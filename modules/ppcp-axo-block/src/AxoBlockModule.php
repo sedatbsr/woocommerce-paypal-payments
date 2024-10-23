@@ -133,6 +133,15 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 				wp_enqueue_style( 'wc-ppcp-axo-block' );
 			}
 		);
+
+		// Enqueue the PayPal Insights script
+		add_action(
+			'wp_enqueue_scripts',
+			function () use ($c) {
+				$this->enqueue_paypal_insights_script($c);
+			}
+		);
+
 		return true;
 	}
 
@@ -165,5 +174,38 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 		}
 
 		return $localized_script_data;
+	}
+
+	/**
+	 * Enqueues PayPal Insights analytics script for the Checkout block.
+	 *
+	 * @param ContainerInterface $c The service container.
+	 * @return void
+	 */
+	private function enqueue_paypal_insights_script( ContainerInterface $c ): void {
+		if ( ! has_block( 'woocommerce/checkout' ) ) {
+			return;
+		}
+
+		$module_url    = $c->get( 'axoblock.url' );
+		$asset_version = $c->get( 'ppcp.asset-version' );
+
+		wp_register_script(
+			'wc-ppcp-paypal-insights',
+			untrailingslashit( $module_url ) . '/resources/js/plugins/PayPalInsights.js',
+			array( 'wp-plugins', 'wp-data', 'wp-element', 'wc-blocks-registry' ),
+			$asset_version,
+			true
+		);
+
+		wp_localize_script(
+			'wc-ppcp-paypal-insights',
+			'ppcpPayPalInsightsData',
+			array(
+				'isAxoEnabled' => true,
+			)
+		);
+
+		wp_enqueue_script( 'wc-ppcp-paypal-insights' );
 	}
 }
