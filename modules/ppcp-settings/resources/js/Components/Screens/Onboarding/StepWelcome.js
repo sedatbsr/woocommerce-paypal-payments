@@ -94,7 +94,7 @@ const WelcomeForm = () => {
 					'woocommerce-paypal-payments'
 				) }
 			>
-				<Button variant="secondary">
+				<Button variant="primary">
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>
@@ -120,7 +120,7 @@ const WelcomeForm = () => {
 					) }
 					type="password"
 				></TextControl>
-				<Button variant="secondary">
+				<Button variant="primary">
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>

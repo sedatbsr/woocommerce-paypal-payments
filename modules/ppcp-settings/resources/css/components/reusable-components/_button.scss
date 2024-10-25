@@ -24,11 +24,14 @@ button.components-button {
 		@include font(13, 16, 500);
 	}
 
-	&.is-secondary {
-		padding: 6px 12px;
-		@include font(13, 20, 500);
-		color: $color-white;
-		border: none;
+	&.is-secondary:not(:disabled) {
+		border-color:$color-blueberry;
+		background-color:$color-white;
+		color:$color-blueberry;
+		&:hover{
+			background-color:$color-white;
+			background:none;
+		}
 	}
 
 	&.is-tertiary {

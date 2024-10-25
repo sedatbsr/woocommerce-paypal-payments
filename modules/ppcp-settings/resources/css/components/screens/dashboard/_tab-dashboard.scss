@@ -1,0 +1,67 @@
+.ppcp-r-tab-dashboard-todo {
+	margin: 0 0 48px 0;
+}
+
+.ppcp-r-todo-item {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	width: 100%;
+
+	&:not(:last-child) {
+		border-bottom: 1px solid $color-gray-400;
+		padding-bottom: 24px;
+	}
+
+	&:not(:first-child) {
+		padding-top: 24px;
+	}
+
+	p {
+		@include font(14, 20, 400);
+	}
+
+	&__inner {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 18px;
+	}
+
+	&__close {
+		margin-left: auto;
+
+		&:hover {
+			cursor: pointer;
+			color: $color-blueberry;
+		}
+	}
+}
+
+.ppcp-r-feature-item {
+	padding-top: 32px;
+	border-top: 1px solid $color-gray-400;
+
+	&__title {
+		@include font(16, 20, 600);
+		color: $color-black;
+		display: block;
+		margin: 0 0 8px 0;
+	}
+
+	&__description {
+		@include font(14, 20, 400);
+		color: $color-gray-800;
+		margin: 0 0 18px 0;
+	}
+
+	&:not(:last-child) {
+		padding-bottom: 32px;
+	}
+
+	&__buttons {
+		display: flex;
+		gap: 18px;
+	}
+}

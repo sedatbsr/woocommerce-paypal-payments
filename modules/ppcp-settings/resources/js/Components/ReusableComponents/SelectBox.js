@@ -1,19 +1,7 @@
 import data from '../../utils/data';
+import { PayPalCheckbox, PayPalRdb, handleCheckboxState } from './Fields';
 
 const SelectBox = ( props ) => {
-	const handleCheckboxState = ( checked ) => {
-		let newValue = null;
-		if ( checked ) {
-			newValue = [ ...props.currentValue, props.value ];
-			props.changeCallback( newValue );
-		} else {
-			newValue = props.currentValue.filter(
-				( value ) => value !== props.value
-			);
-		}
-		props.changeCallback( newValue );
-	};
-
 	let boxClassName = 'ppcp-r-select-box';
 
 	if (
@@ -27,34 +15,20 @@ const SelectBox = ( props ) => {
 	return (
 		<div className={ boxClassName }>
 			{ props.type === 'radio' && (
-				<div className="ppcp-r-select-box__radio">
-					<input
-						className="ppcp-r-select-box__radio-value"
-						type="radio"
-						checked={ props.value === props.currentValue }
-						name={ props.name }
-						value={ props.value }
-						onChange={ () => props.changeCallback( props.value ) }
-					/>
-					<span className="ppcp-r-select-box__radio-presentation"></span>
-				</div>
+				<PayPalRdb
+					{ ...{
+						...props,
+						handleRdbState: props.changeCallback,
+					} }
+				/>
 			) }
 			{ props.type === 'checkbox' && (
-				<div className="ppcp-r-select-box__checkbox">
-					<input
-						className="ppcp-r-select-box__checkbox-value"
-						type="checkbox"
-						checked={ props.currentValue.includes( props.value ) }
-						name={ props.name }
-						value={ props.value }
-						onChange={ ( e ) =>
-							handleCheckboxState( e.target.checked )
-						}
-					/>
-					<span className="ppcp-r-select-box__checkbox-presentation">
-						{ data().getImage( 'icon-checkbox.svg' ) }
-					</span>
-				</div>
+				<PayPalCheckbox
+					{ ...{
+						...props,
+						handleCheckboxState,
+					} }
+				/>
 			) }
 			<div className="ppcp-r-select-box__content">
 				{ data().getImage( props.icon ) }
