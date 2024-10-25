@@ -12,6 +12,7 @@ namespace WooCommerce\PayPalCommerce\WcSubscriptions;
 use Exception;
 use WC_Order;
 use WC_Payment_Tokens;
+use WC_Subscription;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\PaymentSource;
 use WooCommerce\PayPalCommerce\Vaulting\PaymentTokenApplePay;
 use WooCommerce\PayPalCommerce\Vaulting\PaymentTokenVenmo;
@@ -20,11 +21,31 @@ use WooCommerce\PayPalCommerce\WcGateway\Gateway\CreditCardGateway;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayPalGateway;
 use WooCommerce\PayPalCommerce\WcSubscriptions\Helper\SubscriptionHelper;
 
+/**
+ * Class PaymentSourceFactory
+ */
 class PaymentSourceFactory {
 
-	private WooCommercePaymentTokens $wc_payment_tokens;
-	private SubscriptionHelper $subscription_helper;
+	/**
+	 * WooCommerce payment tokens.
+	 *
+	 * @var WooCommercePaymentTokens
+	 */
+	private $wc_payment_tokens;
 
+	/**
+	 * Subscription helper.
+	 *
+	 * @var SubscriptionHelper
+	 */
+	private $subscription_helper;
+
+	/**
+	 * PaymentSourceFactory constructor.
+	 *
+	 * @param WooCommercePaymentTokens $wc_payment_tokens WooCommerce payment tokens.
+	 * @param SubscriptionHelper       $subscription_helper Subscription helper.
+	 */
 	public function __construct(
 		WooCommercePaymentTokens $wc_payment_tokens,
 		SubscriptionHelper $subscription_helper
@@ -90,45 +111,45 @@ class PaymentSourceFactory {
 	 */
 	private function create_card_payment_source( int $user_id, WC_Order $wc_order ): PaymentSource {
 		$wc_tokens     = WC_Payment_Tokens::get_customer_tokens( $user_id, CreditCardGateway::ID );
-		$paypal_tokens = $this->wc_payment_tokens->customer_tokens( $user_id );
+		$subscriptions = wcs_get_subscriptions_for_renewal_order( $wc_order );
+		$subscription  = end( $subscriptions );
+
 		foreach ( $wc_tokens as $wc_token ) {
-			foreach ( $paypal_tokens as $paypal_token ) {
-				if ( $paypal_token['id'] === $wc_token->get_token() ) {
-					$properties = array(
-						'vault_id' => $wc_token->get_token(),
-					);
+			$properties = array(
+				'vault_id' => $wc_token->get_token(),
+			);
 
-					$properties = $this->add_previous_transaction( $wc_order, $properties );
-
-					return new PaymentSource(
-						'card',
-						(object) $properties
-					);
+			if ( $subscription ) {
+				$tokens = $subscription->get_payment_tokens();
+				if ( in_array( $wc_token->get_id(), $tokens, true ) ) {
+					$properties = $this->add_previous_transaction( $subscription, $properties );
 				}
 			}
+
+			return new PaymentSource(
+				'card',
+				(object) $properties
+			);
+
 		}
 
 		throw new Exception( 'Could not create card payment source.' );
 	}
 
 	/**
-	 * @param WC_Order $wc_order
-	 * @param array    $properties
+	 * @param WC_Subscription $subscription
+	 * @param array           $properties
 	 * @return array
 	 */
-	private function add_previous_transaction( WC_Order $wc_order, array $properties ): array {
-		$subscriptions = wcs_get_subscriptions_for_renewal_order( $wc_order );
-		$subscription  = end( $subscriptions );
-		if ( $subscription ) {
-			$transaction = $this->subscription_helper->previous_transaction( $subscription );
-			if ( $transaction ) {
-				$properties['stored_credential'] = array(
-					'payment_initiator'              => 'MERCHANT',
-					'payment_type'                   => 'RECURRING',
-					'usage'                          => 'SUBSEQUENT',
-					'previous_transaction_reference' => $transaction,
-				);
-			}
+	private function add_previous_transaction( WC_Subscription $subscription, array $properties ): array {
+		$transaction = $this->subscription_helper->previous_transaction( $subscription );
+		if ( $transaction ) {
+			$properties['stored_credential'] = array(
+				'payment_initiator'              => 'MERCHANT',
+				'payment_type'                   => 'RECURRING',
+				'usage'                          => 'SUBSEQUENT',
+				'previous_transaction_reference' => $transaction,
+			);
 		}
 
 		return $properties;
