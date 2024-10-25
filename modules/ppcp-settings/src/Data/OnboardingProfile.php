@@ -9,12 +9,16 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings\Data;
 
+use RuntimeException;
+
 /**
  * Class OnboardingProfile
  *
  * This class serves as a container for managing the onboarding profile details
- * within the WooCommerce PayPal Commerce plugin. It provides methods to retrieve
- * and save the onboarding profile data using WordPress options.
+ * within the WooCommerce PayPal Commerce plugin.
+ *
+ * This profile impacts the onboarding wizard and help to apply default
+ * settings. The details here should not be used outside the onboarding process.
  */
 class OnboardingProfile extends AbstractDataModel {
 
@@ -26,17 +30,38 @@ class OnboardingProfile extends AbstractDataModel {
 	protected const OPTION_KEY = 'woocommerce-ppcp-data-onboarding';
 
 	/**
+	 * Constructor.
+	 *
+	 * @param bool $can_use_casual_selling Whether casual selling is enabled in the store's country.
+	 * @param bool $can_use_vaulting       Whether vaulting is enabled in the store's country.
+	 * @param bool $can_use_card_payments  Whether credit card payments are possible.
+	 *
+	 * @throws RuntimeException If the OPTION_KEY is not defined in the child class.
+	 */
+	public function __construct(
+		bool $can_use_casual_selling = false,
+		bool $can_use_vaulting = false,
+		bool $can_use_card_payments = false
+	) {
+		parent::__construct();
+
+		$this->set_can_use_casual_selling( $can_use_casual_selling );
+		$this->set_can_use_vaulting( $can_use_vaulting );
+		$this->set_can_use_card_payments( $can_use_card_payments );
+	}
+
+	/**
 	 * Get default values for the model.
 	 *
 	 * @return array
 	 */
 	protected function get_defaults() : array {
 		return array(
-			'step'                  => 0,
-			'use_sandbox'           => false,
-			'use_manual_connection' => false,
-			'client_id'             => '',
-			'client_secret'         => '',
+			'step'                   => 0,
+			'use_sandbox'            => false,
+			'use_manual_connection'  => false,
+			'client_id'              => '',
+			'client_secret'          => '',
 			'can_use_casual_selling' => false,
 			'can_use_vaulting'       => false,
 			'can_use_card_payments'  => false,
