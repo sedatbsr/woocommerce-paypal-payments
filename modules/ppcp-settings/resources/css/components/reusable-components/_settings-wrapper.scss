@@ -9,9 +9,11 @@
 	}
 
 	&-container {
-		box-shadow: $shadow-card;
 		max-width: 1024px;
 		margin: 0 auto;
+		&--settings{
+			max-width: 938px;
+		}
 	}
 
 	&-card {

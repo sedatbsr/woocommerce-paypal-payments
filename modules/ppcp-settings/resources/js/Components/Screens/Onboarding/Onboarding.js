@@ -1,15 +1,16 @@
-import Container from '../../ReusableComponents/Container.js';
+import Container, {
+	PAGE_ONBOARDING,
+} from '../../ReusableComponents/Container.js';
 import StepWelcome from './StepWelcome.js';
 import StepBusiness from './StepBusiness.js';
 import StepProducts from './StepProducts.js';
 import { useState } from '@wordpress/element';
-import Dashboard from '../Dashboard/Dashboard';
 
 const Onboarding = () => {
 	const [ step, setStep ] = useState( 0 );
 
 	return (
-		<Container>
+		<Container page={ PAGE_ONBOARDING }>
 			<div className="ppcp-r-card">
 				<Stepper currentStep={ step } setStep={ setStep } />
 			</div>
