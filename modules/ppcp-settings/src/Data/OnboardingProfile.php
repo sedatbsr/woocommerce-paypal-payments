@@ -37,6 +37,9 @@ class OnboardingProfile extends AbstractDataModel {
 			'use_manual_connection' => false,
 			'client_id'             => '',
 			'client_secret'         => '',
+			'can_use_casual_selling' => false,
+			'can_use_vaulting'       => false,
+			'can_use_card_payments'  => false,
 		);
 	}
 
@@ -130,5 +133,59 @@ class OnboardingProfile extends AbstractDataModel {
 	 */
 	public function set_client_secret( string $client_secret ) : void {
 		$this->data['client_secret'] = sanitize_text_field( $client_secret );
+	}
+
+	/**
+	 * Gets whether casual selling can be used.
+	 *
+	 * @return bool
+	 */
+	public function get_can_use_casual_selling() : bool {
+		return (bool) $this->data['can_use_casual_selling'];
+	}
+
+	/**
+	 * Sets whether casual selling can be used.
+	 *
+	 * @param bool $can_use_casual_selling Whether casual selling can be used.
+	 */
+	public function set_can_use_casual_selling( bool $can_use_casual_selling ) : void {
+		$this->data['can_use_casual_selling'] = $can_use_casual_selling;
+	}
+
+	/**
+	 * Gets whether vaulting can be used.
+	 *
+	 * @return bool
+	 */
+	public function get_can_use_vaulting() : bool {
+		return (bool) $this->data['can_use_vaulting'];
+	}
+
+	/**
+	 * Sets whether vaulting can be used.
+	 *
+	 * @param bool $can_use_vaulting Whether vaulting can be used.
+	 */
+	public function set_can_use_vaulting( bool $can_use_vaulting ) : void {
+		$this->data['can_use_vaulting'] = $can_use_vaulting;
+	}
+
+	/**
+	 * Gets whether Credit Card payments can be used.
+	 *
+	 * @return bool
+	 */
+	public function get_can_use_card_payments() : bool {
+		return (bool) $this->data['can_use_card_payments'];
+	}
+
+	/**
+	 * Sets whether Credit Card payments can be used.
+	 *
+	 * @param bool $can_use_card_payments Whether Credit Card payments can be used.
+	 */
+	public function set_can_use_card_payments( bool $can_use_card_payments ) : void {
+		$this->data['can_use_card_payments'] = $can_use_card_payments;
 	}
 }

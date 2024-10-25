@@ -41,25 +41,37 @@ class OnboardingRestEndpoint extends RestEndpoint {
 	 * @var array
 	 */
 	private array $field_map = array(
-		'step'                  => array(
+		'step'                   => array(
 			'js_name'  => 'step',
 			'sanitize' => 'to_number',
 		),
-		'use_sandbox'           => array(
+		'use_sandbox'            => array(
 			'js_name'  => 'useSandbox',
 			'sanitize' => 'to_boolean',
 		),
-		'use_manual_connection' => array(
+		'use_manual_connection'  => array(
 			'js_name'  => 'useManualConnection',
 			'sanitize' => 'to_boolean',
 		),
-		'client_id'             => array(
+		'client_id'              => array(
 			'js_name'  => 'clientId',
 			'sanitize' => 'sanitize_text_field',
 		),
-		'client_secret'         => array(
+		'client_secret'          => array(
 			'js_name'  => 'clientSecret',
 			'sanitize' => 'sanitize_text_field',
+		),
+		'can_use_casual_selling' => array(
+			'js_name'  => 'canUseCasualSelling',
+			'sanitize' => 'to_boolean',
+		),
+		'can_use_vaulting'       => array(
+			'js_name'  => 'canUseVaulting',
+			'sanitize' => 'to_boolean',
+		),
+		'can_use_card_payments'  => array(
+			'js_name'  => 'canUseCardPayments',
+			'sanitize' => 'to_boolean',
 		),
 	);
 
