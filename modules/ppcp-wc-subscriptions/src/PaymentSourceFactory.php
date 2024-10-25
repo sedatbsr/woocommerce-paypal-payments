@@ -55,7 +55,7 @@ class PaymentSourceFactory {
 		$paypal_tokens = $this->wc_payment_tokens->customer_tokens( $user_id );
 		foreach ( $wc_tokens as $wc_token ) {
 			foreach ( $paypal_tokens as $paypal_token ) {
-				if ( $paypal_token['id'] === $wc_token ) {
+				if ( $paypal_token['id'] === $wc_token->get_token() ) {
 					$name       = 'paypal';
 					$properties = array(
 						'vault_id' => $wc_token->get_token(),
@@ -93,7 +93,7 @@ class PaymentSourceFactory {
 		$paypal_tokens = $this->wc_payment_tokens->customer_tokens( $user_id );
 		foreach ( $wc_tokens as $wc_token ) {
 			foreach ( $paypal_tokens as $paypal_token ) {
-				if ( $paypal_token['id'] === $wc_token ) {
+				if ( $paypal_token['id'] === $wc_token->get_token() ) {
 					$properties = array(
 						'vault_id' => $wc_token->get_token(),
 					);

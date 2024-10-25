@@ -170,7 +170,7 @@ class RenewalHandler {
 	 * @param SubscriptionHelper           $subscription_helper Subscription helper.
 	 * @param PaymentTokensEndpoint        $payment_tokens_endpoint Payment tokens endpoint.
 	 * @param WooCommercePaymentTokens     $wc_payment_tokens WooCommerce payments tokens factory.
-	 * @param PaymentSourceFactory $payment_source_factory Payment source factory.
+	 * @param PaymentSourceFactory         $payment_source_factory Payment source factory.
 	 */
 	public function __construct(
 		LoggerInterface $logger,
@@ -204,7 +204,7 @@ class RenewalHandler {
 		$this->subscription_helper              = $subscription_helper;
 		$this->payment_tokens_endpoint          = $payment_tokens_endpoint;
 		$this->wc_payment_tokens                = $wc_payment_tokens;
-		$this->payment_source_factory = $payment_source_factory;
+		$this->payment_source_factory           = $payment_source_factory;
 	}
 
 	/**
@@ -248,11 +248,11 @@ class RenewalHandler {
 	/**
 	 * Process a WooCommerce order.
 	 *
-	 * @param \WC_Order $wc_order The WooCommerce order.
+	 * @param WC_Order $wc_order The WooCommerce order.
 	 *
-	 * @throws \Exception If customer cannot be read/found.
+	 * @throws Exception If customer cannot be read/found.
 	 */
-	private function process_order( \WC_Order $wc_order ): void {
+	private function process_order( WC_Order $wc_order ): void {
 		$user_id  = (int) $wc_order->get_customer_id();
 		$customer = new \WC_Customer( $user_id );
 
@@ -270,7 +270,8 @@ class RenewalHandler {
 				$user_id,
 				$wc_order
 			);
-		} catch (Exception $exception) {
+		} catch ( Exception $exception ) {
+			$this->logger->error( $exception->getMessage() );
 			$payment_source = null;
 		}
 
