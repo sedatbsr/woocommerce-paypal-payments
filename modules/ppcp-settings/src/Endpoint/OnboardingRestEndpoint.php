@@ -63,15 +63,15 @@ class OnboardingRestEndpoint extends RestEndpoint {
 		),
 		'can_use_casual_selling' => array(
 			'js_name'  => 'canUseCasualSelling',
-			'sanitize' => 'to_boolean',
+			'sanitize' => 'read_only',
 		),
 		'can_use_vaulting'       => array(
 			'js_name'  => 'canUseVaulting',
-			'sanitize' => 'to_boolean',
+			'sanitize' => 'read_only',
 		),
 		'can_use_card_payments'  => array(
 			'js_name'  => 'canUseCardPayments',
-			'sanitize' => 'to_boolean',
+			'sanitize' => 'read_only',
 		),
 	);
 

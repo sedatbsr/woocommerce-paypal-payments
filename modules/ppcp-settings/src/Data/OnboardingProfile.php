@@ -45,9 +45,9 @@ class OnboardingProfile extends AbstractDataModel {
 	) {
 		parent::__construct();
 
-		$this->set_can_use_casual_selling( $can_use_casual_selling );
-		$this->set_can_use_vaulting( $can_use_vaulting );
-		$this->set_can_use_card_payments( $can_use_card_payments );
+		$this->data['can_use_casual_selling'] = $can_use_casual_selling;
+		$this->data['can_use_vaulting']       = $can_use_vaulting;
+		$this->data['can_use_card_payments']  = $can_use_card_payments;
 	}
 
 	/**
@@ -62,9 +62,9 @@ class OnboardingProfile extends AbstractDataModel {
 			'use_manual_connection'  => false,
 			'client_id'              => '',
 			'client_secret'          => '',
-			'can_use_casual_selling' => false,
-			'can_use_vaulting'       => false,
-			'can_use_card_payments'  => false,
+			'can_use_casual_selling' => null,
+			'can_use_vaulting'       => null,
+			'can_use_card_payments'  => null,
 		);
 	}
 
@@ -170,15 +170,6 @@ class OnboardingProfile extends AbstractDataModel {
 	}
 
 	/**
-	 * Sets whether casual selling can be used.
-	 *
-	 * @param bool $can_use_casual_selling Whether casual selling can be used.
-	 */
-	public function set_can_use_casual_selling( bool $can_use_casual_selling ) : void {
-		$this->data['can_use_casual_selling'] = $can_use_casual_selling;
-	}
-
-	/**
 	 * Gets whether vaulting can be used.
 	 *
 	 * @return bool
@@ -188,29 +179,11 @@ class OnboardingProfile extends AbstractDataModel {
 	}
 
 	/**
-	 * Sets whether vaulting can be used.
-	 *
-	 * @param bool $can_use_vaulting Whether vaulting can be used.
-	 */
-	public function set_can_use_vaulting( bool $can_use_vaulting ) : void {
-		$this->data['can_use_vaulting'] = $can_use_vaulting;
-	}
-
-	/**
 	 * Gets whether Credit Card payments can be used.
 	 *
 	 * @return bool
 	 */
 	public function get_can_use_card_payments() : bool {
 		return (bool) $this->data['can_use_card_payments'];
-	}
-
-	/**
-	 * Sets whether Credit Card payments can be used.
-	 *
-	 * @param bool $can_use_card_payments Whether Credit Card payments can be used.
-	 */
-	public function set_can_use_card_payments( bool $can_use_card_payments ) : void {
-		$this->data['can_use_card_payments'] = $can_use_card_payments;
 	}
 }
