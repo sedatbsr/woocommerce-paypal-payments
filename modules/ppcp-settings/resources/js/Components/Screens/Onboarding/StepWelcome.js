@@ -4,6 +4,8 @@ import { Button, TextControl } from '@wordpress/components';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import SettingsToggleBlock from '../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../ReusableComponents/Separator';
+import { useOnboardingDetails } from '../../../data';
+import DataStoreControl from '../../ReusableComponents/DataStoreControl';
 
 const StepWelcome = ( { setStep, currentStep } ) => {
 	return (
@@ -73,6 +75,17 @@ const WelcomeFeatures = () => {
 };
 
 const WelcomeForm = () => {
+	const {
+		isSandboxMode,
+		setSandboxMode,
+		isManualConnectionMode,
+		setManualConnectionMode,
+		clientId,
+		setClientId,
+		clientSecret,
+		setClientSecret,
+	} = useOnboardingDetails();
+
 	const advancedUsersDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
 		__(
@@ -93,8 +106,10 @@ const WelcomeForm = () => {
 					'Activate Sandbox mode to safely test PayPal with sample data. Once your store is ready to go live, you can easily switch to your production account.',
 					'woocommerce-paypal-payments'
 				) }
+				isToggled={ !! isSandboxMode }
+				setToggled={ setSandboxMode }
 			>
-				<Button variant="primary">
+				<Button variant="secondary">
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>
@@ -105,22 +120,29 @@ const WelcomeForm = () => {
 					'woocommerce-paypal-payments'
 				) }
 				description={ advancedUsersDescription }
+				isToggled={ !! isManualConnectionMode }
+				setToggled={ setManualConnectionMode }
 			>
-				<TextControl
+				<DataStoreControl
+					control={ TextControl }
 					label={ __(
 						'Sandbox Client ID',
 						'woocommerce-paypal-payments'
 					) }
-				></TextControl>
-
-				<TextControl
+					value={ clientId }
+					onChange={ setClientId }
+				/>
+				<DataStoreControl
+					control={ TextControl }
 					label={ __(
 						'Sandbox Secret Key',
 						'woocommerce-paypal-payments'
 					) }
+					value={ clientSecret }
+					onChange={ setClientSecret }
 					type="password"
-				></TextControl>
-				<Button variant="primary">
+				/>
+				<Button variant="secondary">
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>
