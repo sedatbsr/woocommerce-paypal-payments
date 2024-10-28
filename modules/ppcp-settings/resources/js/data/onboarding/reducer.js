@@ -40,10 +40,13 @@ export const onboardingReducer = (
 
 	switch ( type ) {
 		// Transient data.
-		case ACTION_TYPES.SET_IS_SAVING_ONBOARDING_DETAILS:
+		case ACTION_TYPES.SET_IS_SAVING_ONBOARDING:
 			return setTransient( { isSaving: action.isSaving } );
 
 		// Persistent data.
+		case ACTION_TYPES.SET_ONBOARDING_DETAILS:
+			return setPersistent( action.payload );
+
 		case ACTION_TYPES.SET_ONBOARDING_COMPLETED:
 			return setPersistent( { completed: action.completed } );
 
@@ -52,9 +55,6 @@ export const onboardingReducer = (
 
 		case ACTION_TYPES.SET_CLIENT_SECRET:
 			return setPersistent( { clientSecret: action.clientSecret } );
-
-		case ACTION_TYPES.SET_ONBOARDING_DETAILS:
-			return setPersistent( action.payload );
 
 		case ACTION_TYPES.SET_ONBOARDING_STEP:
 			return setPersistent( { step: action.step } );

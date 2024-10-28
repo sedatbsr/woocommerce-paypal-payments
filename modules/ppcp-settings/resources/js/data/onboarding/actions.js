@@ -11,7 +11,7 @@ import { NAMESPACE, STORE_NAME } from '../constants';
  */
 export const setIsSaving = ( isSaving ) => {
 	return {
-		type: ACTION_TYPES.SET_IS_SAVING_ONBOARDING_DETAILS,
+		type: ACTION_TYPES.SET_IS_SAVING_ONBOARDING,
 		isSaving,
 	};
 };
