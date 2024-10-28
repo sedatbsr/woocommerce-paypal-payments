@@ -4,21 +4,25 @@ import Container, {
 import StepWelcome from './StepWelcome.js';
 import StepBusiness from './StepBusiness.js';
 import StepProducts from './StepProducts.js';
-import { useState } from '@wordpress/element';
+import { useOnboardingStep } from '../../../data';
 
 const Onboarding = () => {
-	const [ step, setStep ] = useState( 0 );
+	const { step, setStep, setCompleted } = useOnboardingStep();
 
 	return (
 		<Container page={ PAGE_ONBOARDING }>
 			<div className="ppcp-r-card">
-				<Stepper currentStep={ step } setStep={ setStep } />
+				<Stepper
+					currentStep={ step }
+					setStep={ setStep }
+					setCompleted={ setCompleted }
+				/>
 			</div>
 		</Container>
 	);
 };
 
-const Stepper = ( { currentStep, setStep } ) => {
+const Stepper = ( { currentStep, setStep, setCompleted } ) => {
 	const stepperOrder = [ StepWelcome, StepBusiness, StepProducts ];
 
 	const renderSteps = () => {
@@ -31,6 +35,7 @@ const Stepper = ( { currentStep, setStep } ) => {
 					<Step
 						setStep={ setStep }
 						currentStep={ currentStep }
+						setCompleted={ setCompleted }
 						stepperOrder={ stepperOrder }
 					/>
 				</div>
