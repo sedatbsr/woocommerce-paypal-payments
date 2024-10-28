@@ -3,10 +3,9 @@ import { STORE_NAME } from '../constants';
 
 export const useOnboardingDetails = () => {
 	const {
-		setOnboardingStep,
+		persist,
 		setSandboxMode,
 		setManualConnectionMode,
-		persist,
 		setClientId,
 		setClientSecret,
 	} = useDispatch( STORE_NAME );
@@ -25,10 +24,6 @@ export const useOnboardingDetails = () => {
 		return select( STORE_NAME ).getPersistentData().clientSecret;
 	}, [] );
 
-	const onboardingStep = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().step || 0;
-	}, [] );
-
 	const isSandboxMode = useSelect( ( select ) => {
 		return select( STORE_NAME ).getPersistentData().useSandbox;
 	}, [] );
@@ -43,7 +38,6 @@ export const useOnboardingDetails = () => {
 	};
 
 	return {
-		onboardingStep,
 		isSaving,
 		isSandboxMode,
 		isManualConnectionMode,
@@ -52,8 +46,6 @@ export const useOnboardingDetails = () => {
 		clientSecret,
 		setClientSecret: ( value ) =>
 			setDetailAndPersist( setClientSecret, value ),
-		setOnboardingStep: ( step ) =>
-			setDetailAndPersist( setOnboardingStep, step ),
 		setSandboxMode: ( state ) =>
 			setDetailAndPersist( setSandboxMode, state ),
 		setManualConnectionMode: ( state ) =>
@@ -62,9 +54,10 @@ export const useOnboardingDetails = () => {
 };
 
 export const useOnboardingStep = () => {
-	const { setOnboardingStep, setCompleted } = useDispatch( STORE_NAME );
+	const { persist, setOnboardingStep, setCompleted } =
+		useDispatch( STORE_NAME );
 
-	const onboardingStep = useSelect( ( select ) => {
+	const step = useSelect( ( select ) => {
 		return select( STORE_NAME ).getPersistentData().step || 0;
 	} );
 
@@ -72,10 +65,15 @@ export const useOnboardingStep = () => {
 		return select( STORE_NAME ).getPersistentData().completed;
 	} );
 
+	const setDetailAndPersist = async ( setter, value ) => {
+		setter( value );
+		await persist();
+	};
+
 	return {
-		onboardingStep,
-		setOnboardingStep: ( step ) => setOnboardingStep( step ),
+		step,
+		setStep: ( value ) => setDetailAndPersist( setOnboardingStep, value ),
 		completed,
-		setCompleted: ( state ) => setCompleted( state ),
+		setCompleted: ( state ) => setDetailAndPersist( setCompleted, state ),
 	};
 };
