@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState } from '@wordpress/element';
+import { useCallback, useEffect, useState } from '@wordpress/element';
 import { TabPanel } from '@wordpress/components';
 import { getQuery, updateQueryString } from '@woocommerce/navigation';
 
@@ -18,7 +18,7 @@ const TabNavigation = ( { tabs } ) => {
 
 	const [ activePanel, setActivePanel ] = useState( getValidInitialPanel );
 
-	const updatePanelUri = useCallback(
+	const updateActivePanel = useCallback(
 		( tabName ) => {
 			if ( isValidTab( tabs, tabName ) ) {
 				setActivePanel( tabName );
@@ -37,7 +37,7 @@ const TabNavigation = ( { tabs } ) => {
 		<TabPanel
 			className={ `ppcp-r-tabs ${ activePanel }` }
 			initialTabName={ activePanel }
-			onSelect={ updatePanelUri }
+			onSelect={ updateActivePanel }
 			tabs={ tabs }
 		>
 			{ ( tab ) => {

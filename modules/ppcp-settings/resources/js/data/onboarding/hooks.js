@@ -60,3 +60,22 @@ export const useOnboardingDetails = () => {
 			setDetailAndPersist( setManualConnectionMode, state ),
 	};
 };
+
+export const useOnboardingStep = () => {
+	const { setOnboardingStep, setCompleted } = useDispatch( STORE_NAME );
+
+	const onboardingStep = useSelect( ( select ) => {
+		return select( STORE_NAME ).getPersistentData().step || 0;
+	} );
+
+	const completed = useSelect( ( select ) => {
+		return select( STORE_NAME ).getPersistentData().completed;
+	} );
+
+	return {
+		onboardingStep,
+		setOnboardingStep: ( step ) => setOnboardingStep( step ),
+		completed,
+		setCompleted: ( state ) => setCompleted( state ),
+	};
+};
