@@ -1,13 +1,10 @@
-import Onboarding from './Onboarding/Onboarding';
-import { useState } from '@wordpress/element';
-import Dashboard from './Dashboard/Dashboard';
+import TabNavigation from '../ReusableComponents/TabNavigation';
 import { getSettingsTabs } from './tabs';
 
 const Settings = () => {
-	const [ onboarded, setOnboarded ] = useState( true );
 	const tabs = getSettingsTabs();
 
-	return <>{ onboarded ? <Onboarding /> : <Dashboard /> }</>;
+	return <TabNavigation tabs={ tabs }></TabNavigation>;
 };
 
 export default Settings;

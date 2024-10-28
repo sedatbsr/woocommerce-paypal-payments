@@ -1,11 +1,7 @@
 import TabNavigation from '../../ReusableComponents/TabNavigation';
 
 const Dashboard = () => {
-	return (
-		<div>
-			<TabNavigation />
-		</div>
-	);
+	return <div>Settings Page</div>;
 };
 
 export default Dashboard;
