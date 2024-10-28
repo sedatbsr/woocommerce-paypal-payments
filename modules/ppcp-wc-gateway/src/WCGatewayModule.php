@@ -94,20 +94,22 @@ class WCGatewayModule implements ServiceModule, ExtendingModule, ExecutableModul
 		$this->register_wc_tasks( $c );
 		$this->register_void_button( $c );
 
-		add_action(
-			'woocommerce_sections_checkout',
-			function() use ( $c ) {
-				$header_renderer = $c->get( 'wcgateway.settings.header-renderer' );
-				assert( $header_renderer instanceof HeaderRenderer );
+		if ( ! $c->get( 'wcgateway.settings.admin-settings-enabled' ) ) {
+			add_action(
+				'woocommerce_sections_checkout',
+				function () use ( $c ) {
+					$header_renderer = $c->get( 'wcgateway.settings.header-renderer' );
+					assert( $header_renderer instanceof HeaderRenderer );
 
-				$section_renderer = $c->get( 'wcgateway.settings.sections-renderer' );
-				assert( $section_renderer instanceof SectionsRenderer );
+					$section_renderer = $c->get( 'wcgateway.settings.sections-renderer' );
+					assert( $section_renderer instanceof SectionsRenderer );
 
-				// phpcs:ignore WordPress.Security.EscapeOutput
-				echo $header_renderer->render() . $section_renderer->render();
-			},
-			20
-		);
+					// phpcs:ignore WordPress.Security.EscapeOutput
+					echo $header_renderer->render() . $section_renderer->render();
+				},
+				20
+			);
+		}
 
 		add_action(
 			'woocommerce_paypal_payments_order_captured',
