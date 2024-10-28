@@ -1,0 +1,18 @@
+.ppcp-r-tabs {
+	--wp-components-color-accent: #{$color-blueberry};
+	--wp-admin-border-width-focus: 3px;
+
+	.components-tab-panel__tabs {
+		box-shadow: 0 -1px 0 0 $color-gray-400 inset;
+		margin-bottom: 48px;
+		gap: 12px;
+
+		.components-button {
+			padding: 16px 20px;
+
+			&.is-active {
+				background-color: #fff4;
+			}
+		}
+	}
+}
