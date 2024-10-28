@@ -17,11 +17,13 @@ $color-gradient-dark: #001435;
 $gradient-header: linear-gradient(87.03deg, #003087 -0.49%, #001E51 29.22%, $color-gradient-dark 100%);
 
 $max-width-onboarding: 1024px;
+$max-width-onboarding-content: 662px;
 $max-width-settings: 938px;
 
 #ppcp-settings-container {
 	--max-width-settings: #{$max-width-settings};
 	--max-width-onboarding: #{$max-width-onboarding};
+	--max-width-onboarding-content: #{$max-width-onboarding-content};
 
-	--max-tabbar-width: var(--max-width-settings);
+	--max-container-width: var(--max-width-settings);
 }

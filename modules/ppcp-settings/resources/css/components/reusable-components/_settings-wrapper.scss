@@ -1,9 +1,13 @@
 .ppcp-r {
+	&-container {
+		max-width: var(--max-container-width, none);
+		margin-left: auto;
+		margin-right: auto;
+	}
 
 	&-inner-container {
-		width: 652px;
-		max-width: 100%;
-		margin: 0 auto;
+		margin-left: auto;
+		margin-right: auto;
 		padding: 0 16px;
 		box-sizing: border-box;
 	}

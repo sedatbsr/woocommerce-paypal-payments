@@ -2,6 +2,11 @@
 @import './onboarding/step-business';
 @import './onboarding/step-products';
 
-.ppcp-r-tabs.onboarding {
-	--max-tabbar-width: var(--max-width-onboarding);
+.ppcp-r-tabs.onboarding,
+.ppcp-r-container--onboarding {
+	--max-container-width: var(--max-width-onboarding);
+
+	.ppcp-r-inner-container {
+		max-width: var(--max-width-onboarding-content);
+	}
 }

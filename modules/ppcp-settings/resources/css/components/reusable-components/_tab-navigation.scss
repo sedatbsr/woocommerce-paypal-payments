@@ -2,7 +2,7 @@
 	--wp-components-color-accent: #{$color-blueberry};
 	--wp-admin-border-width-focus: 3px;
 
-	max-width: var(--max-tabbar-width);
+	max-width: var(--max-container-width);
 	margin: 0 auto;
 	transition: max-width 0.2s;
 
