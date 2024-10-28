@@ -13,7 +13,6 @@ use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
-use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayPalGateway;
 
 /**
  * Class SettingsModule
@@ -87,6 +86,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 						'assets' => array(
 							'imagesUrl' => $module_url . '/images/',
 						),
+						'debug'  => defined( 'WP_DEBUG' ) && WP_DEBUG,
 					)
 				);
 			}
