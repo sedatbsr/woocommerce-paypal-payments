@@ -1,13 +1,18 @@
 import { TabPanel } from '@wordpress/components';
-import { useState } from '@wordpress/element';
+import { getQuery, updateQueryString } from '@woocommerce/navigation';
+import { useEffect, useState } from '@wordpress/element';
 
 const TabNavigation = ( { tabs } ) => {
-	const initialPanel = tabs[ 0 ].name;
+	const initialPanel = getQuery()?.panel ?? tabs[ 0 ].name;
 	const [ activePanel, setActivePanel ] = useState( initialPanel );
 
 	const updatePanelUri = ( tabName ) => {
 		setActivePanel( tabName );
 	};
+
+	useEffect( () => {
+		updateQueryString( { panel: activePanel }, '/', getQuery() );
+	}, [ activePanel ] );
 
 	return (
 		<TabPanel
