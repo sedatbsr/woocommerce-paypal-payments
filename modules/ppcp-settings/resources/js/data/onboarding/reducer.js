@@ -44,6 +44,9 @@ export const onboardingReducer = (
 			return setTransient( { isSaving: action.isSaving } );
 
 		// Persistent data.
+		case ACTION_TYPES.SET_ONBOARDING_COMPLETED:
+			return setPersistent( { completed: action.completed } );
+
 		case ACTION_TYPES.SET_CLIENT_ID:
 			return setPersistent( { clientId: action.clientId } );
 
