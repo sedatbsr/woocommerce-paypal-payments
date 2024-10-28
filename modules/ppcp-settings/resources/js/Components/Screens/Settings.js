@@ -4,8 +4,7 @@ import Dashboard from './Dashboard/Dashboard';
 
 const Settings = () => {
 	const [ onboarded, setOnboarded ] = useState( true );
-
-	return <>{ onboarded ? <Onboarding /> : <Dashboard /> }</>;
+	return <>{ onboarded ? <Dashboard /> : <Onboarding /> }</>;
 };
 
 export default Settings;
