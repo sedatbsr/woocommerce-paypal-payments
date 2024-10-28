@@ -1,6 +1,7 @@
 import ACTION_TYPES from './action-types';
 
 const defaultState = {
+	isReady: false,
 	isSaving: false,
 	data: {
 		completed: false,
@@ -40,6 +41,9 @@ export const onboardingReducer = (
 
 	switch ( type ) {
 		// Transient data.
+		case ACTION_TYPES.SET_ONBOARDING_IS_READY:
+			return setTransient( { isReady: action.isReady } );
+
 		case ACTION_TYPES.SET_IS_SAVING_ONBOARDING:
 			return setTransient( { isSaving: action.isSaving } );
 

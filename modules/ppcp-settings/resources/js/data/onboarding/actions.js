@@ -4,6 +4,19 @@ import ACTION_TYPES from './action-types';
 import { NAMESPACE, STORE_NAME } from '../constants';
 
 /**
+ * Non-persistent. Marks the onboarding details as "ready", i.e., fully initialized.
+ *
+ * @param {boolean} isReady
+ * @return {{type: string, isReady}} The action.
+ */
+export const setIsReady = ( isReady ) => {
+	return {
+		type: ACTION_TYPES.SET_ONBOARDING_IS_READY,
+		isReady,
+	};
+};
+
+/**
  * Non-persistent. Changes the "saving" flag.
  *
  * @param {boolean} isSaving

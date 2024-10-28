@@ -57,6 +57,10 @@ export const useOnboardingStep = () => {
 	const { persist, setOnboardingStep, setCompleted } =
 		useDispatch( STORE_NAME );
 
+	const isReady = useSelect( ( select ) => {
+		return select( STORE_NAME ).getTransientData().isReady;
+	} );
+
 	const step = useSelect( ( select ) => {
 		return select( STORE_NAME ).getPersistentData().step || 0;
 	} );
@@ -71,6 +75,7 @@ export const useOnboardingStep = () => {
 	};
 
 	return {
+		isReady,
 		step,
 		setStep: ( value ) => setDetailAndPersist( setOnboardingStep, value ),
 		completed,

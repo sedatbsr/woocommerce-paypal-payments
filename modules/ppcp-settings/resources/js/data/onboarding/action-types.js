@@ -1,5 +1,6 @@
 export default {
 	// Transient data.
+	SET_ONBOARDING_IS_READY: 'SET_ONBOARDING_IS_READY',
 	SET_IS_SAVING_ONBOARDING: 'SET_IS_SAVING_ONBOARDING',
 
 	// Persistent data.
