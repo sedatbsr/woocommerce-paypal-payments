@@ -27,4 +27,23 @@ export const initStore = () => {
 	} );
 
 	register( store );
+
+	/* eslint-disable no-console */
+	// Provide a debug tool to inspect the Redux store via the JS console.
+	if ( window.ppcpSettings?.debug && console?.groupCollapsed ) {
+		window.ppcpSettings.dumpStore = () => {
+			const storeSelector = `wp.data.select('${ STORE_NAME }')`;
+			console.group( `[STORE] ${ storeSelector }` );
+
+			const storeState = wp.data.select( STORE_NAME );
+			Object.keys( selectors ).forEach( ( selector ) => {
+				console.groupCollapsed( `[SELECTOR] .${ selector }()` );
+				console.table( storeState[ selector ]() );
+				console.groupEnd();
+			} );
+
+			console.groupEnd();
+		};
+	}
+	/* eslint-enable no-console */
 };

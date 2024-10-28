@@ -86,6 +86,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 						'assets' => array(
 							'imagesUrl' => $module_url . '/images/',
 						),
+						'debug'  => defined( 'WP_DEBUG' ) && WP_DEBUG,
 					)
 				);
 			}

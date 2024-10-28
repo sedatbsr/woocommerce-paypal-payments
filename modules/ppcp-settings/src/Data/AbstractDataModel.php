@@ -57,8 +57,9 @@ abstract class AbstractDataModel {
 	 * Loads the model data from WordPress options.
 	 */
 	public function load() : void {
-		$saved_data = get_option( static::OPTION_KEY, array() );
-		$this->data = array_merge( $this->data, $saved_data );
+		$saved_data    = get_option( static::OPTION_KEY, array() );
+		$filtered_data = array_intersect_key( $saved_data, $this->data );
+		$this->data    = array_merge( $this->data, $filtered_data );
 	}
 
 	/**
@@ -91,8 +92,6 @@ abstract class AbstractDataModel {
 			$setter = "set_$key";
 			if ( method_exists( $this, $setter ) ) {
 				$this->$setter( $value );
-			} else {
-				$this->data[ $key ] = $value;
 			}
 		}
 	}
