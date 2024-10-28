@@ -17,6 +17,19 @@ export const setIsSaving = ( isSaving ) => {
 };
 
 /**
+ * Persistent.Set the "onboarding completed" flag which shows or hides the wizard.
+ *
+ * @param {boolean} completed
+ * @return {{type: string, payload}} The action.
+ */
+export const setCompleted = ( completed ) => {
+	return {
+		type: ACTION_TYPES.SET_ONBOARDING_COMPLETED,
+		completed,
+	};
+};
+
+/**
  * Persistent. Set the full onboarding details, usually during app initialization.
  *
  * @param {Object} payload

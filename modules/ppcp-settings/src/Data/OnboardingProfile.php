@@ -57,6 +57,7 @@ class OnboardingProfile extends AbstractDataModel {
 	 */
 	protected function get_defaults() : array {
 		return array(
+			'completed'              => false,
 			'step'                   => 0,
 			'use_sandbox'            => false,
 			'use_manual_connection'  => false,
@@ -71,6 +72,24 @@ class OnboardingProfile extends AbstractDataModel {
 	// -----
 
 	/**
+	 * Gets the 'completed' flag.
+	 *
+	 * @return bool
+	 */
+	public function get_completed() : bool {
+		return (bool) $this->data['completed'];
+	}
+
+	/**
+	 * Sets the 'completed' flag.
+	 *
+	 * @param bool $step Whether the onboarding process has been completed.
+	 */
+	public function set_completed( bool $step ) : void {
+		$this->data['completed'] = $step;
+	}
+
+	/**
 	 * Gets the 'step' setting.
 	 *
 	 * @return int
@@ -82,7 +101,7 @@ class OnboardingProfile extends AbstractDataModel {
 	/**
 	 * Sets the 'step' setting.
 	 *
-	 * @param int $step Whether to use sandbox mode.
+	 * @param int $step The current onboarding step.
 	 */
 	public function set_step( int $step ) : void {
 		$this->data['step'] = $step;

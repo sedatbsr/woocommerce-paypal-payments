@@ -3,6 +3,7 @@ import ACTION_TYPES from './action-types';
 const defaultState = {
 	isSaving: false,
 	data: {
+		completed: false,
 		step: 0,
 		useSandbox: false,
 		useManualConnection: false,
