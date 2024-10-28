@@ -8,6 +8,9 @@ const defaultState = {
 		useManualConnection: false,
 		clientId: '',
 		clientSecret: '',
+		canUseCasualSelling: false,
+		canUseVaulting: false,
+		canUseCardPayments: false,
 	},
 };
 

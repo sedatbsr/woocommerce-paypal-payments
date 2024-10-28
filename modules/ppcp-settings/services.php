@@ -26,7 +26,20 @@ return array(
 		);
 	},
 	'settings.data.onboarding' => static function ( ContainerInterface $container ) : OnboardingProfile {
-		return new OnboardingProfile();
+		$can_use_casual_selling = false;
+		$can_use_vaulting       = $container->has( 'save-payment-methods.eligible' ) && $container->get( 'save-payment-methods.eligible' );
+		$can_use_card_payments  = $container->has( 'card-fields.eligible' ) && $container->get( 'card-fields.eligible' );
+
+		// Card payments are disabled for this plugin when WooPayments is active.
+		if ( class_exists( '\WC_Payments' ) ) {
+			$can_use_card_payments = false;
+		}
+
+		return new OnboardingProfile(
+			$can_use_casual_selling,
+			$can_use_vaulting,
+			$can_use_card_payments
+		);
 	},
 	'settings.rest.onboarding' => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );

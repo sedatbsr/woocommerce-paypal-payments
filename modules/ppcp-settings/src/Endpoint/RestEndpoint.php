@@ -53,7 +53,11 @@ class RestEndpoint extends WC_REST_Controller {
 			$source_key    = $details['js_name'] ?? '';
 			$sanitation_cb = $details['sanitize'] ?? null;
 
-			if ( ! $source_key || ! isset( $params[ $source_key ] ) ) {
+			if (
+				! $source_key
+				|| ! isset( $params[ $source_key ] )
+				|| 'read_only' === $sanitation_cb
+			) {
 				continue;
 			}
 
@@ -121,5 +125,4 @@ class RestEndpoint extends WC_REST_Controller {
 	protected function to_number( $value ) {
 		return $value !== null ? ( is_numeric( $value ) ? $value + 0 : null ) : null;
 	}
-
 }
