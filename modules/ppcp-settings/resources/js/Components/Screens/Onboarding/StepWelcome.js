@@ -89,10 +89,10 @@ const WelcomeForm = () => {
 	const advancedUsersDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
 		__(
-			'For advanced users: Connect a custom PayPal REST app for full control over your integration. For more information on creating a PayPal REST application, <a href="%s">click here</a>.',
+			'For advanced users: Connect a custom PayPal REST app for full control over your integration. For more information on creating a PayPal REST application, <a target="_blank" href="%s">click here</a>.',
 			'woocommerce-paypal-payments'
 		),
-		'#'
+		'https://woocommerce.com/document/woocommerce-paypal-payments/#manual-credential-input '
 	);
 
 	return (
@@ -116,7 +116,7 @@ const WelcomeForm = () => {
 			<Separator className="ppcp-r-page-welcome-mode-separator" />
 			<SettingsToggleBlock
 				label={ __(
-					'Manually Connect - TODO missing link',
+					'Manually Connect',
 					'woocommerce-paypal-payments'
 				) }
 				description={ advancedUsersDescription }

@@ -106,9 +106,12 @@ const StepProducts = ( { setStep, currentStep, stepperOrder } ) => {
 						currentValue={ products }
 						type="checkbox"
 					>
-						<a href="#">
+						<a
+							target="__blank"
+							href="https://woocommerce.com/document/woocommerce-paypal-payments/#subscriptions-faq"
+						>
 							{ __(
-								'WooCommerce Subscriptions - TODO missing link',
+								'WooCommerce Subscriptions',
 								'woocommerce-paypal-payments'
 							) }
 						</a>
