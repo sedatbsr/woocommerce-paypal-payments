@@ -1,0 +1,36 @@
+.ppcp-r-modal {
+	.components-modal {
+		&__header {
+			height: 52px;
+			padding: 20px 20px 0 20px;
+
+			button {
+				padding: 4px;
+			}
+		}
+
+		&__content {
+			margin-top: 48px;
+			padding: 0 50px 48px 50px;
+		}
+	}
+
+	&__header {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 8px;
+		border-bottom: 1px solid $color-gray-500;
+		padding-bottom: 12px;
+	}
+
+	&__title {
+		@include font(16, 20, 600);
+		color: $color-black;
+	}
+
+	&__content {
+		width: 400px;
+		max-width: 100%;
+	}
+}

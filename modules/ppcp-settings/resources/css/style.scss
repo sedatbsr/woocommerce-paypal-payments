@@ -15,8 +15,12 @@
 	@import './components/reusable-components/tabs';
 	@import './components/reusable-components/fields';
 	@import './components/reusable-components/title-badge';
+	@import './components/reusable-components/payment-method-item';
 	@import './components/screens/onboarding/step-welcome';
 	@import './components/screens/onboarding/step-business';
 	@import './components/screens/onboarding/step-products';
 	@import './components/screens/dashboard/tab-dashboard';
+	@import './components/screens/dashboard/tab-payment-methods';
 }
+
+@import './components/reusable-components/payment-method-modal';
