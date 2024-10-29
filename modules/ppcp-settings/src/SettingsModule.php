@@ -2,17 +2,17 @@
 /**
  * The Settings module.
  *
- * @package WooCommerce\PayPalCommerce\AxoBlock
+ * @package WooCommerce\PayPalCommerce\Settings
  */
 
-declare(strict_types=1);
+declare( strict_types = 1 );
+
 namespace WooCommerce\PayPalCommerce\Settings;
 
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
-use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayPalGateway;
 
 /**
  * Class SettingsModule
@@ -23,14 +23,14 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	/**
 	 * {@inheritDoc}
 	 */
-	public function services(): array {
+	public function services() : array {
 		return require __DIR__ . '/../services.php';
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function run( ContainerInterface $container ): bool {
+	public function run( ContainerInterface $container ) : bool {
 		add_action(
 			'admin_enqueue_scripts',
 			/**
@@ -38,7 +38,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 			 *
 			 * @psalm-suppress MissingClosureParamType
 			 */
-			static function( $hook_suffix ) use ( $container ) {
+			static function ( $hook_suffix ) use ( $container ) {
 				if ( 'woocommerce_page_wc-settings' !== $hook_suffix ) {
 					return;
 				}
@@ -77,19 +77,60 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 				);
 
 				wp_enqueue_style( 'ppcp-admin-settings' );
+
+				wp_enqueue_style( 'ppcp-admin-settings-font', 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap', array(), $style_asset_file['version'] );
+				wp_localize_script(
+					'ppcp-admin-settings',
+					'ppcpSettings',
+					array(
+						'assets' => array(
+							'imagesUrl' => $module_url . '/images/',
+						),
+						'debug'  => defined( 'WP_DEBUG' ) && WP_DEBUG,
+					)
+				);
 			}
 		);
 
 		add_action(
 			'woocommerce_paypal_payments_gateway_admin_options_wrapper',
-			static function(): void {
+			function () : void {
 				global $hide_save_button;
 				$hide_save_button = true;
 
-				echo '<div id="ppcp-settings-container"></div>';
+				$this->render_header();
+				$this->render_content();
+			}
+		);
+
+		add_action(
+			'rest_api_init',
+			static function () use ( $container ) : void {
+				$onboarding_endpoint = $container->get( 'settings.rest.onboarding' );
+				$onboarding_endpoint->register_routes();
 			}
 		);
 
 		return true;
+	}
+
+	/**
+	 * Outputs the settings page header (title and back-link).
+	 *
+	 * @return void
+	 */
+	protected function render_header() : void {
+		echo '<h2>' . esc_html__( 'PayPal', 'woocommerce-paypal-payments' );
+		wc_back_link( __( 'Return to payments', 'woocommerce-paypal-payments' ), admin_url( 'admin.php?page=wc-settings&tab=checkout' ) );
+		echo '</h2>';
+	}
+
+	/**
+	 * Renders the container for the React app.
+	 *
+	 * @return void
+	 */
+	protected function render_content() : void {
+		echo '<div id="ppcp-settings-container"></div>';
 	}
 }
