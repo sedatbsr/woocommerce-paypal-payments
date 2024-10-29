@@ -1,8 +1,10 @@
 import ACTION_TYPES from './action-types';
 
 const defaultState = {
+	isReady: false,
 	isSaving: false,
 	data: {
+		completed: false,
 		step: 0,
 		useSandbox: false,
 		useManualConnection: false,
@@ -39,18 +41,24 @@ export const onboardingReducer = (
 
 	switch ( type ) {
 		// Transient data.
-		case ACTION_TYPES.SET_IS_SAVING_ONBOARDING_DETAILS:
+		case ACTION_TYPES.SET_ONBOARDING_IS_READY:
+			return setTransient( { isReady: action.isReady } );
+
+		case ACTION_TYPES.SET_IS_SAVING_ONBOARDING:
 			return setTransient( { isSaving: action.isSaving } );
 
 		// Persistent data.
+		case ACTION_TYPES.SET_ONBOARDING_DETAILS:
+			return setPersistent( action.payload );
+
+		case ACTION_TYPES.SET_ONBOARDING_COMPLETED:
+			return setPersistent( { completed: action.completed } );
+
 		case ACTION_TYPES.SET_CLIENT_ID:
 			return setPersistent( { clientId: action.clientId } );
 
 		case ACTION_TYPES.SET_CLIENT_SECRET:
 			return setPersistent( { clientSecret: action.clientSecret } );
-
-		case ACTION_TYPES.SET_ONBOARDING_DETAILS:
-			return setPersistent( action.payload );
 
 		case ACTION_TYPES.SET_ONBOARDING_STEP:
 			return setPersistent( { step: action.step } );

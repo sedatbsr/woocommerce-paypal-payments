@@ -5,7 +5,12 @@ import SelectBox from '../../ReusableComponents/SelectBox';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
 import { useState } from '@wordpress/element';
 
-const StepProducts = ( { setStep, currentStep, stepperOrder } ) => {
+const StepProducts = ( {
+	setStep,
+	currentStep,
+	stepperOrder,
+	setCompleted,
+} ) => {
 	const [ products, setProducts ] = useState( [] );
 	const PRODUCTS_CHECKBOX_GROUP_NAME = 'products';
 	const VIRTUAL_CHECKBOX_VALUE = 'virtual';
@@ -106,9 +111,12 @@ const StepProducts = ( { setStep, currentStep, stepperOrder } ) => {
 						currentValue={ products }
 						type="checkbox"
 					>
-						<a href="#">
+						<a
+							target="__blank"
+							href="https://woocommerce.com/document/woocommerce-paypal-payments/#subscriptions-faq"
+						>
 							{ __(
-								'WooCommerce Subscriptions - TODO missing link',
+								'WooCommerce Subscriptions',
 								'woocommerce-paypal-payments'
 							) }
 						</a>
@@ -118,6 +126,7 @@ const StepProducts = ( { setStep, currentStep, stepperOrder } ) => {
 					setStep={ setStep }
 					currentStep={ currentStep }
 					stepperOrder={ stepperOrder }
+					setCompleted={ setCompleted }
 					canProceeedCallback={ () => products.length > 0 }
 				/>
 			</div>

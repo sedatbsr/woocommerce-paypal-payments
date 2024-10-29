@@ -6,7 +6,12 @@ import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import { useState } from '@wordpress/element';
 import Navigation from '../../ReusableComponents/Navigation';
 
-const StepBusiness = ( { setStep, currentStep, stepperOrder } ) => {
+const StepBusiness = ( {
+	setStep,
+	currentStep,
+	stepperOrder,
+	setCompleted,
+} ) => {
 	const [ businessCategory, setBusinessCategory ] = useState( null );
 	const BUSINESS_RADIO_GROUP_NAME = 'business';
 	const CASUAL_SELLER_CHECKBOX_VALUE = 'casual_seller';
@@ -91,6 +96,7 @@ const StepBusiness = ( { setStep, currentStep, stepperOrder } ) => {
 					setStep={ setStep }
 					currentStep={ currentStep }
 					stepperOrder={ stepperOrder }
+					setCompleted={ setCompleted }
 					canProceeedCallback={ () => businessCategory !== null }
 				/>
 			</div>

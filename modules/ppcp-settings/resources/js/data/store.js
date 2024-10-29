@@ -44,6 +44,10 @@ export const initStore = () => {
 
 			console.groupEnd();
 		};
+		window.ppcpSettings.startOnboarding = () => {
+			wp.data.dispatch( STORE_NAME ).setCompleted( false );
+			wp.data.dispatch( STORE_NAME ).setOnboardingStep( 0 );
+		};
 	}
 	/* eslint-enable no-console */
 };
