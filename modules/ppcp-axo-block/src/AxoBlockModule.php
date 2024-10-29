@@ -134,11 +134,11 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 			}
 		);
 
-		// Enqueue the PayPal Insights script
+		// Enqueue the PayPal Insights script.
 		add_action(
 			'wp_enqueue_scripts',
-			function () use ($c) {
-				$this->enqueue_paypal_insights_script($c);
+			function () use ( $c ) {
+				$this->enqueue_paypal_insights_script( $c );
 			}
 		);
 
@@ -183,7 +183,7 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 	 * @return void
 	 */
 	private function enqueue_paypal_insights_script( ContainerInterface $c ): void {
-		if ( ! has_block( 'woocommerce/checkout' ) ) {
+		if ( ! has_block( 'woocommerce/checkout' ) || WC()->cart->is_empty() ) {
 			return;
 		}
 
@@ -192,7 +192,7 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 
 		wp_register_script(
 			'wc-ppcp-paypal-insights',
-			untrailingslashit( $module_url ) . '/resources/js/plugins/PayPalInsights.js',
+			untrailingslashit( $module_url ) . '/assets/js/PayPalInsightsLoader.js',
 			array( 'wp-plugins', 'wp-data', 'wp-element', 'wc-blocks-registry' ),
 			$asset_version,
 			true

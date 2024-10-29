@@ -18,6 +18,7 @@ use WooCommerce\PayPalCommerce\WcGateway\Gateway\CreditCardGateway;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayPalGateway;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
 use WooCommerce\PayPalCommerce\WcGateway\Helper\DCCGatewayConfiguration;
+use WooCommerce\PayPalCommerce\ApiClient\Helper\CurrencyGetter;
 
 return array(
 
@@ -64,6 +65,7 @@ return array(
 			$container->get( 'session.handler' ),
 			$container->get( 'wcgateway.settings' ),
 			$container->get( 'onboarding.environment' ),
+			$container->get( 'axo.insights' ),
 			$container->get( 'wcgateway.settings.status' ),
 			$container->get( 'api.shop.currency.getter' ),
 			$container->get( 'woocommerce.logger.woocommerce' ),
@@ -86,6 +88,52 @@ return array(
 			$container->get( 'wcgateway.transaction-url-provider' ),
 			$container->get( 'onboarding.environment' ),
 			$container->get( 'woocommerce.logger.woocommerce' )
+		);
+	},
+
+	// Data needed for the PayPal Insights.
+	'axo.insights'                           => static function ( ContainerInterface $container ): array {
+		$settings = $container->get( 'wcgateway.settings' );
+		assert( $settings instanceof Settings );
+
+		$currency = $container->get( 'api.shop.currency.getter' );
+		assert( $currency instanceof CurrencyGetter );
+
+		return array(
+			'enabled'                     => defined( 'WP_DEBUG' ) && WP_DEBUG,
+			'client_id'                   => ( $settings->has( 'client_id' ) ? $settings->get( 'client_id' ) : null ),
+			'session_id'                  => substr(
+				method_exists( WC()->session, 'get_customer_unique_id' ) ?
+					md5( WC()->session->get_customer_unique_id() ) :
+					'',
+				0,
+				16
+			),
+			'amount'                      => array(
+				'currency_code' => $currency->get(),
+			),
+			'payment_method_selected_map' => $container->get( 'axo.payment_method_selected_map' ),
+			'wp_debug'                    => defined( 'WP_DEBUG' ) && WP_DEBUG,
+		);
+	},
+
+	// The mapping of payment methods to the PayPal Insights 'payment_method_selected' types.
+	'axo.payment_method_selected_map'        => static function ( ContainerInterface $container ): array {
+		return array(
+			'ppcp-axo-gateway'         => 'card',
+			'ppcp-credit-card-gateway' => 'card',
+			'ppcp-gateway'             => 'paypal',
+			'ppcp-googlepay'           => 'google_pay',
+			'ppcp-applepay'            => 'apple_pay',
+			'ppcp-multibanco'          => 'other',
+			'ppcp-trustly'             => 'other',
+			'ppcp-p24'                 => 'other',
+			'ppcp-mybank'              => 'other',
+			'ppcp-ideal'               => 'other',
+			'ppcp-eps'                 => 'other',
+			'ppcp-blik'                => 'other',
+			'ppcp-bancontact'          => 'other',
+			'ppcp-card-button-gateway' => 'card',
 		);
 	},
 

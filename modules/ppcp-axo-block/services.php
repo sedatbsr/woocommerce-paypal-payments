@@ -37,6 +37,7 @@ return array(
 			$container->get( 'wcgateway.settings' ),
 			$container->get( 'wcgateway.configuration.dcc' ),
 			$container->get( 'onboarding.environment' ),
+			$container->get( 'axo.payment_method_selected_map' ),
 			$container->get( 'wcgateway.url' )
 		);
 	},

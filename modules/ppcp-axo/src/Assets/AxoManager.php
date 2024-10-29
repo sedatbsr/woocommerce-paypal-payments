@@ -53,6 +53,13 @@ class AxoManager {
 	private $environment;
 
 	/**
+	 * Data needed for the PayPal Insights.
+	 *
+	 * @var array
+	 */
+	private array $insights_data;
+
+	/**
 	 * The Settings status helper.
 	 *
 	 * @var SettingsStatus
@@ -95,6 +102,7 @@ class AxoManager {
 	 * @param SessionHandler  $session_handler The Session handler.
 	 * @param Settings        $settings The Settings.
 	 * @param Environment     $environment The environment object.
+	 * @param array           $insights_data Data needed for the PayPal Insights.
 	 * @param SettingsStatus  $settings_status The Settings status helper.
 	 * @param CurrencyGetter  $currency The getter of the 3-letter currency code of the shop.
 	 * @param LoggerInterface $logger The logger.
@@ -106,6 +114,7 @@ class AxoManager {
 		SessionHandler $session_handler,
 		Settings $settings,
 		Environment $environment,
+		array $insights_data,
 		SettingsStatus $settings_status,
 		CurrencyGetter $currency,
 		LoggerInterface $logger,
@@ -117,6 +126,7 @@ class AxoManager {
 		$this->session_handler      = $session_handler;
 		$this->settings             = $settings;
 		$this->environment          = $environment;
+		$this->insights_data        = $insights_data;
 		$this->settings_status      = $settings_status;
 		$this->currency             = $currency;
 		$this->logger               = $logger;
@@ -161,7 +171,7 @@ class AxoManager {
 	 *
 	 * @return array
 	 */
-	private function script_data() {
+	private function script_data(): array {
 		return array(
 			'environment'               => array(
 				'is_sandbox' => $this->environment->current_environment() === 'sandbox',
@@ -169,20 +179,10 @@ class AxoManager {
 			'widgets'                   => array(
 				'email' => 'render',
 			),
-			'insights'                  => array(
-				'enabled'    => defined( 'WP_DEBUG' ) && WP_DEBUG,
-				'client_id'  => ( $this->settings->has( 'client_id' ) ? $this->settings->get( 'client_id' ) : null ),
-				'session_id' =>
-					substr(
-						method_exists( WC()->session, 'get_customer_unique_id' ) ? md5( WC()->session->get_customer_unique_id() ) : '',
-						0,
-						16
-					),
-				'amount'     => array(
-					'currency_code' => $this->currency->get(),
-					'value'         => WC()->cart->get_total( 'numeric' ),
-				),
-			),
+			// The amount is not available when setting the insights data, so we need to merge it here.
+			'insights'                  => ( function( array $data ): array {
+				$data['amount']['value'] = WC()->cart->get_total( 'numeric' );
+				return $data; } )( $this->insights_data ),
 			'style_options'             => array(
 				'root'  => array(
 					'backgroundColor' => $this->settings->has( 'axo_style_root_bg_color' ) ? $this->settings->get( 'axo_style_root_bg_color' ) : '',
