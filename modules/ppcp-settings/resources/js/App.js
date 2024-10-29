@@ -1,3 +1,8 @@
+import Settings from './Components/Screens/Settings';
 export function App() {
-	return <div className="red">App</div>;
+	return (
+		<div>
+			<Settings />
+		</div>
+	);
 }
