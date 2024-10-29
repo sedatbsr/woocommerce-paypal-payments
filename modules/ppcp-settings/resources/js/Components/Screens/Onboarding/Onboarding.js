@@ -12,7 +12,7 @@ const Onboarding = () => {
 	return (
 		<Container page={ PAGE_ONBOARDING }>
 			<div className="ppcp-r-card">
-				<Stepper
+				<OnboardingStep
 					currentStep={ step }
 					setStep={ setStep }
 					setCompleted={ setCompleted }
@@ -22,28 +22,27 @@ const Onboarding = () => {
 	);
 };
 
-const Stepper = ( { currentStep, setStep, setCompleted } ) => {
+const OnboardingStep = ( { currentStep, setStep, setCompleted } ) => {
 	const stepperOrder = [ StepWelcome, StepBusiness, StepProducts ];
 
-	const renderSteps = () => {
-		return stepperOrder.map( ( Step, index ) => {
-			return (
-				<div
-					key={ index }
-					style={ index !== currentStep ? { display: 'none' } : {} }
-				>
-					<Step
-						setStep={ setStep }
-						currentStep={ currentStep }
-						setCompleted={ setCompleted }
-						stepperOrder={ stepperOrder }
-					/>
-				</div>
-			);
-		} );
-	};
+	const isValidStep = ( step ) =>
+		typeof step === 'number' &&
+		Number.isInteger( step ) &&
+		step >= 0 &&
+		step < stepperOrder.length;
 
-	return <>{ renderSteps() }</>;
+	const safeCurrentStep = isValidStep( currentStep ) ? currentStep : 0;
+
+	const CurrentStepComponent = stepperOrder[ safeCurrentStep ];
+
+	return (
+		<CurrentStepComponent
+			setStep={ setStep }
+			currentStep={ safeCurrentStep }
+			setCompleted={ setCompleted }
+			stepperOrder={ stepperOrder }
+		/>
+	);
 };
 
 export default Onboarding;
