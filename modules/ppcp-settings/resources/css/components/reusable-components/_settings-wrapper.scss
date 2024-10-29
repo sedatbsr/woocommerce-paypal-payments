@@ -1,20 +1,23 @@
 .ppcp-r {
+	&-container {
+		max-width: var(--max-container-width, none);
+		margin-left: auto;
+		margin-right: auto;
+	}
 
 	&-inner-container {
-		width: 652px;
-		max-width: 100%;
-		margin: 0 auto;
-		padding: 0 16px;
+		margin-left: auto;
+		margin-right: auto;
+		padding: 0 16px 72px;
 		box-sizing: border-box;
+
+		@media screen and (max-width: 480px) {
+			padding-bottom: 36px;
+		}
 	}
 
 	&-container {
-		max-width: 1024px;
-		margin: 0 auto;
-
-		&--settings {
-			max-width: 938px;
-		}
+		box-shadow: $shadow-card;
 	}
 
 	&-card {

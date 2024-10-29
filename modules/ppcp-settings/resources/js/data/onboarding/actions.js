@@ -4,6 +4,19 @@ import ACTION_TYPES from './action-types';
 import { NAMESPACE, STORE_NAME } from '../constants';
 
 /**
+ * Non-persistent. Marks the onboarding details as "ready", i.e., fully initialized.
+ *
+ * @param {boolean} isReady
+ * @return {{type: string, isReady}} The action.
+ */
+export const setIsReady = ( isReady ) => {
+	return {
+		type: ACTION_TYPES.SET_ONBOARDING_IS_READY,
+		isReady,
+	};
+};
+
+/**
  * Non-persistent. Changes the "saving" flag.
  *
  * @param {boolean} isSaving
@@ -11,7 +24,7 @@ import { NAMESPACE, STORE_NAME } from '../constants';
  */
 export const setIsSaving = ( isSaving ) => {
 	return {
-		type: ACTION_TYPES.SET_IS_SAVING_ONBOARDING_DETAILS,
+		type: ACTION_TYPES.SET_IS_SAVING_ONBOARDING,
 		isSaving,
 	};
 };
@@ -26,6 +39,19 @@ export const setOnboardingDetails = ( payload ) => {
 	return {
 		type: ACTION_TYPES.SET_ONBOARDING_DETAILS,
 		payload,
+	};
+};
+
+/**
+ * Persistent.Set the "onboarding completed" flag which shows or hides the wizard.
+ *
+ * @param {boolean} completed
+ * @return {{type: string, payload}} The action.
+ */
+export const setCompleted = ( completed ) => {
+	return {
+		type: ACTION_TYPES.SET_ONBOARDING_COMPLETED,
+		completed,
 	};
 };
 

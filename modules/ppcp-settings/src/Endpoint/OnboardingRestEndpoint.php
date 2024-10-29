@@ -41,6 +41,10 @@ class OnboardingRestEndpoint extends RestEndpoint {
 	 * @var array
 	 */
 	private array $field_map = array(
+		'completed'              => array(
+			'js_name'  => 'completed',
+			'sanitize' => 'to_boolean',
+		),
 		'step'                   => array(
 			'js_name'  => 'step',
 			'sanitize' => 'to_number',
