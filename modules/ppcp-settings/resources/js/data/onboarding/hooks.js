@@ -1,5 +1,5 @@
 import { useSelect, useDispatch } from '@wordpress/data';
-import { STORE_NAME } from '../constants';
+import { PRODUCT_TYPES, STORE_NAME } from '../constants';
 
 export const useOnboardingDetails = () => {
 	const {
@@ -8,6 +8,8 @@ export const useOnboardingDetails = () => {
 		setManualConnectionMode,
 		setClientId,
 		setClientSecret,
+		setIsCasualSeller,
+		setProducts,
 	} = useDispatch( STORE_NAME );
 
 	// Transient accessors.
@@ -32,6 +34,21 @@ export const useOnboardingDetails = () => {
 		return select( STORE_NAME ).getPersistentData().useManualConnection;
 	}, [] );
 
+	const isCasualSeller = useSelect( ( select ) => {
+		return select( STORE_NAME ).getPersistentData().isCasualSeller;
+	}, [] );
+
+	const products = useSelect( ( select ) => {
+		return select( STORE_NAME ).getPersistentData().products || [];
+	}, [] );
+
+	const toggleProduct = ( list ) => {
+		const validProducts = list.filter( ( item ) =>
+			Object.values( PRODUCT_TYPES ).includes( item )
+		);
+		return setDetailAndPersist( setProducts, validProducts );
+	};
+
 	const setDetailAndPersist = async ( setter, value ) => {
 		setter( value );
 		await persist();
@@ -50,6 +67,11 @@ export const useOnboardingDetails = () => {
 			setDetailAndPersist( setSandboxMode, state ),
 		setManualConnectionMode: ( state ) =>
 			setDetailAndPersist( setManualConnectionMode, state ),
+		isCasualSeller,
+		setIsCasualSeller: ( value ) =>
+			setDetailAndPersist( setIsCasualSeller, value ),
+		products,
+		toggleProduct,
 	};
 };
 
