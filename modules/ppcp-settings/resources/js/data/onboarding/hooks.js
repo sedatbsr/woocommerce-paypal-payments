@@ -4,6 +4,8 @@ import { PRODUCT_TYPES, STORE_NAME } from '../constants';
 export const useOnboardingDetails = () => {
 	const {
 		persist,
+		setOnboardingStep,
+		setCompleted,
 		setSandboxMode,
 		setManualConnectionMode,
 		setClientId,
@@ -17,7 +19,19 @@ export const useOnboardingDetails = () => {
 		return select( STORE_NAME ).getTransientData().isSaving;
 	}, [] );
 
+	const isReady = useSelect( ( select ) => {
+		return select( STORE_NAME ).getTransientData().isReady;
+	} );
+
 	// Persistent accessors.
+	const step = useSelect( ( select ) => {
+		return select( STORE_NAME ).getPersistentData().step || 0;
+	} );
+
+	const completed = useSelect( ( select ) => {
+		return select( STORE_NAME ).getPersistentData().completed;
+	} );
+
 	const clientId = useSelect( ( select ) => {
 		return select( STORE_NAME ).getPersistentData().clientId;
 	}, [] );
@@ -56,17 +70,22 @@ export const useOnboardingDetails = () => {
 
 	return {
 		isSaving,
+		isReady,
+		step,
+		setStep: ( value ) => setDetailAndPersist( setOnboardingStep, value ),
+		completed,
+		setCompleted: ( state ) => setDetailAndPersist( setCompleted, state ),
 		isSandboxMode,
+		setSandboxMode: ( state ) =>
+			setDetailAndPersist( setSandboxMode, state ),
 		isManualConnectionMode,
+		setManualConnectionMode: ( state ) =>
+			setDetailAndPersist( setManualConnectionMode, state ),
 		clientId,
 		setClientId: ( value ) => setDetailAndPersist( setClientId, value ),
 		clientSecret,
 		setClientSecret: ( value ) =>
 			setDetailAndPersist( setClientSecret, value ),
-		setSandboxMode: ( state ) =>
-			setDetailAndPersist( setSandboxMode, state ),
-		setManualConnectionMode: ( state ) =>
-			setDetailAndPersist( setManualConnectionMode, state ),
 		isCasualSeller,
 		setIsCasualSeller: ( value ) =>
 			setDetailAndPersist( setIsCasualSeller, value ),
@@ -76,31 +95,8 @@ export const useOnboardingDetails = () => {
 };
 
 export const useOnboardingStep = () => {
-	const { persist, setOnboardingStep, setCompleted } =
-		useDispatch( STORE_NAME );
+	const { isReady, step, setStep, completed, setCompleted } =
+		useOnboardingDetails();
 
-	const isReady = useSelect( ( select ) => {
-		return select( STORE_NAME ).getTransientData().isReady;
-	} );
-
-	const step = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().step || 0;
-	} );
-
-	const completed = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().completed;
-	} );
-
-	const setDetailAndPersist = async ( setter, value ) => {
-		setter( value );
-		await persist();
-	};
-
-	return {
-		isReady,
-		step,
-		setStep: ( value ) => setDetailAndPersist( setOnboardingStep, value ),
-		completed,
-		setCompleted: ( state ) => setDetailAndPersist( setCompleted, state ),
-	};
+	return { isReady, step, setStep, completed, setCompleted };
 };
