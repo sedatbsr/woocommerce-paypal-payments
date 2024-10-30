@@ -46,6 +46,10 @@ export const onboardingReducer = (
 	};
 
 	switch ( type ) {
+		// Reset store to initial state.
+		case ACTION_TYPES.RESET_ONBOARDING:
+			return setPersistent( defaultState.data );
+
 		// Transient data.
 		case ACTION_TYPES.SET_ONBOARDING_IS_READY:
 			return setTransient( { isReady: action.isReady } );

@@ -4,6 +4,15 @@ import ACTION_TYPES from './action-types';
 import { NAMESPACE, STORE_NAME } from '../constants';
 
 /**
+ * Special. Resets all values in the onboarding store to initial defaults.
+ *
+ * @return {{type: string}} The action.
+ */
+export const resetOnboarding = () => {
+	return { type: ACTION_TYPES.RESET_ONBOARDING };
+};
+
+/**
  * Non-persistent. Marks the onboarding details as "ready", i.e., fully initialized.
  *
  * @param {boolean} isReady
