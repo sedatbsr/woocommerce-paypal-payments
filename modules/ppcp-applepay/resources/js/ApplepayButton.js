@@ -109,10 +109,15 @@ class ApplePayButton extends PaymentButton {
 	 * @inheritDoc
 	 */
 	static getStyles( buttonConfig, ppcpConfig ) {
-		return combineStyles(
-			ppcpConfig?.button || {},
-			buttonConfig?.button || {}
-		);
+		const { color, lang, type } = buttonConfig?.button || {};
+		const buttonStyle = { color, lang, type };
+
+		const buttonStyles = {
+			style: buttonStyle,
+			mini_cart_style: buttonStyle,
+		};
+
+		return combineStyles( ppcpConfig?.button || {}, buttonStyles );
 	}
 
 	constructor(
