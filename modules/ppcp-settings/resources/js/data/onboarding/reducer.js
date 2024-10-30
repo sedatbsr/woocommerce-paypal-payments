@@ -12,6 +12,8 @@ const defaultState = {
 		useManualConnection: false,
 		clientId: '',
 		clientSecret: '',
+		isCasualSeller: null, // null value will uncheck both options in the UI.
+		products: [],
 	},
 
 	// Read only values, provided by the server.
@@ -86,6 +88,12 @@ export const onboardingReducer = (
 			return setPersistent( {
 				useManualConnection: action.useManualConnection,
 			} );
+
+		case ACTION_TYPES.SET_IS_CASUAL_SELLER:
+			return setPersistent( { isCasualSeller: action.isCasualSeller } );
+
+		case ACTION_TYPES.SET_PRODUCTS:
+			return setPersistent( { products: action.products } );
 
 		default:
 			return state;

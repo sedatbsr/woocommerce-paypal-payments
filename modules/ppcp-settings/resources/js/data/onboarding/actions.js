@@ -130,6 +130,32 @@ export const setClientSecret = ( clientSecret ) => {
 };
 
 /**
+ * Persistent. Sets the "isCasualSeller" value.
+ *
+ * @param {boolean} isCasualSeller
+ * @return {{type: string, isCasualSeller}} The action.
+ */
+export const setIsCasualSeller = ( isCasualSeller ) => {
+	return {
+		type: ACTION_TYPES.SET_IS_CASUAL_SELLER,
+		isCasualSeller,
+	};
+};
+
+/**
+ * Persistent. Sets the "products" array.
+ *
+ * @param {string[]} products
+ * @return {{type: string, products}} The action.
+ */
+export const setProducts = ( products ) => {
+	return {
+		type: ACTION_TYPES.SET_PRODUCTS,
+		products,
+	};
+};
+
+/**
  * Saves the persistent details to the WP database.
  *
  * @return {any} A generator function that handles the saving process.
