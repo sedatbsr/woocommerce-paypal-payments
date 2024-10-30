@@ -98,6 +98,8 @@ class OnboardingRestEndpoint extends RestEndpoint {
 	 */
 	public function __construct( OnboardingProfile $profile ) {
 		$this->profile = $profile;
+
+		$this->field_map['products']['sanitize'] = fn( $list ) => array_map( 'sanitize_text_field', $list );
 	}
 
 	/**
