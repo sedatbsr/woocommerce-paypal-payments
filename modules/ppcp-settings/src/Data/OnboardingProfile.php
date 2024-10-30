@@ -70,6 +70,8 @@ class OnboardingProfile extends AbstractDataModel {
 			'use_manual_connection' => false,
 			'client_id'             => '',
 			'client_secret'         => '',
+			'is_casual_seller'      => null,
+			'products'              => array(),
 		);
 	}
 
@@ -181,6 +183,42 @@ class OnboardingProfile extends AbstractDataModel {
 	 */
 	public function set_client_secret( string $client_secret ) : void {
 		$this->data['client_secret'] = sanitize_text_field( $client_secret );
+	}
+
+	/**
+	 * Gets the casual seller flag.
+	 *
+	 * @return bool|null
+	 */
+	public function get_casual_seller() : ?bool {
+		return $this->data['is_casual_seller'];
+	}
+
+	/**
+	 * Sets the casual-seller flag.
+	 *
+	 * @param bool|null $casual_seller Whether the merchant uses a personal account for selling.
+	 */
+	public function set_casual_seller( ?bool $casual_seller ) : void {
+		$this->data['is_casual_seller'] = $casual_seller;
+	}
+
+	/**
+	 * Gets the active product types for this store.
+	 *
+	 * @return string[]
+	 */
+	public function get_products() : array {
+		return $this->data['products'];
+	}
+
+	/**
+	 * Sets the list of active product types.
+	 *
+	 * @param string[] $products Any of ['virtual'|'physical'|'subscriptions'].
+	 */
+	public function set_products( array $products ) : void {
+		$this->data['products'] = $products;
 	}
 
 	/**

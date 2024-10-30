@@ -65,6 +65,13 @@ class OnboardingRestEndpoint extends RestEndpoint {
 			'js_name'  => 'clientSecret',
 			'sanitize' => 'sanitize_text_field',
 		),
+		'is_casual_seller'      => array(
+			'js_name'  => 'isCasualSeller',
+			'sanitize' => 'to_boolean',
+		),
+		'products'              => array(
+			'js_name' => 'products',
+		),
 	);
 
 	/**
