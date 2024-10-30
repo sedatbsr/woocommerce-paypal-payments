@@ -116,7 +116,7 @@ class OnboardingProfile extends AbstractDataModel {
 	 *
 	 * @return bool
 	 */
-	public function get_use_sandbox() : bool {
+	public function get_sandbox() : bool {
 		return (bool) $this->data['use_sandbox'];
 	}
 
@@ -125,7 +125,7 @@ class OnboardingProfile extends AbstractDataModel {
 	 *
 	 * @param bool $use_sandbox Whether to use sandbox mode.
 	 */
-	public function set_use_sandbox( bool $use_sandbox ) : void {
+	public function set_sandbox( bool $use_sandbox ) : void {
 		$this->data['use_sandbox'] = $use_sandbox;
 	}
 
@@ -134,7 +134,7 @@ class OnboardingProfile extends AbstractDataModel {
 	 *
 	 * @return bool
 	 */
-	public function get_use_manual_connection() : bool {
+	public function get_manual_connection() : bool {
 		return (bool) $this->data['use_manual_connection'];
 	}
 
@@ -143,7 +143,7 @@ class OnboardingProfile extends AbstractDataModel {
 	 *
 	 * @param bool $use_manual_connection Whether to use manual connection.
 	 */
-	public function set_use_manual_connection( bool $use_manual_connection ) : void {
+	public function set_manual_connection( bool $use_manual_connection ) : void {
 		$this->data['use_manual_connection'] = $use_manual_connection;
 	}
 
