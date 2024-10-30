@@ -22,6 +22,7 @@ use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\WcGateway\Endpoint\RefreshFeatureStatusEndpoint;
+use WooCommerce\PayPalCommerce\WcGateway\Notice\SendOnlyCountryNotice;
 use WooCommerce\PayPalCommerce\WcGateway\Processor\CreditCardOrderInfoHandlingTrait;
 use WC_Order;
 use WooCommerce\PayPalCommerce\AdminNotices\Repository\Repository;
@@ -224,13 +225,19 @@ class WCGatewayModule implements ServiceModule, ExtendingModule, ExecutableModul
 				foreach ( array(
 					$c->get( 'wcgateway.notice.dcc-without-paypal' ),
 					$c->get( 'wcgateway.notice.card-button-without-paypal' ),
-					$c->get( 'wcgateway.notice.send-only-country' ),
 				) as $gateway_without_paypal_notice ) {
 					assert( $gateway_without_paypal_notice instanceof GatewayWithoutPayPalAdminNotice );
 					$message = $gateway_without_paypal_notice->message();
 					if ( $message ) {
 						$notices[] = $message;
 					}
+				}
+
+				$send_only_country_notice = $c->get( 'wcgateway.notice.send-only-country' );
+				assert( $send_only_country_notice instanceof SendOnlyCountryNotice );
+				$message = $send_only_country_notice->message();
+				if ( $message ) {
+					$notices[] = $message;
 				}
 
 				$authorize_order_action = $c->get( 'wcgateway.notice.authorize-order-action' );
