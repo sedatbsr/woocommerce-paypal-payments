@@ -3,7 +3,7 @@ import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper.js';
 import SelectBox from '../../ReusableComponents/SelectBox.js';
 import { __ } from '@wordpress/i18n';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
-import { useState } from '@wordpress/element';
+import { useOnboardingStepBusiness } from '../../../data';
 import Navigation from '../../ReusableComponents/Navigation';
 import { BUSINESS_TYPES } from '../../../data/constants';
 
@@ -15,7 +15,21 @@ const StepBusiness = ( {
 	stepperOrder,
 	setCompleted,
 } ) => {
-	const [ businessCategory, setBusinessCategory ] = useState( null );
+	const { isCasualSeller, setIsCasualSeller } = useOnboardingStepBusiness();
+
+	const handleSellerTypeChange = ( value ) => {
+		setIsCasualSeller( BUSINESS_TYPES.CASUAL_SELLER === value );
+	};
+
+	const getCurrentValue = () => {
+		if ( isCasualSeller === null ) {
+			return '';
+		}
+
+		return isCasualSeller
+			? BUSINESS_TYPES.CASUAL_SELLER
+			: BUSINESS_TYPES.BUSINESS;
+	};
 
 	return (
 		<div className="ppcp-r-page-business">
@@ -39,12 +53,9 @@ const StepBusiness = ( {
 						icon="icon-business-casual-seller.svg"
 						name={ BUSINESS_RADIO_GROUP_NAME }
 						value={ BUSINESS_TYPES.CASUAL_SELLER }
-						changeCallback={ setBusinessCategory }
-						currentValue={ businessCategory }
-						checked={
-							businessCategory ===
-							{ CASUAL_SELLER_CHECKBOX_VALUE }
-						}
+						changeCallback={ handleSellerTypeChange }
+						currentValue={ getCurrentValue() }
+						checked={ isCasualSeller === true }
 						type="radio"
 					>
 						<PaymentMethodIcons
@@ -70,11 +81,9 @@ const StepBusiness = ( {
 						icon="icon-business-business.svg"
 						name={ BUSINESS_RADIO_GROUP_NAME }
 						value={ BUSINESS_TYPES.BUSINESS }
-						currentValue={ businessCategory }
-						changeCallback={ setBusinessCategory }
-						checked={
-							businessCategory === { BUSINESS_CHECKBOX_VALUE }
-						}
+						changeCallback={ handleSellerTypeChange }
+						currentValue={ getCurrentValue() }
+						checked={ isCasualSeller === false }
 						type="radio"
 					>
 						<PaymentMethodIcons
@@ -97,7 +106,7 @@ const StepBusiness = ( {
 					currentStep={ currentStep }
 					stepperOrder={ stepperOrder }
 					setCompleted={ setCompleted }
-					canProceeedCallback={ () => businessCategory !== null }
+					canProceeedCallback={ () => isCasualSeller !== null }
 				/>
 			</div>
 		</div>

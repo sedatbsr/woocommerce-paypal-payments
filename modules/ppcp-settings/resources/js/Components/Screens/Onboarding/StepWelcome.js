@@ -4,7 +4,7 @@ import { Button, TextControl } from '@wordpress/components';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import SettingsToggleBlock from '../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../ReusableComponents/Separator';
-import { useOnboardingDetails } from '../../../data';
+import { useOnboardingStepWelcome } from '../../../data';
 import DataStoreControl from '../../ReusableComponents/DataStoreControl';
 
 const StepWelcome = ( { setStep, currentStep } ) => {
@@ -84,7 +84,7 @@ const WelcomeForm = () => {
 		setClientId,
 		clientSecret,
 		setClientSecret,
-	} = useOnboardingDetails();
+	} = useOnboardingStepWelcome();
 
 	const advancedUsersDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide

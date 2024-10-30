@@ -1,7 +1,7 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { PRODUCT_TYPES, STORE_NAME } from '../constants';
 
-export const useOnboardingDetails = () => {
+const useOnboardingDetails = () => {
 	const {
 		persist,
 		setOnboardingStep,
@@ -92,6 +92,44 @@ export const useOnboardingDetails = () => {
 		products,
 		toggleProduct,
 	};
+};
+
+export const useOnboardingStepWelcome = () => {
+	const {
+		isSaving,
+		isSandboxMode,
+		setSandboxMode,
+		isManualConnectionMode,
+		setManualConnectionMode,
+		clientId,
+		setClientId,
+		clientSecret,
+		setClientSecret,
+	} = useOnboardingDetails();
+
+	return {
+		isSaving,
+		isSandboxMode,
+		setSandboxMode,
+		isManualConnectionMode,
+		setManualConnectionMode,
+		clientId,
+		setClientId,
+		clientSecret,
+		setClientSecret,
+	};
+};
+
+export const useOnboardingStepBusiness = () => {
+	const { isCasualSeller, setIsCasualSeller } = useOnboardingDetails();
+
+	return { isCasualSeller, setIsCasualSeller };
+};
+
+export const useOnboardingStepProducts = () => {
+	const { products, toggleProduct } = useOnboardingDetails();
+
+	return { products, toggleProduct };
 };
 
 export const useOnboardingStep = () => {

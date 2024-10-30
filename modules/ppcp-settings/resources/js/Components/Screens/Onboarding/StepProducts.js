@@ -3,7 +3,7 @@ import Navigation from '../../ReusableComponents/Navigation';
 import { __ } from '@wordpress/i18n';
 import SelectBox from '../../ReusableComponents/SelectBox';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
-import { useState } from '@wordpress/element';
+import { useOnboardingStepProducts } from '../../../data';
 import { PRODUCT_TYPES } from '../../../data/constants';
 
 const PRODUCTS_CHECKBOX_GROUP_NAME = 'products';
@@ -14,7 +14,7 @@ const StepProducts = ( {
 	stepperOrder,
 	setCompleted,
 } ) => {
-	const [ products, setProducts ] = useState( [] );
+	const { products, toggleProduct } = useOnboardingStepProducts();
 
 	return (
 		<div className="ppcp-r-page-products">
@@ -35,7 +35,7 @@ const StepProducts = ( {
 						icon="icon-product-virtual.svg"
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
 						value={ PRODUCT_TYPES.VIRTUAL }
-						changeCallback={ setProducts }
+						changeCallback={ toggleProduct }
 						currentValue={ products }
 						type="checkbox"
 					>
@@ -78,7 +78,7 @@ const StepProducts = ( {
 						icon="icon-product-physical.svg"
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
 						value={ PRODUCT_TYPES.PHYSICAL }
-						changeCallback={ setProducts }
+						changeCallback={ toggleProduct }
 						currentValue={ products }
 						type="checkbox"
 					>
@@ -106,7 +106,7 @@ const StepProducts = ( {
 						icon="icon-product-subscription.svg"
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
 						value={ PRODUCT_TYPES.SUBSCRIPTIONS }
-						changeCallback={ setProducts }
+						changeCallback={ toggleProduct }
 						currentValue={ products }
 						type="checkbox"
 					>
