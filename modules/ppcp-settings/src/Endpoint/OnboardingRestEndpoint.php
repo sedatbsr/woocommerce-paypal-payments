@@ -41,41 +41,46 @@ class OnboardingRestEndpoint extends RestEndpoint {
 	 * @var array
 	 */
 	private array $field_map = array(
-		'completed'              => array(
+		'completed'             => array(
 			'js_name'  => 'completed',
 			'sanitize' => 'to_boolean',
 		),
-		'step'                   => array(
+		'step'                  => array(
 			'js_name'  => 'step',
 			'sanitize' => 'to_number',
 		),
-		'use_sandbox'            => array(
+		'use_sandbox'           => array(
 			'js_name'  => 'useSandbox',
 			'sanitize' => 'to_boolean',
 		),
-		'use_manual_connection'  => array(
+		'use_manual_connection' => array(
 			'js_name'  => 'useManualConnection',
 			'sanitize' => 'to_boolean',
 		),
-		'client_id'              => array(
+		'client_id'             => array(
 			'js_name'  => 'clientId',
 			'sanitize' => 'sanitize_text_field',
 		),
-		'client_secret'          => array(
+		'client_secret'         => array(
 			'js_name'  => 'clientSecret',
 			'sanitize' => 'sanitize_text_field',
 		),
+	);
+
+	/**
+	 * Map the internal flags to JS names.
+	 *
+	 * @var array
+	 */
+	private array $flag_map = array(
 		'can_use_casual_selling' => array(
-			'js_name'  => 'canUseCasualSelling',
-			'sanitize' => 'read_only',
+			'js_name' => 'canUseCasualSelling',
 		),
 		'can_use_vaulting'       => array(
-			'js_name'  => 'canUseVaulting',
-			'sanitize' => 'read_only',
+			'js_name' => 'canUseVaulting',
 		),
 		'can_use_card_payments'  => array(
-			'js_name'  => 'canUseCardPayments',
-			'sanitize' => 'read_only',
+			'js_name' => 'canUseCardPayments',
 		),
 	);
 
@@ -128,7 +133,17 @@ class OnboardingRestEndpoint extends RestEndpoint {
 			$this->field_map
 		);
 
-		return rest_ensure_response( $js_data );
+		$js_flags = $this->sanitize_for_javascript(
+			$this->profile->get_flags(),
+			$this->flag_map
+		);
+
+		return rest_ensure_response(
+			array(
+				'data'  => $js_data,
+				'flags' => $js_flags,
+			)
+		);
 	}
 
 	/**

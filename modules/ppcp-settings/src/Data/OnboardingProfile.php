@@ -30,6 +30,13 @@ class OnboardingProfile extends AbstractDataModel {
 	protected const OPTION_KEY = 'woocommerce-ppcp-data-onboarding';
 
 	/**
+	 * List of customization flags, provided by the server (read-only).
+	 *
+	 * @var array
+	 */
+	protected array $flags = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param bool $can_use_casual_selling Whether casual selling is enabled in the store's country.
@@ -45,9 +52,9 @@ class OnboardingProfile extends AbstractDataModel {
 	) {
 		parent::__construct();
 
-		$this->data['can_use_casual_selling'] = $can_use_casual_selling;
-		$this->data['can_use_vaulting']       = $can_use_vaulting;
-		$this->data['can_use_card_payments']  = $can_use_card_payments;
+		$this->flags['can_use_casual_selling'] = $can_use_casual_selling;
+		$this->flags['can_use_vaulting']       = $can_use_vaulting;
+		$this->flags['can_use_card_payments']  = $can_use_card_payments;
 	}
 
 	/**
@@ -57,15 +64,12 @@ class OnboardingProfile extends AbstractDataModel {
 	 */
 	protected function get_defaults() : array {
 		return array(
-			'completed'              => false,
-			'step'                   => 0,
-			'use_sandbox'            => false,
-			'use_manual_connection'  => false,
-			'client_id'              => '',
-			'client_secret'          => '',
-			'can_use_casual_selling' => null,
-			'can_use_vaulting'       => null,
-			'can_use_card_payments'  => null,
+			'completed'             => false,
+			'step'                  => 0,
+			'use_sandbox'           => false,
+			'use_manual_connection' => false,
+			'client_id'             => '',
+			'client_secret'         => '',
 		);
 	}
 
@@ -180,29 +184,11 @@ class OnboardingProfile extends AbstractDataModel {
 	}
 
 	/**
-	 * Gets whether casual selling can be used.
+	 * Returns the list of read-only customization flags
 	 *
-	 * @return bool
+	 * @return array
 	 */
-	public function get_can_use_casual_selling() : bool {
-		return (bool) $this->data['can_use_casual_selling'];
-	}
-
-	/**
-	 * Gets whether vaulting can be used.
-	 *
-	 * @return bool
-	 */
-	public function get_can_use_vaulting() : bool {
-		return (bool) $this->data['can_use_vaulting'];
-	}
-
-	/**
-	 * Gets whether Credit Card payments can be used.
-	 *
-	 * @return bool
-	 */
-	public function get_can_use_card_payments() : bool {
-		return (bool) $this->data['can_use_card_payments'];
+	public function get_flags() : array {
+		return $this->flags;
 	}
 }

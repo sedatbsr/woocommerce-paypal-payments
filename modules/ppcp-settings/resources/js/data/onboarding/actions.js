@@ -32,7 +32,7 @@ export const setIsSaving = ( isSaving ) => {
 /**
  * Persistent. Set the full onboarding details, usually during app initialization.
  *
- * @param {Object} payload
+ * @param {{data: {}, flags?: {}}} payload
  * @return {{type: string, payload}} The action.
  */
 export const setOnboardingDetails = ( payload ) => {
