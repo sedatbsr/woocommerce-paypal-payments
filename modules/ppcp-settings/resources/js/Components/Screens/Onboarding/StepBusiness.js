@@ -5,6 +5,9 @@ import { __ } from '@wordpress/i18n';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import { useState } from '@wordpress/element';
 import Navigation from '../../ReusableComponents/Navigation';
+import { BUSINESS_TYPES } from '../../../data/constants';
+
+const BUSINESS_RADIO_GROUP_NAME = 'business';
 
 const StepBusiness = ( {
 	setStep,
@@ -13,9 +16,6 @@ const StepBusiness = ( {
 	setCompleted,
 } ) => {
 	const [ businessCategory, setBusinessCategory ] = useState( null );
-	const BUSINESS_RADIO_GROUP_NAME = 'business';
-	const CASUAL_SELLER_CHECKBOX_VALUE = 'casual_seller';
-	const BUSINESS_CHECKBOX_VALUE = 'business';
 
 	return (
 		<div className="ppcp-r-page-business">
@@ -38,7 +38,7 @@ const StepBusiness = ( {
 						) }
 						icon="icon-business-casual-seller.svg"
 						name={ BUSINESS_RADIO_GROUP_NAME }
-						value={ CASUAL_SELLER_CHECKBOX_VALUE }
+						value={ BUSINESS_TYPES.CASUAL_SELLER }
 						changeCallback={ setBusinessCategory }
 						currentValue={ businessCategory }
 						checked={
@@ -69,7 +69,7 @@ const StepBusiness = ( {
 						) }
 						icon="icon-business-business.svg"
 						name={ BUSINESS_RADIO_GROUP_NAME }
-						value={ BUSINESS_CHECKBOX_VALUE }
+						value={ BUSINESS_TYPES.BUSINESS }
 						currentValue={ businessCategory }
 						changeCallback={ setBusinessCategory }
 						checked={
