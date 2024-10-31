@@ -9,12 +9,13 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings;
 
+use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
 
 return array(
-	'settings.url'             => static function ( ContainerInterface $container ) : string {
+	'settings.url'                 => static function ( ContainerInterface $container ) : string {
 		/**
 		 * The path cannot be false.
 		 *
@@ -25,7 +26,7 @@ return array(
 			dirname( realpath( __FILE__ ), 3 ) . '/woocommerce-paypal-payments.php'
 		);
 	},
-	'settings.data.onboarding' => static function ( ContainerInterface $container ) : OnboardingProfile {
+	'settings.data.onboarding'     => static function ( ContainerInterface $container ) : OnboardingProfile {
 		$can_use_casual_selling = false;
 		$can_use_vaulting       = $container->has( 'save-payment-methods.eligible' ) && $container->get( 'save-payment-methods.eligible' );
 		$can_use_card_payments  = $container->has( 'card-fields.eligible' ) && $container->get( 'card-fields.eligible' );
@@ -41,7 +42,10 @@ return array(
 			$can_use_card_payments
 		);
 	},
-	'settings.rest.onboarding' => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
+	'settings.rest.onboarding'     => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );
+	},
+	'settings.rest.connect_manual' => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
+		return new ConnectManualRestEndpoint();
 	},
 );
