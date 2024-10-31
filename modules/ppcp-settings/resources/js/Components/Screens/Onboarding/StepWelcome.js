@@ -125,19 +125,33 @@ const WelcomeForm = () => {
 			>
 				<DataStoreControl
 					control={ TextControl }
-					label={ __(
-						'Sandbox Client ID',
-						'woocommerce-paypal-payments'
-					) }
+					label={
+						isSandboxMode
+							? __(
+									'Sandbox Client ID',
+									'woocommerce-paypal-payments'
+							  )
+							: __(
+									'Live Client ID',
+									'woocommerce-paypal-payments'
+							  )
+					}
 					value={ clientId }
 					onChange={ setClientId }
 				/>
 				<DataStoreControl
 					control={ TextControl }
-					label={ __(
-						'Sandbox Secret Key',
-						'woocommerce-paypal-payments'
-					) }
+					label={
+						isSandboxMode
+							? __(
+									'Sandbox Secret Key',
+									'woocommerce-paypal-payments'
+							  )
+							: __(
+									'Live Secret Key',
+									'woocommerce-paypal-payments'
+							  )
+					}
 					value={ clientSecret }
 					onChange={ setClientSecret }
 					type="password"
