@@ -46,9 +46,9 @@ return array(
 	'settings.rest.onboarding'                    => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );
 	},
-	'settings.rest.connect_manual' => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
+	'settings.rest.connect_manual'                => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
 		return new ConnectManualRestEndpoint();
-  },
+	},
 	'settings.casual-selling.supported-countries' => static function ( ContainerInterface $container ) : array {
 		// TODO: This is a dummy list, while we wait for the official eligibility list.
 
