@@ -1,10 +1,11 @@
-import OnboardingHeader from '../../ReusableComponents/OnboardingHeader.js';
+import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, TextControl } from '@wordpress/components';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import SettingsToggleBlock from '../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../ReusableComponents/Separator';
-import { useManualConnect, useOnboardingDetails } from '../../../data';
+import { useOnboardingStepWelcome, useManualConnect } from '../../../data';
+
 import DataStoreControl from '../../ReusableComponents/DataStoreControl';
 
 const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
@@ -84,7 +85,8 @@ const WelcomeForm = ( { setCompleted } ) => {
 		setClientId,
 		clientSecret,
 		setClientSecret,
-	} = useOnboardingDetails();
+	} = 
+        ();
 
 	const { connectManual } = useManualConnect();
 
