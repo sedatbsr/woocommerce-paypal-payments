@@ -21,6 +21,7 @@ use WooCommerce\PayPalCommerce\Session\SessionHandler;
 use WooCommerce\PayPalCommerce\WcGateway\Exception\NotFoundException;
 use WooCommerce\PayPalCommerce\WcGateway\Helper\SettingsStatus;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
+use WooCommerce\PayPalCommerce\WcSubscriptions\Helper\SubscriptionHelper;
 
 /**
  * Class Button
@@ -72,13 +73,6 @@ class Button implements ButtonInterface {
 	private $settings_status;
 
 	/**
-	 * 3-letter currency code of the shop.
-	 *
-	 * @var string
-	 */
-	private $currency;
-
-	/**
 	 * The logger.
 	 *
 	 * @var LoggerInterface
@@ -93,39 +87,46 @@ class Button implements ButtonInterface {
 	private $session_handler;
 
 	/**
+	 * The Subscription Helper.
+	 *
+	 * @var SubscriptionHelper
+	 */
+	private $subscription_helper;
+
+	/**
 	 * SmartButton constructor.
 	 *
-	 * @param string          $module_url The URL to the module.
-	 * @param string          $sdk_url The URL to the SDK.
-	 * @param string          $version The assets version.
-	 * @param SessionHandler  $session_handler The Session handler.
-	 * @param Settings        $settings The Settings.
-	 * @param Environment     $environment The environment object.
-	 * @param SettingsStatus  $settings_status The Settings status helper.
-	 * @param string          $currency 3-letter currency code of the shop.
-	 * @param LoggerInterface $logger The logger.
+	 * @param string             $module_url The URL to the module.
+	 * @param string             $sdk_url The URL to the SDK.
+	 * @param string             $version The assets version.
+	 * @param SessionHandler     $session_handler The Session handler.
+	 * @param SubscriptionHelper $subscription_helper The subscription helper.
+	 * @param Settings           $settings The Settings.
+	 * @param Environment        $environment The environment object.
+	 * @param SettingsStatus     $settings_status The Settings status helper.
+	 * @param LoggerInterface    $logger The logger.
 	 */
 	public function __construct(
 		string $module_url,
 		string $sdk_url,
 		string $version,
 		SessionHandler $session_handler,
+		SubscriptionHelper $subscription_helper,
 		Settings $settings,
 		Environment $environment,
 		SettingsStatus $settings_status,
-		string $currency,
 		LoggerInterface $logger
 	) {
 
-		$this->module_url      = $module_url;
-		$this->sdk_url         = $sdk_url;
-		$this->version         = $version;
-		$this->session_handler = $session_handler;
-		$this->settings        = $settings;
-		$this->environment     = $environment;
-		$this->settings_status = $settings_status;
-		$this->currency        = $currency;
-		$this->logger          = $logger;
+		$this->module_url          = $module_url;
+		$this->sdk_url             = $sdk_url;
+		$this->version             = $version;
+		$this->session_handler     = $session_handler;
+		$this->subscription_helper = $subscription_helper;
+		$this->settings            = $settings;
+		$this->environment         = $environment;
+		$this->settings_status     = $settings_status;
+		$this->logger              = $logger;
 	}
 
 	/**
@@ -243,6 +244,21 @@ class Button implements ButtonInterface {
 		$button_enabled_payorder = true;
 		$button_enabled_minicart = $this->settings_status->is_smart_button_enabled_for_location( 'mini-cart' );
 
+		if (
+			$this->subscription_helper->plugin_is_active()
+			&& ! $this->subscription_helper->accept_manual_renewals()
+		) {
+			if ( is_product() && $this->subscription_helper->current_product_is_subscription() ) {
+				return false;
+			}
+			if ( $this->subscription_helper->order_pay_contains_subscription() ) {
+				return false;
+			}
+			if ( $this->subscription_helper->cart_contains_subscription() ) {
+				return false;
+			}
+		}
+
 		/**
 		 * Param types removed to avoid third-party issues.
 		 *
@@ -290,6 +306,7 @@ class Button implements ButtonInterface {
 				$render_placeholder,
 				function () {
 					$this->googlepay_button();
+					$this->hide_gateway_until_eligible();
 				},
 				21
 			);
@@ -303,6 +320,7 @@ class Button implements ButtonInterface {
 				$render_placeholder,
 				function () {
 					$this->googlepay_button();
+					$this->hide_gateway_until_eligible();
 				},
 				21
 			);
@@ -332,6 +350,23 @@ class Button implements ButtonInterface {
 		<div id="ppc-button-googlepay-container" class="ppcp-button-apm ppcp-button-googlepay">
 			<?php wp_nonce_field( 'woocommerce-process_checkout', 'woocommerce-process-checkout-nonce' ); ?>
 		</div>
+		<?php
+	}
+
+	/**
+	 * Outputs an inline CSS style that hides the Google Pay gateway (on Classic Checkout).
+	 * The style is removed by `PaymentButton.js` once the eligibility of the payment method
+	 * is confirmed.
+	 *
+	 * @return void
+	 */
+	protected function hide_gateway_until_eligible() : void {
+		?>
+		<style data-hide-gateway='<?php echo esc_attr( GooglePayGateway::ID ); ?>'>
+			.wc_payment_method.payment_method_ppcp-googlepay {
+				display: none;
+			}
+		</style>
 		<?php
 	}
 
@@ -412,10 +447,20 @@ class Button implements ButtonInterface {
 	 * @return array
 	 */
 	public function script_data(): array {
+		$use_shipping_form = $this->settings->has( 'googlepay_button_shipping_enabled' ) && $this->settings->get( 'googlepay_button_shipping_enabled' );
+
+		// On the product page, only show the shipping form for physical products.
+		$context = $this->context();
+		if ( $use_shipping_form && 'product' === $context ) {
+			$product = wc_get_product();
+
+			if ( ! $product || $product->is_downloadable() || $product->is_virtual() ) {
+				$use_shipping_form = false;
+			}
+		}
+
 		$shipping = array(
-			'enabled'    => $this->settings->has( 'googlepay_button_shipping_enabled' )
-				? boolval( $this->settings->get( 'googlepay_button_shipping_enabled' ) )
-				: false,
+			'enabled'    => $use_shipping_form,
 			'configured' => wc_shipping_enabled() && wc_get_shipping_method_count( false, true ) > 0,
 		);
 

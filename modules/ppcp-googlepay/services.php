@@ -36,7 +36,7 @@ return array(
 		return new ApmApplies(
 			$container->get( 'googlepay.supported-countries' ),
 			$container->get( 'googlepay.supported-currencies' ),
-			$container->get( 'api.shop.currency' ),
+			$container->get( 'api.shop.currency.getter' ),
 			$container->get( 'api.shop.country' )
 		);
 	},
@@ -174,10 +174,10 @@ return array(
 			$container->get( 'googlepay.sdk_url' ),
 			$container->get( 'ppcp.asset-version' ),
 			$container->get( 'session.handler' ),
+			$container->get( 'wc-subscriptions.helper' ),
 			$container->get( 'wcgateway.settings' ),
 			$container->get( 'onboarding.environment' ),
 			$container->get( 'wcgateway.settings.status' ),
-			$container->get( 'api.shop.currency' ),
 			$container->get( 'woocommerce.logger.woocommerce' )
 		);
 	},
@@ -267,7 +267,8 @@ return array(
 			$container->get( 'wcgateway.processor.refunds' ),
 			$container->get( 'wcgateway.transaction-url-provider' ),
 			$container->get( 'session.handler' ),
-			$container->get( 'googlepay.url' )
+			$container->get( 'googlepay.url' ),
+			$container->get( 'woocommerce.logger.woocommerce' )
 		);
 	},
 );

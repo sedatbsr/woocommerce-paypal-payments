@@ -22,9 +22,10 @@ use WooCommerce\PayPalCommerce\ApiClient\Endpoint\BillingSubscriptions;
 use WooCommerce\PayPalCommerce\ApiClient\Exception\PayPalApiException;
 use WooCommerce\PayPalCommerce\ApiClient\Exception\RuntimeException;
 use WooCommerce\PayPalCommerce\Onboarding\Environment;
-use WooCommerce\PayPalCommerce\Vendor\Dhii\Container\ServiceProvider;
-use WooCommerce\PayPalCommerce\Vendor\Dhii\Modular\Module\ModuleInterface;
-use WooCommerce\PayPalCommerce\Vendor\Interop\Container\ServiceProviderInterface;
+use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
+use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
+use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
+use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\WcGateway\Exception\NotFoundException;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
@@ -34,22 +35,27 @@ use WP_Post;
 /**
  * Class SavedPaymentCheckerModule
  */
-class PayPalSubscriptionsModule implements ModuleInterface {
+class PayPalSubscriptionsModule implements ServiceModule, ExtendingModule, ExecutableModule {
+	use ModuleClassNameIdTrait;
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function setup(): ServiceProviderInterface {
-		return new ServiceProvider(
-			require __DIR__ . '/../services.php',
-			require __DIR__ . '/../extensions.php'
-		);
+	public function services(): array {
+		return require __DIR__ . '/../services.php';
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public function run( ContainerInterface $c ): void {
+	public function extensions(): array {
+		return require __DIR__ . '/../extensions.php';
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public function run( ContainerInterface $c ): bool {
 		add_action(
 			'save_post',
 			/**
@@ -60,9 +66,7 @@ class PayPalSubscriptionsModule implements ModuleInterface {
 			function( $product_id ) use ( $c ) {
 				$subscriptions_helper = $c->get( 'wc-subscriptions.helper' );
 				assert( $subscriptions_helper instanceof SubscriptionHelper );
-
-				$connect_subscription = wc_clean( wp_unslash( $_POST['_ppcp_enable_subscription_product'] ?? '' ) );
-				if ( ! $subscriptions_helper->plugin_is_active() || $connect_subscription !== 'yes' ) {
+				if ( ! $subscriptions_helper->plugin_is_active() ) {
 					return;
 				}
 
@@ -183,6 +187,9 @@ class PayPalSubscriptionsModule implements ModuleInterface {
 			30
 		);
 
+		/**
+		 * Executed when updating WC Subscription.
+		 */
 		add_action(
 			'woocommerce_process_shop_subscription_meta',
 			/**
@@ -190,65 +197,41 @@ class PayPalSubscriptionsModule implements ModuleInterface {
 			 *
 			 * @psalm-suppress MissingClosureParamType
 			 */
-			function( $id, $post ) use ( $c ) {
+			function( $id ) use ( $c ) {
 				$subscription = wcs_get_subscription( $id );
-				if ( ! is_a( $subscription, WC_Subscription::class ) ) {
+				if ( $subscription === false ) {
 					return;
 				}
+
 				$subscription_id = $subscription->get_meta( 'ppcp_subscription' ) ?? '';
 				if ( ! $subscription_id ) {
 					return;
 				}
-				$subscriptions_endpoint = $c->get( 'api.endpoint.billing-subscriptions' );
-				assert( $subscriptions_endpoint instanceof BillingSubscriptions );
 
-				if ( $subscription->get_status() === 'cancelled' ) {
-					try {
-						$subscriptions_endpoint->cancel( $subscription_id );
-					} catch ( RuntimeException $exception ) {
-						$error = $exception->getMessage();
-						if ( is_a( $exception, PayPalApiException::class ) ) {
-							$error = $exception->get_details( $error );
-						}
+				$subscription_status = $c->get( 'paypal-subscriptions.status' );
+				assert( $subscription_status instanceof SubscriptionStatus );
 
-						$logger = $c->get( 'woocommerce.logger.woocommerce' );
-						$logger->error( 'Could not cancel subscription product on PayPal. ' . $error );
-					}
-				}
-
-				if ( $subscription->get_status() === 'pending-cancel' ) {
-					try {
-						$subscriptions_endpoint->suspend( $subscription_id );
-					} catch ( RuntimeException $exception ) {
-						$error = $exception->getMessage();
-						if ( is_a( $exception, PayPalApiException::class ) ) {
-							$error = $exception->get_details( $error );
-						}
-
-						$logger = $c->get( 'woocommerce.logger.woocommerce' );
-						$logger->error( 'Could not suspend subscription product on PayPal. ' . $error );
-					}
-				}
-
-				if ( $subscription->get_status() === 'active' ) {
-					try {
-						$current_subscription = $subscriptions_endpoint->subscription( $subscription_id );
-						if ( $current_subscription->status === 'SUSPENDED' ) {
-							$subscriptions_endpoint->activate( $subscription_id );
-						}
-					} catch ( RuntimeException $exception ) {
-						$error = $exception->getMessage();
-						if ( is_a( $exception, PayPalApiException::class ) ) {
-							$error = $exception->get_details( $error );
-						}
-
-						$logger = $c->get( 'woocommerce.logger.woocommerce' );
-						$logger->error( 'Could not reactivate subscription product on PayPal. ' . $error );
-					}
-				}
+				$subscription_status->update_status( $subscription->get_status(), $subscription_id );
 			},
-			20,
-			2
+			20
+		);
+
+		/**
+		 * Update subscription status from WC Subscriptions list page action link.
+		 */
+		add_action(
+			'woocommerce_subscription_status_updated',
+			function( WC_Subscription $subscription ) use ( $c ) {
+				$subscription_id = $subscription->get_meta( 'ppcp_subscription' ) ?? '';
+				if ( ! $subscription_id ) {
+					return;
+				}
+
+				$subscription_status = $c->get( 'paypal-subscriptions.status' );
+				assert( $subscription_status instanceof SubscriptionStatus );
+
+				$subscription_status->update_status( $subscription->get_status(), $subscription_id );
+			}
 		);
 
 		add_filter(
@@ -703,6 +686,8 @@ class PayPalSubscriptionsModule implements ModuleInterface {
 				}
 			}
 		);
+
+		return true;
 	}
 
 	/**
@@ -711,11 +696,18 @@ class PayPalSubscriptionsModule implements ModuleInterface {
 	 * @param WC_Product              $product The product.
 	 * @param SubscriptionsApiHandler $subscriptions_api_handler The subscription api handler.
 	 * @return void
+	 *
+	 * @psalm-suppress PossiblyInvalidCast
 	 */
 	private function update_subscription_product_meta( WC_Product $product, SubscriptionsApiHandler $subscriptions_api_handler ): void {
 		// phpcs:ignore WordPress.Security.NonceVerification
-		$enable_subscription_product = wc_clean( wp_unslash( $_POST['_ppcp_enable_subscription_product'] ?? '' ) );
-		$product->update_meta_data( '_ppcp_enable_subscription_product', $enable_subscription_product );
+		$enable_subscription_product = wc_string_to_bool( (string) wc_clean( wp_unslash( $_POST['_ppcp_enable_subscription_product'] ?? '' ) ) );
+		$product->update_meta_data( '_ppcp_enable_subscription_product', wc_bool_to_string( $enable_subscription_product ) );
+
+		if ( ! $enable_subscription_product ) {
+			$product->save();
+			return;
+		}
 
 		if ( ! $product->get_sold_individually() ) {
 			$product->set_sold_individually( true );
@@ -723,7 +715,7 @@ class PayPalSubscriptionsModule implements ModuleInterface {
 
 		$product->save();
 
-		if ( ( $product->get_type() === 'subscription' || $product->get_type() === 'subscription_variation' ) && $enable_subscription_product === 'yes' ) {
+		if ( $product->get_type() === 'subscription' || $product->get_type() === 'subscription_variation' ) {
 			if ( $product->meta_exists( 'ppcp_subscription_product' ) && $product->meta_exists( 'ppcp_subscription_plan' ) ) {
 				$subscriptions_api_handler->update_product( $product );
 				$subscriptions_api_handler->update_plan( $product );

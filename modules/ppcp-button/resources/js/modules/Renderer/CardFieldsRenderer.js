@@ -1,5 +1,5 @@
 import { show } from '../Helper/Hiding';
-import { cardFieldStyles } from '../Helper/CardFieldsHelper';
+import { renderFields } from '../../../../../ppcp-card-fields/resources/js/Render';
 
 class CardFieldsRenderer {
 	constructor(
@@ -44,8 +44,14 @@ class CardFieldsRenderer {
 		if ( hideDccGateway ) {
 			hideDccGateway.parentNode.removeChild( hideDccGateway );
 		}
+        const dccGatewayLi = document.querySelector(
+            '.wc_payment_method.payment_method_ppcp-credit-card-gateway'
+        );
+        if (dccGatewayLi.style.display === 'none' || dccGatewayLi.style.display === '') {
+            dccGatewayLi.style.display = 'block';
+        }
 
-		const cardField = paypal.CardFields( {
+		const cardFields = paypal.CardFields( {
 			createOrder: contextConfig.createOrder,
 			onApprove( data ) {
 				return contextConfig.onApprove( data );
@@ -56,79 +62,8 @@ class CardFieldsRenderer {
 			},
 		} );
 
-		if ( cardField.isEligible() ) {
-			const nameField = document.getElementById(
-				'ppcp-credit-card-gateway-card-name'
-			);
-			if ( nameField ) {
-				const styles = cardFieldStyles( nameField );
-				const fieldOptions = {
-					style: { input: styles },
-				};
-				if ( nameField.getAttribute( 'placeholder' ) ) {
-					fieldOptions.placeholder =
-						nameField.getAttribute( 'placeholder' );
-				}
-				cardField
-					.NameField( fieldOptions )
-					.render( nameField.parentNode );
-				nameField.remove();
-			}
-
-			const numberField = document.getElementById(
-				'ppcp-credit-card-gateway-card-number'
-			);
-			if ( numberField ) {
-				const styles = cardFieldStyles( numberField );
-				const fieldOptions = {
-					style: { input: styles },
-				};
-				if ( numberField.getAttribute( 'placeholder' ) ) {
-					fieldOptions.placeholder =
-						numberField.getAttribute( 'placeholder' );
-				}
-				cardField
-					.NumberField( fieldOptions )
-					.render( numberField.parentNode );
-				numberField.remove();
-			}
-
-			const expiryField = document.getElementById(
-				'ppcp-credit-card-gateway-card-expiry'
-			);
-			if ( expiryField ) {
-				const styles = cardFieldStyles( expiryField );
-				const fieldOptions = {
-					style: { input: styles },
-				};
-				if ( expiryField.getAttribute( 'placeholder' ) ) {
-					fieldOptions.placeholder =
-						expiryField.getAttribute( 'placeholder' );
-				}
-				cardField
-					.ExpiryField( fieldOptions )
-					.render( expiryField.parentNode );
-				expiryField.remove();
-			}
-
-			const cvvField = document.getElementById(
-				'ppcp-credit-card-gateway-card-cvc'
-			);
-			if ( cvvField ) {
-				const styles = cardFieldStyles( cvvField );
-				const fieldOptions = {
-					style: { input: styles },
-				};
-				if ( cvvField.getAttribute( 'placeholder' ) ) {
-					fieldOptions.placeholder =
-						cvvField.getAttribute( 'placeholder' );
-				}
-				cardField
-					.CVVField( fieldOptions )
-					.render( cvvField.parentNode );
-				cvvField.remove();
-			}
-
+		if ( cardFields.isEligible() ) {
+			renderFields( cardFields );
 			document.dispatchEvent( new CustomEvent( 'hosted_fields_loaded' ) );
 		}
 
@@ -169,7 +104,7 @@ class CardFieldsRenderer {
 					return;
 				}
 
-				cardField.submit().catch( ( error ) => {
+				cardFields.submit().catch( ( error ) => {
 					this.spinner.unblock();
 					console.error( error );
 					this.errorHandler.message(

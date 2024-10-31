@@ -99,7 +99,7 @@ return array(
 			new VaultPaymentTokenCreated( $logger, $prefix, $authorized_payments_processor, $payment_token_factory, $payment_token_helper ),
 			new VaultPaymentTokenDeleted( $logger ),
 			new PaymentCapturePending( $logger ),
-			new PaymentSaleCompleted( $logger ),
+			new PaymentSaleCompleted( $logger, $container->get( 'paypal-subscriptions.renewal-handler' ) ),
 			new PaymentSaleRefunded( $logger, $refund_fees_updater ),
 			new BillingSubscriptionCancelled( $logger ),
 			new BillingPlanPricingChangeActivated( $logger ),
@@ -129,18 +129,6 @@ return array(
 
 	'webhook.is-registered'                   => function( ContainerInterface $container ) : bool {
 		return $container->get( 'webhook.current' ) !== null;
-	},
-
-	'webhook.status.registered-webhooks'      => function( ContainerInterface $container ) : array {
-		$endpoint = $container->get( 'api.endpoint.webhook' );
-		assert( $endpoint instanceof WebhookEndpoint );
-
-		$state = $container->get( 'onboarding.state' );
-		if ( $state->current_state() >= State::STATE_ONBOARDED ) {
-			return $endpoint->list();
-		}
-
-		return array();
 	},
 
 	'webhook.status.registered-webhooks-data' => function( ContainerInterface $container ) : array {

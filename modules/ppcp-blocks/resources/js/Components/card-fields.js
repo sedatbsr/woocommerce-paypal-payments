@@ -7,18 +7,21 @@ import {
 } from '@paypal/react-paypal-js';
 
 import { CheckoutHandler } from './checkout-handler';
-import { createOrder, onApprove } from '../card-fields-config';
+import {
+	createOrder,
+	onApprove,
+	createVaultSetupToken,
+	onApproveSavePayment,
+} from '../card-fields-config';
 import { cartHasSubscriptionProducts } from '../Helper/Subscription';
 
 export function CardFields( {
 	config,
 	eventRegistration,
 	emitResponse,
-	components,
 } ) {
 	const { onPaymentSetup } = eventRegistration;
 	const { responseTypes } = emitResponse;
-	const { PaymentMethodIcons } = components;
 
 	const [ cardFieldsForm, setCardFieldsForm ] = useState();
 	const getCardFieldsForm = ( cardFieldsForm ) => {
@@ -70,17 +73,26 @@ export function CardFields( {
 				} }
 			>
 				<PayPalCardFieldsProvider
-					createOrder={ createOrder }
-					onApprove={ onApprove }
+					createVaultSetupToken={
+						config.scriptData.is_free_trial_cart
+							? createVaultSetupToken
+							: undefined
+					}
+					createOrder={
+						config.scriptData.is_free_trial_cart
+							? undefined
+							: createOrder
+					}
+					onApprove={
+						config.scriptData.is_free_trial_cart
+							? onApproveSavePayment
+							: onApprove
+					}
 					onError={ ( err ) => {
 						console.error( err );
 					} }
 				>
 					<PayPalCardFieldsForm />
-					<PaymentMethodIcons
-						icons={ config.card_icons }
-						align="left"
-					/>
 					<CheckoutHandler
 						getCardFieldsForm={ getCardFieldsForm }
 						getSavePayment={ getSavePayment }
