@@ -823,7 +823,7 @@ if ( block_enabled ) {
 			name: config.id,
 			label: <div dangerouslySetInnerHTML={ { __html: config.title } } />,
 			content: <PayPalComponent isEditing={ false } />,
-			edit: <BlockEditorPayPalComponent fundingSource={ 'paypal' }/>,
+			edit: <BlockEditorPayPalComponent fundingSource={ 'paypal' } />,
 			ariaLabel: config.title,
 			canMakePayment: () => {
 				return true;
@@ -883,6 +883,7 @@ if ( block_enabled ) {
 				},
 				supports: {
 					features,
+					style: [ 'height', 'borderRadius' ],
 				},
 			} );
 		}
