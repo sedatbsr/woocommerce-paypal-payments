@@ -1,5 +1,6 @@
 import { useSelect, useDispatch } from '@wordpress/data';
-import { PRODUCT_TYPES, STORE_NAME } from '../constants';
+import apiFetch from '@wordpress/api-fetch';
+import { NAMESPACE, PRODUCT_TYPES, STORE_NAME } from '../constants';
 import { getFlags } from './selectors';
 
 const useOnboardingDetails = () => {
@@ -144,4 +145,22 @@ export const useOnboardingStep = () => {
 		useOnboardingDetails();
 
 	return { isReady, step, setStep, completed, setCompleted, flags };
+};
+
+export const useManualConnect = () => {
+	const connectManual = async ( clientId, clientSecret, isSandboxMode ) => {
+		return await apiFetch( {
+			path: `${ NAMESPACE }/connect_manual`,
+			method: 'POST',
+			data: {
+				clientId,
+				clientSecret,
+				useSandbox: isSandboxMode,
+			},
+		} );
+	};
+
+	return {
+		connectManual,
+	};
 };

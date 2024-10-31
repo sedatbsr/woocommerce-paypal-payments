@@ -9,6 +9,7 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings;
 
+use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
@@ -44,6 +45,9 @@ return array(
 	},
 	'settings.rest.onboarding'                    => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );
+	},
+	'settings.rest.connect_manual'                => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
+		return new ConnectManualRestEndpoint();
 	},
 	'settings.casual-selling.supported-countries' => static function ( ContainerInterface $container ) : array {
 		// TODO: This is a dummy list, while we wait for the official eligibility list.
