@@ -1,5 +1,6 @@
 import { useSelect, useDispatch } from '@wordpress/data';
 import { PRODUCT_TYPES, STORE_NAME } from '../constants';
+import { getFlags } from './selectors';
 
 const useOnboardingDetails = () => {
 	const {
@@ -21,6 +22,11 @@ const useOnboardingDetails = () => {
 
 	const isReady = useSelect( ( select ) => {
 		return select( STORE_NAME ).getTransientData().isReady;
+	} );
+
+	// Read-only flags.
+	const flags = useSelect( ( select ) => {
+		return select( STORE_NAME ).getFlags();
 	} );
 
 	// Persistent accessors.
@@ -91,6 +97,7 @@ const useOnboardingDetails = () => {
 			setDetailAndPersist( setIsCasualSeller, value ),
 		products,
 		toggleProduct,
+		flags,
 	};
 };
 
@@ -133,8 +140,8 @@ export const useOnboardingStepProducts = () => {
 };
 
 export const useOnboardingStep = () => {
-	const { isReady, step, setStep, completed, setCompleted } =
+	const { isReady, step, setStep, completed, setCompleted, flags } =
 		useOnboardingDetails();
 
-	return { isReady, step, setStep, completed, setCompleted };
+	return { isReady, step, setStep, completed, setCompleted, flags };
 };

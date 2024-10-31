@@ -1,11 +1,9 @@
 import Container from '../../ReusableComponents/Container';
-import StepWelcome from './StepWelcome';
-import StepBusiness from './StepBusiness';
-import StepProducts from './StepProducts';
 import { useOnboardingStep } from '../../../data';
+import { getSteps } from './availableSteps';
 
 const Onboarding = () => {
-	const { step, setStep, setCompleted } = useOnboardingStep();
+	const { step, setStep, setCompleted, flags } = useOnboardingStep();
 
 	return (
 		<Container page="onboarding">
@@ -14,14 +12,15 @@ const Onboarding = () => {
 					currentStep={ step }
 					setStep={ setStep }
 					setCompleted={ setCompleted }
+					flags={ flags }
 				/>
 			</div>
 		</Container>
 	);
 };
 
-const OnboardingStep = ( { currentStep, setStep, setCompleted } ) => {
-	const stepperOrder = [ StepWelcome, StepBusiness, StepProducts ];
+const OnboardingStep = ( { currentStep, setStep, setCompleted, flags } ) => {
+	const stepperOrder = getSteps( flags );
 
 	const isValidStep = ( step ) =>
 		typeof step === 'number' &&
