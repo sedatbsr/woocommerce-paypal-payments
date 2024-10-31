@@ -4,10 +4,10 @@ import { Button, TextControl } from '@wordpress/components';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import SettingsToggleBlock from '../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../ReusableComponents/Separator';
-import { useOnboardingDetails } from '../../../data';
+import { useManualConnect, useOnboardingDetails } from '../../../data';
 import DataStoreControl from '../../ReusableComponents/DataStoreControl';
 
-const StepWelcome = ( { setStep, currentStep } ) => {
+const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 	return (
 		<div className="ppcp-r-page-welcome">
 			<OnboardingHeader
@@ -37,7 +37,7 @@ const StepWelcome = ( { setStep, currentStep } ) => {
 					className="ppcp-r-page-welcome-or-separator"
 					text={ __( 'or', 'woocommerce-paypal-payments' ) }
 				/>
-				<WelcomeForm />
+				<WelcomeForm setCompleted={ setCompleted } />
 			</div>
 		</div>
 	);
@@ -74,7 +74,7 @@ const WelcomeFeatures = () => {
 	);
 };
 
-const WelcomeForm = () => {
+const WelcomeForm = ( { setCompleted } ) => {
 	const {
 		isSandboxMode,
 		setSandboxMode,
@@ -85,6 +85,26 @@ const WelcomeForm = () => {
 		clientSecret,
 		setClientSecret,
 	} = useOnboardingDetails();
+
+	const { connectManual } = useManualConnect();
+
+	const handleConnect = async () => {
+		try {
+			const res = await connectManual(
+				clientId,
+				clientSecret,
+				isSandboxMode
+			);
+			if ( ! res.success ) {
+				throw new Error( 'Request failed.' );
+			}
+
+			setCompleted( true );
+		} catch ( exc ) {
+			console.error( exc );
+			alert( 'Connection failed.' );
+		}
+	};
 
 	const advancedUsersDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
@@ -156,7 +176,7 @@ const WelcomeForm = () => {
 					onChange={ setClientSecret }
 					type="password"
 				/>
-				<Button variant="secondary">
+				<Button variant="secondary" onClick={ handleConnect }>
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>

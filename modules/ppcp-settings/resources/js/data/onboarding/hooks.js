@@ -1,5 +1,6 @@
 import { useSelect, useDispatch } from '@wordpress/data';
-import { STORE_NAME } from '../constants';
+import { NAMESPACE, STORE_NAME } from '../constants';
+import apiFetch from '@wordpress/api-fetch';
 
 export const useOnboardingDetails = () => {
 	const {
@@ -80,5 +81,23 @@ export const useOnboardingStep = () => {
 		setStep: ( value ) => setDetailAndPersist( setOnboardingStep, value ),
 		completed,
 		setCompleted: ( state ) => setDetailAndPersist( setCompleted, state ),
+	};
+};
+
+export const useManualConnect = () => {
+	const connectManual = async ( clientId, clientSecret, isSandboxMode ) => {
+		return await apiFetch( {
+			path: `${ NAMESPACE }/connect_manual`,
+			method: 'POST',
+			data: {
+				clientId,
+				clientSecret,
+				useSandbox: isSandboxMode,
+			},
+		} );
+	};
+
+	return {
+		connectManual,
 	};
 };
