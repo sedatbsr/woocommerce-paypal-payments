@@ -1,6 +1,6 @@
-import OnboardingHeader from '../../ReusableComponents/OnboardingHeader.js';
-import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper.js';
-import SelectBox from '../../ReusableComponents/SelectBox.js';
+import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
+import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
+import SelectBox from '../../ReusableComponents/SelectBox';
 import { __ } from '@wordpress/i18n';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import { useOnboardingStepBusiness } from '../../../data';

@@ -1,4 +1,4 @@
-import OnboardingHeader from '../../ReusableComponents/OnboardingHeader.js';
+import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, TextControl } from '@wordpress/components';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';

@@ -1,16 +1,14 @@
-import Container, {
-	PAGE_ONBOARDING,
-} from '../../ReusableComponents/Container.js';
-import StepWelcome from './StepWelcome.js';
-import StepBusiness from './StepBusiness.js';
-import StepProducts from './StepProducts.js';
+import Container from '../../ReusableComponents/Container';
+import StepWelcome from './StepWelcome';
+import StepBusiness from './StepBusiness';
+import StepProducts from './StepProducts';
 import { useOnboardingStep } from '../../../data';
 
 const Onboarding = () => {
 	const { step, setStep, setCompleted } = useOnboardingStep();
 
 	return (
-		<Container page={ PAGE_ONBOARDING }>
+		<Container page="onboarding">
 			<div className="ppcp-r-card">
 				<OnboardingStep
 					currentStep={ step }
