@@ -4,6 +4,15 @@ import ACTION_TYPES from './action-types';
 import { NAMESPACE, STORE_NAME } from '../constants';
 
 /**
+ * Special. Resets all values in the onboarding store to initial defaults.
+ *
+ * @return {{type: string}} The action.
+ */
+export const resetOnboarding = () => {
+	return { type: ACTION_TYPES.RESET_ONBOARDING };
+};
+
+/**
  * Non-persistent. Marks the onboarding details as "ready", i.e., fully initialized.
  *
  * @param {boolean} isReady
@@ -32,7 +41,7 @@ export const setIsSaving = ( isSaving ) => {
 /**
  * Persistent. Set the full onboarding details, usually during app initialization.
  *
- * @param {Object} payload
+ * @param {{data: {}, flags?: {}}} payload
  * @return {{type: string, payload}} The action.
  */
 export const setOnboardingDetails = ( payload ) => {
@@ -117,6 +126,32 @@ export const setClientSecret = ( clientSecret ) => {
 	return {
 		type: ACTION_TYPES.SET_CLIENT_SECRET,
 		clientSecret,
+	};
+};
+
+/**
+ * Persistent. Sets the "isCasualSeller" value.
+ *
+ * @param {boolean} isCasualSeller
+ * @return {{type: string, isCasualSeller}} The action.
+ */
+export const setIsCasualSeller = ( isCasualSeller ) => {
+	return {
+		type: ACTION_TYPES.SET_IS_CASUAL_SELLER,
+		isCasualSeller,
+	};
+};
+
+/**
+ * Persistent. Sets the "products" array.
+ *
+ * @param {string[]} products
+ * @return {{type: string, products}} The action.
+ */
+export const setProducts = ( products ) => {
+	return {
+		type: ACTION_TYPES.SET_PRODUCTS,
+		products,
 	};
 };
 

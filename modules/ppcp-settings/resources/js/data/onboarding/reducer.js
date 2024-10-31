@@ -3,6 +3,8 @@ import ACTION_TYPES from './action-types';
 const defaultState = {
 	isReady: false,
 	isSaving: false,
+
+	// Data persisted to the server.
 	data: {
 		completed: false,
 		step: 0,
@@ -10,6 +12,12 @@ const defaultState = {
 		useManualConnection: false,
 		clientId: '',
 		clientSecret: '',
+		isCasualSeller: null, // null value will uncheck both options in the UI.
+		products: [],
+	},
+
+	// Read only values, provided by the server.
+	flags: {
 		canUseCasualSelling: false,
 		canUseVaulting: false,
 		canUseCardPayments: false,
@@ -40,6 +48,10 @@ export const onboardingReducer = (
 	};
 
 	switch ( type ) {
+		// Reset store to initial state.
+		case ACTION_TYPES.RESET_ONBOARDING:
+			return setPersistent( defaultState.data );
+
 		// Transient data.
 		case ACTION_TYPES.SET_ONBOARDING_IS_READY:
 			return setTransient( { isReady: action.isReady } );
@@ -49,7 +61,13 @@ export const onboardingReducer = (
 
 		// Persistent data.
 		case ACTION_TYPES.SET_ONBOARDING_DETAILS:
-			return setPersistent( action.payload );
+			const newState = setPersistent( action.payload.data );
+
+			if ( action.payload.flags ) {
+				newState.flags = { ...newState.flags, ...action.payload.flags };
+			}
+
+			return newState;
 
 		case ACTION_TYPES.SET_ONBOARDING_COMPLETED:
 			return setPersistent( { completed: action.completed } );
@@ -70,6 +88,12 @@ export const onboardingReducer = (
 			return setPersistent( {
 				useManualConnection: action.useManualConnection,
 			} );
+
+		case ACTION_TYPES.SET_IS_CASUAL_SELLER:
+			return setPersistent( { isCasualSeller: action.isCasualSeller } );
+
+		case ACTION_TYPES.SET_PRODUCTS:
+			return setPersistent( { products: action.products } );
 
 		default:
 			return state;

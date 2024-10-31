@@ -3,7 +3,10 @@ import Navigation from '../../ReusableComponents/Navigation';
 import { __ } from '@wordpress/i18n';
 import SelectBox from '../../ReusableComponents/SelectBox';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
-import { useState } from '@wordpress/element';
+import { useOnboardingStepProducts } from '../../../data';
+import { PRODUCT_TYPES } from '../../../data/constants';
+
+const PRODUCTS_CHECKBOX_GROUP_NAME = 'products';
 
 const StepProducts = ( {
 	setStep,
@@ -11,11 +14,7 @@ const StepProducts = ( {
 	stepperOrder,
 	setCompleted,
 } ) => {
-	const [ products, setProducts ] = useState( [] );
-	const PRODUCTS_CHECKBOX_GROUP_NAME = 'products';
-	const VIRTUAL_CHECKBOX_VALUE = 'virtual';
-	const PHYSICAL_CHECKBOX_VALUE = 'physical';
-	const SUBSCRIPTIONS_CHECKBOX_VALUE = 'subscriptions';
+	const { products, toggleProduct } = useOnboardingStepProducts();
 
 	return (
 		<div className="ppcp-r-page-products">
@@ -35,8 +34,8 @@ const StepProducts = ( {
 						) }
 						icon="icon-product-virtual.svg"
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
-						value={ VIRTUAL_CHECKBOX_VALUE }
-						changeCallback={ setProducts }
+						value={ PRODUCT_TYPES.VIRTUAL }
+						changeCallback={ toggleProduct }
 						currentValue={ products }
 						type="checkbox"
 					>
@@ -78,8 +77,8 @@ const StepProducts = ( {
 						) }
 						icon="icon-product-physical.svg"
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
-						value={ PHYSICAL_CHECKBOX_VALUE }
-						changeCallback={ setProducts }
+						value={ PRODUCT_TYPES.PHYSICAL }
+						changeCallback={ toggleProduct }
 						currentValue={ products }
 						type="checkbox"
 					>
@@ -106,8 +105,8 @@ const StepProducts = ( {
 						) }
 						icon="icon-product-subscription.svg"
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
-						value={ SUBSCRIPTIONS_CHECKBOX_VALUE }
-						changeCallback={ setProducts }
+						value={ PRODUCT_TYPES.SUBSCRIPTIONS }
+						changeCallback={ toggleProduct }
 						currentValue={ products }
 						type="checkbox"
 					>
