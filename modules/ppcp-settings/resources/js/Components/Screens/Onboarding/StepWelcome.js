@@ -85,8 +85,7 @@ const WelcomeForm = ( { setCompleted } ) => {
 		setClientId,
 		clientSecret,
 		setClientSecret,
-	} = 
-        ();
+	} = useOnboardingStepWelcome();
 
 	const { connectManual } = useManualConnect();
 
