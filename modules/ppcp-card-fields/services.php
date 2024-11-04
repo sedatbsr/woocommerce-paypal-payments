@@ -55,6 +55,7 @@ return array(
 				'NL',
 				'PL',
 				'PT',
+				'RO',
 				'SG',
 				'SK',
 				'SI',
