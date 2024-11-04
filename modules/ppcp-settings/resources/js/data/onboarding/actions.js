@@ -46,7 +46,7 @@ export const setIsSaving = ( isSaving ) => {
  */
 export const setManualConnectionIsBusy = ( isBusy ) => {
 	return {
-		type: ACTION_TYPES.SET_IS_SAVING_ONBOARDING,
+		type: ACTION_TYPES.SET_MANUAL_CONNECTION_BUSY,
 		isBusy,
 	};
 };
