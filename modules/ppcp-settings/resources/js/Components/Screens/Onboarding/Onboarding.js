@@ -1,47 +1,35 @@
-import Container, {
-	PAGE_ONBOARDING,
-} from '../../ReusableComponents/Container.js';
-import StepWelcome from './StepWelcome.js';
-import StepBusiness from './StepBusiness.js';
-import StepProducts from './StepProducts.js';
+import Container from '../../ReusableComponents/Container';
 import { useOnboardingStep } from '../../../data';
+import { getSteps } from './availableSteps';
 
-const Onboarding = () => {
-	const { step, setStep, setCompleted } = useOnboardingStep();
-
-	return (
-		<Container page={ PAGE_ONBOARDING }>
-			<div className="ppcp-r-card">
-				<OnboardingStep
-					currentStep={ step }
-					setStep={ setStep }
-					setCompleted={ setCompleted }
-				/>
-			</div>
-		</Container>
-	);
-};
-
-const OnboardingStep = ( { currentStep, setStep, setCompleted } ) => {
-	const stepperOrder = [ StepWelcome, StepBusiness, StepProducts ];
-
+const getCurrentStep = ( requestedStep, steps ) => {
 	const isValidStep = ( step ) =>
 		typeof step === 'number' &&
 		Number.isInteger( step ) &&
 		step >= 0 &&
-		step < stepperOrder.length;
+		step < steps.length;
 
-	const safeCurrentStep = isValidStep( currentStep ) ? currentStep : 0;
+	const safeCurrentStep = isValidStep( requestedStep ) ? requestedStep : 0;
+	return steps[ safeCurrentStep ];
+};
 
-	const CurrentStepComponent = stepperOrder[ safeCurrentStep ];
+const Onboarding = () => {
+	const { step, setStep, setCompleted, flags } = useOnboardingStep();
+	const steps = getSteps( flags );
+
+	const CurrentStepComponent = getCurrentStep( step, steps );
 
 	return (
-		<CurrentStepComponent
-			setStep={ setStep }
-			currentStep={ safeCurrentStep }
-			setCompleted={ setCompleted }
-			stepperOrder={ stepperOrder }
-		/>
+		<Container page="onboarding">
+			<div className="ppcp-r-card">
+				<CurrentStepComponent
+					setStep={ setStep }
+					currentStep={ step }
+					setCompleted={ setCompleted }
+					stepperOrder={ steps }
+				/>
+			</div>
+		</Container>
 	);
 };
 
