@@ -1,8 +1,19 @@
-import { ToggleControl } from '@wordpress/components';
+import { ToggleControl, Spinner } from '@wordpress/components';
 
-const SettingsToggleBlock = ( { isToggled, setToggled, ...props } ) => {
+const SettingsToggleBlock = ( {
+	isToggled,
+	setToggled,
+	isLoading = false,
+	...props
+} ) => {
+	const blockClasses = [ 'ppcp-r-toggle-block' ];
+
+	if ( isLoading ) {
+		blockClasses.push( 'ppcp--is-loading' );
+	}
+
 	return (
-		<div className="ppcp-r-toggle-block">
+		<div className={ blockClasses.join( ' ' ) }>
 			<div className="ppcp-r-toggle-block__wrapper">
 				<div className="ppcp-r-toggle-block__content">
 					{ props?.label && (
@@ -25,11 +36,13 @@ const SettingsToggleBlock = ( { isToggled, setToggled, ...props } ) => {
 						onChange={ ( newValue ) => {
 							setToggled( newValue );
 						} }
+						disabled={ isLoading }
 					/>
 				</div>
 			</div>
 			{ props.children && isToggled && (
 				<div className="ppcp-r-toggle-block__toggled-content">
+					{ isLoading && <Spinner /> }
 					{ props.children }
 				</div>
 			) }

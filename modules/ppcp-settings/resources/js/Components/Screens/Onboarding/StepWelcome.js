@@ -140,6 +140,7 @@ const WelcomeForm = ( { setCompleted } ) => {
 				description={ advancedUsersDescription }
 				isToggled={ !! isManualConnectionMode }
 				setToggled={ setManualConnectionMode }
+				isLoading={ isManualConnectionBusy }
 			>
 				<DataStoreControl
 					control={ TextControl }
