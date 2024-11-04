@@ -170,7 +170,7 @@ class ApplepayModule implements ServiceModule, ExtendingModule, ExecutableModule
 
 		add_filter(
 			'woocommerce_paypal_payments_selected_button_locations',
-			function( array $locations, string $setting_name ) {
+			function( array $locations, string $setting_name ): array {
 				$gateway = WC()->payment_gateways()->payment_gateways()[ ApplePayGateway::ID ] ?? '';
 				if ( $gateway && $gateway->enabled === 'yes' && $setting_name === 'smart_button_locations' ) {
 					$locations[] = 'checkout';
