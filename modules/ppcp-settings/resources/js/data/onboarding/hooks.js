@@ -155,19 +155,9 @@ export const useOnboardingStep = () => {
 };
 
 export const useManualConnect = () => {
-	const connectManual = async ( clientId, clientSecret, isSandboxMode ) => {
-		return await apiFetch( {
-			path: `${ NAMESPACE }/connect_manual`,
-			method: 'POST',
-			data: {
-				clientId,
-				clientSecret,
-				useSandbox: isSandboxMode,
-			},
-		} );
-	};
+	const { connectViaIdAndSecret } = useDispatch( STORE_NAME );
 
 	return {
-		connectManual,
+		connectManual: connectViaIdAndSecret,
 	};
 };

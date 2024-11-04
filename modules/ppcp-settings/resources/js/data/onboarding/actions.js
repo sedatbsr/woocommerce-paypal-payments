@@ -169,9 +169,46 @@ export const setProducts = ( products ) => {
 };
 
 /**
+ * Attempts to establish a connection using client ID and secret via the server-side
+ * connection endpoint.
+ *
+ * @return {boolean} True if the connection was successful, false otherwise.
+ */
+export function* connectViaIdAndSecret() {
+	let error = null;
+
+	try {
+		const path = `${ NAMESPACE }/connect_manual`;
+		const { clientId, clientSecret, useSandbox } =
+			yield select( STORE_NAME ).getPersistentData();
+
+		yield setManualConnectionIsBusy( true );
+
+		const result = yield apiFetch( {
+			path,
+			method: 'POST',
+			data: {
+				clientId,
+				clientSecret,
+				useSandbox,
+			},
+		} );
+
+		console.log( 'Manual connection result:', result );
+	} catch ( e ) {
+		error = e;
+		console.error( 'Manual connection failed:', e );
+	} finally {
+		yield setManualConnectionIsBusy( false );
+	}
+
+	return error === null;
+}
+
+/**
  * Saves the persistent details to the WP database.
  *
- * @return {any} A generator function that handles the saving process.
+ * @return {boolean} True, if the values were successfully saved.
  */
 export function* persist() {
 	let error = null;

@@ -92,11 +92,7 @@ const WelcomeForm = ( { setCompleted } ) => {
 
 	const handleConnect = async () => {
 		try {
-			const res = await connectManual(
-				clientId,
-				clientSecret,
-				isSandboxMode
-			);
+			const res = await connectManual();
 			if ( ! res.success ) {
 				throw new Error( 'Request failed.' );
 			}
