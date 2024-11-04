@@ -528,7 +528,7 @@ return array(
 	'wcgateway.allowed_refund_payment_methods'             => static function ( ContainerInterface $container ): array {
 		return apply_filters(
 			'woocommerce_paypal_payments_allowed_refund_payment_methods',
-			array( PayPalGateway::ID, CreditCardGateway::ID, CardButtonGateway::ID, PayUponInvoiceGateway::ID )
+			array( PayPalGateway::ID, CreditCardGateway::ID, CardButtonGateway::ID, PayUponInvoiceGateway::ID, GooglePayGateway::ID, ApplePayGateway::ID )
 		);
 	},
 	'wcgateway.processor.authorized-payments'              => static function ( ContainerInterface $container ): AuthorizedPaymentsProcessor {
