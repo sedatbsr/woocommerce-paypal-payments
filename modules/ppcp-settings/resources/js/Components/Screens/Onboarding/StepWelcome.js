@@ -77,6 +77,7 @@ const WelcomeFeatures = () => {
 
 const WelcomeForm = ( { setCompleted } ) => {
 	const {
+		isManualConnectionBusy,
 		isSandboxMode,
 		setSandboxMode,
 		isManualConnectionMode,
