@@ -520,15 +520,8 @@ return array(
 			$container->get( 'api.endpoint.order' ),
 			$container->get( 'api.endpoint.payments' ),
 			$container->get( 'wcgateway.helper.refund-fees-updater' ),
-			$container->get( 'wcgateway.allowed_refund_payment_methods' ),
 			$container->get( 'api.prefix' ),
 			$container->get( 'woocommerce.logger.woocommerce' )
-		);
-	},
-	'wcgateway.allowed_refund_payment_methods'             => static function ( ContainerInterface $container ): array {
-		return apply_filters(
-			'woocommerce_paypal_payments_allowed_refund_payment_methods',
-			array( PayPalGateway::ID, CreditCardGateway::ID, CardButtonGateway::ID, PayUponInvoiceGateway::ID, GooglePayGateway::ID, ApplePayGateway::ID )
 		);
 	},
 	'wcgateway.processor.authorized-payments'              => static function ( ContainerInterface $container ): AuthorizedPaymentsProcessor {
@@ -1933,8 +1926,7 @@ return array(
 			$container->get( 'wcgateway.url' ),
 			$container->get( 'ppcp.asset-version' ),
 			$container->get( 'api.endpoint.order' ),
-			$container->get( 'wcgateway.processor.refunds' ),
-			$container->get( 'wcgateway.allowed_refund_payment_methods' )
+			$container->get( 'wcgateway.processor.refunds' )
 		);
 	},
 	'wcgateway.void-button.endpoint'                       => function( ContainerInterface $container ) : VoidOrderEndpoint {
