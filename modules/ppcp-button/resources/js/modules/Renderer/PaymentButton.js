@@ -10,6 +10,8 @@ import {
 	dispatchButtonEvent,
 	observeButtonEvent,
 } from '../Helper/PaymentButtonHelpers';
+import { isVisible } from '../Helper/Hiding';
+import { isDisabled, setEnabled } from '../Helper/ButtonDisabler';
 
 /**
  * Collection of all available styling options for this button.
@@ -183,6 +185,13 @@ export default class PaymentButton {
 	 * @type {boolean}
 	 */
 	#isVisible = true;
+
+	/**
+	 * Whether this button is enabled (can be clicked).
+	 *
+	 * @type {boolean}
+	 */
+	#isEnabled = true;
 
 	/**
 	 * The currently visible payment button.
@@ -572,6 +581,29 @@ export default class PaymentButton {
 	}
 
 	/**
+	 * The enabled/disabled state of the button (whether it can be clicked).
+	 *
+	 * @return {boolean} True indicates, that the button is enabled.
+	 */
+	get isEnabled() {
+		return this.#isEnabled;
+	}
+
+	/**
+	 * Change the enabled/disabled state of the button.
+	 *
+	 * @param {boolean} newState Whether the button is enabled.
+	 */
+	set isEnabled( newState ) {
+		if ( this.#isEnabled === newState ) {
+			return;
+		}
+
+		this.#isEnabled = newState;
+		this.triggerRedraw();
+	}
+
+	/**
 	 * Returns the HTML element that wraps the current button
 	 *
 	 * @readonly
@@ -579,6 +611,23 @@ export default class PaymentButton {
 	 */
 	get wrapperElement() {
 		return document.getElementById( this.wrapperId );
+	}
+
+	/**
+	 * Returns the standard PayPal smart button selector for the current context.
+	 *
+	 * @return {string | null} The selector, or null if not available.
+	 */
+	get ppcpButtonWrapperSelector() {
+		if ( PaymentContext.Blocks.includes( this.context ) ) {
+			return null;
+		}
+
+		if ( this.context === PaymentContext.MiniCart ) {
+			return this.ppcpConfig?.button?.mini_cart_wrapper;
+		}
+
+		return this.ppcpConfig?.button?.wrapper;
 	}
 
 	/**
@@ -768,7 +817,23 @@ export default class PaymentButton {
 	}
 
 	/**
-	 * Attaches event listeners to show or hide the payment button when needed.
+	 * Applies the visibility and enabled state from the PayPal button.
+	 * Intended for the product page, may not work correctly on the checkout page.
+	 */
+	syncProductButtonsState() {
+		const ppcpButton = document.querySelector(
+			this.ppcpButtonWrapperSelector
+		);
+		if ( ! ppcpButton ) {
+			return;
+		}
+
+		this.isVisible = isVisible( ppcpButton );
+		this.isEnabled = ! isDisabled( ppcpButton );
+	}
+
+	/**
+	 * Attaches event listeners to show/hide or enable/disable the payment button when needed.
 	 */
 	initEventListeners() {
 		// Refresh the button - this might show, hide or re-create the payment button.
@@ -796,6 +861,24 @@ export default class PaymentButton {
 				paymentMethod: parentMethod,
 				callback: () => ( this.isVisible = true ),
 			} );
+		}
+
+		// On the product page, copy the visibility and enabled state from the PayPal button.
+		if ( this.context === PaymentContext.Product ) {
+			jQuery( document ).on(
+				'ppcp-shown ppcp-hidden ppcp-enabled ppcp-disabled',
+				( ev, data ) => {
+					if (
+						! jQuery( data.selector ).is(
+							this.ppcpButtonWrapperSelector
+						)
+					) {
+						return;
+					}
+
+					this.syncProductButtonsState();
+				}
+			);
 		}
 	}
 
@@ -878,6 +961,12 @@ export default class PaymentButton {
 
 		// Apply the wrapper visibility.
 		wrapper.style.display = this.isVisible ? 'block' : 'none';
+
+		// Apply the enabled/disabled state.
+		// On the product page, use the form to display error messages if clicked while disabled.
+		const form =
+			this.context === PaymentContext.Product ? 'form.cart' : null;
+		setEnabled( wrapper, this.isEnabled, form );
 	}
 
 	/**
