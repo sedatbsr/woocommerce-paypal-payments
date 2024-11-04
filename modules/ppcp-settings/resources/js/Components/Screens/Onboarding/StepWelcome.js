@@ -1,13 +1,14 @@
-import OnboardingHeader from '../../ReusableComponents/OnboardingHeader.js';
+import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, TextControl } from '@wordpress/components';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import SettingsToggleBlock from '../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../ReusableComponents/Separator';
-import { useOnboardingDetails } from '../../../data';
+import { useOnboardingStepWelcome, useManualConnect } from '../../../data';
+
 import DataStoreControl from '../../ReusableComponents/DataStoreControl';
 
-const StepWelcome = ( { setStep, currentStep } ) => {
+const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 	return (
 		<div className="ppcp-r-page-welcome">
 			<OnboardingHeader
@@ -37,7 +38,7 @@ const StepWelcome = ( { setStep, currentStep } ) => {
 					className="ppcp-r-page-welcome-or-separator"
 					text={ __( 'or', 'woocommerce-paypal-payments' ) }
 				/>
-				<WelcomeForm />
+				<WelcomeForm setCompleted={ setCompleted } />
 			</div>
 		</div>
 	);
@@ -74,7 +75,7 @@ const WelcomeFeatures = () => {
 	);
 };
 
-const WelcomeForm = () => {
+const WelcomeForm = ( { setCompleted } ) => {
 	const {
 		isSandboxMode,
 		setSandboxMode,
@@ -84,15 +85,35 @@ const WelcomeForm = () => {
 		setClientId,
 		clientSecret,
 		setClientSecret,
-	} = useOnboardingDetails();
+	} = useOnboardingStepWelcome();
+
+	const { connectManual } = useManualConnect();
+
+	const handleConnect = async () => {
+		try {
+			const res = await connectManual(
+				clientId,
+				clientSecret,
+				isSandboxMode
+			);
+			if ( ! res.success ) {
+				throw new Error( 'Request failed.' );
+			}
+
+			setCompleted( true );
+		} catch ( exc ) {
+			console.error( exc );
+			alert( 'Connection failed.' );
+		}
+	};
 
 	const advancedUsersDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
 		__(
-			'For advanced users: Connect a custom PayPal REST app for full control over your integration. For more information on creating a PayPal REST application, <a href="%s">click here</a>.',
+			'For advanced users: Connect a custom PayPal REST app for full control over your integration. For more information on creating a PayPal REST application, <a target="_blank" href="%s">click here</a>.',
 			'woocommerce-paypal-payments'
 		),
-		'#'
+		'https://woocommerce.com/document/woocommerce-paypal-payments/#manual-credential-input '
 	);
 
 	return (
@@ -116,7 +137,7 @@ const WelcomeForm = () => {
 			<Separator className="ppcp-r-page-welcome-mode-separator" />
 			<SettingsToggleBlock
 				label={ __(
-					'Manually Connect - TODO missing link',
+					'Manually Connect',
 					'woocommerce-paypal-payments'
 				) }
 				description={ advancedUsersDescription }
@@ -125,24 +146,38 @@ const WelcomeForm = () => {
 			>
 				<DataStoreControl
 					control={ TextControl }
-					label={ __(
-						'Sandbox Client ID',
-						'woocommerce-paypal-payments'
-					) }
+					label={
+						isSandboxMode
+							? __(
+									'Sandbox Client ID',
+									'woocommerce-paypal-payments'
+							  )
+							: __(
+									'Live Client ID',
+									'woocommerce-paypal-payments'
+							  )
+					}
 					value={ clientId }
 					onChange={ setClientId }
 				/>
 				<DataStoreControl
 					control={ TextControl }
-					label={ __(
-						'Sandbox Secret Key',
-						'woocommerce-paypal-payments'
-					) }
+					label={
+						isSandboxMode
+							? __(
+									'Sandbox Secret Key',
+									'woocommerce-paypal-payments'
+							  )
+							: __(
+									'Live Secret Key',
+									'woocommerce-paypal-payments'
+							  )
+					}
 					value={ clientSecret }
 					onChange={ setClientSecret }
 					type="password"
 				/>
-				<Button variant="secondary">
+				<Button variant="secondary" onClick={ handleConnect }>
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>

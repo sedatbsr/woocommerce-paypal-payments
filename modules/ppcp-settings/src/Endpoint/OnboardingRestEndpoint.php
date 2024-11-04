@@ -41,6 +41,10 @@ class OnboardingRestEndpoint extends RestEndpoint {
 	 * @var array
 	 */
 	private array $field_map = array(
+		'completed'             => array(
+			'js_name'  => 'completed',
+			'sanitize' => 'to_boolean',
+		),
 		'step'                  => array(
 			'js_name'  => 'step',
 			'sanitize' => 'to_number',
@@ -61,6 +65,30 @@ class OnboardingRestEndpoint extends RestEndpoint {
 			'js_name'  => 'clientSecret',
 			'sanitize' => 'sanitize_text_field',
 		),
+		'is_casual_seller'      => array(
+			'js_name'  => 'isCasualSeller',
+			'sanitize' => 'to_boolean',
+		),
+		'products'              => array(
+			'js_name' => 'products',
+		),
+	);
+
+	/**
+	 * Map the internal flags to JS names.
+	 *
+	 * @var array
+	 */
+	private array $flag_map = array(
+		'can_use_casual_selling' => array(
+			'js_name' => 'canUseCasualSelling',
+		),
+		'can_use_vaulting'       => array(
+			'js_name' => 'canUseVaulting',
+		),
+		'can_use_card_payments'  => array(
+			'js_name' => 'canUseCardPayments',
+		),
 	);
 
 	/**
@@ -70,6 +98,8 @@ class OnboardingRestEndpoint extends RestEndpoint {
 	 */
 	public function __construct( OnboardingProfile $profile ) {
 		$this->profile = $profile;
+
+		$this->field_map['products']['sanitize'] = fn( $list ) => array_map( 'sanitize_text_field', $list );
 	}
 
 	/**
@@ -112,7 +142,17 @@ class OnboardingRestEndpoint extends RestEndpoint {
 			$this->field_map
 		);
 
-		return rest_ensure_response( $js_data );
+		$js_flags = $this->sanitize_for_javascript(
+			$this->profile->get_flags(),
+			$this->flag_map
+		);
+
+		return rest_ensure_response(
+			array(
+				'data'  => $js_data,
+				'flags' => $js_flags,
+			)
+		);
 	}
 
 	/**

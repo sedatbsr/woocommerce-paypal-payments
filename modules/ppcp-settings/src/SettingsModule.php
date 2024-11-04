@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings;
 
+use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
@@ -86,6 +88,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 						'assets' => array(
 							'imagesUrl' => $module_url . '/images/',
 						),
+						'debug'  => defined( 'WP_DEBUG' ) && WP_DEBUG,
 					)
 				);
 			}
@@ -93,11 +96,12 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 
 		add_action(
 			'woocommerce_paypal_payments_gateway_admin_options_wrapper',
-			static function () : void {
+			function () : void {
 				global $hide_save_button;
 				$hide_save_button = true;
 
-				echo '<div id="ppcp-settings-container"></div>';
+				$this->render_header();
+				$this->render_content();
 			}
 		);
 
@@ -105,10 +109,35 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 			'rest_api_init',
 			static function () use ( $container ) : void {
 				$onboarding_endpoint = $container->get( 'settings.rest.onboarding' );
+				assert( $onboarding_endpoint instanceof OnboardingRestEndpoint );
 				$onboarding_endpoint->register_routes();
+
+				$connect_manual_endpoint = $container->get( 'settings.rest.connect_manual' );
+				assert( $connect_manual_endpoint instanceof ConnectManualRestEndpoint );
+				$connect_manual_endpoint->register_routes();
 			}
 		);
 
 		return true;
+	}
+
+	/**
+	 * Outputs the settings page header (title and back-link).
+	 *
+	 * @return void
+	 */
+	protected function render_header() : void {
+		echo '<h2>' . esc_html__( 'PayPal', 'woocommerce-paypal-payments' );
+		wc_back_link( __( 'Return to payments', 'woocommerce-paypal-payments' ), admin_url( 'admin.php?page=wc-settings&tab=checkout' ) );
+		echo '</h2>';
+	}
+
+	/**
+	 * Renders the container for the React app.
+	 *
+	 * @return void
+	 */
+	protected function render_content() : void {
+		echo '<div id="ppcp-settings-container"></div>';
 	}
 }

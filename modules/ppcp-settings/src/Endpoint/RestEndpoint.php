@@ -53,7 +53,11 @@ class RestEndpoint extends WC_REST_Controller {
 			$source_key    = $details['js_name'] ?? '';
 			$sanitation_cb = $details['sanitize'] ?? null;
 
-			if ( ! $source_key || ! isset( $params[ $source_key ] ) ) {
+			if (
+				! $source_key
+				|| ! isset( $params[ $source_key ] )
+				|| 'read_only' === $sanitation_cb
+			) {
 				continue;
 			}
 
@@ -61,7 +65,7 @@ class RestEndpoint extends WC_REST_Controller {
 
 			if ( null === $sanitation_cb ) {
 				$sanitized[ $key ] = $value;
-			} elseif ( method_exists( $this, $sanitation_cb ) ) {
+			} elseif ( is_string( $sanitation_cb ) && method_exists( $this, $sanitation_cb ) ) {
 				$sanitized[ $key ] = $this->{$sanitation_cb}( $value );
 			} elseif ( is_callable( $sanitation_cb ) ) {
 				$sanitized[ $key ] = $sanitation_cb( $value );
@@ -121,5 +125,4 @@ class RestEndpoint extends WC_REST_Controller {
 	protected function to_number( $value ) {
 		return $value !== null ? ( is_numeric( $value ) ? $value + 0 : null ) : null;
 	}
-
 }
