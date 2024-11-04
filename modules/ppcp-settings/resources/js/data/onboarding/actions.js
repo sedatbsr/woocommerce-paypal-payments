@@ -39,6 +39,19 @@ export const setIsSaving = ( isSaving ) => {
 };
 
 /**
+ * Non-persistent. Changes the "manual connection is busy" flag.
+ *
+ * @param {boolean} isBusy
+ * @return {{type: string, isBusy}} The action.
+ */
+export const setManualConnectionIsBusy = ( isBusy ) => {
+	return {
+		type: ACTION_TYPES.SET_IS_SAVING_ONBOARDING,
+		isBusy,
+	};
+};
+
+/**
  * Persistent. Set the full onboarding details, usually during app initialization.
  *
  * @param {{data: {}, flags?: {}}} payload
