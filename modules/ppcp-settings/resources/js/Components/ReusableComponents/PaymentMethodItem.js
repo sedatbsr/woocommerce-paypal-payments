@@ -7,6 +7,10 @@ import { __ } from '@wordpress/i18n';
 const PaymentMethodItem = ( props ) => {
 	const [ paymentMethodState, setPaymentMethodState ] = useState();
 	const [ modalIsVisible, setModalIsVisible ] = useState( false );
+	let Modal = null;
+	if ( props?.modal ) {
+		Modal = props.modal;
+	}
 	const handleCheckboxState = ( checked ) => {
 		if ( checked ) {
 			setPaymentMethodState( props.payment_method_id );
@@ -37,7 +41,7 @@ const PaymentMethodItem = ( props ) => {
 						<p>{ props.description }</p>
 					</div>
 				</div>
-				{ props.modal && (
+				{ Modal && (
 					<Button
 						variant="secondary"
 						onClick={ () => {
@@ -48,7 +52,9 @@ const PaymentMethodItem = ( props ) => {
 					</Button>
 				) }
 			</div>
-			{ modalIsVisible && props.modal( setModalIsVisible ) }
+			{ Modal && modalIsVisible && (
+				<Modal setModalIsVisible={ setModalIsVisible } />
+			) }
 		</>
 	);
 };

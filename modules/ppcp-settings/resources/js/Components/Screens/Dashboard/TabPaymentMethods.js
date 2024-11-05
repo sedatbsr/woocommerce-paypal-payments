@@ -1,7 +1,9 @@
 import SettingsCard from '../../ReusableComponents/SettingsCard';
 import { __ } from '@wordpress/i18n';
 import PaymentMethodItem from '../../ReusableComponents/PaymentMethodItem';
-import PaymentMethodModal from '../../ReusableComponents/PaymentMethodModal';
+import ModalPayPal from './Modals/ModalPayPal';
+import ModalFastlane from './Modals/ModalFastlane';
+import ModalAcdc from './Modals/ModalAcdc';
 
 const TabPaymentMethods = () => {
 	const renderPaymentMethods = ( data ) => {
@@ -54,16 +56,6 @@ const TabPaymentMethods = () => {
 	);
 };
 
-const PayPalModal = ( setModalIsVisible ) => {
-	return (
-		<PaymentMethodModal
-			setModalIsVisible={ setModalIsVisible }
-			icon="payment-method-paypal"
-			title={ __( 'PayPal', 'woocommerce-paypal-payments' ) }
-		></PaymentMethodModal>
-	);
-};
-
 const paymentMethodsPayPalCheckoutDefault = [
 	{
 		id: 'paypal',
@@ -73,7 +65,7 @@ const paymentMethodsPayPalCheckoutDefault = [
 			'woocommerce-paypal-payments'
 		),
 		icon: 'payment-method-paypal',
-		modal: PayPalModal,
+		modal: ModalPayPal,
 	},
 	{
 		id: 'venmo',
@@ -119,6 +111,7 @@ const paymentMethodsOnlineCardPaymentsDefault = [
 			'woocommerce-paypal-payments'
 		),
 		icon: 'payment-method-cards',
+		modal: ModalAcdc,
 	},
 	{
 		id: 'fastlane',
@@ -128,6 +121,7 @@ const paymentMethodsOnlineCardPaymentsDefault = [
 			'woocommerce-paypal-payments'
 		),
 		icon: 'payment-method-fastlane',
+		modal: ModalFastlane,
 	},
 	{
 		id: 'apply_pay',
