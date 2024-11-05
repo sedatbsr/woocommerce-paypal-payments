@@ -1,13 +1,24 @@
-.ppcp-r-text-badge-box {
+.ppcp-r-badge-box {
+	margin: 0 0 8px 0;
+
 	&__title {
-		font-size: 16px;
-		line-height: 1.25;
-		font-weight: 700;
-		color: #000;
+		@include font(14, 20, 700);
 		display: block;
 		margin: 0 0 8px 0;
 
-		.ppcp-r-title-image-badge {
+		.ppcp-r-badge-box__title-text {
+			color: #000;
+
+			&--big {
+				@include font(16, 28, 700);
+			}
+
+			&--small {
+				vertical-align: text-bottom;
+			}
+		}
+
+		&-image-badge {
 			margin-left: 7px;
 
 			img {
@@ -15,6 +26,12 @@
 				vertical-align: bottom;
 				height: 24px;
 			}
+		}
+
+		&--has-image-badge .ppcp-r-title-badge--info {
+			display: block;
+			margin: 6px 0px 0px 0px;
+			width: fit-content;
 		}
 	}
 }

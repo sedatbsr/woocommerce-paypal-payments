@@ -23,14 +23,13 @@
 	}
 
 	&__title {
-		@include font(20, 28, 700);
+		@include font(24, 32, 400);
 		margin: 0 0 4px 0;
 		text-align: center;
 	}
 
 	&__description {
-		color: $color-gray-800;
-		@include font(14, 20, 400);
+		@include font(14, 22, 400);
 		margin: 0;
 		text-align: center;
 	}

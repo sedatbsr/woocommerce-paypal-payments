@@ -17,14 +17,14 @@
 	}
 
 	.ppcp-r-page-welcome-or-separator {
-		margin: 0 0 32px 0;
+		margin: 0 0 16px 0;
 	}
 
 	.ppcp-r-page-welcome-mode-separator {
 		margin: 0 0 64px 0;
 
 		.ppcp-r-separator__line {
-			background-color: $color-gray-500;
+			background-color: $color-gray-300;
 		}
 	}
 
@@ -62,9 +62,9 @@
 		}
 
 		&:not(:last-child) {
-			padding-right: 18px;
+			padding-right: 48px;
 			border-right: 1px solid $color-gray-200;
-			margin-right: 18px;
+			margin-right: 48px;
 		}
 	}
 
@@ -89,6 +89,8 @@
 
 	&__title {
 		text-align: center;
+		@include font(20, 28, 700);
+		margin: 0 0 32px 0;
 	}
 
 	&__wrapper {

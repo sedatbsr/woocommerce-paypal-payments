@@ -7,7 +7,7 @@ import Separator from '../../ReusableComponents/Separator';
 import { useOnboardingStepWelcome, useManualConnect } from '../../../data';
 
 import DataStoreControl from '../../ReusableComponents/DataStoreControl';
-import BadgeBox from "../../ReusableComponents/BadgeBox";
+import BadgeBox, {BADGE_BOX_TITLE_BIG} from "../../ReusableComponents/BadgeBox";
 
 const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 	return (
@@ -86,16 +86,16 @@ const WelcomeDocs = () => {
                 <div className="ppcp-r-welcome-docs__col">
                     <BadgeBox
                         title={__('PayPal Checkout', 'woocommerce-paypal-payments')}
+                        titleType = {BADGE_BOX_TITLE_BIG}
                         textBadge={__('from 3.49% + $0.49 USD1', 'woocommerce-paypal-payments')}
                         description={__(
                             'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
                             'woocommerce-paypal-payments'
                         )}
                     />
-                    <BadgeBox title={__('Included in PayPal Checkout', 'woocommerce-paypal-payments')}/>
+                    <BadgeBox title={__('Included in PayPal Checkout', 'woocommerce-paypal-payments')} titleType = {BADGE_BOX_TITLE_BIG}/>
                     <BadgeBox
                         title={__('Pay with PayPal', 'woocommerce-paypal-payments')}
-                        titleTag='h4'
                         imageBadge={['icon-button-paypal.svg']}
                         description={sprintf(
                             // translators: %s: Link to PayPal REST application guide
@@ -109,7 +109,6 @@ const WelcomeDocs = () => {
                     <Separator className="ppcp-r-page-welcome-mode-separator"/>
                     <BadgeBox
                         title={__('Pay Later', 'woocommerce-paypal-payments')}
-                        titleTag='h4'
                         imageBadge={['icon-payment-method-paypal-small.svg']}
                         description={sprintf(
                             // translators: %s: Link to PayPal REST application guide
@@ -123,7 +122,6 @@ const WelcomeDocs = () => {
                     <Separator className="ppcp-r-page-welcome-mode-separator"/>
                     <BadgeBox
                         title={__('Venmo', 'woocommerce-paypal-payments')}
-                        titleTag='h4'
                         imageBadge={['icon-button-venmo.svg']}
                         description={sprintf(
                             // translators: %s: Link to PayPal REST application guide
@@ -137,7 +135,6 @@ const WelcomeDocs = () => {
                     <Separator className="ppcp-r-page-welcome-mode-separator"/>
                     <BadgeBox
                         title={__('Crypto', 'woocommerce-paypal-payments')}
-                        titleTag='h4'
                         imageBadge={['icon-payment-method-crypto.svg']}
                         description={sprintf(
                             // translators: %s: Link to PayPal REST application guide
@@ -152,11 +149,11 @@ const WelcomeDocs = () => {
                 <div className="ppcp-r-welcome-docs__col">
                     <BadgeBox
                         title={__('Optional payment methods', 'woocommerce-paypal-payments')}
+                        titleType = {BADGE_BOX_TITLE_BIG}
                         description={__('with additional application', 'woocommerce-paypal-payments')}
                     />
                     <BadgeBox
                         title={__('Custom Card Fields', 'woocommerce-paypal-payments')}
-                        titleTag='h4'
                         imageBadge={['icon-button-visa.svg', 'icon-button-mastercard.svg', 'icon-button-amex.svg', 'icon-button-discover.svg']}
                         textBadge={__('from 2.59% + $0.49 USD1', 'woocommerce-paypal-payments')}
                         description={sprintf(
@@ -171,7 +168,6 @@ const WelcomeDocs = () => {
                     <Separator className="ppcp-r-page-welcome-mode-separator"/>
                     <BadgeBox
                         title={__('Digital Wallets', 'woocommerce-paypal-payments')}
-                        titleTag='h4'
                         imageBadge={['icon-button-apple-pay.svg', 'icon-button-google-pay.svg']}
                         textBadge={__('from 2.59% + $0.49 USD1', 'woocommerce-paypal-payments')}
                         description={sprintf(
@@ -186,7 +182,6 @@ const WelcomeDocs = () => {
                     <Separator className="ppcp-r-page-welcome-mode-separator"/>
                     <BadgeBox
                         title={__('Alternative Payment Methods', 'woocommerce-paypal-payments')}
-                        titleTag='h4'
                         imageBadge={['icon-button-sepa.svg', 'icon-button-ideal.svg', 'icon-button-blik.svg', 'icon-button-bancontact.svg']}
                         textBadge={__('from 3.49% + $0.49 USD1', 'woocommerce-paypal-payments')}
                         description={sprintf(
@@ -201,7 +196,6 @@ const WelcomeDocs = () => {
                     <Separator className="ppcp-r-page-welcome-mode-separator"/>
                     <BadgeBox
                         title={__('', 'woocommerce-paypal-payments')}
-                        titleTag='h4'
                         imageBadge={['icon-payment-method-fastlane-small.svg']}
                         textBadge={__('from 2.59% + $0.49 USD1', 'woocommerce-paypal-payments')}
                         description={sprintf(
