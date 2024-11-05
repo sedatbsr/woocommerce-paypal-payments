@@ -1,11 +1,7 @@
 button.components-button, a.components-button {
 	&.is-primary, &.is-secondary {
 		&:not(:disabled) {
-			background-color: $color-blueberry;
-
-			&:hover {
-				background: $gradient-header;
-			}
+			background-color: $color-black;
 		}
 
 		&:disabled {
