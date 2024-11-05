@@ -8,6 +8,7 @@ import BadgeBox, {
 	BADGE_BOX_TITLE_BIG,
 } from '../../ReusableComponents/BadgeBox';
 import AdvancedOptionsForm from './Components/AdvancedOptionsForm';
+import AccordionSection from '../../ReusableComponents/AccordionSection';
 
 const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 	return (
@@ -44,7 +45,16 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 			</div>
 			<Separator className="ppcp-r-page-welcome-mode-separator" />
 			<WelcomeDocs />
-			<AdvancedOptionsForm setCompleted={ setCompleted } />
+			<Separator text={ __( 'or', 'woocommerce-paypal-payments' ) } />
+			<AccordionSection
+				title={ __(
+					'See advanced options',
+					'woocommerce-paypal-payments'
+				) }
+				initiallyOpen={ false }
+			>
+				<AdvancedOptionsForm setCompleted={ setCompleted } />
+			</AccordionSection>
 		</div>
 	);
 };
