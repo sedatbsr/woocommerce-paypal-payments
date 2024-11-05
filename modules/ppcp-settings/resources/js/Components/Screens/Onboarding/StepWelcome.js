@@ -18,7 +18,7 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
                     'woocommerce-paypal-payments'
                 )}
                 description={__(
-                    'Your all-in-one integration for PayPal checkout solutions that enable buyers to pay via PayPal, Pay Later, all major credit/debit cards, Apple Pay, Google Pay, and more.',
+                    'Your all-in-one integration for PayPal checkout solutions that enable buyers<br/> to pay via PayPal, Pay Later, all major credit/debit cards, Apple Pay, Google Pay, and more.',
                     'woocommerce-paypal-payments'
                 )}
             />

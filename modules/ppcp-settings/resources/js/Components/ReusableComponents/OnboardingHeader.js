@@ -13,9 +13,10 @@ const OnboardingHeader = ( props ) => {
 					{ props.title }
 				</h1>
 				{ props.description && (
-					<p className="ppcp-r-onboarding-header__description">
-						{ props.description }
-					</p>
+					<p
+                        className="ppcp-r-onboarding-header__description"
+                        dangerouslySetInnerHTML={ { __html: props.description, } }
+					></p>
 				) }
 			</div>
 		</section>

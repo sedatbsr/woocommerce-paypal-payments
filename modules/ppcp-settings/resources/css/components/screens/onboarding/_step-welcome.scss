@@ -21,7 +21,7 @@
 	}
 
 	.ppcp-r-page-welcome-mode-separator {
-		margin: 0 0 64px 0;
+		margin: 0 0 48px 0;
 
 		.ppcp-r-separator__line {
 			background-color: $color-gray-300;
@@ -50,21 +50,21 @@
 		gap: 4px;
 
 		> span {
-			@include font(11, 16, 600);
+			@include font(12, 16, 500);
 			text-transform: uppercase;
 			color: $color-gray-800;
 		}
 
 		> p {
 			margin: 0;
-			@include font(13, 16, 400);
+			@include font(11, 16, 450);
 			color: $color-gray-700;
 		}
 
 		&:not(:last-child) {
-			padding-right: 48px;
+			padding-right: 18px;
 			border-right: 1px solid $color-gray-200;
-			margin-right: 48px;
+			margin-right: 18px;
 		}
 	}
 
@@ -112,9 +112,9 @@
 		}
 
 		&:not(:last-child) {
-			padding-right: 24px;
+			padding-right: 48px;
 			border-right: 1px solid $color-gray-200;
-			margin-right: 24px;
+			margin-right: 48px;
 		}
 	}
 
