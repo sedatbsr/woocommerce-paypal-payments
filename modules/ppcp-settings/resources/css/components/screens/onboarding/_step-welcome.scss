@@ -86,6 +86,7 @@
 }
 
 .ppcp-r-welcome-docs {
+	margin: 0 0 48px 0;
 
 	&__title {
 		text-align: center;
@@ -93,10 +94,21 @@
 		margin: 0 0 32px 0;
 	}
 
+	&__description {
+		text-align: center;
+		@include font(14, 22, 400);
+		font-style: italic;
+
+		a {
+			color: $color-gray-700;
+		}
+	}
+
 	&__wrapper {
 		display: flex;
 		justify-content: center;
 		padding: 8px;
+		margin: 0 0 48px 0;
 	}
 
 	&__col {
