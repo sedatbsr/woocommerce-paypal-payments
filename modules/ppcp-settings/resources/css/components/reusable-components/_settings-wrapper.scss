@@ -16,15 +16,6 @@
 		}
 	}
 
-	&-container {
-		box-shadow: $shadow-card;
-	}
-
-	&-card {
-		box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
-		background-color: $color-white;
-	}
-
 	&-settings-card {
 		background-color: $color-white;
 		padding: 48px;
