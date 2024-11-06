@@ -100,6 +100,8 @@ const WelcomeForm = ( { setCompleted } ) => {
 				throw new Error( 'Request failed.' );
 			}
 
+            console.log(`Merchant ID: ${res.merchantId}, email: ${res.email}`);
+
 			setCompleted( true );
 		} catch ( exc ) {
 			console.error( exc );
