@@ -83,7 +83,7 @@ class PayPalBearer implements Bearer {
 		string $key,
 		string $secret,
 		LoggerInterface $logger,
-		Settings $settings
+		ContainerInterface $settings
 	) {
 
 		$this->cache    = $cache;
@@ -136,8 +136,7 @@ class PayPalBearer implements Bearer {
 			$error = new RuntimeException(
 				__( 'Could not create token.', 'woocommerce-paypal-payments' )
 			);
-			$this->logger->log(
-				'warning',
+			$this->logger->warning(
 				$error->getMessage(),
 				array(
 					'args'     => $args,
