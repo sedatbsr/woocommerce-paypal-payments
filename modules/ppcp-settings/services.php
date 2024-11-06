@@ -47,7 +47,11 @@ return array(
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );
 	},
 	'settings.rest.connect_manual'                => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
-		return new ConnectManualRestEndpoint();
+		return new ConnectManualRestEndpoint(
+			$container->get( 'api.paypal-host-production' ),
+			$container->get( 'api.paypal-host-sandbox' ),
+			$container->get( 'woocommerce.logger.woocommerce' )
+		);
 	},
 	'settings.casual-selling.supported-countries' => static function ( ContainerInterface $container ) : array {
 		return array(
