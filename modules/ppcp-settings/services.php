@@ -47,19 +47,60 @@ return array(
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );
 	},
 	'settings.rest.connect_manual'                => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
-		return new ConnectManualRestEndpoint();
+		return new ConnectManualRestEndpoint(
+			$container->get( 'api.paypal-host-production' ),
+			$container->get( 'api.paypal-host-sandbox' ),
+			$container->get( 'woocommerce.logger.woocommerce' )
+		);
 	},
 	'settings.casual-selling.supported-countries' => static function ( ContainerInterface $container ) : array {
-		// TODO: This is a dummy list, while we wait for the official eligibility list.
-
 		return array(
-			'US',
-			'CA',
-			'DE',
-			'ES',
+			'AR',
+			'AU',
 			'AT',
-			'CH',
+			'BE',
+			'BR',
+			'CA',
+			'CL',
+			'CN',
+			'CY',
+			'CZ',
+			'DK',
+			'EE',
+			'FI',
+			'FR',
+			'GR',
+			'HU',
+			'ID',
+			'IE',
+			'IT',
+			'JP',
+			'LV',
+			'LI',
+			'LU',
+			'MY',
+			'MT',
 			'NL',
+			'NZ',
+			'NO',
+			'PH',
+			'PL',
+			'PT',
+			'RO',
+			'RU',
+			'SM',
+			'SA',
+			'SG',
+			'SK',
+			'SI',
+			'ZA',
+			'KR',
+			'ES',
+			'SE',
+			'TW',
+			'GB',
+			'US',
+			'VN',
 		);
 	},
 	'settings.casual-selling.eligible'            => static function ( ContainerInterface $container ) : bool {

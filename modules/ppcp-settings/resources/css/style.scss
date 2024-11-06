@@ -9,6 +9,7 @@
 	@import './components/reusable-components/text-control';
 	@import './components/reusable-components/separator';
 	@import './components/reusable-components/payment-method-icons';
+	@import "./components/reusable-components/payment-method-item";
 	@import './components/reusable-components/settings-wrapper';
 	@import './components/reusable-components/select-box';
 	@import './components/reusable-components/tab-navigation';
@@ -18,4 +19,7 @@
 	@import './components/reusable-components/_badge-box.scss';
 	@import './components/screens/onboarding';
 	@import './components/screens/dashboard/tab-dashboard';
+	@import './components/screens/dashboard/tab-payment-methods';
 }
+
+@import './components/reusable-components/payment-method-modal';
