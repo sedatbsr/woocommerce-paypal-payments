@@ -14,7 +14,7 @@ use WooCommerce\PayPalCommerce\ApiClient\Entity\Token;
 use WooCommerce\PayPalCommerce\ApiClient\Exception\RuntimeException;
 use WooCommerce\PayPalCommerce\ApiClient\Helper\Cache;
 use Psr\Log\LoggerInterface;
-use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
+use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 
 /**
  * Class PayPalBearer
@@ -28,7 +28,7 @@ class PayPalBearer implements Bearer {
 	/**
 	 * The settings.
 	 *
-	 * @var Settings
+	 * @var ContainerInterface
 	 */
 	protected $settings;
 
@@ -70,12 +70,12 @@ class PayPalBearer implements Bearer {
 	/**
 	 * PayPalBearer constructor.
 	 *
-	 * @param Cache           $cache The cache.
-	 * @param string          $host The host.
-	 * @param string          $key The key.
-	 * @param string          $secret The secret.
-	 * @param LoggerInterface $logger The logger.
-	 * @param Settings        $settings The settings.
+	 * @param Cache              $cache The cache.
+	 * @param string             $host The host.
+	 * @param string             $key The key.
+	 * @param string             $secret The secret.
+	 * @param LoggerInterface    $logger The logger.
+	 * @param ContainerInterface $settings The settings.
 	 */
 	public function __construct(
 		Cache $cache,
