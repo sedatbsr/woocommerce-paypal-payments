@@ -716,6 +716,7 @@ return array(
 				'FR' => $mastercard_visa_amex,
 				'GB' => $mastercard_visa_amex,
 				'GR' => $mastercard_visa_amex,
+				'HK' => $mastercard_visa_amex,
 				'HU' => $mastercard_visa_amex,
 				'IE' => $mastercard_visa_amex,
 				'IT' => $mastercard_visa_amex,
@@ -745,6 +746,7 @@ return array(
 				'SE' => $mastercard_visa_amex,
 				'SI' => $mastercard_visa_amex,
 				'SK' => $mastercard_visa_amex,
+				'SG' => $mastercard_visa_amex,
 				'JP' => array(
 					'mastercard' => array(),
 					'visa'       => array(),
