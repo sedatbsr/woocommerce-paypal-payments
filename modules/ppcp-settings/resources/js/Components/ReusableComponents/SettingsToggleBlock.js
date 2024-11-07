@@ -1,5 +1,7 @@
-import { ToggleControl, Spinner } from '@wordpress/components';
+import { ToggleControl } from '@wordpress/components';
 import { useRef } from '@wordpress/element';
+
+import SpinnerOverlay from './SpinnerOverlay';
 
 const SettingsToggleBlock = ( {
 	isToggled,
@@ -15,9 +17,10 @@ const SettingsToggleBlock = ( {
 	}
 
 	const handleLabelClick = () => {
-		if ( ! toggleRef.current ) {
+		if ( ! toggleRef.current || isLoading ) {
 			return;
 		}
+
 		toggleRef.current.click();
 		toggleRef.current.focus();
 	};
@@ -55,7 +58,7 @@ const SettingsToggleBlock = ( {
 			</div>
 			{ props.children && isToggled && (
 				<div className="ppcp-r-toggle-block__toggled-content">
-					{ isLoading && <Spinner /> }
+					{ isLoading && <SpinnerOverlay /> }
 					{ props.children }
 				</div>
 			) }
