@@ -1,4 +1,5 @@
 import { ToggleControl, Spinner } from '@wordpress/components';
+import { useRef } from '@wordpress/element';
 
 const SettingsToggleBlock = ( {
 	isToggled,
@@ -6,20 +7,33 @@ const SettingsToggleBlock = ( {
 	isLoading = false,
 	...props
 } ) => {
+	const toggleRef = useRef( null );
 	const blockClasses = [ 'ppcp-r-toggle-block' ];
 
 	if ( isLoading ) {
 		blockClasses.push( 'ppcp--is-loading' );
 	}
 
+	const handleLabelClick = () => {
+		if ( ! toggleRef.current ) {
+			return;
+		}
+		toggleRef.current.click();
+		toggleRef.current.focus();
+	};
+
 	return (
 		<div className={ blockClasses.join( ' ' ) }>
 			<div className="ppcp-r-toggle-block__wrapper">
 				<div className="ppcp-r-toggle-block__content">
 					{ props?.label && (
-						<span className="ppcp-r-toggle-block__content-label">
+						// eslint-disable-next-line jsx-a11y/click-events-have-key-events,jsx-a11y/no-static-element-interactions -- keyboard element is ToggleControl
+						<div
+							className="ppcp-r-toggle-block__content-label"
+							onClick={ handleLabelClick }
+						>
 							{ props.label }
-						</span>
+						</div>
 					) }
 					{ props?.description && (
 						<p
@@ -32,10 +46,9 @@ const SettingsToggleBlock = ( {
 				</div>
 				<div className="ppcp-r-toggle-block__switch">
 					<ToggleControl
+						ref={ toggleRef }
 						checked={ isToggled }
-						onChange={ ( newValue ) => {
-							setToggled( newValue );
-						} }
+						onChange={ ( newState ) => setToggled( newState ) }
 						disabled={ isLoading }
 					/>
 				</div>
