@@ -249,59 +249,45 @@ class GooglepayButton extends PaymentButton {
 	/**
 	 * @inheritDoc
 	 */
-	validateConfiguration( silent = false ) {
-		const validEnvs = [ 'PRODUCTION', 'TEST' ];
+	registerValidationRules( invalidIf, validIf ) {
+		invalidIf(
+			() =>
+				! [ 'TEST', 'PRODUCTION' ].includes(
+					this.buttonConfig.environment
+				),
+			`Invalid environment: ${ this.buttonConfig.environment }`
+		);
 
-		const isInvalid = ( ...args ) => {
-			if ( ! silent ) {
-				this.error( ...args );
-			}
-			return false;
-		};
+		validIf( () => this.isPreview );
 
-		if ( ! validEnvs.includes( this.buttonConfig.environment ) ) {
-			return isInvalid(
-				'Invalid environment:',
-				this.buttonConfig.environment
-			);
-		}
+		invalidIf(
+			() => ! this.googlePayConfig,
+			'No API configuration - missing configure() call?'
+		);
 
-		// Preview buttons only need a valid environment.
-		if ( this.isPreview ) {
-			return true;
-		}
+		invalidIf(
+			() => ! this.transactionInfo,
+			'No transactionInfo - missing configure() call?'
+		);
 
-		if ( ! this.googlePayConfig ) {
-			return isInvalid(
-				'No API configuration - missing configure() call?'
-			);
-		}
+		invalidIf(
+			() => ! this.contextHandler?.validateContext(),
+			`Invalid context handler.`
+		);
 
-		if ( ! this.transactionInfo ) {
-			return isInvalid(
-				'No transactionInfo - missing configure() call?'
-			);
-		}
+		invalidIf(
+			() =>
+				this.buttonAttributes?.height &&
+				isNaN( parseInt( this.buttonAttributes.height ) ),
+			'Invalid height in buttonAttributes'
+		);
 
-		// Add buttonAttributes validation
-		if ( this.buttonAttributes ) {
-			if (
-				this.buttonAttributes.height &&
-				isNaN( parseInt( this.buttonAttributes.height ) )
-			) {
-				return isInvalid( 'Invalid height in buttonAttributes' );
-			}
-			if (
-				this.buttonAttributes.borderRadius &&
-				isNaN( parseInt( this.buttonAttributes.borderRadius ) )
-			) {
-				return isInvalid( 'Invalid borderRadius in buttonAttributes' );
-			}
-		}
-
-		if ( ! typeof this.contextHandler?.validateContext() ) {
-			return isInvalid( 'Invalid context handler.', this.contextHandler );
-		}
+		invalidIf(
+			() =>
+				this.buttonAttributes?.borderRadius &&
+				isNaN( parseInt( this.buttonAttributes.borderRadius ) ),
+			'Invalid borderRadius in buttonAttributes'
+		);
 
 		return true;
 	}
