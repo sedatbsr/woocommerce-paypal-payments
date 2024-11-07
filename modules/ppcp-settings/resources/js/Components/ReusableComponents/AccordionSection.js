@@ -25,7 +25,7 @@ const Accordion = ( {
 		wrapperClasses.push( className );
 	}
 	if ( isOpen ) {
-		wrapperClasses.push( 'open' );
+		wrapperClasses.push( 'ppcp--is-open' );
 	}
 
 	return (
