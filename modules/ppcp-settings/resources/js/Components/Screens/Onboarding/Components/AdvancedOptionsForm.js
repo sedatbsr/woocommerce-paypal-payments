@@ -41,7 +41,7 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 			'For advanced users: Connect a custom PayPal REST app for full control over your integration. For more information on creating a PayPal REST application, <a target="_blank" href="%s">click here</a>.',
 			'woocommerce-paypal-payments'
 		),
-		'https://woocommerce.com/document/woocommerce-paypal-payments/#manual-credential-input '
+		'https://woocommerce.com/document/woocommerce-paypal-payments/#manual-credential-input'
 	);
 
 	return (
