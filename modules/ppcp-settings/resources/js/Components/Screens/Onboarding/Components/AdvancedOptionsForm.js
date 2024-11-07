@@ -1,5 +1,8 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, TextControl } from '@wordpress/components';
+import { useRef } from '@wordpress/element';
+import { useDispatch } from '@wordpress/data';
+import { store as noticesStore } from '@wordpress/notices';
 
 import SettingsToggleBlock from '../../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../../ReusableComponents/Separator';
@@ -19,19 +22,77 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 		setClientSecret,
 	} = useOnboardingStepWelcome();
 
+	const { createSuccessNotice, createErrorNotice } =
+		useDispatch( noticesStore );
 	const { connectManual } = useManualConnect();
+	const refClientId = useRef( null );
+	const refClientSecret = useRef( null );
 
-	const handleConnect = async () => {
-		try {
-			const res = await connectManual();
-			if ( ! res.success ) {
-				throw new Error( 'Request failed.' );
+	const handleFormValidation = () => {
+		const fields = [
+			{
+				ref: refClientId,
+				value: clientId,
+				errorMessage: __(
+					'Please enter your Client ID',
+					'woocommerce-paypal-payments'
+				),
+			},
+			{
+				ref: refClientSecret,
+				value: clientSecret,
+				errorMessage: __(
+					'Please enter your Secret Key',
+					'woocommerce-paypal-payments'
+				),
+			},
+		];
+
+		for ( const { ref, value, errorMessage } of fields ) {
+			if ( value ) {
+				continue;
 			}
 
-			setCompleted( true );
-		} catch ( exc ) {
-			console.error( exc );
-			alert( 'Connection failed.' );
+			ref?.current?.focus();
+			createErrorNotice( errorMessage );
+			return false;
+		}
+
+		return true;
+	};
+
+	const handleServerError = ( res ) => {
+		if ( res.message ) {
+			createErrorNotice( res.message );
+		} else {
+			createErrorNotice(
+				__(
+					'Could not connect to PayPal. Please make sure your Client ID and Secret Key are correct.',
+					'woocommerce-paypal-payments'
+				)
+			);
+		}
+	};
+
+	const handleServerSuccess = () => {
+		createSuccessNotice(
+			__( 'Connected to PayPal', 'woocommerce-paypal-payments' )
+		);
+
+		setCompleted( true );
+	};
+
+	const handleConnect = async () => {
+		if ( ! handleFormValidation() ) {
+			return;
+		}
+
+		const res = await connectManual();
+
+		if ( res.success ) {
+			handleServerSuccess();
+		} else {
+			handleServerError( res );
 		}
 	};
 
@@ -75,6 +136,7 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 			>
 				<DataStoreControl
 					control={ TextControl }
+					ref={ refClientId }
 					label={
 						isSandboxMode
 							? __(
@@ -91,6 +153,7 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 				/>
 				<DataStoreControl
 					control={ TextControl }
+					ref={ refClientSecret }
 					label={
 						isSandboxMode
 							? __(

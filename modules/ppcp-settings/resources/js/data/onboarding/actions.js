@@ -172,10 +172,10 @@ export const setProducts = ( products ) => {
  * Attempts to establish a connection using client ID and secret via the server-side
  * connection endpoint.
  *
- * @return {boolean} True if the connection was successful, false otherwise.
+ * @return {Object} The server response object
  */
 export function* connectViaIdAndSecret() {
-	let error = null;
+	let result = null;
 
 	try {
 		const path = `${ NAMESPACE }/connect_manual`;
@@ -184,7 +184,7 @@ export function* connectViaIdAndSecret() {
 
 		yield setManualConnectionIsBusy( true );
 
-		const result = yield apiFetch( {
+		result = yield apiFetch( {
 			path,
 			method: 'POST',
 			data: {
@@ -193,16 +193,16 @@ export function* connectViaIdAndSecret() {
 				useSandbox,
 			},
 		} );
-
-		console.log( 'Manual connection result:', result );
 	} catch ( e ) {
-		error = e;
-		console.error( 'Manual connection failed:', e );
+		result = {
+			success: false,
+			error: e,
+		};
 	} finally {
 		yield setManualConnectionIsBusy( false );
 	}
 
-	return error === null;
+	return result;
 }
 
 /**
