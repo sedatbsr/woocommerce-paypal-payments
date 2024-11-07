@@ -51,6 +51,7 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 					'See advanced options',
 					'woocommerce-paypal-payments'
 				) }
+				className="onboarding-advanced-options"
 				initiallyOpen={ false }
 			>
 				<AdvancedOptionsForm setCompleted={ setCompleted } />

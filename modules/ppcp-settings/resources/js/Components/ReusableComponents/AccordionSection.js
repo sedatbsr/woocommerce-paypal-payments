@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
 import data from '../../utils/data';
 
-const Accordion = ( { title, initiallyOpen, children } ) => {
+const Accordion = ( {
+	title,
+	initiallyOpen = false,
+	className = '',
+	children,
+} ) => {
 	const [ isOpen, setIsOpen ] = useState( initiallyOpen );
 
 	const toggleOpen = ( ev ) => {
@@ -15,8 +20,16 @@ const Accordion = ( { title, initiallyOpen, children } ) => {
 		'ppcp-r-accordion--icon'
 	);
 
+	const wrapperClasses = [ 'ppcp-r-accordion' ];
+	if ( className ) {
+		wrapperClasses.push( className );
+	}
+	if ( isOpen ) {
+		wrapperClasses.push( 'open' );
+	}
+
 	return (
-		<div className={ `ppcp-r-accordion ${ isOpen ? 'open' : '' }` }>
+		<div className={ wrapperClasses.join( ' ' ) }>
 			<button
 				onClick={ toggleOpen }
 				className="ppcp-r-accordion--title"
