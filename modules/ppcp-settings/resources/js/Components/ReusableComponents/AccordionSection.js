@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
-import data from '../../utils/data';
+import { Icon } from '@wordpress/components';
+import { chevronDown, chevronUp } from '@wordpress/icons';
+
+import { useState } from 'react';
 
 const Accordion = ( {
 	title,
@@ -14,11 +16,6 @@ const Accordion = ( {
 		ev?.preventDefault();
 		return false;
 	};
-
-	const iconChevron = data().getImage(
-		'icon-arrow-down.svg',
-		'ppcp-r-accordion--icon'
-	);
 
 	const wrapperClasses = [ 'ppcp-r-accordion' ];
 	if ( className ) {
@@ -35,8 +32,8 @@ const Accordion = ( {
 				className="ppcp-r-accordion--title"
 				type="button"
 			>
-				{ title }
-				{ iconChevron }
+				<span>{ title }</span>
+				<Icon icon={ isOpen ? chevronUp : chevronDown } />
 			</button>
 			{ isOpen && (
 				<div className="ppcp-r-accordion--content">{ children }</div>
