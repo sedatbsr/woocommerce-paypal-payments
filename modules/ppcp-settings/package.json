@@ -10,7 +10,7 @@
         "@woocommerce/navigation": "~8.1.0",
         "@wordpress/data": "^10.10.0",
         "@wordpress/data-controls": "^4.10.0",
-        "@wordpress/scripts": "~30.0.0"
+        "@wordpress/scripts": "^30.3.0"
     },
     "dependencies": {
         "@woocommerce/settings": "^1.0.0"
