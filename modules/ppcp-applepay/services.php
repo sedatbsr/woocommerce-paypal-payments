@@ -191,7 +191,6 @@ return array(
 				'FR', // France
 				'DE', // Germany
 				'GR', // Greece
-				'HK', // Hong Kong
 				'HU', // Hungary
 				'IE', // Ireland
 				'IT', // Italy
@@ -205,7 +204,6 @@ return array(
 				'PL', // Poland
 				'PT', // Portugal
 				'RO', // Romania
-				'SG', // Singapore
 				'SK', // Slovakia
 				'SI', // Slovenia
 				'ES', // Spain
@@ -236,7 +234,6 @@ return array(
 				'DKK', // Danish Krone
 				'EUR', // Euro
 				'GBP', // British Pound Sterling
-				'HKD', // Hong Kong Dollar
 				'HUF', // Hungarian Forint
 				'ILS', // Israeli New Shekel
 				'JPY', // Japanese Yen
@@ -246,7 +243,6 @@ return array(
 				'PHP', // Philippine Peso
 				'PLN', // Polish Zloty
 				'SEK', // Swedish Krona
-				'SGD', // Singapore Dollar
 				'THB', // Thai Baht
 				'TWD', // New Taiwan Dollar
 				'USD',  // United States Dollar
