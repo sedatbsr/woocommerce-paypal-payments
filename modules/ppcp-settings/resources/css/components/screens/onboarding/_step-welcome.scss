@@ -113,17 +113,6 @@
 		@media screen and (max-width: 480px) {
 			flex-wrap: wrap;
 			row-gap: 8px;
-			&__col {
-				width: 100%;
-				text-align: center;
-				border-right: 0;
-				padding-right: 0;
-
-				&:not(:last-child) {
-					border-bottom: 1px solid $color-gray-200;
-					padding-bottom: 8px;
-				}
-			}
 		}
 	}
 
@@ -143,6 +132,17 @@
 			padding-right: 48px;
 			border-right: 1px solid $color-gray-200;
 			margin-right: 48px;
+		}
+
+		@media screen and (max-width: 480px) {
+			width: 100%;
+			text-align: center;
+			border-right: 0 !important;
+			padding-right: 0 !important;
+
+			&:not(:last-child) {
+				padding-bottom: 8px;
+			}
 		}
 	}
 
