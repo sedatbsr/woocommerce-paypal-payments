@@ -5,6 +5,7 @@
 	padding: 24px 48px;
 	margin: 0 -20px 48px -20px;
 	border-bottom: 1px solid $color-gray-300;
+	position: relative;
 
 	button.is-primary {
 		padding: 10px 18px;
@@ -34,8 +35,20 @@
 		text-decoration: none;
 	}
 
+	&--progress-bar {
+		position: absolute;
+		bottom: 0px;
+		left: 0;
+		background-color: $color-blueberry;
+		height: 4px;
+	}
+
 	@media screen and (max-width: 480px) {
 		flex-wrap: wrap;
 		row-gap: 8px;
+
+		&--progress-bar {
+			display:none;
+		}
 	}
 }

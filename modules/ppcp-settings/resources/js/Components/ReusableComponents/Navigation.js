@@ -68,6 +68,12 @@ const Navigation = ( {
                     </Button>
                 </div>
             ) }
+            <div
+                className="ppcp-r-navigation--progress-bar"
+                style={ {
+                    width: `${ ( currentStep / ( stepperOrder.length - 1 ) ) * 90 }%`
+                } }
+            ></div>
         </div>
     );
 };
