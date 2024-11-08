@@ -13,11 +13,8 @@ use WC_REST_Controller;
 
 /**
  * Base class for REST controllers in the settings module.
- *
- * This is a base class for specific REST endpoints; do not instantiate this
- * class directly.
  */
-class RestEndpoint extends WC_REST_Controller {
+abstract class RestEndpoint extends WC_REST_Controller {
 	/**
 	 * Endpoint namespace.
 	 *
