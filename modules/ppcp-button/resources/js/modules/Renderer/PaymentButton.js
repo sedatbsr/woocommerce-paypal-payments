@@ -175,9 +175,9 @@ export default class PaymentButton {
 	/**
 	 * Whether the current browser/website support the payment method.
 	 *
-	 * @type {boolean}
+	 * @type {?boolean}
 	 */
-	#isEligible = false;
+	#isEligible = null;
 
 	/**
 	 * Whether this button is visible. Modified by `show()` and `hide()`
@@ -887,6 +887,10 @@ export default class PaymentButton {
 	 */
 	refresh() {
 		if ( ! this.isPresent ) {
+			return;
+		}
+		if ( ! this.isEligible ) {
+			this.wrapperElement.style.display = 'none';
 			return;
 		}
 
