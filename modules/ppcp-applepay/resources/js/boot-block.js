@@ -7,6 +7,7 @@ import { loadCustomScript } from '@paypal/paypal-js';
 import CheckoutHandler from './Context/CheckoutHandler';
 import ApplePayManager from './ApplepayManager';
 import ApplePayManagerBlockEditor from './ApplepayManagerBlockEditor';
+import checkApplePayAvailability from './Helper/checkApplePayAvailability';
 
 const ppcpData = wc.wcSettings.getSetting( 'ppcp-gateway_data' );
 const ppcpConfig = ppcpData.scriptData;
@@ -99,7 +100,7 @@ registerExpressPaymentMethod( {
 	content: <ApplePayComponent isEditing={ false } />,
 	edit: <ApplePayComponent isEditing={ true } />,
 	ariaLabel: buttonData.title,
-	canMakePayment: () => buttonData.enabled,
+	canMakePayment: () => buttonData.enabled && checkApplePayAvailability(),
 	supports: {
 		features,
 	},
