@@ -122,7 +122,7 @@ class GeneralSettings extends AbstractDataModel {
 	 * @param string $value The value to set.
 	 */
 	public function set_live_merchant_email( string $value ) : void {
-		$this->data['live_merchant_email'] = sanitize_text_field( $value );
+		$this->data['live_merchant_email'] = sanitize_email( $value );
 	}
 
 	/**
@@ -186,6 +186,6 @@ class GeneralSettings extends AbstractDataModel {
 	 * @param string $value The value to set.
 	 */
 	public function set_sandbox_merchant_email( string $value ) : void {
-		$this->data['sandbox_merchant_email'] = sanitize_text_field( $value );
+		$this->data['sandbox_merchant_email'] = sanitize_email( $value );
 	}
 }
