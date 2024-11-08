@@ -101,13 +101,6 @@ const StepBusiness = ( {
 						/>
 					</SelectBox>
 				</SelectBoxWrapper>
-				<Navigation
-					setStep={ setStep }
-					currentStep={ currentStep }
-					stepperOrder={ stepperOrder }
-					setCompleted={ setCompleted }
-					canProceeedCallback={ () => isCasualSeller !== null }
-				/>
 			</div>
 		</div>
 	);

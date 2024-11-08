@@ -121,13 +121,6 @@ const StepProducts = ( {
 						</a>
 					</SelectBox>
 				</SelectBoxWrapper>
-				<Navigation
-					setStep={ setStep }
-					currentStep={ currentStep }
-					stepperOrder={ stepperOrder }
-					setCompleted={ setCompleted }
-					canProceeedCallback={ () => products.length > 0 }
-				/>
 			</div>
 		</div>
 	);
