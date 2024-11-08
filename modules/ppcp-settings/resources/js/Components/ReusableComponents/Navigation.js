@@ -9,6 +9,8 @@ const Navigation = ( {
 	currentStep,
 	stepperOrder
 } ) => {
+    const isLastStep = () => currentStep + 1 === stepperOrder.length;
+    const isFistStep = () => currentStep === 0;
 	const navigateBy = ( stepDirection ) => {
 		let newStep = currentStep + stepDirection;
 
@@ -29,8 +31,6 @@ const Navigation = ( {
 
     let navigationTitle = '';
     let disabled = false;
-    let isLastStep = currentStep + 1 === stepperOrder.length;
-    let isFistStep = currentStep === 0;
 
     switch ( currentStep ) {
         case 1:
@@ -54,30 +54,45 @@ const Navigation = ( {
         <div className="ppcp-r-navigation-container">
             <div className="ppcp-r-navigation">
                 <div className="ppcp-r-navigation--left">
-                    <Button variant="tertiary" onClick={ () => navigateBy( -1 ) }>
-                        <span>{ data().getImage( 'icon-arrow-left.svg' ) }</span>{ navigationTitle }
-                    </Button>
+                    <span>{data().getImage('icon-arrow-left.svg')}</span>
+                    {!isFistStep() ? (
+                        <Button variant="tertiary" onClick={() => navigateBy(-1)}>
+                            {navigationTitle}
+                        </Button>
+                    ) : (
+                        <a
+                            className="ppcp-r-navigation--left__link"
+                            href={global.ppcpSettings.wcPaymentsTabUrl}
+                            aria-label={__('Return to payments', 'woocommerce-paypal-payments')}
+                        >
+                            {navigationTitle}
+                        </a>
+                    )}
                 </div>
-                { ! isFistStep && (
+                {!isFistStep() && (
                     <div className="ppcp-r-navigation--right">
-                        <a href={ global.ppcpSettings.wcPaymentsTabUrl }
-                           aria-label="Return to payments">{__('Save and exit', 'woocommerce-paypal-payments')}</a>
-                        { ! isLastStep && (
+                        <a
+                            href={ global.ppcpSettings.wcPaymentsTabUrl }
+                            aria-label={ __( 'Return to payments', 'woocommerce-paypal-payments' ) }
+                        >
+                            { __( 'Save and exit', 'woocommerce-paypal-payments' ) }
+                        </a>
+                        {!isLastStep() && (
                             <Button
                                 variant="primary"
                                 disabled={ disabled }
                                 onClick={ () => navigateBy( 1 ) }
                             >
-                                { __('Continue', 'woocommerce-paypal-payments') }
+                                { __( 'Continue', 'woocommerce-paypal-payments' ) }
                             </Button>
-                        ) }
+                        )}
                     </div>
-                ) }
+                )}
                 <div
                     className="ppcp-r-navigation--progress-bar"
-                    style={ {
+                    style={{
                         width: `${ ( currentStep / ( stepperOrder.length - 1 ) ) * 90 }%`
-                    } }
+                    }}
                 ></div>
             </div>
         </div>

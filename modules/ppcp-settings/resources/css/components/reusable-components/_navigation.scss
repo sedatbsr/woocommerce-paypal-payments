@@ -25,9 +25,14 @@
 				background-color:none;
 				background:none;
 			}
+		}
 
-			span {
-				padding: 0 12px 0 0;
+		&--left {
+			&__link {
+				@include font(20, 28, 400);
+				color: $color-gray-900;
+				text-decoration: none;
+				padding: 0 0 0 18px;
 			}
 		}
 
