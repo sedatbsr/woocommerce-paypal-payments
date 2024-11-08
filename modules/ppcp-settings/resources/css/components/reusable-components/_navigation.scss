@@ -1,19 +1,41 @@
 .ppcp-r-navigation {
 	display: flex;
-	justify-content: flex-end;
+	justify-content: space-between;
 	align-items: center;
-	gap: 12px;
+	padding: 24px 48px;
+	margin: 0 -20px 48px -20px;
+	border-bottom: 1px solid $color-gray-300;
 
-	.is-primary {
-		min-width: 196px;
+	button.is-primary {
+		padding: 10px 18px;
 		justify-content: center;
+		margin: 0 0 0 12px;
+		&:not(:disabled) {
+			background-color: $color-blueberry;
+		}
 	}
 
-	.is-tertiary {
-		padding: 10px 17px;
-
-		&:hover {
-			background-color: transparent;
+	button.is-tertiary {
+		@include font(16, 24, 600);
+		color: $color-gray-900;
+		&:hover{
+			background-color:none;
+			background:none;
 		}
+
+		span {
+			padding: 0 12px 0 0;
+		}
+	}
+
+	&--right a{
+		@include font(13, 20, 400);
+		color: $color-blueberry;
+		text-decoration: none;
+	}
+
+	@media screen and (max-width: 480px) {
+		flex-wrap: wrap;
+		row-gap: 8px;
 	}
 }
