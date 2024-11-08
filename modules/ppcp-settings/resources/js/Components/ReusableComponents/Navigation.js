@@ -29,6 +29,8 @@ const Navigation = ( {
 
     let navigationTitle = '';
     let disabled = false;
+    let isLastStep = currentStep + 1 === stepperOrder.length;
+    let isFistStep = currentStep === 0;
 
     switch ( currentStep ) {
         case 1:
@@ -49,31 +51,35 @@ const Navigation = ( {
     }
 
 	return (
-        <div className="ppcp-r-navigation">
-            <div className="ppcp-r-navigation--left">
-                <Button variant="tertiary" onClick={ () => navigateBy( -1 ) }>
-                    <span>{ data().getImage( 'icon-arrow-left.svg' ) }</span>{ navigationTitle }
-                </Button>
-            </div>
-            { currentStep > 0 && (
-                <div className="ppcp-r-navigation--right">
-                    <a href="wp-admin/admin.php?page=wc-settings&amp;tab=checkout"
-                       aria-label="Return to payments">{__('Save and exit', 'woocommerce-paypal-payments')}</a>
-                    <Button
-                        variant="primary"
-                        disabled={ disabled }
-                        onClick={ () => navigateBy( 1 ) }
-                    >
-                        { __('Continue', 'woocommerce-paypal-payments') }
+        <div className="ppcp-r-navigation-container">
+            <div className="ppcp-r-navigation">
+                <div className="ppcp-r-navigation--left">
+                    <Button variant="tertiary" onClick={ () => navigateBy( -1 ) }>
+                        <span>{ data().getImage( 'icon-arrow-left.svg' ) }</span>{ navigationTitle }
                     </Button>
                 </div>
-            ) }
-            <div
-                className="ppcp-r-navigation--progress-bar"
-                style={ {
-                    width: `${ ( currentStep / ( stepperOrder.length - 1 ) ) * 90 }%`
-                } }
-            ></div>
+                { ! isFistStep && (
+                    <div className="ppcp-r-navigation--right">
+                        <a href="wp-admin/admin.php?page=wc-settings&amp;tab=checkout"
+                           aria-label="Return to payments">{__('Save and exit', 'woocommerce-paypal-payments')}</a>
+                        { ! isLastStep && (
+                            <Button
+                                variant="primary"
+                                disabled={ disabled }
+                                onClick={ () => navigateBy( 1 ) }
+                            >
+                                { __('Continue', 'woocommerce-paypal-payments') }
+                            </Button>
+                        ) }
+                    </div>
+                ) }
+                <div
+                    className="ppcp-r-navigation--progress-bar"
+                    style={ {
+                        width: `${ ( currentStep / ( stepperOrder.length - 1 ) ) * 90 }%`
+                    } }
+                ></div>
+            </div>
         </div>
     );
 };
