@@ -15,7 +15,6 @@ use WooCommerce\PayPalCommerce\ApiClient\Authentication\UserIdToken;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\Orders;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\PaymentMethodTokensEndpoint;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\PaymentTokensEndpoint;
-use WooCommerce\PayPalCommerce\ApiClient\Entity\CardAuthenticationResult;
 use WooCommerce\PayPalCommerce\ApiClient\Factory\CardAuthenticationResultFactory;
 use WooCommerce\PayPalCommerce\ApiClient\Helper\CurrencyGetter;
 use WooCommerce\PayPalCommerce\ApiClient\Helper\FailureRegistry;
@@ -79,6 +78,7 @@ use WooCommerce\PayPalCommerce\ApiClient\Repository\OrderRepository;
 use WooCommerce\PayPalCommerce\ApiClient\Repository\PartnerReferralsData;
 use WooCommerce\PayPalCommerce\ApiClient\Repository\PayeeRepository;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
+use WooCommerce\PayPalCommerce\ApiClient\Authentication\ConnectBearer;
 
 return array(
 	'api.host'                                       => function( ContainerInterface $container ) : string {
@@ -176,6 +176,22 @@ return array(
 		return new PartnerReferrals(
 			$container->get( 'api.host' ),
 			$container->get( 'api.bearer' ),
+			$container->get( 'woocommerce.logger.woocommerce' )
+		);
+	},
+	'api.endpoint.partner-referrals-sandbox'         => static function ( ContainerInterface $container ) : PartnerReferrals {
+
+		return new PartnerReferrals(
+			CONNECT_WOO_SANDBOX_URL,
+			new ConnectBearer(),
+			$container->get( 'woocommerce.logger.woocommerce' )
+		);
+	},
+	'api.endpoint.partner-referrals-production'      => static function ( ContainerInterface $container ) : PartnerReferrals {
+
+		return new PartnerReferrals(
+			CONNECT_WOO_URL,
+			new ConnectBearer(),
 			$container->get( 'woocommerce.logger.woocommerce' )
 		);
 	},
@@ -852,5 +868,23 @@ return array(
 			$container->get( 'api.client-credentials' ),
 			$container->get( 'api.client-credentials-cache' )
 		);
+	},
+	'api.paypal-host-production'                     => static function( ContainerInterface $container ) : string {
+		return PAYPAL_API_URL;
+	},
+	'api.paypal-host-sandbox'                        => static function( ContainerInterface $container ) : string {
+		return PAYPAL_SANDBOX_API_URL;
+	},
+	'api.paypal-website-url-production'              => static function( ContainerInterface $container ) : string {
+		return PAYPAL_URL;
+	},
+	'api.paypal-website-url-sandbox'                 => static function( ContainerInterface $container ) : string {
+		return PAYPAL_SANDBOX_URL;
+	},
+	'api.partner_merchant_id-production'             => static function( ContainerInterface $container ) : string {
+		return CONNECT_WOO_MERCHANT_ID;
+	},
+	'api.partner_merchant_id-sandbox'                => static function( ContainerInterface $container ) : string {
+		return CONNECT_WOO_SANDBOX_MERCHANT_ID;
 	},
 );

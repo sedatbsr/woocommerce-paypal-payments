@@ -29,8 +29,32 @@ if ( ! defined( 'MINUTE_IN_SECONDS' ) ) {
 if ( ! defined( 'ABSPATH' ) ) {
 	define( 'ABSPATH', '' );
 }
+if ( ! defined( 'PAYPAL_API_URL' ) ) {
+	define( 'PAYPAL_API_URL', 'https://api-m.paypal.com' );
+}
+if ( ! defined( 'PAYPAL_SANDBOX_API_URL' ) ) {
+	define( 'PAYPAL_SANDBOX_API_URL', 'https://api-m.sandbox.paypal.com' );
+}
 if ( ! defined( 'PPCP_PAYPAL_BN_CODE' ) ) {
 	define( 'PPCP_PAYPAL_BN_CODE', 'Woo_PPCP' );
+}
+if ( ! defined( 'CONNECT_WOO_CLIENT_ID' ) ) {
+	define( 'CONNECT_WOO_CLIENT_ID', 'AcCAsWta_JTL__OfpjspNyH7c1GGHH332fLwonA5CwX4Y10mhybRZmHLA0GdRbwKwjQIhpDQy0pluX_P' );
+}
+if ( ! defined( 'CONNECT_WOO_SANDBOX_CLIENT_ID' ) ) {
+	define( 'CONNECT_WOO_SANDBOX_CLIENT_ID', 'AYmOHbt1VHg-OZ_oihPdzKEVbU3qg0qXonBcAztuzniQRaKE0w1Hr762cSFwd4n8wxOl-TCWohEa0XM_' );
+}
+if ( ! defined( 'CONNECT_WOO_MERCHANT_ID' ) ) {
+	define( 'CONNECT_WOO_MERCHANT_ID', 'K8SKZ36LQBWXJ' );
+}
+if ( ! defined( 'CONNECT_WOO_SANDBOX_MERCHANT_ID' ) ) {
+	define( 'CONNECT_WOO_SANDBOX_MERCHANT_ID', 'MPMFHQTVMBZ6G' );
+}
+if ( ! defined( 'CONNECT_WOO_URL' ) ) {
+	define( 'CONNECT_WOO_URL', 'https://api.woocommerce.com/integrations/ppc' );
+}
+if ( ! defined( 'CONNECT_WOO_SANDBOX_URL' ) ) {
+	define( 'CONNECT_WOO_SANDBOX_URL', 'https://api.woocommerce.com/integrations/ppcsandbox' );
 }
 
 /**
@@ -78,12 +102,15 @@ class WP_HTML_Tag_Processor {
 	public function __construct( $html ) {
 	}
 
-	public function next_tag( $query = null ) {
+	public function next_tag( $query = null ) : bool {
+		return false;
 	}
 
-	public function set_attribute( $name, $value ) {
+	public function set_attribute( $name, $value ) : bool {
+		return false;
 	}
 
-	public function get_updated_html() {
+	public function get_updated_html() : string {
+		return '';
 	}
 }
