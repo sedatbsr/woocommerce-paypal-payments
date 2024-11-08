@@ -1,5 +1,4 @@
 import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
-import Navigation from '../../ReusableComponents/Navigation';
 import { __ } from '@wordpress/i18n';
 import SelectBox from '../../ReusableComponents/SelectBox';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
