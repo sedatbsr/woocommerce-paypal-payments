@@ -60,7 +60,7 @@ const Navigation = ( {
                 </div>
                 { ! isFistStep && (
                     <div className="ppcp-r-navigation--right">
-                        <a href="wp-admin/admin.php?page=wc-settings&amp;tab=checkout"
+                        <a href={ global.ppcpSettings.wcPaymentsTabUrl }
                            aria-label="Return to payments">{__('Save and exit', 'woocommerce-paypal-payments')}</a>
                         { ! isLastStep && (
                             <Button
