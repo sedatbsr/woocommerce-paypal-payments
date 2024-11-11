@@ -1,5 +1,4 @@
 import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
-import Navigation from '../../ReusableComponents/Navigation';
 import { __ } from '@wordpress/i18n';
 import SelectBox from '../../ReusableComponents/SelectBox';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
@@ -121,13 +120,6 @@ const StepProducts = ( {
 						</a>
 					</SelectBox>
 				</SelectBoxWrapper>
-				<Navigation
-					setStep={ setStep }
-					currentStep={ currentStep }
-					stepperOrder={ stepperOrder }
-					setCompleted={ setCompleted }
-					canProceeedCallback={ () => products.length > 0 }
-				/>
 			</div>
 		</div>
 	);
