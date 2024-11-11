@@ -16,7 +16,9 @@
 	@import './components/reusable-components/navigation';
 	@import './components/reusable-components/fields';
 	@import './components/reusable-components/title-badge';
-	@import './components/reusable-components/_badge-box.scss';
+	@import './components/reusable-components/accordion-section';
+	@import './components/reusable-components/badge-box';
+	@import './components/reusable-components/spinner-overlay';
 	@import './components/screens/onboarding';
 	@import './components/screens/dashboard/tab-dashboard';
 	@import './components/screens/dashboard/tab-payment-methods';
