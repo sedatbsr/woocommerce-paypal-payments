@@ -56,6 +56,15 @@ a:not(.button) {
 	color: $color-blueberry;
 }
 
+input[type='text'] {
+	padding: 7px 11px;
+	@include font(14, 20, 400);
+}
+
 .components-form-toggle.is-checked > .components-form-toggle__track {
 	background-color: $color-blueberry;
+}
+
+.ppcp-r-table{
+
 }

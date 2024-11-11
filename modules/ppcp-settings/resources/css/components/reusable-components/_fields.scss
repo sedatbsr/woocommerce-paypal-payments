@@ -40,4 +40,25 @@
 	&__checkbox-presentation {
 		@include fake-input-field(2px);
 	}
+
+	&__radio-wrapper {
+		display: flex;
+		gap: 18px;
+		align-items: center;
+		position: relative;
+
+		label {
+			@include font(14, 20, 400);
+			color: $color-gray-800;
+		}
+	}
+
+	&__radio-description {
+		@include font(14, 20, 400);
+		margin: 4px 0 0 0;
+		color:$color-gray-800;
+	}
 }
+
+
+

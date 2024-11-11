@@ -1,6 +1,10 @@
 import { ToggleControl } from '@wordpress/components';
 
-const SettingsToggleBlock = ( { isToggled, setToggled, ...props } ) => {
+const OnboardingSettingsToggleBlock = ( {
+	isToggled,
+	setToggled,
+	...props
+} ) => {
 	return (
 		<div className="ppcp-r-toggle-block">
 			<div className="ppcp-r-toggle-block__wrapper">
@@ -37,4 +41,4 @@ const SettingsToggleBlock = ( { isToggled, setToggled, ...props } ) => {
 	);
 };
 
-export default SettingsToggleBlock;
+export default OnboardingSettingsToggleBlock;
