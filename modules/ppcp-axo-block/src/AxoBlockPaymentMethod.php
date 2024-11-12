@@ -87,6 +87,13 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 	private $supported_country_card_type_matrix;
 
 	/**
+	 * The list of WooCommerce enabled shipping locations.
+	 *
+	 * @var array
+	 */
+	private array $enabled_shipping_locations;
+
+	/**
 	 * AdvancedCardPaymentMethod constructor.
 	 *
 	 * @param string                        $module_url           The URL of this module.
@@ -99,6 +106,7 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 	 * @param Environment                   $environment          The environment object.
 	 * @param string                        $wcgateway_module_url The WcGateway module URL.
 	 * @param array                         $supported_country_card_type_matrix The supported country card type matrix for Axo.
+	 * @param array                         $enabled_shipping_locations The list of WooCommerce enabled shipping locations.
 	 */
 	public function __construct(
 		string $module_url,
@@ -109,7 +117,8 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 		DCCGatewayConfiguration $dcc_configuration,
 		Environment $environment,
 		string $wcgateway_module_url,
-		array $supported_country_card_type_matrix
+		array $supported_country_card_type_matrix,
+		array $enabled_shipping_locations
 	) {
 		$this->name                               = AxoGateway::ID;
 		$this->module_url                         = $module_url;
@@ -121,6 +130,7 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 		$this->environment                        = $environment;
 		$this->wcgateway_module_url               = $wcgateway_module_url;
 		$this->supported_country_card_type_matrix = $supported_country_card_type_matrix;
+		$this->enabled_shipping_locations = $enabled_shipping_locations;
 	}
 
 	/**
@@ -218,7 +228,8 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 			),
 			'allowed_cards'    => $this->supported_country_card_type_matrix,
 			'disable_cards'    => $this->settings->has( 'disable_cards' ) ? (array) $this->settings->get( 'disable_cards' ) : array(),
-			'style_options'    => array(
+			'enabled_shipping_locations' => $this->enabled_shipping_locations,
+			'style_options'              => array(
 				'root'  => array(
 					'backgroundColor' => $this->settings->has( 'axo_style_root_bg_color' ) ? $this->settings->get( 'axo_style_root_bg_color' ) : '',
 					'errorColor'      => $this->settings->has( 'axo_style_root_error_color' ) ? $this->settings->get( 'axo_style_root_error_color' ) : '',
@@ -244,9 +255,9 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 					'CA' => WC()->countries->get_states( 'CA' ),
 				),
 			),
-			'icons_directory'  => esc_url( $this->wcgateway_module_url ) . 'assets/images/axo/',
-			'module_url'       => untrailingslashit( $this->module_url ),
-			'ajax'             => array(
+			'icons_directory'            => esc_url( $this->wcgateway_module_url ) . 'assets/images/axo/',
+			'module_url'                 => untrailingslashit( $this->module_url ),
+			'ajax'                       => array(
 				'frontend_logger' => array(
 					'endpoint' => \WC_AJAX::get_endpoint( FrontendLoggerEndpoint::ENDPOINT ),
 					'nonce'    => wp_create_nonce( FrontendLoggerEndpoint::nonce() ),

@@ -87,6 +87,9 @@ class AxoManager {
 
 		this.cardOptions = this.getCardOptions();
 
+		this.enabledShippingLocations =
+			this.axoConfig.enabled_shipping_locations;
+
 		this.registerEventHandlers();
 
 		this.shippingView = new ShippingView(
@@ -665,6 +668,9 @@ class AxoManager {
 			styles: this.styles,
 			cardOptions: {
 				allowedBrands: this.cardOptions,
+			},
+			shippingAddressOptions: {
+				allowedLocations: this.enabledShippingLocations,
 			},
 		} );
 

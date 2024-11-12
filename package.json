@@ -1,6 +1,6 @@
 {
   "name": "woocommerce-paypal-payments",
-  "version": "2.9.3",
+  "version": "2.9.4",
   "description": "WooCommerce PayPal Payments",
   "repository": "https://github.com/woocommerce/woocommerce-paypal-payments",
   "license": "GPL-2.0",
@@ -26,6 +26,7 @@
     "install:modules:ppcp-onboarding": "cd modules/ppcp-onboarding && yarn install",
     "install:modules:ppcp-card-fields": "cd modules/ppcp-card-fields && yarn install",
     "install:modules:ppcp-compat": "cd modules/ppcp-compat && yarn install",
+    "install:modules:ppcp-settings": "cd modules/ppcp-settings && yarn install",
     "install:modules:ppcp-uninstall": "cd modules/ppcp-uninstall && yarn install",
     "build:modules:ppcp-admin-notices": "cd modules/ppcp-admin-notices && yarn run build",
     "build:modules:ppcp-applepay": "cd modules/ppcp-applepay && yarn run build",
@@ -47,6 +48,7 @@
     "build:modules:ppcp-card-fields": "cd modules/ppcp-card-fields && yarn run build",
     "build:modules:ppcp-compat": "cd modules/ppcp-compat && yarn run build",
     "build:modules:ppcp-uninstall": "cd modules/ppcp-uninstall && yarn run build",
+    "build:modules:ppcp-settings": "cd modules/ppcp-settings && yarn run build",
     "build:modules": "run-p build:modules:*",
     "watch:modules:ppcp-admin-notices": "cd modules/ppcp-admin-notices && yarn run watch",
     "watch:modules:ppcp-applepay": "cd modules/ppcp-applepay && yarn run watch",
@@ -68,6 +70,7 @@
     "watch:modules:ppcp-card-fields": "cd modules/ppcp-card-fields && yarn run watch",
     "watch:modules:ppcp-compat": "cd modules/ppcp-compat && yarn run watch",
     "watch:modules:ppcp-uninstall": "cd modules/ppcp-uninstall && yarn run watch",
+    "watch:modules:ppcp-settings": "cd modules/ppcp-settings && yarn run watch",
     "watch:modules": "run-p watch:modules:*",
     "ddev:setup": "ddev start && ddev orchestrate",
     "ddev:start": "ddev start",
@@ -109,7 +112,7 @@
     "npm-run-all": "^4.1.5",
     "playwright": "^1.43.0",
     "run-s": "^0.0.0",
-    "uuid": "^9.0.1"
+    "uuid": "^11"
   },
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.18.6",
@@ -118,7 +121,7 @@
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
     "@wordpress/element": "^6.1.0",
-    "@wordpress/scripts": "^28.0.0",
+    "@wordpress/scripts": "~30.0.0",
     "babel-plugin-explicit-exports-references": "^1.0.2",
     "jquery": "^3.7.1",
     "react-dom": "^18.3.1"

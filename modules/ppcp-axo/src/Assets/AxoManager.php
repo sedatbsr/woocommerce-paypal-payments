@@ -93,6 +93,13 @@ class AxoManager {
 	 */
 	private array $supported_country_card_type_matrix;
 	/**
+	 * The list of WooCommerce enabled shipping locations.
+	 *
+	 * @var array
+	 */
+	private array $enabled_shipping_locations;
+
+	/**
 	 * AxoManager constructor.
 	 *
 	 * @param string          $module_url The URL to the module.
@@ -105,6 +112,7 @@ class AxoManager {
 	 * @param LoggerInterface $logger The logger.
 	 * @param string          $wcgateway_module_url The WcGateway module URL.
 	 * @param array           $supported_country_card_type_matrix The supported country card type matrix for Axo.
+	 * @param array           $enabled_shipping_locations The list of WooCommerce enabled shipping locations.
 	 */
 	public function __construct(
 		string $module_url,
@@ -116,7 +124,8 @@ class AxoManager {
 		CurrencyGetter $currency,
 		LoggerInterface $logger,
 		string $wcgateway_module_url,
-		array $supported_country_card_type_matrix
+		array $supported_country_card_type_matrix,
+		array $enabled_shipping_locations
 	) {
 
 		$this->module_url                         = $module_url;
@@ -129,6 +138,7 @@ class AxoManager {
 		$this->logger                             = $logger;
 		$this->wcgateway_module_url               = $wcgateway_module_url;
 		$this->supported_country_card_type_matrix = $supported_country_card_type_matrix;
+		$this->enabled_shipping_locations = $enabled_shipping_locations;
 	}
 
 	/**
@@ -171,13 +181,13 @@ class AxoManager {
 	 */
 	private function script_data() {
 		return array(
-			'environment'               => array(
+			'environment'                => array(
 				'is_sandbox' => $this->environment->current_environment() === 'sandbox',
 			),
-			'widgets'                   => array(
+			'widgets'                    => array(
 				'email' => 'render',
 			),
-			'insights'                  => array(
+			'insights'                   => array(
 				'enabled'    => defined( 'WP_DEBUG' ) && WP_DEBUG,
 				'client_id'  => ( $this->settings->has( 'client_id' ) ? $this->settings->get( 'client_id' ) : null ),
 				'session_id' =>
@@ -193,7 +203,8 @@ class AxoManager {
 			),
 			'allowed_cards'             => $this->supported_country_card_type_matrix,
 			'disable_cards'             => $this->settings->has( 'disable_cards' ) ? (array) $this->settings->get( 'disable_cards' ) : array(),
-			'style_options'             => array(
+			'enabled_shipping_locations' => $this->enabled_shipping_locations,
+			'style_options'              => array(
 				'root'  => array(
 					'backgroundColor' => $this->settings->has( 'axo_style_root_bg_color' ) ? $this->settings->get( 'axo_style_root_bg_color' ) : '',
 					'errorColor'      => $this->settings->has( 'axo_style_root_error_color' ) ? $this->settings->get( 'axo_style_root_error_color' ) : '',
@@ -212,16 +223,16 @@ class AxoManager {
 					'focusBorderColor' => $this->settings->has( 'axo_style_input_focus_border_color' ) ? $this->settings->get( 'axo_style_input_focus_border_color' ) : '',
 				),
 			),
-			'name_on_card'              => $this->settings->has( 'axo_name_on_card' ) ? $this->settings->get( 'axo_name_on_card' ) : '',
-			'woocommerce'               => array(
+			'name_on_card'               => $this->settings->has( 'axo_name_on_card' ) ? $this->settings->get( 'axo_name_on_card' ) : '',
+			'woocommerce'                => array(
 				'states' => array(
 					'US' => WC()->countries->get_states( 'US' ),
 					'CA' => WC()->countries->get_states( 'CA' ),
 				),
 			),
-			'icons_directory'           => esc_url( $this->wcgateway_module_url ) . 'assets/images/axo/',
-			'module_url'                => untrailingslashit( $this->module_url ),
-			'ajax'                      => array(
+			'icons_directory'            => esc_url( $this->wcgateway_module_url ) . 'assets/images/axo/',
+			'module_url'                 => untrailingslashit( $this->module_url ),
+			'ajax'                       => array(
 				'frontend_logger' => array(
 					'endpoint' => \WC_AJAX::get_endpoint( FrontendLoggerEndpoint::ENDPOINT ),
 					'nonce'    => wp_create_nonce( FrontendLoggerEndpoint::nonce() ),

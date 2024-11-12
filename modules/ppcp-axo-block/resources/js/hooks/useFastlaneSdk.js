@@ -4,6 +4,7 @@ import Fastlane from '../../../../ppcp-axo/resources/js/Connection/Fastlane';
 import { log } from '../../../../ppcp-axo/resources/js/Helper/Debug';
 import { useDeleteEmptyKeys } from './useDeleteEmptyKeys';
 import useCardOptions from './useCardOptions';
+import useAllowedLocations from './useAllowedLocations';
 import { STORE_NAME } from '../stores/axoStore';
 
 /**
@@ -33,6 +34,8 @@ const useFastlaneSdk = ( namespace, axoConfig, ppcpConfig ) => {
 		return deleteEmptyKeys( configRef.current.axoConfig.style_options );
 	}, [ deleteEmptyKeys ] );
 
+	const allowedLocations = useAllowedLocations( axoConfig );
+
 	// Effect to initialize Fastlane SDK
 	useEffect( () => {
 		const initFastlane = async () => {
@@ -58,6 +61,9 @@ const useFastlaneSdk = ( namespace, axoConfig, ppcpConfig ) => {
 					cardOptions: {
 						allowedBrands: cardOptions,
 					},
+					shippingAddressOptions: {
+						allowedLocations,
+					},
 				} );
 
 				// Set locale (hardcoded to 'en_us' for now)
@@ -72,7 +78,14 @@ const useFastlaneSdk = ( namespace, axoConfig, ppcpConfig ) => {
 		};
 
 		initFastlane();
-	}, [ fastlaneSdk, styleOptions, isPayPalLoaded, namespace, cardOptions ] );
+	}, [
+		fastlaneSdk,
+		styleOptions,
+		isPayPalLoaded,
+		namespace,
+		cardOptions,
+		allowedLocations,
+	] );
 
 	// Effect to update the config ref when configs change
 	useEffect( () => {
