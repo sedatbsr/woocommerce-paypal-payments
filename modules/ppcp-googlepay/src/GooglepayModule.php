@@ -12,6 +12,7 @@ namespace WooCommerce\PayPalCommerce\Googlepay;
 use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 use WC_Payment_Gateway;
 use WooCommerce\PayPalCommerce\Button\Assets\ButtonInterface;
+use WooCommerce\PayPalCommerce\Button\Assets\DisabledSmartButton;
 use WooCommerce\PayPalCommerce\Button\Assets\SmartButtonInterface;
 use WooCommerce\PayPalCommerce\Googlepay\Endpoint\UpdatePaymentDataEndpoint;
 use WooCommerce\PayPalCommerce\Googlepay\Helper\ApmProductStatus;
@@ -21,6 +22,7 @@ use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
+use WooCommerce\PayPalCommerce\WcGateway\Helper\SettingsStatus;
 use WooCommerce\PayPalCommerce\WcGateway\Settings\Settings;
 
 /**
@@ -219,17 +221,23 @@ class GooglepayModule implements ServiceModule, ExtendingModule, ExecutableModul
 		);
 
 		add_filter(
-			'woocommerce_paypal_payments_selected_button_locations',
-			function( array $locations, string $setting_name ): array {
-				$gateway = WC()->payment_gateways()->payment_gateways()[ GooglePayGateway::ID ] ?? '';
-				if ( $gateway && $gateway->enabled === 'yes' && $setting_name === 'smart_button_locations' ) {
-					$locations[] = 'checkout';
+			'woocommerce_available_payment_gateways',
+			function( $available_gateways ) use ( $c ): array {
+				if ( ! isset( $available_gateways[ GooglePayGateway::ID ] ) ) {
+					return $available_gateways;
 				}
 
-				return $locations;
-			},
-			10,
-			2
+				$context         = $c->get( 'button.context' );
+				$settings_status = $c->get( 'wcgateway.settings.status' );
+
+				if ( in_array( $context, array( 'checkout', 'pay-now' ), true ) ) {
+					if ( $c->get( 'wcgateway.use-place-order-button' ) || ! $settings_status->is_smart_button_enabled_for_location( $context ) ) {
+						unset( $available_gateways[ GooglePayGateway::ID ] );
+					}
+				}
+
+				return $available_gateways;
+			}
 		);
 
 		return true;
