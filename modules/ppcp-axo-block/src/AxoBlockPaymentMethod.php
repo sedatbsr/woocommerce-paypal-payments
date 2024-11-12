@@ -130,7 +130,7 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 		$this->environment                        = $environment;
 		$this->wcgateway_module_url               = $wcgateway_module_url;
 		$this->supported_country_card_type_matrix = $supported_country_card_type_matrix;
-		$this->enabled_shipping_locations = $enabled_shipping_locations;
+		$this->enabled_shipping_locations         = $enabled_shipping_locations;
 	}
 
 	/**
@@ -206,13 +206,13 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 		}
 
 		return array(
-			'environment'      => array(
+			'environment'                => array(
 				'is_sandbox' => $this->environment->current_environment() === 'sandbox',
 			),
-			'widgets'          => array(
+			'widgets'                    => array(
 				'email' => 'render',
 			),
-			'insights'         => array(
+			'insights'                   => array(
 				'enabled'    => defined( 'WP_DEBUG' ) && WP_DEBUG,
 				'client_id'  => ( $this->settings->has( 'client_id' ) ? $this->settings->get( 'client_id' ) : null ),
 				'session_id' =>
@@ -226,8 +226,8 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 						: null, // Set to null if WC()->cart is null or get_total doesn't exist.
 				),
 			),
-			'allowed_cards'    => $this->supported_country_card_type_matrix,
-			'disable_cards'    => $this->settings->has( 'disable_cards' ) ? (array) $this->settings->get( 'disable_cards' ) : array(),
+			'allowed_cards'              => $this->supported_country_card_type_matrix,
+			'disable_cards'              => $this->settings->has( 'disable_cards' ) ? (array) $this->settings->get( 'disable_cards' ) : array(),
 			'enabled_shipping_locations' => $this->enabled_shipping_locations,
 			'style_options'              => array(
 				'root'  => array(
@@ -248,8 +248,8 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 					'focusBorderColor' => $this->settings->has( 'axo_style_input_focus_border_color' ) ? $this->settings->get( 'axo_style_input_focus_border_color' ) : '',
 				),
 			),
-			'name_on_card'     => $this->dcc_configuration->show_name_on_card(),
-			'woocommerce'      => array(
+			'name_on_card'               => $this->dcc_configuration->show_name_on_card(),
+			'woocommerce'                => array(
 				'states' => array(
 					'US' => WC()->countries->get_states( 'US' ),
 					'CA' => WC()->countries->get_states( 'CA' ),
@@ -263,10 +263,10 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 					'nonce'    => wp_create_nonce( FrontendLoggerEndpoint::nonce() ),
 				),
 			),
-			'logging_enabled'  => $this->settings->has( 'logging_enabled' ) ? $this->settings->get( 'logging_enabled' ) : '',
-			'wp_debug'         => defined( 'WP_DEBUG' ) && WP_DEBUG,
-			'card_icons'       => $this->settings->has( 'card_icons' ) ? (array) $this->settings->get( 'card_icons' ) : array(),
-			'merchant_country' => WC()->countries->get_base_country(),
+			'logging_enabled'            => $this->settings->has( 'logging_enabled' ) ? $this->settings->get( 'logging_enabled' ) : '',
+			'wp_debug'                   => defined( 'WP_DEBUG' ) && WP_DEBUG,
+			'card_icons'                 => $this->settings->has( 'card_icons' ) ? (array) $this->settings->get( 'card_icons' ) : array(),
+			'merchant_country'           => WC()->countries->get_base_country(),
 		);
 	}
 }

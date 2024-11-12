@@ -138,7 +138,7 @@ class AxoManager {
 		$this->logger                             = $logger;
 		$this->wcgateway_module_url               = $wcgateway_module_url;
 		$this->supported_country_card_type_matrix = $supported_country_card_type_matrix;
-		$this->enabled_shipping_locations = $enabled_shipping_locations;
+		$this->enabled_shipping_locations         = $enabled_shipping_locations;
 	}
 
 	/**
@@ -201,8 +201,8 @@ class AxoManager {
 					'value'         => WC()->cart->get_total( 'numeric' ),
 				),
 			),
-			'allowed_cards'             => $this->supported_country_card_type_matrix,
-			'disable_cards'             => $this->settings->has( 'disable_cards' ) ? (array) $this->settings->get( 'disable_cards' ) : array(),
+			'allowed_cards'              => $this->supported_country_card_type_matrix,
+			'disable_cards'              => $this->settings->has( 'disable_cards' ) ? (array) $this->settings->get( 'disable_cards' ) : array(),
 			'enabled_shipping_locations' => $this->enabled_shipping_locations,
 			'style_options'              => array(
 				'root'  => array(
@@ -238,10 +238,10 @@ class AxoManager {
 					'nonce'    => wp_create_nonce( FrontendLoggerEndpoint::nonce() ),
 				),
 			),
-			'logging_enabled'           => $this->settings->has( 'logging_enabled' ) ? $this->settings->get( 'logging_enabled' ) : '',
-			'wp_debug'                  => defined( 'WP_DEBUG' ) && WP_DEBUG,
-			'billing_email_button_text' => __( 'Continue', 'woocommerce-paypal-payments' ),
-			'merchant_country'          => WC()->countries->get_base_country(),
+			'logging_enabled'            => $this->settings->has( 'logging_enabled' ) ? $this->settings->get( 'logging_enabled' ) : '',
+			'wp_debug'                   => defined( 'WP_DEBUG' ) && WP_DEBUG,
+			'billing_email_button_text'  => __( 'Continue', 'woocommerce-paypal-payments' ),
+			'merchant_country'           => WC()->countries->get_base_country(),
 		);
 	}
 
