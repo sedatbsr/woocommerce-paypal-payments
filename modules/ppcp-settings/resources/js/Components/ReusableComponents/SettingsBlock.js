@@ -1,4 +1,4 @@
-import { Button, ToggleControl, Dropdown } from '@wordpress/components';
+import { Button, ToggleControl, SelectControl } from '@wordpress/components';
 import data from '../../utils/data';
 import { useState } from '@wordpress/element';
 
@@ -113,7 +113,22 @@ const SettingsBlock = ( {
 						</div>
 					) }
 					{ actionProps?.type === SETTINGS_BLOCK_TYPE_SELECT && (
-						<Dropdown />
+						<SelectControl
+							className={
+								actionProps.value === '' &&
+								'ppcp-r-select-no-value-assigned'
+							}
+							value={ actionProps.value }
+							options={ actionProps?.options }
+							multiple={ true }
+							onChange={ ( newValue ) =>
+								actionProps?.callback &&
+								actionProps.callback(
+									actionProps?.key,
+									newValue
+								)
+							}
+						/>
 					) }
 				</div>
 			</div>

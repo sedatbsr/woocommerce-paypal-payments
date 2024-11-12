@@ -184,14 +184,21 @@
 		}
 	}
 
-	input[type='text'] {
+	input[type='text'], select {
 		border-color: $color-gray-700;
 		width: 282px;
+		max-width: 100%;
 		color: $color-gray-800;
+	}
 
+	input[type='text'] {
 		&::placeholder {
 			color: $color-gray-700;
 		}
+	}
+
+	.ppcp-r-select-no-value-assigned > div > select {
+		color: $color-gray-600;
 	}
 
 	&__sandbox {

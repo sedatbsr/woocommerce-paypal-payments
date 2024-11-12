@@ -61,10 +61,11 @@ input[type='text'] {
 	@include font(14, 20, 400);
 }
 
-.components-form-toggle.is-checked > .components-form-toggle__track {
-	background-color: $color-blueberry;
+select {
+	padding: 7px 27px 7px 11px;
+	@include font(14, 20, 400);
 }
 
-.ppcp-r-table{
-
+.components-form-toggle.is-checked > .components-form-toggle__track {
+	background-color: $color-blueberry;
 }

@@ -4,6 +4,7 @@ import SettingsBlock, {
 	SETTINGS_BLOCK_STYLING_TYPE_SECONDARY,
 	SETTINGS_BLOCK_TYPE_EMPTY,
 	SETTINGS_BLOCK_TYPE_INPUT,
+	SETTINGS_BLOCK_TYPE_SELECT,
 	SETTINGS_BLOCK_TYPE_TOGGLE,
 	SETTINGS_BLOCK_TYPE_TOGGLE_CONTENT,
 } from '../../../../ReusableComponents/SettingsBlock';
@@ -204,8 +205,37 @@ const PaypalSettings = ( { updateFormValue, settings } ) => {
 					/>
 				</div>
 			</SettingsBlock>
+			<SettingsBlock
+				title={ __( 'Button Language', 'woocommerce-paypal-payments' ) }
+				description={ __(
+					'If left blank, PayPal and other buttons will present in the user’s detected language. Enter a language here to force all buttons to display in that language.',
+					'woocommerce-paypal-payments'
+				) }
+				style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }
+				actionProps={ {
+					type: SETTINGS_BLOCK_TYPE_SELECT,
+					value: settings.buttonLanguage,
+					callback: updateFormValue,
+					options: languagesExample,
+					key: 'buttonLanguage',
+					placeholder: __(
+						'Browser language',
+						'woocommerce-paypal-payments'
+					),
+				} }
+			/>
 		</SettingsBlock>
 	);
 };
 
+const languagesExample = [
+	{
+		value: '',
+		label: __( 'Browser language', 'woocommerce-paypal-payments' ),
+	},
+	{ value: 'en', label: 'English' },
+	{ value: 'de', label: 'German' },
+	{ value: 'es', label: 'Spanish' },
+	{ value: 'it', label: 'Italian' },
+];
 export default PaypalSettings;

@@ -17,6 +17,7 @@ const TabSettings = () => {
 		brandName: '',
 		softDescriptor: '',
 		paypalLandingPage: null,
+		buttonLanguage: '',
 	} );
 	const updateFormValue = ( key, value ) => {
 		console.log( key, value );
