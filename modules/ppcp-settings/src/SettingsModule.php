@@ -85,10 +85,11 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 					'ppcp-admin-settings',
 					'ppcpSettings',
 					array(
-						'assets' => array(
+						'assets'           => array(
 							'imagesUrl' => $module_url . '/images/',
 						),
-						'debug'  => defined( 'WP_DEBUG' ) && WP_DEBUG,
+						'wcPaymentsTabUrl' => admin_url( 'admin.php?page=wc-settings&tab=checkout' ),
+						'debug'            => defined( 'WP_DEBUG' ) && WP_DEBUG,
 					)
 				);
 			}
