@@ -1,44 +1,36 @@
-import Container, {
-	PAGE_ONBOARDING,
-} from '../../ReusableComponents/Container.js';
-import StepWelcome from './StepWelcome.js';
-import StepBusiness from './StepBusiness.js';
-import StepProducts from './StepProducts.js';
-import { useState } from '@wordpress/element';
+import Container from '../../ReusableComponents/Container';
+import { useOnboardingStep } from '../../../data';
+import { getSteps } from './availableSteps';
+
+const getCurrentStep = ( requestedStep, steps ) => {
+	const isValidStep = ( step ) =>
+		typeof step === 'number' &&
+		Number.isInteger( step ) &&
+		step >= 0 &&
+		step < steps.length;
+
+	const safeCurrentStep = isValidStep( requestedStep ) ? requestedStep : 0;
+	return steps[ safeCurrentStep ];
+};
 
 const Onboarding = () => {
-	const [ step, setStep ] = useState( 0 );
+	const { step, setStep, setCompleted, flags } = useOnboardingStep();
+	const steps = getSteps( flags );
+
+	const CurrentStepComponent = getCurrentStep( step, steps );
 
 	return (
-		<Container page={ PAGE_ONBOARDING }>
+		<Container page="onboarding">
 			<div className="ppcp-r-card">
-				<Stepper currentStep={ step } setStep={ setStep } />
+				<CurrentStepComponent
+					setStep={ setStep }
+					currentStep={ step }
+					setCompleted={ setCompleted }
+					stepperOrder={ steps }
+				/>
 			</div>
 		</Container>
 	);
-};
-
-const Stepper = ( { currentStep, setStep } ) => {
-	const stepperOrder = [ StepWelcome, StepBusiness, StepProducts ];
-
-	const renderSteps = () => {
-		return stepperOrder.map( ( Step, index ) => {
-			return (
-				<div
-					key={ index }
-					style={ index !== currentStep ? { display: 'none' } : {} }
-				>
-					<Step
-						setStep={ setStep }
-						currentStep={ currentStep }
-						stepperOrder={ stepperOrder }
-					/>
-				</div>
-			);
-		} );
-	};
-
-	return <>{ renderSteps() }</>;
 };
 
 export default Onboarding;

@@ -3,27 +3,35 @@ import { __ } from '@wordpress/i18n';
 
 const Navigation = ( {
 	setStep,
+	setCompleted,
 	currentStep,
 	stepperOrder,
 	canProceeedCallback = () => true,
 } ) => {
-	const setNextStep = ( nextStep ) => {
-		let newStep = currentStep + nextStep;
-		if ( newStep > stepperOrder.length - 1 ) {
-			newStep = currentStep;
+	const navigateBy = ( stepDirection ) => {
+		let newStep = currentStep + stepDirection;
+
+		if ( isNaN( newStep ) || newStep < 0 ) {
+			console.warn( 'Invalid next step:', newStep );
+			newStep = 0;
 		}
-		setStep( newStep );
+
+		if ( newStep >= stepperOrder.length ) {
+			setCompleted( true );
+		} else {
+			setStep( newStep );
+		}
 	};
 
 	return (
 		<div className="ppcp-r-navigation">
-			<Button variant="tertiary" onClick={ () => setNextStep( -1 ) }>
+			<Button variant="tertiary" onClick={ () => navigateBy( -1 ) }>
 				{ __( 'Back', 'woocommerce-paypal-payments' ) }
 			</Button>
 			<Button
 				variant="primary"
 				disabled={ ! canProceeedCallback() }
-				onClick={ () => setNextStep( 1 ) }
+				onClick={ () => navigateBy( 1 ) }
 			>
 				{ __( 'Next', 'woocommerce-paypal-payments' ) }
 			</Button>

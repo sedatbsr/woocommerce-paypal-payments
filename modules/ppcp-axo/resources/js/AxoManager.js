@@ -85,6 +85,9 @@ class AxoManager {
 			},
 		};
 
+		this.enabledShippingLocations =
+			this.axoConfig.enabled_shipping_locations;
+
 		this.registerEventHandlers();
 
 		this.shippingView = new ShippingView(
@@ -667,6 +670,9 @@ class AxoManager {
 		await this.fastlane.connect( {
 			locale: this.locale,
 			styles: this.styles,
+			shippingAddressOptions: {
+				allowedLocations: this.enabledShippingLocations,
+			},
 		} );
 
 		this.fastlane.setLocale( 'en_us' );
