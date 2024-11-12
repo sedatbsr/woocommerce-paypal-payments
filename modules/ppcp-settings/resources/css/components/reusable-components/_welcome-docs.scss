@@ -21,6 +21,10 @@
 		padding: 8px;
 		margin: 0 0 48px 0;
 
+		&--one-col .ppcp-r-badge-box {
+			margin: 0 0 24px 0;
+		}
+
 		&:not(&--one-col) {
 			display: flex;
 			justify-content: center;
@@ -63,6 +67,6 @@
 	}
 
 	.ppcp-r-page-welcome-mode-separator {
-		margin: 8px 0 16px 0;
+		margin: 8px 0 24px 0 !important;
 	}
 }

@@ -44,9 +44,9 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 			</div>
 			<Separator className="ppcp-r-page-welcome-mode-separator" />
 			<WelcomeDocs
-                useAcdc = { false }
-                isFastlane = { false }
-                isPayLater = { false }
+                useAcdc = { true }
+                isFastlane = { true }
+                isPayLater = { true }
                 storeCountry = { 'us' }
                 storeCurrency = { 'usd' }
             />
