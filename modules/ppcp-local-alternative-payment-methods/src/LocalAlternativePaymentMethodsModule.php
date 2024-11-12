@@ -47,7 +47,7 @@ class LocalAlternativePaymentMethodsModule implements ServiceModule, ExtendingMo
 		$settings = $c->get( 'wcgateway.settings' );
 		assert( $settings instanceof Settings );
 
-		if ( ! $settings->has( 'allow_local_apm_gateways' ) || $settings->get( 'allow_local_apm_gateways' ) !== true ) {
+		if ( ! self::should_add_local_apm_gateways( $settings ) ) {
 			return true;
 		}
 
@@ -209,5 +209,18 @@ class LocalAlternativePaymentMethodsModule implements ServiceModule, ExtendingMo
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if the local APMs should be added to the available payment gateways.
+	 *
+	 * @param Settings $settings PayPal gateway settings.
+	 * @return bool
+	 */
+	private function should_add_local_apm_gateways( Settings $settings ): bool {
+		return $settings->has( 'enabled' )
+			&& $settings->get( 'enabled' ) === true
+			&& $settings->has( 'allow_local_apm_gateways' )
+			&& $settings->get( 'allow_local_apm_gateways' ) === true;
 	}
 }
