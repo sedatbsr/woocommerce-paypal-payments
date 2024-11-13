@@ -96,16 +96,16 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 	/**
 	 * AdvancedCardPaymentMethod constructor.
 	 *
-	 * @param string                        $module_url           The URL of this module.
-	 * @param string                        $version              The assets version.
-	 * @param WC_Payment_Gateway            $gateway              Credit card gateway.
-	 * @param SmartButtonInterface|callable $smart_button         The smart button script loading
-	 *                                                            handler.
-	 * @param Settings                      $settings             The settings.
-	 * @param DCCGatewayConfiguration       $dcc_configuration    The DCC gateway settings.
-	 * @param Environment                   $environment          The environment object.
+	 * @param string                        $module_url               The URL of this module.
+	 * @param string                        $version                  The assets version.
+	 * @param WC_Payment_Gateway            $gateway                  Credit card gateway.
+	 * @param SmartButtonInterface|callable $smart_button             The smart button script loading
+	 *                                                                handler.
+	 * @param Settings                      $settings                 The settings.
+	 * @param DCCGatewayConfiguration       $dcc_configuration        The DCC gateway settings.
+	 * @param Environment                   $environment              The environment object.
+	 * @param string                        $wcgateway_module_url     The WcGateway module URL.
 	 * @param array                         $payment_method_selected_map Mapping of payment methods to the PayPal Insights 'payment_method_selected' types.
-	 * @param string                        $wcgateway_module_url The WcGateway module URL.
 	 * @param array                         $enabled_shipping_locations The list of WooCommerce enabled shipping locations.
 	 */
 	public function __construct(
@@ -120,17 +120,17 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 		array $payment_method_selected_map,
 		array $enabled_shipping_locations
 	) {
-		$this->name = AxoGateway::ID;
-		$this->module_url = $module_url;
-		$this->version = $version;
-		$this->gateway = $gateway;
-		$this->smart_button = $smart_button;
-		$this->settings = $settings;
-		$this->dcc_configuration = $dcc_configuration;
-		$this->environment = $environment;
-		$this->wcgateway_module_url = $wcgateway_module_url;
+		$this->name                        = AxoGateway::ID;
+		$this->module_url                  = $module_url;
+		$this->version                     = $version;
+		$this->gateway                     = $gateway;
+		$this->smart_button                = $smart_button;
+		$this->settings                    = $settings;
+		$this->dcc_configuration           = $dcc_configuration;
+		$this->environment                 = $environment;
+		$this->wcgateway_module_url        = $wcgateway_module_url;
 		$this->payment_method_selected_map = $payment_method_selected_map;
-		$this->enabled_shipping_locations = $enabled_shipping_locations;
+		$this->enabled_shipping_locations  = $enabled_shipping_locations;
 	}
 
 	/**
@@ -212,7 +212,7 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 			'widgets'                    => array(
 				'email' => 'render',
 			),
-			'insights'        => array(
+			'insights'                   => array(
 				'enabled'                     => defined( 'WP_DEBUG' ) && WP_DEBUG,
 				'client_id'                   => ( $this->settings->has( 'client_id' ) ? $this->settings->get( 'client_id' ) : null ),
 				'session_id'                  =>

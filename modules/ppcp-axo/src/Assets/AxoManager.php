@@ -130,16 +130,16 @@ class AxoManager {
 		array $enabled_shipping_locations
 	) {
 
-		$this->module_url           = $module_url;
-		$this->version              = $version;
-		$this->session_handler      = $session_handler;
-		$this->settings             = $settings;
-		$this->environment          = $environment;
-		$this->insights_data        = $insights_data;
-		$this->settings_status      = $settings_status;
-		$this->currency             = $currency;
-		$this->logger               = $logger;
-		$this->wcgateway_module_url = $wcgateway_module_url;
+		$this->module_url                 = $module_url;
+		$this->version                    = $version;
+		$this->session_handler            = $session_handler;
+		$this->settings                   = $settings;
+		$this->environment                = $environment;
+		$this->insights_data              = $insights_data;
+		$this->settings_status            = $settings_status;
+		$this->currency                   = $currency;
+		$this->logger                     = $logger;
+		$this->wcgateway_module_url       = $wcgateway_module_url;
 		$this->enabled_shipping_locations = $enabled_shipping_locations;
 	}
 
@@ -190,7 +190,7 @@ class AxoManager {
 				'email' => 'render',
 			),
 			// The amount is not available when setting the insights data, so we need to merge it here.
-			'insights'                  => ( function( array $data ): array {
+			'insights'                   => ( function( array $data ): array {
 				$data['amount']['value'] = WC()->cart->get_total( 'numeric' );
 				return $data; } )( $this->insights_data ),
 			'enabled_shipping_locations' => $this->enabled_shipping_locations,
