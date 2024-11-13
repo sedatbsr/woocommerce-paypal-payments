@@ -17,7 +17,7 @@ button.components-button, a.components-button {
 	}
 
 	&.is-primary {
-		@include font(13, 16, 500);
+		@include font(13, 20, 400);
 		color:$color-white;
 	}
 

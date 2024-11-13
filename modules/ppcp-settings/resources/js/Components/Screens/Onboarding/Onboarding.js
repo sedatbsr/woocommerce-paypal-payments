@@ -1,6 +1,8 @@
 import Container from '../../ReusableComponents/Container';
 import { useOnboardingStep } from '../../../data';
 import { getSteps } from './availableSteps';
+import {__} from "@wordpress/i18n";
+import Navigation from "../../ReusableComponents/Navigation";
 
 const getCurrentStep = ( requestedStep, steps ) => {
 	const isValidStep = ( step ) =>
@@ -20,16 +22,24 @@ const Onboarding = () => {
 	const CurrentStepComponent = getCurrentStep( step, steps );
 
 	return (
-		<Container page="onboarding">
-			<div className="ppcp-r-card">
-				<CurrentStepComponent
-					setStep={ setStep }
-					currentStep={ step }
-					setCompleted={ setCompleted }
-					stepperOrder={ steps }
-				/>
-			</div>
-		</Container>
+        <>
+            <Navigation
+                setStep={ setStep }
+                currentStep={ step }
+                setCompleted={ setCompleted }
+                stepperOrder={ steps }
+            />
+            <Container page="onboarding">
+                <div className="ppcp-r-card">
+                    <CurrentStepComponent
+                        setStep={ setStep }
+                        currentStep={ step }
+                        setCompleted={ setCompleted }
+                        stepperOrder={ steps }
+                    />
+                </div>
+            </Container>
+        </>
 	);
 };
 

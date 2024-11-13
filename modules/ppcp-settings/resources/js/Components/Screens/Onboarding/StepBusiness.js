@@ -4,7 +4,6 @@ import SelectBox from '../../ReusableComponents/SelectBox';
 import { __ } from '@wordpress/i18n';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import { useOnboardingStepBusiness } from '../../../data';
-import Navigation from '../../ReusableComponents/Navigation';
 import { BUSINESS_TYPES } from '../../../data/constants';
 
 const BUSINESS_RADIO_GROUP_NAME = 'business';
@@ -101,13 +100,6 @@ const StepBusiness = ( {
 						/>
 					</SelectBox>
 				</SelectBoxWrapper>
-				<Navigation
-					setStep={ setStep }
-					currentStep={ currentStep }
-					stepperOrder={ stepperOrder }
-					setCompleted={ setCompleted }
-					canProceeedCallback={ () => isCasualSeller !== null }
-				/>
 			</div>
 		</div>
 	);
