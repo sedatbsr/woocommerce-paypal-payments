@@ -179,7 +179,7 @@ If you encounter issues with the PayPal buttons not appearing after an update, p
 
 == Changelog ==
 
-= 2.9.4 - xxxx-xx-xx =
+= 2.9.4 - 2024-11-11 =
 * Fix - Apple Pay button preview missing in Standard payment and Advanced Processing tabs #2755
 * Fix - Set "Sold individually" only for subscription connected to PayPal #2710
 * Fix - Ensure Google Pay button does not appear for subscriptions #2718
