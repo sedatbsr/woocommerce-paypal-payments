@@ -45,21 +45,25 @@ export const PayPalRdbWithContent = ( props ) => {
 	}
 
 	return (
-		<div className={ className }>
-			<PayPalRdb { ...props } />
-			<div className="ppcp-r__radio-content">
-				<label htmlFor={ props?.id }>{ props.label }</label>
-				{ props.description && (
-					<p className="ppcp-r__radio-description">
-						{ props.description }
-					</p>
-				) }
-				{ props.children && (
+		<div className="ppcp-r__radio-outer-wrapper">
+			<div className={ className }>
+				<PayPalRdb { ...props } />
+				<div className="ppcp-r__radio-content">
+					<label htmlFor={ props?.id }>{ props.label }</label>
+					{ props.description && (
+						<p className="ppcp-r__radio-description">
+							{ props.description }
+						</p>
+					) }
+				</div>
+			</div>
+			{ props?.toggleAdditionalContent &&
+				props.children &&
+				props.value === props.currentValue && (
 					<div className="ppcp-r__radio-content-additional">
 						{ props.children }
 					</div>
 				) }
-			</div>
 		</div>
 	);
 };

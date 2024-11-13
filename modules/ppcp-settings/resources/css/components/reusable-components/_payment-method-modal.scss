@@ -72,11 +72,6 @@
 			margin: 0;
 			border-color: $color-gray-700;
 		}
-
-		label {
-			@include font(14, 16, 400);
-			color: $color-gray-900;
-		}
 	}
 
 	&__field-rows {

@@ -1,6 +1,7 @@
-import { Button, ToggleControl, SelectControl } from '@wordpress/components';
+import { Button, ToggleControl, TextControl } from '@wordpress/components';
 import data from '../../utils/data';
 import { useState } from '@wordpress/element';
+import Select, { components } from 'react-select';
 
 export const SETTINGS_BLOCK_TYPE_EMPTY = 'empty';
 export const SETTINGS_BLOCK_TYPE_TOGGLE = 'toggle';
@@ -65,72 +66,65 @@ const SettingsBlock = ( {
 						dangerouslySetInnerHTML={ { __html: description } }
 					/>
 				</div>
-				<div className="ppcp-r-settings-block__action">
-					{ actionProps?.type === SETTINGS_BLOCK_TYPE_TOGGLE && (
-						<ToggleControl
-							className="ppcp-r-settings-block__toggle"
-							__nextHasNoMarginBottom={ true }
-							checked={ actionProps?.value }
-							onChange={ ( newValue ) =>
-								actionProps?.callback(
-									actionProps?.key,
-									newValue
-								)
-							}
-						/>
-					) }
-					{ actionProps?.type === SETTINGS_BLOCK_TYPE_INPUT && (
-						<div>
-							<input
-								placeholder={ actionProps?.placeholder }
-								type="text"
-								value={ actionProps?.value }
-								onInput={ ( e ) =>
+				{ actionProps?.type !== SETTINGS_BLOCK_TYPE_EMPTY && (
+					<div className="ppcp-r-settings-block__action">
+						{ actionProps?.type === SETTINGS_BLOCK_TYPE_TOGGLE && (
+							<ToggleControl
+								className="ppcp-r-settings-block__toggle"
+								__nextHasNoMarginBottom={ true }
+								checked={ actionProps?.value }
+								onChange={ ( newValue ) =>
 									actionProps?.callback(
 										actionProps?.key,
-										e.target.value
+										newValue
 									)
 								}
 							/>
-						</div>
-					) }
-					{ actionProps?.type === SETTINGS_BLOCK_TYPE_BUTTON && (
-						<Button
-							variant={ actionProps.buttonType }
-							onClick={
-								actionProps?.callback
-									? () => actionProps.callback()
-									: undefined
-							}
-						>
-							{ actionProps.value }
-						</Button>
-					) }
-					{ actionProps?.type ===
-						SETTINGS_BLOCK_TYPE_TOGGLE_CONTENT && (
-						<div className="ppcp-r-settings-block__toggle-content">
-							{ data().getImage( 'icon-arrow-down.svg' ) }
-						</div>
-					) }
-					{ actionProps?.type === SETTINGS_BLOCK_TYPE_SELECT && (
-						<SelectControl
-							className={
-								actionProps.value === '' &&
-								'ppcp-r-select-no-value-assigned'
-							}
-							value={ actionProps.value }
-							options={ actionProps?.options }
-							multiple={ true }
-							onChange={ ( newValue ) =>
-								actionProps?.callback &&
-								actionProps.callback(
-									actionProps?.key,
-									newValue
-								)
-							}
-						/>
-					) }
-				</div>
+						) }
+						{ actionProps?.type === SETTINGS_BLOCK_TYPE_INPUT && (
+							<>
+								<TextControl
+									className="ppcp-r-vertical-text-control"
+									placeholder={ actionProps?.placeholder }
+									value={ actionProps?.value }
+									onChange={ ( newValue ) =>
+										actionProps?.callback(
+											actionProps?.key,
+											newValue
+										)
+									}
+								/>
+							</>
+						) }
+						{ actionProps?.type === SETTINGS_BLOCK_TYPE_BUTTON && (
+							<Button
+								variant={ actionProps.buttonType }
+								onClick={
+									actionProps?.callback
+										? () => actionProps.callback()
+										: undefined
+								}
+							>
+								{ actionProps.value }
+							</Button>
+						) }
+						{ actionProps?.type ===
+							SETTINGS_BLOCK_TYPE_TOGGLE_CONTENT && (
+							<div className="ppcp-r-settings-block__toggle-content">
+								{ data().getImage( 'icon-arrow-down.svg' ) }
+							</div>
+						) }
+						{ actionProps?.type === SETTINGS_BLOCK_TYPE_SELECT && (
+							<Select
+								className="ppcp-r-multiselect"
+								classNamePrefix="ppcp-r"
+								isMulti={ actionProps?.isMulti }
+								options={ actionProps?.options }
+								components={ { DropdownIndicator } }
+							/>
+						) }
+					</div>
+				) }
 			</div>
 			{ children && toggleContentVisible && (
 				<div className="ppcp-r-settings-block__content">
@@ -138,6 +132,14 @@ const SettingsBlock = ( {
 				</div>
 			) }
 		</div>
+	);
+};
+
+const DropdownIndicator = ( props ) => {
+	return (
+		<components.DropdownIndicator { ...props }>
+			{ data().getImage( 'icon-arrow-down.svg' ) }
+		</components.DropdownIndicator>
 	);
 };
 

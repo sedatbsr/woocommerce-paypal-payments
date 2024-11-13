@@ -9,6 +9,7 @@ import { __ } from '@wordpress/i18n';
 const SavePaymentMethods = ( { updateFormValue, settings } ) => {
 	return (
 		<SettingsBlock
+			className="ppcp-r-settings-block--save-payment-methods"
 			title={ __(
 				'Save Payment Methods',
 				'woocommerce-paypal-payments'
@@ -29,7 +30,7 @@ const SavePaymentMethods = ( { updateFormValue, settings } ) => {
 					'woocommerce-paypal-payments'
 				) }
 				description={ __(
-					'Securely store your customers’ PayPal accounts for a seamless checkout experience. This will disable all Pay Later features and Alternative Payment Methods on your site.',
+					'Securely store your customers’ PayPal accounts for a seamless checkout experience. <br />This will disable all Pay Later features and Alternative Payment Methods on your site.',
 					'woocommerce-paypal-payments'
 				) }
 				style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }

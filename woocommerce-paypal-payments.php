@@ -233,4 +233,3 @@ define( 'PPCP_PAYPAL_BN_CODE', 'Woo_PPCP' );
 	}
 
 } )();
-add_filter( 'woocommerce.feature-flags.woocommerce_paypal_payments.settings_enabled', '__return_true' );

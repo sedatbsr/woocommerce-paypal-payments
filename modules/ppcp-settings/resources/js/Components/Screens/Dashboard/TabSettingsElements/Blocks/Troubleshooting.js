@@ -11,7 +11,7 @@ import { __ } from '@wordpress/i18n';
 const Troubleshooting = ( { updateFormValue, settings } ) => {
 	return (
 		<SettingsBlock
-			className="ppcp-r-settings-block--separated-settings"
+			className="ppcp-r-settings-block--troubleshooting"
 			title={ __( 'Troubleshooting', 'woocommerce-paypal-payments' ) }
 			description={ __(
 				'Access tools to help debug and resolve issues.',
@@ -57,51 +57,52 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 				} }
 			>
 				<HooksTable data={ hooksExampleData() } />
-				<SettingsBlock
-					title={ __(
-						'Resubscribe webhooks',
-						'woocommerce-paypal-payments'
-					) }
-					description={ __(
-						'Click to remove the current webhook subscription and subscribe again, for example, if the website domain or URL structure changed.',
-						'woocommerce-paypal-payments'
-					) }
-					style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }
-					actionProps={ {
-						type: SETTINGS_BLOCK_TYPE_BUTTON,
-						buttonType: 'secondary',
-						callback: () =>
-							console.log(
-								'Resubscribe webhooks',
-								'woocommerce-paypal-payments'
-							),
-						value: __(
+			</SettingsBlock>
+
+			<SettingsBlock
+				title={ __(
+					'Resubscribe webhooks',
+					'woocommerce-paypal-payments'
+				) }
+				description={ __(
+					'Click to remove the current webhook subscription and subscribe again, for example, if the website domain or URL structure changed.',
+					'woocommerce-paypal-payments'
+				) }
+				style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }
+				actionProps={ {
+					type: SETTINGS_BLOCK_TYPE_BUTTON,
+					buttonType: 'secondary',
+					callback: () =>
+						console.log(
 							'Resubscribe webhooks',
 							'woocommerce-paypal-payments'
 						),
-					} }
-				/>
-				<SettingsBlock
-					title={ __(
-						'Simulate webhooks',
+					value: __(
+						'Resubscribe webhooks',
 						'woocommerce-paypal-payments'
-					) }
-					style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }
-					actionProps={ {
-						type: SETTINGS_BLOCK_TYPE_BUTTON,
-						buttonType: 'secondary',
-						callback: () =>
-							console.log(
-								'Simulate webhooks',
-								'woocommerce-paypal-payments'
-							),
-						value: __(
+					),
+				} }
+			/>
+			<SettingsBlock
+				title={ __(
+					'Simulate webhooks',
+					'woocommerce-paypal-payments'
+				) }
+				style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }
+				actionProps={ {
+					type: SETTINGS_BLOCK_TYPE_BUTTON,
+					buttonType: 'secondary',
+					callback: () =>
+						console.log(
 							'Simulate webhooks',
 							'woocommerce-paypal-payments'
 						),
-					} }
-				/>
-			</SettingsBlock>
+					value: __(
+						'Simulate webhooks',
+						'woocommerce-paypal-payments'
+					),
+				} }
+			/>
 		</SettingsBlock>
 	);
 };

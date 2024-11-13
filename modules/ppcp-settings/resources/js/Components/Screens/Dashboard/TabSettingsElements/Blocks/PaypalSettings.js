@@ -13,6 +13,7 @@ import { PayPalRdbWithContent } from '../../../../ReusableComponents/Fields';
 const PaypalSettings = ( { updateFormValue, settings } ) => {
 	return (
 		<SettingsBlock
+			className="ppcp-r-settings-block--settings"
 			title={ __( 'PayPal Settings', 'woocommerce-paypal-payments' ) }
 			description={ __(
 				'Modify the PayPal checkout experience',
@@ -40,7 +41,7 @@ const PaypalSettings = ( { updateFormValue, settings } ) => {
 					type: SETTINGS_BLOCK_TYPE_EMPTY,
 				} }
 			>
-				<div className="ppcp-r-settings-block__mismatch-wrapper">
+				<div className="ppcp-r-settings-block--mismatch-wrapper ppcp-r-settings-block--expert-rdb">
 					<PayPalRdbWithContent
 						id="add_a_correction"
 						name="paypal_settings_mismatch"
@@ -151,7 +152,7 @@ const PaypalSettings = ( { updateFormValue, settings } ) => {
 					type: SETTINGS_BLOCK_TYPE_EMPTY,
 				} }
 			>
-				<div className="ppcp-r-settings-block__mismatch-wrapper">
+				<div className="ppcp-r-settings-block--landing ppcp-r-settings-block--expert-rdb">
 					<PayPalRdbWithContent
 						id="no_perference"
 						name="paypal_settings_landing"
@@ -229,10 +230,6 @@ const PaypalSettings = ( { updateFormValue, settings } ) => {
 };
 
 const languagesExample = [
-	{
-		value: '',
-		label: __( 'Browser language', 'woocommerce-paypal-payments' ),
-	},
 	{ value: 'en', label: 'English' },
 	{ value: 'de', label: 'German' },
 	{ value: 'es', label: 'Spanish' },

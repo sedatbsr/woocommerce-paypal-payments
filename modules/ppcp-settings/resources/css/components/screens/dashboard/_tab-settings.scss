@@ -1,42 +1,38 @@
+// Global settings styles
 .ppcp-r-settings {
-	display: flex;
-	flex-direction: column;
-	gap: 48px;
+	@include vertical-layout-event-gap(48px);
 }
 
-.ppcp-r-settings-card {
-	&.ppcp-r-settings-card--expert-settings {
-		.ppcp-r-settings-card__header {
-			margin-bottom: 48px;
-		}
 
-		> .ppcp-r-settings-card__content > .ppcp-r-settings-block:not(.ppcp-r-settings-block--tertiary) {
-			padding-bottom: 32px;
-			margin-bottom: 32px;
-
-			&:last-child {
-				margin-bottom: 0;
-				padding-bottom: 0;
-				border-bottom: none;
-			}
+.ppcp-r-settings-card__content {
+	> .ppcp-r-settings-block {
+		&:not(:last-child) {
+			border-bottom: 1.5px solid $color-gray-700;
 		}
 	}
 }
 
 .ppcp-r-settings-block {
-	&--primary {
-		padding-bottom: 48px;
-		margin-bottom: 48px;
-		border-bottom: 1px solid $color-gray-700;
+	.ppcp-r-settings-block__header {
+		display: flex;
+		gap: 48px;
 
+		&-inner {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+		}
+	}
+
+	&__action {
+		margin-left: auto;
+	}
+
+	&--primary {
 		> .ppcp-r-settings-block__header {
 			.ppcp-r-settings-block__title {
 				@include font(16, 20, 700);
 				color: $color-black;
-			}
-
-			.ppcp-r-settings-block__description {
-				margin-top: 8px;
 			}
 		}
 	}
@@ -45,8 +41,7 @@
 		> .ppcp-r-settings-block__header {
 			.ppcp-r-settings-block__title {
 				@include font(16, 20, 600);
-				color: $color-gray-900;
-				margin-bottom: 8px;
+				color: $color-gray-800;
 			}
 		}
 	}
@@ -65,64 +60,7 @@
 		}
 	}
 
-	&--separated-settings {
-		> .ppcp-r-settings-block__content {
-			gap: 0;
-
-			> .ppcp-r-settings-block {
-				border-bottom: 1px solid $color-gray-500;
-				padding-bottom: 32px;
-				margin-bottom: 32px;
-
-				&:last-child {
-					border: none;
-					padding: 0;
-					margin: 0;
-				}
-			}
-		}
-	}
-
-	&__title {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-	}
-
-	&--toggle-content {
-		> .ppcp-r-settings-block__header {
-			align-items: center;
-			cursor: pointer;
-
-			* {
-				user-select: none;
-			}
-
-			.ppcp-r-settings-block__action {
-				transition: 0.2s transform ease-out;
-			}
-
-			&:hover {
-				.ppcp-r-settings-block__action {
-					transform: scale(1.2);
-				}
-			}
-		}
-	}
-
-	&--button {
-		> .ppcp-r-settings-block__header {
-			align-items: center;
-		}
-	}
-
-	&--content-visible {
-		.ppcp-r-settings-block__toggle-content {
-			transform: rotate(180deg);
-		}
-	}
-
-	&__description {
+	.ppcp-r-settings-block__description {
 		margin: 0;
 		@include font(14, 20, 400);
 		color: $color-gray-800;
@@ -136,55 +74,77 @@
 		}
 	}
 
-	&__action {
-		margin-left: auto;
+	// Types
+	&--toggle-content {
+		&.ppcp-r-settings-block--content-visible {
+			.ppcp-r-settings-block__toggle-content {
+				transform: rotate(180deg);
+			}
+		}
+
+		.ppcp-r-settings-block__header {
+			user-select: none;
+
+			&:hover {
+				cursor: pointer;
+			}
+		}
+	}
+
+	&--sandbox-connected {
+		.ppcp-r-settings-block__content {
+			margin-top: 24px;
+		}
 
 		button.is-secondary {
-			padding: 6px 12px;
-			min-width: 166px;
-			@include font(13, 20, 400);
-			justify-content: center;
+			@include small-button;
+		}
+
+		.ppcp-r-connection-status__data {
+			margin-bottom: 20px;
 		}
 	}
 
-	&__toggle {
-		.components-form-toggle {
-			order: 1;
+	&--expert-rdb{
+		@include vertical-layout-event-gap(24px);
+	}
+	&--connect-sandbox {
+		button.components-button {
+			@include small-button;
+		}
+
+		.ppcp-r__radio-content-additional {
+			.ppcp-r-vertical-text-control {
+				width: 100%;
+			}
+
+			@include vertical-layout-event-gap(24px);
+			align-items: flex-start;
+
+			input[type='text'] {
+				width: 100%;
+			}
 		}
 	}
 
-	&__content {
-		display: flex;
-		flex-direction: column;
-		gap: 32px;
-		margin-top: 32px;
-	}
-
-	&__header {
-		display: flex;
-		gap: 48px;
-
-		&-inner {
-			display: flex;
-			flex-direction: column;
+	&--troubleshooting {
+		> .ppcp-r-settings-block__content > *:not(:last-child) {
+			padding-bottom: 32px;
+			margin-bottom: 32px;
+			border-bottom: 1px solid $color-gray-500;
 		}
 	}
 
-	&__mismatch-wrapper {
-		display: flex;
-		flex-direction: column;
-		gap: 24px;
-	}
-
-	&--order-intent {
-		.ppcp-r-settings-block__content .ppcp-r-settings-block__title {
-			font-size: 14px;
-			margin-bottom: 4px;
-			color: $color-gray-800;
+	&--settings{
+		> .ppcp-r-settings-block__content > *:not(:last-child){
+			padding-bottom: 32px;
+			margin-bottom: 32px;
+			border-bottom: 1px solid $color-gray-500;
 		}
 	}
 
-	input[type='text'], select {
+	// Fields
+	input[type='text'] {
 		border-color: $color-gray-700;
 		width: 282px;
 		max-width: 100%;
@@ -197,37 +157,75 @@
 		}
 	}
 
-	.ppcp-r-select-no-value-assigned > div > select {
-		color: $color-gray-600;
-	}
-
-	&__sandbox {
-		button.is-secondary {
-			@include small-button;
+	.ppcp-r {
+		&__radio-wrapper {
+			align-items: flex-start;
+			gap: 12px;
 		}
 
-		.ppcp-r-connection-status__data {
-			margin-bottom: 24px;
+		&__radio-content {
+			display: flex;
+			flex-direction: column;
+			gap: 4px;
+
+			label {
+				font-weight: 600;
+			}
 		}
-	}
 
-
-	.ppcp-r__radio-wrapper {
-		align-items: flex-start;
-	}
-
-	.ppcp-r__radio-content {
-		label {
-			font-weight: 600;
+		&__radio-content-additional {
+			padding-left: 32px;
 		}
 	}
 
-	.ppcp-r__radio {
-		padding-top: 2px;
+	// MultiSelect control
+	.ppcp-r {
+		&__control {
+			border-radius: 2px;
+			border-color: $color-gray-700;
+			width: 282px;
+			min-height: auto;
+			padding: 0;
+		}
+
+		&__input-container {
+			padding: 0;
+			margin: 0;
+		}
+
+		&__value-container {
+			padding: 0 0 0 7px;
+		}
+
+		&__indicator {
+			padding: 5px;
+		}
+
+		&__indicator-separator {
+			display: none;
+		}
+
+		&__value-container--has-value {
+			.ppcp-r__single-value {
+				color: $color-gray-800;
+			}
+		}
+
+		&__placeholde, &__single-value {
+			@include font(13, 20, 400);
+		}
+
+		&__option {
+			&--is-selected {
+				background-color: $color-gray-200;
+			}
+		}
 	}
 }
 
+// Special settings styles
 
+// Hooks table
 .ppcp-r-table {
 	&__hooks-url {
 		width: 70%;
@@ -262,5 +260,53 @@
 		color: $color-gray-800;
 		border-bottom: 1px solid $color-gray-600;
 		padding-bottom: 4px;
+	}
+}
+
+// Common settings have 48px margin&padding bottom between blocks
+.ppcp-r-settings-card--common-settings .ppcp-r-settings-card__content {
+	> .ppcp-r-settings-block {
+		&:not(:last-child) {
+			padding-bottom: 48px;
+			margin-bottom: 48px;
+		}
+	}
+}
+
+// Expert settings have 32px margin&padding bottom between blocks
+.ppcp-r-settings-card--expert-settings .ppcp-r-settings-card__content {
+	> .ppcp-r-settings-block {
+		&:not(:last-child) {
+			padding-bottom: 32px;
+			margin-bottom: 32px;
+		}
+	}
+}
+
+
+// Order intent block has 32px gap and no lines in between
+// Save payment methods block has 32px gap and no lines in between
+.ppcp-r-settings-block {
+	&--order-intent, &--save-payment-methods {
+		@include vertical-layout-event-gap(32px);
+
+		> .ppcp-r-settings-block__content {
+			@include vertical-layout-event-gap(32px);
+		}
+	}
+}
+
+
+// Most primary settings block in the expert settings have 32px space after description
+.ppcp-r-settings-block--toggle-content {
+	.ppcp-r-settings-block__content {
+		margin-top: 32px;
+	}
+}
+
+// Common settings have actions aligned top with the text, Expert settings have actions alligned middle with the text
+.ppcp-r-settings-card--expert-settings {
+	.ppcp-r-settings-block__header {
+		align-items: center;
 	}
 }
