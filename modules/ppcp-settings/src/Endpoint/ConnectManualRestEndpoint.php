@@ -16,6 +16,7 @@ use stdClass;
 use WooCommerce\PayPalCommerce\ApiClient\Authentication\PayPalBearer;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\Orders;
 use WooCommerce\PayPalCommerce\ApiClient\Helper\InMemoryCache;
+use WooCommerce\PayPalCommerce\Settings\Data\GeneralSettings;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\WcGateway\Exception\NotFoundException;
 use WP_REST_Server;
@@ -134,6 +135,18 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 			);
 		}
 
+		$settings = new GeneralSettings();
+		if ( $use_sandbox ) {
+			$settings->set_is_sandbox( true );
+			$settings->set_sandbox_client_id( $client_id );
+			$settings->set_sandbox_client_secret( $client_secret );
+		} else {
+			$settings->set_is_sandbox( false );
+			$settings->set_live_client_id( $client_id );
+			$settings->set_live_client_secret( $client_secret );
+		}
+		$settings->save();
+
 		try {
 			$payee = $this->request_payee( $client_id, $client_secret, $use_sandbox );
 		} catch ( Exception $exception ) {
@@ -145,6 +158,15 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 			);
 
 		}
+
+		if ( $use_sandbox ) {
+			$settings->set_sandbox_merchant_id( $payee->merchant_id );
+			$settings->set_sandbox_merchant_email( $payee->email_address );
+		} else {
+			$settings->set_live_merchant_id( $payee->merchant_id );
+			$settings->set_live_merchant_email( $payee->email_address );
+		}
+		$settings->save();
 
 		$result = array(
 			'merchantId' => $payee->merchant_id,
