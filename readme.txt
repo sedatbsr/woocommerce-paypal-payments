@@ -179,7 +179,7 @@ If you encounter issues with the PayPal buttons not appearing after an update, p
 
 == Changelog ==
 
-= 2.9.4 - xxxx-xx-xx =
+= 2.9.4 - 2024-11-11 =
 * Fix - Apple Pay button preview missing in Standard payment and Advanced Processing tabs #2755
 * Fix - Set "Sold individually" only for subscription connected to PayPal #2710
 * Fix - Ensure Google Pay button does not appear for subscriptions #2718
@@ -192,7 +192,6 @@ If you encounter issues with the PayPal buttons not appearing after an update, p
 * Fix - Payment with OXXO cause continuation state for next payment #2702
 * Fix - Fix problems with autoptimize plugin #2705
 * Fix - Missing custom field PayPal Transaction Fee for OXXO #2700
-* Enhancement - Extend Advanced Card Processing country/currency feature availability #2754
 * Enhancement - Add void button #2678
 * Enhancement - Use basic redirect gateway when checkout smart buttons disabled #2714
 * Enhancement - Receive button properties from the Checkout Block #2448
