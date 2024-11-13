@@ -4,9 +4,8 @@ import { Button } from '@wordpress/components';
 import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import Separator from '../../ReusableComponents/Separator';
-import BadgeBox, {
-	BADGE_BOX_TITLE_BIG,
-} from '../../ReusableComponents/BadgeBox';
+import WelcomeDocs from '../../ReusableComponents/WelcomeDocs/WelcomeDocs';
+
 import AdvancedOptionsForm from './Components/AdvancedOptionsForm';
 import AccordionSection from '../../ReusableComponents/AccordionSection';
 
@@ -44,7 +43,13 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 				</Button>
 			</div>
 			<Separator className="ppcp-r-page-welcome-mode-separator" />
-			<WelcomeDocs />
+			<WelcomeDocs
+                useAcdc = { true }
+                isFastlane = { true }
+                isPayLater = { true }
+                storeCountry = { 'us' }
+                storeCurrency = { 'usd' }
+            />
 			<Separator text={ __( 'or', 'woocommerce-paypal-payments' ) } />
 			<AccordionSection
 				title={ __(
