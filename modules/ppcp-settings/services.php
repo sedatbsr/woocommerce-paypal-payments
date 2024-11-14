@@ -9,10 +9,12 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings;
 
-use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
-use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
-use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
+use WooCommerce\PayPalCommerce\ApiClient\Helper\Cache;
 use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Service\ConnectionUrlGenerator;
+use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 
 return array(
 	'settings.url'                                => static function ( ContainerInterface $container ) : string {
@@ -108,5 +110,34 @@ return array(
 		$eligible_countries = $container->get( 'settings.casual-selling.supported-countries' );
 
 		return in_array( $country, $eligible_countries, true );
+	},
+	'settings.service.signup-link-cache'          => static function ( ContainerInterface $container ) : Cache {
+		return new Cache( 'ppcp-paypal-signup-link' );
+	},
+	'settings.service.connection-url-generators'  => static function ( ContainerInterface $container ) : array {
+		// Define available environments.
+		$environments = array(
+			'production' => array(
+				'partner_referrals' => $container->get( 'api.endpoint.partner-referrals-production' ),
+			),
+			'sandbox'    => array(
+				'partner_referrals' => $container->get( 'api.endpoint.partner-referrals-sandbox' ),
+			),
+		);
+
+		$generators = array();
+
+		// Instantiate URL generators for each environment.
+		foreach ( $environments as $environment => $config ) {
+			$generators[ $environment ] = new ConnectionUrlGenerator(
+				$config['partner_referrals'],
+				$container->get( 'api.repository.partner-referrals-data' ),
+				$container->get( 'settings.service.signup-link-cache' ),
+				$environment,
+				$container->get( 'woocommerce.logger.woocommerce' )
+			);
+		}
+
+		return $generators;
 	},
 );
