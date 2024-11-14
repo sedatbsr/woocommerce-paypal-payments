@@ -7,12 +7,15 @@
 
 declare( strict_types = 1 );
 
+namespace WooCommerce\PayPalCommerce\Settings\Service;
+
+use Exception;
 use Psr\Log\LoggerInterface;
-use WooCommerce\PayPalCommerce\Onboarding\Helper\OnboardingUrl;
-use WooCommerce\PayPalCommerce\ApiClient\Helper\Cache;
-use WooCommerce\WooCommerce\Logging\Logger\NullLogger;
-use WooCommerce\PayPalCommerce\ApiClient\Repository\PartnerReferralsData;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\PartnerReferrals;
+use WooCommerce\PayPalCommerce\ApiClient\Helper\Cache;
+use WooCommerce\PayPalCommerce\ApiClient\Repository\PartnerReferralsData;
+use WooCommerce\PayPalCommerce\Onboarding\Helper\OnboardingUrl;
+use WooCommerce\WooCommerce\Logging\Logger\NullLogger;
 
 /**
  * Generator that builds the ISU connection URL.
@@ -63,6 +66,7 @@ class ConnectionUrlGenerator {
 	 * @param Cache                $cache             The cache object used for storing and
 	 *                                                retrieving data.
 	 * @param string               $environment       Environment that is used to generate the URL.
+	 *                                                ['production'|'sandbox'].
 	 * @param ?LoggerInterface     $logger            The logger object for logging messages.
 	 */
 	public function __construct(
@@ -104,9 +108,12 @@ class ConnectionUrlGenerator {
 		$cache_key      = $this->cache_key( $products );
 		$user_id        = get_current_user_id();
 		$onboarding_url = new OnboardingUrl( $this->cache, $cache_key, $user_id );
+		$cached_url     = $this->try_get_from_cache( $onboarding_url, $cache_key );
 
-		if ( $this->try_load_from_cache( $onboarding_url, $cache_key ) ) {
-			return $onboarding_url->get();
+		if ( $cached_url ) {
+			$this->logger->info( 'Using cached onboarding URL for: ' . $cache_key );
+
+			return $cached_url;
 		}
 
 		$this->logger->info( 'Generating onboarding URL for: ' . $cache_key );
@@ -140,20 +147,21 @@ class ConnectionUrlGenerator {
 	 * @param OnboardingUrl $onboarding_url The OnboardingUrl object.
 	 * @param string        $cache_key      The cache key.
 	 *
-	 * @return bool True if loaded from cache, false otherwise.
+	 * @return string The cached URL, or an empty string if no URL is found.
 	 */
-	protected function try_load_from_cache( OnboardingUrl $onboarding_url, string $cache_key ) : bool {
+	protected function try_get_from_cache( OnboardingUrl $onboarding_url, string $cache_key ) : string {
 		try {
 			if ( $onboarding_url->load() ) {
 				$this->logger->debug( 'Loaded onboarding URL from cache: ' . $cache_key );
 
-				return true;
+				return $onboarding_url->get();
 			}
 		} catch ( Exception $e ) {
-			// No problem, we'll generate a new URL
+			// No problem, return an empty string to generate a new URL.
+			$this->logger->warning( 'Failed to load onboarding URL from cache: ' . $cache_key );
 		}
 
-		return false;
+		return '';
 	}
 
 	/**
@@ -166,6 +174,7 @@ class ConnectionUrlGenerator {
 	 * @return string The generated URL or an empty string on failure.
 	 */
 	protected function generate_new_url( array $products, OnboardingUrl $onboarding_url, string $cache_key ) : string {
+		$query_args = array( 'displayMode' => 'minibrowser' );
 		$onboarding_url->init();
 
 		try {
@@ -186,7 +195,7 @@ class ConnectionUrlGenerator {
 			return '';
 		}
 
-		return add_query_arg( array( 'displayMode' => 'minibrowser' ), $url );
+		return add_query_arg( $query_args, $url );
 	}
 
 	/**
@@ -211,7 +220,7 @@ class ConnectionUrlGenerator {
 	 * @param OnboardingUrl $onboarding_url The OnboardingUrl object.
 	 * @param string        $url            The URL to persist.
 	 */
-	protected function persist_url( OnboardingUrl $onboarding_url, string $url ) {
+	protected function persist_url( OnboardingUrl $onboarding_url, string $url ) : void {
 		$onboarding_url->set( $url );
 		$onboarding_url->persist();
 	}
