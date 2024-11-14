@@ -25,6 +25,10 @@ const useOnboardingDetails = () => {
 		return select( STORE_NAME ).getTransientData().isReady;
 	} );
 
+	const isManualConnectionBusy = useSelect( ( select ) => {
+		return select( STORE_NAME ).getTransientData().isManualConnectionBusy;
+	}, [] );
+
 	// Read-only flags.
 	const flags = useSelect( ( select ) => {
 		return select( STORE_NAME ).getFlags();
@@ -78,6 +82,7 @@ const useOnboardingDetails = () => {
 	return {
 		isSaving,
 		isReady,
+		isManualConnectionBusy,
 		step,
 		setStep: ( value ) => setDetailAndPersist( setOnboardingStep, value ),
 		completed,
@@ -105,6 +110,7 @@ const useOnboardingDetails = () => {
 export const useOnboardingStepWelcome = () => {
 	const {
 		isSaving,
+		isManualConnectionBusy,
 		isSandboxMode,
 		setSandboxMode,
 		isManualConnectionMode,
@@ -117,6 +123,7 @@ export const useOnboardingStepWelcome = () => {
 
 	return {
 		isSaving,
+		isManualConnectionBusy,
 		isSandboxMode,
 		setSandboxMode,
 		isManualConnectionMode,
@@ -148,19 +155,9 @@ export const useOnboardingStep = () => {
 };
 
 export const useManualConnect = () => {
-	const connectManual = async ( clientId, clientSecret, isSandboxMode ) => {
-		return await apiFetch( {
-			path: `${ NAMESPACE }/connect_manual`,
-			method: 'POST',
-			data: {
-				clientId,
-				clientSecret,
-				useSandbox: isSandboxMode,
-			},
-		} );
-	};
+	const { connectViaIdAndSecret } = useDispatch( STORE_NAME );
 
 	return {
-		connectManual,
+		connectManual: connectViaIdAndSecret,
 	};
 };

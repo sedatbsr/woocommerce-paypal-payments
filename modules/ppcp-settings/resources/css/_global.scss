@@ -44,7 +44,7 @@
 	font-family: "PayPalPro", sans-serif;
 }
 
-* {
+& {
 	font-family: "PayPalPro", sans-serif;
 	-webkit-font-smoothing: antialiased;
 	box-sizing: border-box;
@@ -59,4 +59,6 @@ a:not(.button) {
 	color: $color-blueberry;
 }
 
-
+.components-form-toggle.is-checked > .components-form-toggle__track {
+	background-color: $color-blueberry;
+}
