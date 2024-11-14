@@ -95,11 +95,11 @@ import {
 						) {
 							return;
 						}
-
+                        document.getElementById('place_order').disabled = true;
 						event.preventDefault();
-
 						cardFields.submit().catch( ( error ) => {
 							console.error( error );
+                            document.getElementById('place_order').disabled = false;
 						} );
 					} );
 			} );
