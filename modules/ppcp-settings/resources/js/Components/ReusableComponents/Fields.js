@@ -51,9 +51,12 @@ export const PayPalRdbWithContent = ( props ) => {
 				<div className="ppcp-r__radio-content">
 					<label htmlFor={ props?.id }>{ props.label }</label>
 					{ props.description && (
-						<p className="ppcp-r__radio-description">
-							{ props.description }
-						</p>
+						<p
+							className="ppcp-r__radio-description"
+							dangerouslySetInnerHTML={ {
+								__html: props.description,
+							} }
+						/>
 					) }
 				</div>
 			</div>

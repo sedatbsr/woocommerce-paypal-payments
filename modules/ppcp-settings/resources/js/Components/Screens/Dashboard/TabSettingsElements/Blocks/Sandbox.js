@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import SettingsBlock, {
 	SETTINGS_BLOCK_STYLING_TYPE_PRIMARY,
 	SETTINGS_BLOCK_STYLING_TYPE_SECONDARY,
@@ -158,9 +158,13 @@ const Sandbox = ( { settings, updateFormValue } ) => {
 								'Manual Connect',
 								'woocommerce-paypal-payments'
 							) }
-							description={ __(
-								'For advanced users: Connect a custom PayPal REST app for full control over your integration. For more information on creating a PayPal REST application, click here.',
-								'woocommerce-paypal-payments'
+							description={ sprintf(
+								// translators: %s: Link to creating PayPal REST application
+								__(
+									'For advanced users: Connect a custom PayPal REST app for full control over your integration. For more information on creating a PayPal REST application, <a target="_blank" href="%s">click here</a>.',
+									'woocommerce-paypal-payments'
+								),
+								'#'
 							) }
 						>
 							<TextControl
