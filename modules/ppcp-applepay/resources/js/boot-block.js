@@ -108,5 +108,6 @@ registerExpressPaymentMethod( {
 	canMakePayment: () => buttonData.enabled,
 	supports: {
 		features,
+		style: [ 'height', 'borderRadius' ],
 	},
 } );
