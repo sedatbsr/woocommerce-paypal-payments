@@ -414,24 +414,32 @@ class ApplePayButton extends PaymentButton {
 				? this.buttonAttributes
 				: this.#storedButtonAttributes;
 
-		// Apply height if available
-		if ( attributes?.height ) {
-			const height = parseInt( attributes.height, 10 );
-			if ( ! isNaN( height ) ) {
-				wrapper.style.setProperty(
-					'--apple-pay-button-height',
-					`${ height }px`
-				);
-				wrapper.style.height = `${ height }px`;
-			}
+		const defaultHeight = 48;
+		const defaultBorderRadius = 4;
+
+		const height = attributes?.height
+			? parseInt( attributes.height, 10 )
+			: defaultHeight;
+
+		if ( ! isNaN( height ) ) {
+			wrapper.style.setProperty(
+				'--apple-pay-button-height',
+				`${ height }px`
+			);
+			wrapper.style.height = `${ height }px`;
+		} else {
+			wrapper.style.setProperty(
+				'--apple-pay-button-height',
+				`${ defaultHeight }px`
+			);
+			wrapper.style.height = `${ defaultHeight }px`;
 		}
 
-		// Apply border radius if available
-		if ( attributes?.borderRadius ) {
-			const borderRadius = parseInt( attributes.borderRadius, 10 );
-			if ( ! isNaN( borderRadius ) ) {
-				wrapper.style.borderRadius = `${ borderRadius }px`;
-			}
+		const borderRadius = attributes?.borderRadius
+			? parseInt( attributes.borderRadius, 10 )
+			: defaultBorderRadius;
+		if ( ! isNaN( borderRadius ) ) {
+			wrapper.style.borderRadius = `${ borderRadius }px`;
 		}
 	}
 

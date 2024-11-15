@@ -63,10 +63,10 @@ const ApplepayButton = ( {
 			style={ {
 				height: buttonAttributes?.height
 					? `${ buttonAttributes.height }px`
-					: undefined,
+					: '48px',
 				'--apple-pay-button-height': buttonAttributes?.height
 					? `${ buttonAttributes.height }px`
-					: undefined,
+					: '48px',
 				borderRadius: buttonAttributes?.borderRadius
 					? `${ buttonAttributes.borderRadius }px`
 					: undefined,
