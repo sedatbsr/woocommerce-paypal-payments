@@ -15,6 +15,7 @@ use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Service\ConnectionUrlGenerator;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\LoginLinkRestEndpoint;
 
 return array(
 	'settings.url'                                => static function ( ContainerInterface $container ) : string {
@@ -53,6 +54,11 @@ return array(
 			$container->get( 'api.paypal-host-production' ),
 			$container->get( 'api.paypal-host-sandbox' ),
 			$container->get( 'woocommerce.logger.woocommerce' )
+		);
+	},
+	'settings.rest.login_link'                    => static function ( ContainerInterface $container ) : LoginLinkRestEndpoint {
+		return new LoginLinkRestEndpoint(
+			$container->get( 'settings.service.connection-url-generators' ),
 		);
 	},
 	'settings.casual-selling.supported-countries' => static function ( ContainerInterface $container ) : array {
