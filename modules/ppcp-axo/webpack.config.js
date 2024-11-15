@@ -12,7 +12,7 @@ module.exports = {
 		boot: path.resolve( './resources/js/boot.js' ),
 		styles: path.resolve( './resources/css/styles.scss' ),
 		TrackEndCheckout: path.resolve(
-			'./resources/js/Insights/TrackEndCheckout.js'
+			'./resources/js/Insights/EndCheckoutTracker.js'
 		),
 	},
 	output: {
