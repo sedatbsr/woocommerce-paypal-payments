@@ -9,12 +9,11 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings;
 
-use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
-use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\RestEndpoint;
 
 /**
  * Class SettingsModule
@@ -109,13 +108,15 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 		add_action(
 			'rest_api_init',
 			static function () use ( $container ) : void {
-				$onboarding_endpoint = $container->get( 'settings.rest.onboarding' );
-				assert( $onboarding_endpoint instanceof OnboardingRestEndpoint );
-				$onboarding_endpoint->register_routes();
+				$endpoints = array(
+					$container->get( 'settings.rest.onboarding' ),
+					$container->get( 'settings.rest.connect_manual' ),
+				);
 
-				$connect_manual_endpoint = $container->get( 'settings.rest.connect_manual' );
-				assert( $connect_manual_endpoint instanceof ConnectManualRestEndpoint );
-				$connect_manual_endpoint->register_routes();
+				foreach ( $endpoints as $endpoint ) {
+					assert( $endpoint instanceof RestEndpoint );
+					$endpoint->register_routes();
+				}
 			}
 		);
 
