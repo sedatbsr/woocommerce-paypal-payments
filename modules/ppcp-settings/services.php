@@ -9,6 +9,7 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings;
 
+use WooCommerce\PayPalCommerce\Settings\Data\GeneralSettings;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
@@ -50,7 +51,8 @@ return array(
 		return new ConnectManualRestEndpoint(
 			$container->get( 'api.paypal-host-production' ),
 			$container->get( 'api.paypal-host-sandbox' ),
-			$container->get( 'woocommerce.logger.woocommerce' )
+			$container->get( 'woocommerce.logger.woocommerce' ),
+			$container->get( 'settings.general' )
 		);
 	},
 	'settings.casual-selling.supported-countries' => static function ( ContainerInterface $container ) : array {
@@ -108,5 +110,8 @@ return array(
 		$eligible_countries = $container->get( 'settings.casual-selling.supported-countries' );
 
 		return in_array( $country, $eligible_countries, true );
+	},
+	'settings.general'                            => static function ( ContainerInterface $container ) : GeneralSettings {
+		return new GeneralSettings();
 	},
 );

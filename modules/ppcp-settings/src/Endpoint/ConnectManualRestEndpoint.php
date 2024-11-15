@@ -57,6 +57,13 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 	protected $rest_base = 'connect_manual';
 
 	/**
+	 * Settings instance.
+	 *
+	 * @var GeneralSettings
+	 */
+	private $settings = null;
+
+	/**
 	 * Field mapping for request.
 	 *
 	 * @var array
@@ -82,16 +89,19 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 	 * @param string          $live_host The API host for the live mode.
 	 * @param string          $sandbox_host The API host for the sandbox mode.
 	 * @param LoggerInterface $logger The logger.
+	 * @param GeneralSettings $settings Settings instance.
 	 */
 	public function __construct(
 		string $live_host,
 		string $sandbox_host,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		GeneralSettings $settings
 	) {
 
 		$this->live_host    = $live_host;
 		$this->sandbox_host = $sandbox_host;
 		$this->logger       = $logger;
+		$this->settings     = $settings;
 	}
 
 	/**
@@ -135,18 +145,6 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 			);
 		}
 
-		$settings = new GeneralSettings();
-		if ( $use_sandbox ) {
-			$settings->set_is_sandbox( true );
-			$settings->set_sandbox_client_id( $client_id );
-			$settings->set_sandbox_client_secret( $client_secret );
-		} else {
-			$settings->set_is_sandbox( false );
-			$settings->set_live_client_id( $client_id );
-			$settings->set_live_client_secret( $client_secret );
-		}
-		$settings->save();
-
 		try {
 			$payee = $this->request_payee( $client_id, $client_secret, $use_sandbox );
 		} catch ( Exception $exception ) {
@@ -160,13 +158,19 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 		}
 
 		if ( $use_sandbox ) {
-			$settings->set_sandbox_merchant_id( $payee->merchant_id );
-			$settings->set_sandbox_merchant_email( $payee->email_address );
+			$this->settings->set_is_sandbox( true );
+			$this->settings->set_sandbox_client_id( $client_id );
+			$this->settings->set_sandbox_client_secret( $client_secret );
+			$this->settings->set_sandbox_merchant_id( $payee->merchant_id );
+			$this->settings->set_sandbox_merchant_email( $payee->email_address );
 		} else {
-			$settings->set_live_merchant_id( $payee->merchant_id );
-			$settings->set_live_merchant_email( $payee->email_address );
+			$this->settings->set_is_sandbox( false );
+			$this->settings->set_live_client_id( $client_id );
+			$this->settings->set_live_client_secret( $client_secret );
+			$this->settings->set_live_merchant_id( $payee->merchant_id );
+			$this->settings->set_live_merchant_email( $payee->email_address );
 		}
-		$settings->save();
+		$this->settings->save();
 
 		$result = array(
 			'merchantId' => $payee->merchant_id,
