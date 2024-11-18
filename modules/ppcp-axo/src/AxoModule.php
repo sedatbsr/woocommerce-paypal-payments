@@ -377,11 +377,15 @@ class AxoModule implements ServiceModule, ExtendingModule, ExecutableModule {
 		$dcc_configuration = $c->get( 'wcgateway.configuration.dcc' );
 		assert( $dcc_configuration instanceof DCCGatewayConfiguration );
 
+		$subscription_helper = $c->get( 'wc-subscriptions.helper' );
+		assert( $subscription_helper instanceof SubscriptionHelper );
+
 		return ! is_user_logged_in()
 			&& CartCheckoutDetector::has_classic_checkout()
 			&& $dcc_configuration->use_fastlane()
 			&& ! $this->is_excluded_endpoint()
-			&& is_checkout();
+			&& is_checkout()
+			&& ! $subscription_helper->cart_contains_subscription();
 	}
 
 	/**
