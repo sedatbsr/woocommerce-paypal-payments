@@ -100,16 +100,19 @@ return array(
 		$currency = $container->get( 'api.shop.currency.getter' );
 		assert( $currency instanceof CurrencyGetter );
 
+		$session_id = '';
+		if ( isset( WC()->session ) && method_exists( WC()->session, 'get_customer_unique_id' ) ) {
+			$session_id = substr(
+				md5( WC()->session->get_customer_unique_id() ),
+				0,
+				16
+			);
+		}
+
 		return array(
 			'enabled'                     => defined( 'WP_DEBUG' ) && WP_DEBUG,
 			'client_id'                   => ( $settings->has( 'client_id' ) ? $settings->get( 'client_id' ) : null ),
-			'session_id'                  => substr(
-				method_exists( WC()->session, 'get_customer_unique_id' ) ?
-					md5( WC()->session->get_customer_unique_id() ) :
-					'',
-				0,
-				16
-			),
+			'session_id'                  => $session_id,
 			'amount'                      => array(
 				'currency_code' => $currency->get(),
 			),
