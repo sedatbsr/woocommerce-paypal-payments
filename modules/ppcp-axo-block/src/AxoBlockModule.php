@@ -22,6 +22,7 @@ use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
+use WooCommerce\PayPalCommerce\WcGateway\Helper\DCCGatewayConfiguration;
 
 /**
  * Class AxoBlockModule
@@ -133,6 +134,18 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 				wp_enqueue_style( 'wc-ppcp-axo-block' );
 			}
 		);
+
+		// Add meta tag to allow feature-detection of the site's AXO payment state.
+		add_action(
+			'wp_enqueue_scripts',
+			function () use ( $c ) {
+				$dcc_configuration = $c->get( 'wcgateway.configuration.dcc' );
+				assert( $dcc_configuration instanceof DCCGatewayConfiguration );
+
+				$this->enqueue_feature_detection_tag_script( $c, $dcc_configuration->use_fastlane() );
+			}
+		);
+
 		return true;
 	}
 
@@ -165,5 +178,39 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 		}
 
 		return $localized_script_data;
+	}
+
+	/**
+	 * Outputs a meta tag to allow feature detection on certain pages.
+	 *
+	 * @param ContainerInterface $c The container.
+	 * @param bool               $axo_enabled Whether the gateway is enabled.
+	 * @return void
+	 */
+	private function enqueue_feature_detection_tag_script( ContainerInterface $c, bool $axo_enabled ): void {
+		if ( ! has_block( 'woocommerce/checkout' ) ) {
+			return;
+		}
+
+		$module_url    = $c->get( 'axoblock.url' );
+		$asset_version = $c->get( 'ppcp.asset-version' );
+
+		wp_register_script(
+			'wc-ppcp-axo-meta',
+			untrailingslashit( $module_url ) . '/assets/js/AxoDetectionTagLoader.js',
+			array( 'wp-plugins', 'wp-element' ),
+			$asset_version,
+			true
+		);
+
+		wp_localize_script(
+			'wc-ppcp-axo-meta',
+			'wc_ppcp_axo_meta',
+			array(
+				'isAxoEnabled' => $axo_enabled,
+			)
+		);
+
+		wp_enqueue_script( 'wc-ppcp-axo-meta' );
 	}
 }
