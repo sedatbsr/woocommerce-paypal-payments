@@ -10,15 +10,15 @@ const getState = ( state ) => {
 	return state[ STORE_KEY ] || EMPTY_OBJ;
 };
 
-export const getPersistentData = ( state ) => {
+export const onboardingPersistentData = ( state ) => {
 	return getState( state ).data || EMPTY_OBJ;
 };
 
-export const getTransientData = ( state ) => {
+export const onboardingTransientData = ( state ) => {
 	const { data, flags, ...transientState } = getState( state );
 	return transientState || EMPTY_OBJ;
 };
 
-export const getFlags = ( state ) => {
+export const onboardingFlags = ( state ) => {
 	return getState( state ).flags || EMPTY_OBJ;
 };

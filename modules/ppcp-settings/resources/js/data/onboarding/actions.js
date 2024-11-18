@@ -9,48 +9,48 @@ import ACTION_TYPES from './action-types';
 /**
  * Special. Resets all values in the onboarding store to initial defaults.
  *
- * @return {{type: string}} The action.
+ * @return {Action} The action.
  */
 export const resetOnboarding = () => {
-	return { type: ACTION_TYPES.RESET_ONBOARDING };
+	return { type: ACTION_TYPES.RESET };
 };
 
 /**
- * Non-persistent. Marks the onboarding details as "ready", i.e., fully initialized.
+ * Transient. Marks the onboarding details as "ready", i.e., fully initialized.
  *
  * @param {boolean} isReady
- * @return {{type: string, isReady}} The action.
+ * @return {Action} The action.
  */
 export const setIsReady = ( isReady ) => {
 	return {
-		type: ACTION_TYPES.SET_ONBOARDING_IS_READY,
-		isReady,
+		type: ACTION_TYPES.SET_TRANSIENT,
+		payload: { isReady },
 	};
 };
 
 /**
- * Non-persistent. Changes the "saving" flag.
+ * Transient. Changes the "saving" flag.
  *
  * @param {boolean} isSaving
- * @return {{type: string, isSaving}} The action.
+ * @return {Action} The action.
  */
 export const setIsSaving = ( isSaving ) => {
 	return {
-		type: ACTION_TYPES.SET_IS_SAVING_ONBOARDING,
-		isSaving,
+		type: ACTION_TYPES.SET_TRANSIENT,
+		payload: { isSaving },
 	};
 };
 
 /**
- * Non-persistent. Changes the "manual connection is busy" flag.
+ * Transient. Changes the "manual connection is busy" flag.
  *
  * @param {boolean} isBusy
- * @return {{type: string, isBusy}} The action.
+ * @return {Action} The action.
  */
 export const setManualConnectionIsBusy = ( isBusy ) => {
 	return {
-		type: ACTION_TYPES.SET_MANUAL_CONNECTION_BUSY,
-		isBusy,
+		type: ACTION_TYPES.SET_TRANSIENT,
+		payload: { isBusy },
 	};
 };
 
@@ -58,11 +58,11 @@ export const setManualConnectionIsBusy = ( isBusy ) => {
  * Persistent. Set the full onboarding details, usually during app initialization.
  *
  * @param {{data: {}, flags?: {}}} payload
- * @return {{type: string, payload}} The action.
+ * @return {Action} The action.
  */
-export const setOnboardingDetails = ( payload ) => {
+export const hydrateOnboardingDetails = ( payload ) => {
 	return {
-		type: ACTION_TYPES.SET_ONBOARDING_DETAILS,
+		type: ACTION_TYPES.HYDRATE,
 		payload,
 	};
 };
@@ -71,12 +71,12 @@ export const setOnboardingDetails = ( payload ) => {
  * Persistent.Set the "onboarding completed" flag which shows or hides the wizard.
  *
  * @param {boolean} completed
- * @return {{type: string, payload}} The action.
+ * @return {Action} The action.
  */
 export const setCompleted = ( completed ) => {
 	return {
-		type: ACTION_TYPES.SET_ONBOARDING_COMPLETED,
-		completed,
+		type: ACTION_TYPES.SET_PERSISTENT,
+		payload: { completed },
 	};
 };
 
@@ -84,38 +84,38 @@ export const setCompleted = ( completed ) => {
  * Persistent. Sets the onboarding wizard to a new step.
  *
  * @param {number} step
- * @return {{type: string, step}} An action.
+ * @return {Action} The action.
  */
 export const setOnboardingStep = ( step ) => {
 	return {
-		type: ACTION_TYPES.SET_ONBOARDING_STEP,
-		step,
+		type: ACTION_TYPES.SET_PERSISTENT,
+		payload: { step },
 	};
 };
 
 /**
  * Persistent. Sets the sandbox mode on or off.
  *
- * @param {boolean} sandboxMode
- * @return {{type: string, useSandbox}} An action.
+ * @param {boolean} useSandbox
+ * @return {Action} The action.
  */
-export const setSandboxMode = ( sandboxMode ) => {
+export const setSandboxMode = ( useSandbox ) => {
 	return {
-		type: ACTION_TYPES.SET_SANDBOX_MODE,
-		useSandbox: sandboxMode,
+		type: ACTION_TYPES.SET_PERSISTENT,
+		payload: { useSandbox },
 	};
 };
 
 /**
  * Persistent. Toggles the "Manual Connection" mode on or off.
  *
- * @param {boolean} manualConnectionMode
- * @return {{type: string, useManualConnection}} An action.
+ * @param {boolean} useManualConnection
+ * @return {Action} The action.
  */
-export const setManualConnectionMode = ( manualConnectionMode ) => {
+export const setManualConnectionMode = ( useManualConnection ) => {
 	return {
-		type: ACTION_TYPES.SET_MANUAL_CONNECTION_MODE,
-		useManualConnection: manualConnectionMode,
+		type: ACTION_TYPES.SET_PERSISTENT,
+		payload: { useManualConnection },
 	};
 };
 
@@ -123,12 +123,12 @@ export const setManualConnectionMode = ( manualConnectionMode ) => {
  * Persistent. Changes the "client ID" value.
  *
  * @param {string} clientId
- * @return {{type: string, clientId}} The action.
+ * @return {Action} The action.
  */
 export const setClientId = ( clientId ) => {
 	return {
-		type: ACTION_TYPES.SET_CLIENT_ID,
-		clientId,
+		type: ACTION_TYPES.SET_PERSISTENT,
+		payload: { clientId },
 	};
 };
 
@@ -136,12 +136,12 @@ export const setClientId = ( clientId ) => {
  * Persistent. Changes the "client secret" value.
  *
  * @param {string} clientSecret
- * @return {{type: string, clientSecret}} The action.
+ * @return {Action} The action.
  */
 export const setClientSecret = ( clientSecret ) => {
 	return {
-		type: ACTION_TYPES.SET_CLIENT_SECRET,
-		clientSecret,
+		type: ACTION_TYPES.SET_PERSISTENT,
+		payload: { clientSecret },
 	};
 };
 
@@ -149,12 +149,12 @@ export const setClientSecret = ( clientSecret ) => {
  * Persistent. Sets the "isCasualSeller" value.
  *
  * @param {boolean} isCasualSeller
- * @return {{type: string, isCasualSeller}} The action.
+ * @return {Action} The action.
  */
 export const setIsCasualSeller = ( isCasualSeller ) => {
 	return {
-		type: ACTION_TYPES.SET_IS_CASUAL_SELLER,
-		isCasualSeller,
+		type: ACTION_TYPES.SET_PERSISTENT,
+		payload: { isCasualSeller },
 	};
 };
 
@@ -162,12 +162,12 @@ export const setIsCasualSeller = ( isCasualSeller ) => {
  * Persistent. Sets the "products" array.
  *
  * @param {string[]} products
- * @return {{type: string, products}} The action.
+ * @return {Action} The action.
  */
 export const setProducts = ( products ) => {
 	return {
-		type: ACTION_TYPES.SET_PRODUCTS,
-		products,
+		type: ACTION_TYPES.SET_PERSISTENT,
+		payload: { products },
 	};
 };
 

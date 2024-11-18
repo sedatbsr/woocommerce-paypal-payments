@@ -1,7 +1,6 @@
 import { useSelect, useDispatch } from '@wordpress/data';
-import apiFetch from '@wordpress/api-fetch';
-import { NAMESPACE, PRODUCT_TYPES, STORE_NAME } from '../constants';
-import { getFlags } from './selectors';
+
+import { PRODUCT_TYPES, STORE_NAME } from '../constants';
 
 const useOnboardingDetails = () => {
 	const {
@@ -16,55 +15,60 @@ const useOnboardingDetails = () => {
 		setProducts,
 	} = useDispatch( STORE_NAME );
 
-	// Transient accessors.
-	const isSaving = useSelect( ( select ) => {
-		return select( STORE_NAME ).getTransientData().isSaving;
-	}, [] );
-
-	const isReady = useSelect( ( select ) => {
-		return select( STORE_NAME ).getTransientData().isReady;
-	} );
-
-	const isManualConnectionBusy = useSelect( ( select ) => {
-		return select( STORE_NAME ).getTransientData().isManualConnectionBusy;
-	}, [] );
+	const transientData = ( select ) =>
+		select( STORE_NAME ).onboardingTransientData();
+	const persistentData = ( select ) =>
+		select( STORE_NAME ).onboardingPersistentData();
 
 	// Read-only flags.
 	const flags = useSelect( ( select ) => {
-		return select( STORE_NAME ).getFlags();
+		return select( STORE_NAME ).onboardingFlags();
 	} );
+
+	// Transient accessors.
+	const isSaving = useSelect( ( select ) => {
+		return transientData( select ).isSaving;
+	}, [] );
+
+	const isReady = useSelect( ( select ) => {
+		return transientData( select ).isReady;
+	} );
+
+	const isManualConnectionBusy = useSelect( ( select ) => {
+		return transientData( select ).isManualConnectionBusy;
+	}, [] );
 
 	// Persistent accessors.
 	const step = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().step || 0;
+		return persistentData( select ).step || 0;
 	} );
 
 	const completed = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().completed;
+		return persistentData( select ).completed;
 	} );
 
 	const clientId = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().clientId;
+		return persistentData( select ).clientId;
 	}, [] );
 
 	const clientSecret = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().clientSecret;
+		return persistentData( select ).clientSecret;
 	}, [] );
 
 	const isSandboxMode = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().useSandbox;
+		return persistentData( select ).useSandbox;
 	}, [] );
 
 	const isManualConnectionMode = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().useManualConnection;
+		return persistentData( select ).useManualConnection;
 	}, [] );
 
 	const isCasualSeller = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().isCasualSeller;
+		return persistentData( select ).isCasualSeller;
 	}, [] );
 
 	const products = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().products || [];
+		return persistentData( select ).products || [];
 	}, [] );
 
 	const toggleProduct = ( list ) => {
