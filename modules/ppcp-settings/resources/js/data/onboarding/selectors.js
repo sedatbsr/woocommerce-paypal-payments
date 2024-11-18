@@ -1,3 +1,13 @@
+/**
+ * Selectors: Extract specific pieces of state from the store.
+ *
+ * These functions provide a consistent interface for accessing store data.
+ * They allow components to retrieve data without knowing the store structure.
+ * Exported functions must have unique names across all store modules.
+ *
+ * @file
+ */
+
 import { STORE_KEY } from './constants';
 
 const EMPTY_OBJ = Object.freeze( {} );

@@ -1,3 +1,13 @@
+/**
+ * Action Creators: Define functions to create action objects.
+ *
+ * These functions update state or trigger side effects (e.g., async operations).
+ * Exported functions must have unique names across all store modules.
+ * Actions are categorized as Transient, Persistent, or Side effect.
+ *
+ * @file
+ */
+
 import ACTION_TYPES from './action-types';
 
 /**

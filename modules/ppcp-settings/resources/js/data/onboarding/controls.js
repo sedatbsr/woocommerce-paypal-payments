@@ -1,3 +1,12 @@
+/**
+ * Controls: Implement side effects, typically asynchronous operations.
+ *
+ * Controls use ACTION_TYPES keys as identifiers to ensure uniqueness.
+ * They are triggered by corresponding actions and handle external interactions.
+ *
+ * @file
+ */
+
 import { select } from '@wordpress/data';
 import { apiFetch } from '@wordpress/api-fetch';
 
