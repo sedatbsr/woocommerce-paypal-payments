@@ -1,21 +1,12 @@
+import { createReducer, createSetters } from '../utils';
 import ACTION_TYPES from './action-types';
 
-const defaultState = {
+// Store structure.
+
+const defaultTransient = {
 	isReady: false,
 	isSaving: false,
 	isManualConnectionBusy: false,
-
-	// Data persisted to the server.
-	data: {
-		completed: false,
-		step: 0,
-		useSandbox: false,
-		useManualConnection: false,
-		clientId: '',
-		clientSecret: '',
-		isCasualSeller: null, // null value will uncheck both options in the UI.
-		products: [],
-	},
 
 	// Read only values, provided by the server.
 	flags: {
@@ -25,29 +16,33 @@ const defaultState = {
 	},
 };
 
+const defaultPersistent = {
+	completed: false,
+	step: 0,
+	useSandbox: false,
+	useManualConnection: false,
+	clientId: '',
+	clientSecret: '',
+	isCasualSeller: null, // null value will uncheck both options in the UI.
+	products: [],
+};
+
+// Reducer logic.
+
+const [ setTransient, setPersistent ] = createSetters(
+	defaultTransient,
+	defaultPersistent
+);
+
+const defaultState = {
+	...defaultTransient,
+	data: { ...defaultPersistent },
+};
+
 export const onboardingReducer = (
 	state = defaultState,
 	{ type, ...action }
 ) => {
-	const setTransient = ( changes ) => {
-		const { data, ...transientChanges } = changes;
-		return { ...state, ...transientChanges };
-	};
-
-	const setPersistent = ( changes ) => {
-		const validChanges = Object.keys( changes ).reduce( ( acc, key ) => {
-			if ( key in defaultState.data ) {
-				acc[ key ] = changes[ key ];
-			}
-			return acc;
-		}, {} );
-
-		return {
-			...state,
-			data: { ...state.data, ...validChanges },
-		};
-	};
-
 	switch ( type ) {
 		// Reset store to initial state.
 		case ACTION_TYPES.RESET_ONBOARDING:
