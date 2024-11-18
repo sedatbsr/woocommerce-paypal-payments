@@ -9,6 +9,16 @@
 export const STORE_KEY = 'onboarding';
 
 /**
+ * REST path to hydrate data of this module by loading data from the WP DB..
+ *
+ * Used by: Resolvers
+ * See: OnboardingRestEndpoint.php
+ *
+ * @type {string}
+ */
+export const REST_HYDRATE_PATH = 'onboarding';
+
+/**
  * REST path to persist data of this module to the WP DB.
  *
  * Used by: Controls
