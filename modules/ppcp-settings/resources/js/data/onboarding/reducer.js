@@ -4,7 +4,6 @@
  * Manages both transient (temporary) and persistent (saved) state.
  * Each module uses isolated memory objects to prevent conflicts.
  * The initial state must define all properties, as dynamic additions are not supported.
- * Reducers are separated per module to avoid conflicts in state management.
  *
  * @file
  */
