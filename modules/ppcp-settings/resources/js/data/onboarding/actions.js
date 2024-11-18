@@ -1,7 +1,10 @@
-import { select } from '@wordpress/data';
-import { apiFetch } from '@wordpress/data-controls';
 import ACTION_TYPES from './action-types';
-import { NAMESPACE, STORE_NAME } from '../constants';
+
+/**
+ * @typedef {Object} Action An action object that is handled by a reducer or control.
+ * @property {string}  type    - The action type.
+ * @property {Object?} payload - Optional payload for the action.
+ */
 
 /**
  * Special. Resets all values in the onboarding store to initial defaults.
@@ -169,67 +172,23 @@ export const setProducts = ( products ) => {
 };
 
 /**
- * Attempts to establish a connection using client ID and secret via the server-side
- * connection endpoint.
+ * Side effect. Triggers the persistence of onboarding data to the server.
  *
- * @return {Object} The server response object
+ * @return {Action} The action.
  */
-export function* connectViaIdAndSecret() {
-	let result = null;
-
-	try {
-		const path = `${ NAMESPACE }/connect_manual`;
-		const { clientId, clientSecret, useSandbox } =
-			yield select( STORE_NAME ).getPersistentData();
-
-		yield setManualConnectionIsBusy( true );
-
-		result = yield apiFetch( {
-			path,
-			method: 'POST',
-			data: {
-				clientId,
-				clientSecret,
-				useSandbox,
-			},
-		} );
-	} catch ( e ) {
-		result = {
-			success: false,
-			error: e,
-		};
-	} finally {
-		yield setManualConnectionIsBusy( false );
-	}
-
-	return result;
-}
+export const persist = () => {
+	return {
+		type: ACTION_TYPES.DO_PERSIST_DATA,
+	};
+};
 
 /**
- * Saves the persistent details to the WP database.
+ * Side effect. Initiates a manual connection attempt using the provided client ID and secret.
  *
- * @return {boolean} True, if the values were successfully saved.
+ * @return {Action} The action.
  */
-export function* persist() {
-	let error = null;
-
-	try {
-		const path = `${ NAMESPACE }/onboarding`;
-		const data = select( STORE_NAME ).getPersistentData();
-
-		yield setIsSaving( true );
-
-		yield apiFetch( {
-			path,
-			method: 'post',
-			data,
-		} );
-	} catch ( e ) {
-		error = e;
-		console.error( 'Error saving progress.', e );
-	} finally {
-		yield setIsSaving( false );
-	}
-
-	return error === null;
-}
+export const connectViaIdAndSecret = () => {
+	return {
+		type: ACTION_TYPES.DO_MANUAL_CONNECTION,
+	};
+};
