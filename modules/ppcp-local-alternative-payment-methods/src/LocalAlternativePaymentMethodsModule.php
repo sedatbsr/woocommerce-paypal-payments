@@ -185,18 +185,6 @@ class LocalAlternativePaymentMethodsModule implements ServiceModule, ExtendingMo
 			2
 		);
 
-		add_filter(
-			'woocommerce_paypal_payments_allowed_refund_payment_methods',
-			function( array $payment_methods ) use ( $c ): array {
-				$local_payment_methods = $c->get( 'ppcp-local-apms.payment-methods' );
-				foreach ( $local_payment_methods as $payment_method ) {
-					$payment_methods[] = $payment_method['id'];
-				}
-
-				return $payment_methods;
-			}
-		);
-
 		return true;
 	}
 
