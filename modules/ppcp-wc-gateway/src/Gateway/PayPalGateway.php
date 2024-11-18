@@ -210,6 +210,13 @@ class PayPalGateway extends \WC_Payment_Gateway {
 	private $module_url;
 
 	/**
+	 * Whether settings module is enabled.
+	 *
+	 * @var bool
+	 */
+	private $admin_settings_enabled;
+
+	/**
 	 * PayPalGateway constructor.
 	 *
 	 * @param SettingsRenderer         $settings_renderer The Settings Renderer.
@@ -233,6 +240,7 @@ class PayPalGateway extends \WC_Payment_Gateway {
 	 * @param bool                     $vault_v3_enabled Whether Vault v3 module is enabled.
 	 * @param WooCommercePaymentTokens $wc_payment_tokens WooCommerce payment tokens.
 	 * @param string                   $module_url The module URL.
+	 * @param bool                     $admin_settings_enabled Whether settings module is enabled.
 	 */
 	public function __construct(
 		SettingsRenderer $settings_renderer,
@@ -255,7 +263,8 @@ class PayPalGateway extends \WC_Payment_Gateway {
 		PaymentTokensEndpoint $payment_tokens_endpoint,
 		bool $vault_v3_enabled,
 		WooCommercePaymentTokens $wc_payment_tokens,
-		string $module_url
+		string $module_url,
+		bool $admin_settings_enabled
 	) {
 		$this->id                          = self::ID;
 		$this->settings_renderer           = $settings_renderer;
@@ -281,6 +290,7 @@ class PayPalGateway extends \WC_Payment_Gateway {
 		$this->wc_payment_tokens           = $wc_payment_tokens;
 		$this->module_url                  = $module_url;
 		$this->icon                        = apply_filters( 'woocommerce_paypal_payments_paypal_gateway_icon', esc_url( $this->module_url ) . 'assets/images/paypal.svg' );
+		$this->admin_settings_enabled      = $admin_settings_enabled;
 
 		$default_support = array(
 			'products',
@@ -367,7 +377,7 @@ class PayPalGateway extends \WC_Payment_Gateway {
 				'type'        => 'checkbox',
 				'desc_tip'    => true,
 				'description' => __( 'In order to use PayPal or Advanced Card Processing, you need to enable the Gateway.', 'woocommerce-paypal-payments' ),
-				'label'       => __( 'Enable PayPal features for your store', 'woocommerce-paypal-payments' ),
+				'label'       => __( 'Enable the PayPal gateway and more features for your store.', 'woocommerce-paypal-payments' ),
 				'default'     => 'no',
 			),
 			'ppcp'    => array(
@@ -754,6 +764,17 @@ class PayPalGateway extends \WC_Payment_Gateway {
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * Override the parent admin_options method.
+	 */
+	public function admin_options() {
+		if ( ! $this->admin_settings_enabled ) {
+			parent::admin_options();
+		}
+
+		do_action( 'woocommerce_paypal_payments_gateway_admin_options_wrapper', $this );
 	}
 
 	/**

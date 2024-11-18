@@ -124,7 +124,8 @@ class WcGatewayTest extends TestCase
 			$this->paymentTokensEndpoint,
 			$this->vaultV3Enabled,
 			$this->wcPaymentTokens,
-			''
+			'',
+			false
 		);
 	}
 
