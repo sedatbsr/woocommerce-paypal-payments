@@ -85,6 +85,8 @@ class AxoManager {
 			},
 		};
 
+		this.cardOptions = this.getCardOptions();
+
 		this.enabledShippingLocations =
 			this.axoConfig.enabled_shipping_locations;
 
@@ -664,6 +666,9 @@ class AxoManager {
 		await this.fastlane.connect( {
 			locale: this.locale,
 			styles: this.styles,
+			cardOptions: {
+				allowedBrands: this.cardOptions,
+			},
 			shippingAddressOptions: {
 				allowedLocations: this.enabledShippingLocations,
 			},
@@ -1249,6 +1254,31 @@ class AxoManager {
 
 	useEmailWidget() {
 		return this.axoConfig?.widgets?.email === 'use_widget';
+	}
+
+	getCardOptions() {
+		const DEFAULT_ALLOWED_CARDS = [
+			'VISA',
+			'MASTERCARD',
+			'AMEX',
+			'DISCOVER',
+		];
+		const merchantCountry = this.axoConfig.merchant_country || 'US';
+
+		const allowedCards = new Set(
+			this.axoConfig.allowed_cards?.[ merchantCountry ] ||
+				DEFAULT_ALLOWED_CARDS
+		);
+
+		const disabledCards = new Set(
+			( this.axoConfig.disable_cards || [] ).map( ( card ) =>
+				card.toUpperCase()
+			)
+		);
+
+		return [ ...allowedCards ].filter(
+			( card ) => ! disabledCards.has( card )
+		);
 	}
 
 	deleteKeysWithEmptyString = ( obj ) => {
