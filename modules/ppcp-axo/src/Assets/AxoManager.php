@@ -137,17 +137,17 @@ class AxoManager {
 		array $enabled_shipping_locations
 	) {
 
-		$this->module_url = $module_url;
-		$this->version = $version;
-		$this->session_handler = $session_handler;
-		$this->settings = $settings;
-		$this->environment = $environment;
-		$this->insights_data = $insights_data;
-		$this->settings_status = $settings_status;
-		$this->currency = $currency;
-		$this->logger = $logger;
-		$this->wcgateway_module_url = $wcgateway_module_url;
-		$this->enabled_shipping_locations = $enabled_shipping_locations;
+		$this->module_url                         = $module_url;
+		$this->version                            = $version;
+		$this->session_handler                    = $session_handler;
+		$this->settings                           = $settings;
+		$this->environment                        = $environment;
+		$this->insights_data                      = $insights_data;
+		$this->settings_status                    = $settings_status;
+		$this->currency                           = $currency;
+		$this->logger                             = $logger;
+		$this->wcgateway_module_url               = $wcgateway_module_url;
+		$this->enabled_shipping_locations         = $enabled_shipping_locations;
 		$this->supported_country_card_type_matrix = $supported_country_card_type_matrix;
 	}
 
