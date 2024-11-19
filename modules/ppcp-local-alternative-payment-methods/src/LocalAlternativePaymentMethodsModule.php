@@ -11,6 +11,7 @@ namespace WooCommerce\PayPalCommerce\LocalAlternativePaymentMethods;
 
 use WC_Order;
 use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
+use WooCommerce\PayPalCommerce\Onboarding\State;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
@@ -46,7 +47,7 @@ class LocalAlternativePaymentMethodsModule implements ServiceModule, ExtendingMo
 		$settings = $c->get( 'wcgateway.settings' );
 		assert( $settings instanceof Settings );
 
-		if ( ! $settings->has( 'allow_local_apm_gateways' ) || $settings->get( 'allow_local_apm_gateways' ) !== true ) {
+		if ( ! self::should_add_local_apm_gateways( $settings ) ) {
 			return true;
 		}
 
@@ -58,6 +59,11 @@ class LocalAlternativePaymentMethodsModule implements ServiceModule, ExtendingMo
 			 * @psalm-suppress MissingClosureParamType
 			 */
 			function ( $methods ) use ( $c ) {
+				$onboarding_state = $c->get( 'onboarding.state' );
+				if ( $onboarding_state->current_state() === State::STATE_START ) {
+					return $methods;
+				}
+
 				if ( ! is_array( $methods ) ) {
 					return $methods;
 				}
@@ -185,18 +191,6 @@ class LocalAlternativePaymentMethodsModule implements ServiceModule, ExtendingMo
 			2
 		);
 
-		add_filter(
-			'woocommerce_paypal_payments_allowed_refund_payment_methods',
-			function( array $payment_methods ) use ( $c ): array {
-				$local_payment_methods = $c->get( 'ppcp-local-apms.payment-methods' );
-				foreach ( $local_payment_methods as $payment_method ) {
-					$payment_methods[] = $payment_method['id'];
-				}
-
-				return $payment_methods;
-			}
-		);
-
 		return true;
 	}
 
@@ -215,5 +209,18 @@ class LocalAlternativePaymentMethodsModule implements ServiceModule, ExtendingMo
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if the local APMs should be added to the available payment gateways.
+	 *
+	 * @param Settings $settings PayPal gateway settings.
+	 * @return bool
+	 */
+	private function should_add_local_apm_gateways( Settings $settings ): bool {
+		return $settings->has( 'enabled' )
+			&& $settings->get( 'enabled' ) === true
+			&& $settings->has( 'allow_local_apm_gateways' )
+			&& $settings->get( 'allow_local_apm_gateways' ) === true;
 	}
 }

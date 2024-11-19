@@ -30,16 +30,17 @@ return array(
 	},
 	'axoblock.method'    => static function ( ContainerInterface $container ) : AxoBlockPaymentMethod {
 		return new AxoBlockPaymentMethod(
-			$container->get( 'axoblock.url' ),
-			$container->get( 'ppcp.asset-version' ),
-			$container->get( 'axo.gateway' ),
-			fn() : SmartButtonInterface => $container->get( 'button.smart-button' ),
-			$container->get( 'wcgateway.settings' ),
-			$container->get( 'wcgateway.configuration.dcc' ),
-			$container->get( 'onboarding.environment' ),
-			$container->get( 'wcgateway.url' ),
-			$container->get( 'axo.payment_method_selected_map' ),
-			$container->get( 'axo.shipping-wc-enabled-locations' )
+			$container->get('axoblock.url'),
+			$container->get('ppcp.asset-version'),
+			$container->get('axo.gateway'),
+			fn(): SmartButtonInterface => $container->get('button.smart-button'),
+			$container->get('wcgateway.settings'),
+			$container->get('wcgateway.configuration.dcc'),
+			$container->get('onboarding.environment'),
+			$container->get('wcgateway.url'),
+			$container->get('axo.payment_method_selected_map'),
+			$container->get('axo.supported-country-card-type-matrix'),
+			$container->get('axo.shipping-wc-enabled-locations')
 		);
 	},
 );

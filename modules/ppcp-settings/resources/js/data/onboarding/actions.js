@@ -39,6 +39,19 @@ export const setIsSaving = ( isSaving ) => {
 };
 
 /**
+ * Non-persistent. Changes the "manual connection is busy" flag.
+ *
+ * @param {boolean} isBusy
+ * @return {{type: string, isBusy}} The action.
+ */
+export const setManualConnectionIsBusy = ( isBusy ) => {
+	return {
+		type: ACTION_TYPES.SET_MANUAL_CONNECTION_BUSY,
+		isBusy,
+	};
+};
+
+/**
  * Persistent. Set the full onboarding details, usually during app initialization.
  *
  * @param {{data: {}, flags?: {}}} payload
@@ -156,9 +169,46 @@ export const setProducts = ( products ) => {
 };
 
 /**
+ * Attempts to establish a connection using client ID and secret via the server-side
+ * connection endpoint.
+ *
+ * @return {Object} The server response object
+ */
+export function* connectViaIdAndSecret() {
+	let result = null;
+
+	try {
+		const path = `${ NAMESPACE }/connect_manual`;
+		const { clientId, clientSecret, useSandbox } =
+			yield select( STORE_NAME ).getPersistentData();
+
+		yield setManualConnectionIsBusy( true );
+
+		result = yield apiFetch( {
+			path,
+			method: 'POST',
+			data: {
+				clientId,
+				clientSecret,
+				useSandbox,
+			},
+		} );
+	} catch ( e ) {
+		result = {
+			success: false,
+			error: e,
+		};
+	} finally {
+		yield setManualConnectionIsBusy( false );
+	}
+
+	return result;
+}
+
+/**
  * Saves the persistent details to the WP database.
  *
- * @return {any} A generator function that handles the saving process.
+ * @return {boolean} True, if the values were successfully saved.
  */
 export function* persist() {
 	let error = null;
