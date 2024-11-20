@@ -11,6 +11,7 @@ namespace WooCommerce\PayPalCommerce\Settings;
 
 use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
@@ -26,7 +27,10 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	 * Returns whether the old settings UI should be loaded.
 	 */
 	public static function should_use_the_old_ui(): bool {
-		return apply_filters( 'woocommerce_paypal_payments_should_use_the_old_ui', false );
+		return apply_filters(
+			'woocommerce_paypal_payments_should_use_the_old_ui',
+			get_option(SwitchSettingsUiEndpoint::OPTION_NAME_SHOULD_USE_OLD_UI) === '1'
+		);
 	}
 
 	/**
@@ -45,7 +49,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 				'woocommerce_paypal_payments_inside_settings_page_header',
 				static function () : void {
 					echo sprintf(
-						'<a href="#" class="button" onclick="javascript:void(0);">%s</a>',
+						'<a href="#" class="button button-settings-switch-ui">%s</a>',
 						esc_html__( 'Switch to new settings UI', 'woocommerce-paypal-payments' )
 					);
 				}
@@ -67,13 +71,21 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 
 					wp_localize_script(
 						'ppcp-switch-settings-ui',
-						'PayPalCommerceGatewayOrderTrackingInfo',
-						array()
+						'ppcpSwitchSettingsUi',
+						array(
+							'endpoint' => \WC_AJAX::get_endpoint( SwitchSettingsUiEndpoint::ENDPOINT ),
+							'nonce'    => wp_create_nonce( SwitchSettingsUiEndpoint::nonce() ),
+						)
 					);
 
 					wp_enqueue_script( 'ppcp-switch-settings-ui' );
 				}
 			);
+
+			$endpoint = $container->get( 'settings.switch-ui.endpoint' );
+			assert( $endpoint instanceof SwitchSettingsUiEndpoint );
+
+			add_action( 'wc_ajax_' . SwitchSettingsUiEndpoint::ENDPOINT, array( $endpoint, 'handle_request' ) );
 
 			return true;
 		}
