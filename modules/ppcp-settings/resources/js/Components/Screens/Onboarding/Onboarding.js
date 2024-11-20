@@ -1,7 +1,7 @@
 import Container from '../../ReusableComponents/Container';
 import { OnboardingHooks } from '../../../data';
 import { getSteps } from './availableSteps';
-import Navigation from '../../ReusableComponents/Navigation';
+import Navigation from './Components/Navigation';
 
 const getCurrentStep = ( requestedStep, steps ) => {
 	const isValidStep = ( step ) =>
