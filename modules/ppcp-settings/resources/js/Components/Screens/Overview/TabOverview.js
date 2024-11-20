@@ -15,16 +15,16 @@ import ConnectionInfo, {
 	connectionStatusDataDefault,
 } from '../../ReusableComponents/ConnectionInfo';
 
-const TabDashboard = () => {
+const TabOverview = () => {
 	const [ todos, setTodos ] = useState( [] );
 	const [ todosData, setTodosData ] = useState( todosDataDefault );
 
 	return (
-		<div className="ppcp-r-tab-dashboard">
+		<div className="ppcp-r-tab-overview">
 			{ todosData.length > 0 && (
 				<SettingsCard
-					className="ppcp-r-tab-dashboard-todo"
-					icon="icon-dashboard-list.svg"
+					className="ppcp-r-tab-overview-todo"
+					icon="icon-overview-list.svg"
 					title={ __(
 						'Things to do next',
 						'woocommerce-paypal-payments'
@@ -51,8 +51,8 @@ const TabDashboard = () => {
 				</SettingsCard>
 			) }
 			<SettingsCard
-				className="ppcp-r-tab-dashboard-support"
-				icon="icon-dashboard-support.svg"
+				className="ppcp-r-tab-overview-support"
+				icon="icon-overview-support.svg"
 				title={ __( 'Status', 'woocommerce-paypal-payments' ) }
 				description={ __(
 					'Your PayPal account connection details, along with available products and features.',
@@ -400,4 +400,4 @@ const featuresDefault = [
 		],
 	},
 ];
-export default TabDashboard;
+export default TabOverview;

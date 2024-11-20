@@ -121,7 +121,7 @@ class AxoManager {
 			this.axoConfig?.insights?.session_id
 		) {
 			PayPalInsights.config( this.axoConfig?.insights?.client_id, {
-				debug: true,
+				debug: axoConfig?.wp_debug === '1',
 			} );
 			PayPalInsights.setSessionId( this.axoConfig?.insights?.session_id );
 			PayPalInsights.trackJsLoad();
@@ -164,19 +164,25 @@ class AxoManager {
 	}
 
 	registerEventHandlers() {
+		// Payment method change tracking with duplicate prevention
+		let lastSelectedPaymentMethod = document.querySelector(
+			'input[name=payment_method]:checked'
+		)?.value;
 		this.$( document ).on(
 			'change',
 			'input[name=payment_method]',
 			( ev ) => {
-				const map = {
-					'ppcp-axo-gateway': 'card',
-					'ppcp-gateway': 'paypal',
-				};
-
-				PayPalInsights.trackSelectPaymentMethod( {
-					payment_method_selected: map[ ev.target.value ] || 'other',
-					page_type: 'checkout',
-				} );
+				if ( lastSelectedPaymentMethod !== ev.target.value ) {
+					PayPalInsights.trackSelectPaymentMethod( {
+						payment_method_selected:
+							this.axoConfig?.insights
+								?.payment_method_selected_map[
+								ev.target.value
+							] || 'other',
+						page_type: 'checkout',
+					} );
+					lastSelectedPaymentMethod = ev.target.value;
+				}
 			}
 		);
 
@@ -1165,16 +1171,6 @@ class AxoManager {
 		}
 
 		this.el.axoNonceInput.get().value = nonce;
-
-		PayPalInsights.trackEndCheckout( {
-			amount: this.axoConfig?.insights?.amount,
-			page_type: 'checkout',
-			payment_method_selected: 'card',
-			user_data: {
-				country: 'US',
-				is_store_member: false,
-			},
-		} );
 
 		if ( data ) {
 			// Ryan flow.

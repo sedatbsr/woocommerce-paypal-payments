@@ -1,4 +1,4 @@
-import { createReduxStore, register, dispatch } from '@wordpress/data';
+import { createReduxStore, register, dispatch, select } from '@wordpress/data';
 
 export const STORE_NAME = 'woocommerce-paypal-payments/axo-block';
 
@@ -108,13 +108,15 @@ const selectors = {
 };
 
 // Create and register the Redux store for the AXO block
-const store = createReduxStore( STORE_NAME, {
-	reducer,
-	actions,
-	selectors,
-} );
+if ( ! select( STORE_NAME ) ) {
+	const store = createReduxStore( STORE_NAME, {
+		reducer,
+		actions,
+		selectors,
+	} );
 
-register( store );
+	register( store );
+}
 
 // Action dispatchers
 

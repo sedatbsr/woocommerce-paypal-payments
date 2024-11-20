@@ -31,7 +31,6 @@ const SelectBox = ( props ) => {
 				/>
 			) }
 			<div className="ppcp-r-select-box__content">
-				{ data().getImage( props.icon ) }
 				<div className="ppcp-r-select-box__content-inner">
 					<span className="ppcp-r-select-box__title">
 						{ props.title }

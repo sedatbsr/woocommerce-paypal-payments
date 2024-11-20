@@ -9,7 +9,7 @@
 		margin-left: auto;
 		margin-right: auto;
 		padding: 0 16px 48px;
-		box-sizing: border-box;
+		box-sizing: content-box;
 
 		@media screen and (max-width: 480px) {
 			padding-bottom: 36px;

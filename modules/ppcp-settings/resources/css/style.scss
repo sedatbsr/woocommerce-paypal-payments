@@ -20,9 +20,9 @@
 	@import './components/reusable-components/spinner-overlay';
 	@import './components/reusable-components/welcome-docs';
 	@import './components/screens/onboarding';
-	@import './components/screens/dashboard/tab-dashboard';
-	@import './components/screens/dashboard/tab-payment-methods';
-	@import 'components/screens/dashboard/tab-settings';
+	@import './components/screens/overview/tab-overview';
+	@import './components/screens/overview/tab-payment-methods';
+	@import 'components/screens/overview/tab-settings';
 }
 
 @import './components/reusable-components/payment-method-modal';
