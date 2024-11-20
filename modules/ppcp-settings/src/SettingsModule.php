@@ -23,9 +23,19 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	use ModuleClassNameIdTrait;
 
 	/**
+	 * Returns whether the old settings UI should be loaded.
+	 */
+	public static function should_use_the_old_ui(): bool {
+		return apply_filters( 'woocommerce_paypal_payments_should_use_the_old_ui', false );
+	}
+
+	/**
 	 * {@inheritDoc}
 	 */
 	public function services() : array {
+		if ( self::should_use_the_old_ui() ) {
+			return array();
+		}
 		return require __DIR__ . '/../services.php';
 	}
 
@@ -33,6 +43,20 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	 * {@inheritDoc}
 	 */
 	public function run( ContainerInterface $container ) : bool {
+		if ( self::should_use_the_old_ui() ) {
+			add_action(
+				'woocommerce_paypal_payments_inside_settings_page_header',
+				static function () : void {
+					echo sprintf(
+						'<a href="#" class="button" onclick="javascript:void(0);">%s</a>',
+						esc_html__( 'Switch to new settings UI', 'woocommerce-paypal-payments' )
+					);
+				}
+			);
+
+			return true;
+		}
+
 		add_action(
 			'admin_enqueue_scripts',
 			/**
