@@ -21,6 +21,4 @@ export const initStore = () => {
 	register( store );
 };
 
-export { hooks };
-
-export { STORE_NAME };
+export { hooks, selectors, STORE_NAME };
