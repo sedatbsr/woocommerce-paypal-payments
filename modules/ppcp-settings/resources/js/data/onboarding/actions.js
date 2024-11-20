@@ -186,10 +186,12 @@ export const setProducts = ( products ) => {
  *
  * @return {Action} The action.
  */
-export const persist = () => {
-	return {
-		type: ACTION_TYPES.DO_PERSIST_DATA,
-	};
+export const persist = function* () {
+	const data = yield select( STORE_NAME ).persistentData();
+
+	yield setIsSaving( true );
+	yield { type: ACTION_TYPES.DO_PERSIST_DATA, data };
+	yield setIsSaving( false );
 };
 
 /**
@@ -197,8 +199,19 @@ export const persist = () => {
  *
  * @return {Action} The action.
  */
-export const connectViaIdAndSecret = () => {
-	return {
+export const connectViaIdAndSecret = function* () {
+	const { clientId, clientSecret, useSandbox } =
+		yield select( STORE_NAME ).persistentData();
+
+	yield setManualConnectionIsBusy( true );
+
+	const result = yield {
 		type: ACTION_TYPES.DO_MANUAL_CONNECTION,
+		clientId,
+		clientSecret,
+		useSandbox,
 	};
+	yield setManualConnectionIsBusy( false );
+
+	return result;
 };
