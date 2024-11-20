@@ -87,7 +87,7 @@ define( 'PPCP_PAYPAL_BN_CODE', 'Woo_PPCP' );
 	}
 
 	add_action(
-		'plugins_loaded',
+		'init',
 		function () {
 			init();
 
@@ -116,7 +116,8 @@ define( 'PPCP_PAYPAL_BN_CODE', 'Woo_PPCP' );
 				}
 				update_option( 'woocommerce-ppcp-version', $plugin_version );
 			}
-		}
+		},
+		1
 	);
 	register_activation_hook(
 		__FILE__,
