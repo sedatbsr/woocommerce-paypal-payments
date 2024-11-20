@@ -2,7 +2,6 @@
  * Reducer: Defines store structure and state updates for this module.
  *
  * Manages both transient (temporary) and persistent (saved) state.
- * Each module uses isolated memory objects to prevent conflicts.
  * The initial state must define all properties, as dynamic additions are not supported.
  *
  * @file
@@ -16,7 +15,7 @@ import ACTION_TYPES from './action-types';
 const defaultTransient = {
 	isReady: false,
 	isSaving: false,
-	isManualConnectionBusy: false,
+	isBusy: false,
 
 	// Read only values, provided by the server.
 	flags: {

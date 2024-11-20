@@ -3,19 +3,31 @@
  *
  * These encapsulate store interactions, offering a consistent interface.
  * Hooks simplify data access and manipulation for components.
- * Exported hooks must have unique names across all store modules.
  *
  * @file
  */
 
 import { useSelect, useDispatch } from '@wordpress/data';
 
-import { PRODUCT_TYPES, STORE_NAME } from '../constants';
+import { PRODUCT_TYPES } from '../constants';
+import { STORE_NAME } from './constants';
+
+const useTransient = ( key ) =>
+	useSelect(
+		( select ) => select( STORE_NAME ).transientData()?.[ key ],
+		[ key ]
+	);
+
+const usePersistent = ( key ) =>
+	useSelect(
+		( select ) => select( STORE_NAME ).persistentData()?.[ key ],
+		[ key ]
+	);
 
 const useOnboardingDetails = () => {
 	const {
 		persist,
-		setOnboardingStep,
+		setStep,
 		setCompleted,
 		setSandboxMode,
 		setManualConnectionMode,
@@ -25,61 +37,23 @@ const useOnboardingDetails = () => {
 		setProducts,
 	} = useDispatch( STORE_NAME );
 
-	const transientData = ( select ) =>
-		select( STORE_NAME ).onboardingTransientData();
-	const persistentData = ( select ) =>
-		select( STORE_NAME ).onboardingPersistentData();
-
 	// Read-only flags.
-	const flags = useSelect( ( select ) => {
-		return select( STORE_NAME ).onboardingFlags();
-	} );
+	const flags = useSelect( ( select ) => select( STORE_NAME ).flags(), [] );
 
 	// Transient accessors.
-	const isSaving = useSelect( ( select ) => {
-		return transientData( select ).isSaving;
-	}, [] );
-
-	const isReady = useSelect( ( select ) => {
-		return transientData( select ).isReady;
-	} );
-
-	const isManualConnectionBusy = useSelect( ( select ) => {
-		return transientData( select ).isManualConnectionBusy;
-	}, [] );
+	const isSaving = useTransient( 'isSaving' );
+	const isReady = useTransient( 'isReady' );
+	const isBusy = useTransient( 'isBusy' );
 
 	// Persistent accessors.
-	const step = useSelect( ( select ) => {
-		return persistentData( select ).step || 0;
-	} );
-
-	const completed = useSelect( ( select ) => {
-		return persistentData( select ).completed;
-	} );
-
-	const clientId = useSelect( ( select ) => {
-		return persistentData( select ).clientId;
-	}, [] );
-
-	const clientSecret = useSelect( ( select ) => {
-		return persistentData( select ).clientSecret;
-	}, [] );
-
-	const isSandboxMode = useSelect( ( select ) => {
-		return persistentData( select ).useSandbox;
-	}, [] );
-
-	const isManualConnectionMode = useSelect( ( select ) => {
-		return persistentData( select ).useManualConnection;
-	}, [] );
-
-	const isCasualSeller = useSelect( ( select ) => {
-		return persistentData( select ).isCasualSeller;
-	}, [] );
-
-	const products = useSelect( ( select ) => {
-		return persistentData( select ).products || [];
-	}, [] );
+	const step = usePersistent( 'step' );
+	const completed = usePersistent( 'completed' );
+	const clientId = usePersistent( 'clientId' );
+	const clientSecret = usePersistent( 'clientSecret' );
+	const isSandboxMode = usePersistent( 'useSandbox' );
+	const isManualConnectionMode = usePersistent( 'useManualConnection' );
+	const isCasualSeller = usePersistent( 'isCasualSeller' );
+	const products = usePersistent( 'products' );
 
 	const toggleProduct = ( list ) => {
 		const validProducts = list.filter( ( item ) =>
@@ -96,9 +70,9 @@ const useOnboardingDetails = () => {
 	return {
 		isSaving,
 		isReady,
-		isManualConnectionBusy,
+		isBusy,
 		step,
-		setStep: ( value ) => setDetailAndPersist( setOnboardingStep, value ),
+		setStep: ( value ) => setDetailAndPersist( setStep, value ),
 		completed,
 		setCompleted: ( state ) => setDetailAndPersist( setCompleted, state ),
 		isSandboxMode,
@@ -121,10 +95,10 @@ const useOnboardingDetails = () => {
 	};
 };
 
-export const useOnboardingStepWelcome = () => {
+export const useConnection = () => {
 	const {
 		isSaving,
-		isManualConnectionBusy,
+		isBusy,
 		isSandboxMode,
 		setSandboxMode,
 		isManualConnectionMode,
@@ -137,7 +111,7 @@ export const useOnboardingStepWelcome = () => {
 
 	return {
 		isSaving,
-		isManualConnectionBusy,
+		isBusy,
 		isSandboxMode,
 		setSandboxMode,
 		isManualConnectionMode,
@@ -149,19 +123,19 @@ export const useOnboardingStepWelcome = () => {
 	};
 };
 
-export const useOnboardingStepBusiness = () => {
+export const useBusiness = () => {
 	const { isCasualSeller, setIsCasualSeller } = useOnboardingDetails();
 
 	return { isCasualSeller, setIsCasualSeller };
 };
 
-export const useOnboardingStepProducts = () => {
+export const useProducts = () => {
 	const { products, toggleProduct } = useOnboardingDetails();
 
 	return { products, toggleProduct };
 };
 
-export const useOnboardingStep = () => {
+export const useSteps = () => {
 	const { isReady, step, setStep, completed, setCompleted, flags } =
 		useOnboardingDetails();
 
