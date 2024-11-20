@@ -13,4 +13,4 @@ export const CommonStoreName = Common.STORE_NAME;
 
 export * from './constants';
 
-addDebugTools( window.ppcpSettings );
+addDebugTools( window.ppcpSettings, [ Onboarding, Common ] );

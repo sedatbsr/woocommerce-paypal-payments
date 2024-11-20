@@ -1,7 +1,6 @@
 import { OnboardingStoreName } from './index';
-import * as selectors from './onboarding/selectors';
 
-export const addDebugTools = ( context ) => {
+export const addDebugTools = ( context, modules ) => {
 	if ( ! context || ! context?.debug ) {
 		return;
 	}
@@ -13,23 +12,20 @@ export const addDebugTools = ( context ) => {
 			return;
 		}
 
-		[ OnboardingStoreName ].forEach( ( storeName ) => {
-			const storeSelector = `wp.data.select('${ storeName }')`;
+		modules.forEach( ( module ) => {
+			const storeName = module.STORE_NAME;
+			const storeSelector = `wp.data.select( '${ storeName }' )`;
 			console.group( `[STORE] ${ storeSelector }` );
 
-			const dumpStore = async ( selector ) => {
-				const contents = await wp.data
-					.resolveSelect( storeName )
-					[ selector ]();
+			const dumpStore = ( selector ) => {
+				const contents = wp.data.select( storeName )[ selector ]();
 
-				console.groupCollapsed( `[SELECTOR] .${ selector }()` );
+				console.groupCollapsed( `.${ selector }()` );
 				console.table( contents );
 				console.groupEnd();
 			};
 
-			Object.keys( selectors ).forEach( async ( selector ) => {
-				await dumpStore( selector );
-			} );
+			Object.keys( module.selectors ).forEach( dumpStore );
 
 			console.groupEnd();
 		} );
