@@ -1,10 +1,9 @@
-import { STORE_NAME } from './constants';
-import { initStore } from './store';
+import * as Onboarding from './onboarding';
 import { addDebugTools } from './debug';
 
-initStore();
+Onboarding.initStore();
 
-export const WC_PAYPAL_STORE_NAME = STORE_NAME;
-export * from './onboarding/hooks';
+export const OnboardingHooks = Onboarding.hooks;
+export const OnboardingStoreName = Onboarding.STORE_NAME;
 
 addDebugTools( window.ppcpSettings );

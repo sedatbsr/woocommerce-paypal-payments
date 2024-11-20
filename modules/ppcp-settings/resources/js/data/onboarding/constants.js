@@ -1,12 +1,11 @@
 /**
- * Name of the module-store in the main Redux store.
- * Helps to isolate data.
+ * Name of the Redux store module.
  *
  * Used by: Reducer, Selector, Index
  *
  * @type {string}
  */
-export const STORE_KEY = 'onboarding';
+export const STORE_NAME = 'wc/paypal/onboarding';
 
 /**
  * REST path to hydrate data of this module by loading data from the WP DB..
