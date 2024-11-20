@@ -141,9 +141,12 @@ class Plugin implements PluginInterface {
 
 		// phpcs:disable
 		$text = \__( $this->description, $this->text_domain );
-		// phpcs:enable
 
+		/**
+		 * @psalm-suppress InvalidArgument
+		 */
 		return wp_kses( $text, $allowed_tags );
+		// phpcs:enable
 	}
 
 	/**
