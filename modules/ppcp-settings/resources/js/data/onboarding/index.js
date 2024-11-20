@@ -5,8 +5,8 @@ import { STORE_NAME } from './constants';
 import reducer from './reducer';
 import * as selectors from './selectors';
 import * as actions from './actions';
-import * as resolvers from './resolvers';
 import * as hooks from './hooks';
+import { resolvers } from './resolvers';
 import { controls } from './controls';
 
 export const initStore = () => {
