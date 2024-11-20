@@ -53,7 +53,7 @@ export const setIsSaving = ( isSaving ) => ( {
  * @param {boolean} isBusy
  * @return {Action} The action.
  */
-export const setManualConnectionIsBusy = ( isBusy ) => ( {
+export const setIsBusy = ( isBusy ) => ( {
 	type: ACTION_TYPES.SET_TRANSIENT,
 	payload: { isBusy },
 } );
@@ -179,7 +179,7 @@ export const connectViaIdAndSecret = function* () {
 	const { clientId, clientSecret, useSandbox } =
 		yield select( STORE_NAME ).persistentData();
 
-	yield setManualConnectionIsBusy( true );
+	yield setIsBusy( true );
 
 	const result = yield {
 		type: ACTION_TYPES.DO_MANUAL_CONNECTION,
@@ -187,7 +187,7 @@ export const connectViaIdAndSecret = function* () {
 		clientSecret,
 		useSandbox,
 	};
-	yield setManualConnectionIsBusy( false );
+	yield setIsBusy( false );
 
 	return result;
 };
