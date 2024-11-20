@@ -3,7 +3,22 @@
  *
  * These encapsulate store interactions, offering a consistent interface.
  * Hooks simplify data access and manipulation for components.
- * Exported hooks must have unique names across all store modules.
  *
  * @file
  */
+
+import { useSelect } from '@wordpress/data';
+
+import { STORE_NAME } from './constants';
+
+const useTransient = ( key ) =>
+	useSelect(
+		( select ) => select( STORE_NAME ).transientData()?.[ key ],
+		[ key ]
+	);
+
+const usePersistent = ( key ) =>
+	useSelect(
+		( select ) => select( STORE_NAME ).persistentData()?.[ key ],
+		[ key ]
+	);

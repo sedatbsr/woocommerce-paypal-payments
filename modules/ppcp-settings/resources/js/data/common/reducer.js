@@ -2,7 +2,6 @@
  * Reducer: Defines store structure and state updates for this module.
  *
  * Manages both transient (temporary) and persistent (saved) state.
- * Each module uses isolated memory objects to prevent conflicts.
  * The initial state must define all properties, as dynamic additions are not supported.
  *
  * @file
@@ -16,6 +15,7 @@ import ACTION_TYPES from './action-types';
 const defaultTransient = {
 	isReady: false,
 	isSaving: false,
+	isBusy: false,
 };
 
 const defaultPersistent = {
@@ -38,6 +38,9 @@ const commonReducer = createReducer( defaultTransient, defaultPersistent, {
 
 	[ ACTION_TYPES.SET_PERSISTENT ]: ( state, action ) =>
 		setPersistent( state, action ),
+
+	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) =>
+		setPersistent( state, payload.data ),
 } );
 
 export default commonReducer;
