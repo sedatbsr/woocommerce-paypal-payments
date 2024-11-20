@@ -30,10 +30,10 @@ const updateObject = ( oldObject, newValues, allowedKeys = {} ) => ( {
  * @return {[Function, Function]} An array containing setTransient and setPersistent functions.
  */
 export const createSetters = ( defaultTransient, defaultPersistent ) => {
-	const setTransient = ( oldState, newValues ) =>
+	const setTransient = ( oldState, newValues = {} ) =>
 		updateObject( oldState, newValues, defaultTransient );
 
-	const setPersistent = ( oldState, newValues ) => ( {
+	const setPersistent = ( oldState, newValues = {} ) => ( {
 		...oldState,
 		data: updateObject( oldState.data, newValues, defaultPersistent ),
 	} );
@@ -67,7 +67,7 @@ export const createReducer = (
 
 	return function reducer( state = initialState, action ) {
 		if ( Object.hasOwnProperty.call( handlers, action.type ) ) {
-			return handlers[ action.type ]( state, action.data );
+			return handlers[ action.type ]( state, action.payload ?? {} );
 		}
 
 		return state;
