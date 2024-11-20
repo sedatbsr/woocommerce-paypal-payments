@@ -7,19 +7,13 @@
  * @file
  */
 
-import { select } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 
-import {
-	STORE_NAME,
-	REST_PERSIST_PATH,
-	REST_MANUAL_CONNECTION_PATH,
-} from './constants';
+import { REST_PERSIST_PATH, REST_MANUAL_CONNECTION_PATH } from './constants';
 import ACTION_TYPES from './action-types';
 
 export const controls = {
 	async [ ACTION_TYPES.DO_PERSIST_DATA ]( { data } ) {
-		console.log( 'Do PERSIST: ', data );
 		try {
 			await apiFetch( {
 				path: REST_PERSIST_PATH,
