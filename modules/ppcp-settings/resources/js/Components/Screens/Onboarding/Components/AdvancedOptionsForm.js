@@ -7,11 +7,11 @@ import { store as noticesStore } from '@wordpress/notices';
 import SettingsToggleBlock from '../../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../../ReusableComponents/Separator';
 import DataStoreControl from '../../../ReusableComponents/DataStoreControl';
-import { useManualConnect, useOnboardingStepWelcome } from '../../../../data';
+import { OnboardingHooks } from '../../../../data';
 
 const AdvancedOptionsForm = ( { setCompleted } ) => {
 	const {
-		isManualConnectionBusy,
+		isBusy,
 		isSandboxMode,
 		setSandboxMode,
 		isManualConnectionMode,
@@ -20,11 +20,11 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 		setClientId,
 		clientSecret,
 		setClientSecret,
-	} = useOnboardingStepWelcome();
+	} = OnboardingHooks.useConnection();
 
 	const { createSuccessNotice, createErrorNotice } =
 		useDispatch( noticesStore );
-	const { connectManual } = useManualConnect();
+	const { connectManual } = OnboardingHooks.useManualConnect();
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
@@ -125,14 +125,14 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 			</SettingsToggleBlock>
 			<Separator className="ppcp-r-page-welcome-mode-separator" />
 			<SettingsToggleBlock
-				label={ __(
-					'Manually Connect',
-					'woocommerce-paypal-payments'
-				) }
+				label={
+					__( 'Manually Connect', 'woocommerce-paypal-payments' ) +
+					( isBusy ? ' ...' : '' )
+				}
 				description={ advancedUsersDescription }
 				isToggled={ !! isManualConnectionMode }
 				setToggled={ setManualConnectionMode }
-				isLoading={ isManualConnectionBusy }
+				isLoading={ isBusy }
 			>
 				<DataStoreControl
 					control={ TextControl }
