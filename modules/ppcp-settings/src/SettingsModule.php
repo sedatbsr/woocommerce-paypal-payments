@@ -33,9 +33,6 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	 * {@inheritDoc}
 	 */
 	public function services() : array {
-		if ( self::should_use_the_old_ui() ) {
-			return array();
-		}
 		return require __DIR__ . '/../services.php';
 	}
 
@@ -51,6 +48,30 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 						'<a href="#" class="button" onclick="javascript:void(0);">%s</a>',
 						esc_html__( 'Switch to new settings UI', 'woocommerce-paypal-payments' )
 					);
+				}
+			);
+
+			add_action(
+				'admin_enqueue_scripts',
+				static function () use ( $container ) {
+					$module_url = $container->get('settings.url');
+					$script_asset_file = require dirname( realpath( __FILE__ ) ?: '', 2 ) . '/assets/switchSettingsUi.asset.php';
+
+					wp_register_script(
+						'ppcp-switch-settings-ui',
+						untrailingslashit( $module_url ) . '/assets/switchSettingsUi.js',
+						$script_asset_file['dependencies'],
+						$script_asset_file['version'],
+						true
+					);
+
+					wp_localize_script(
+						'ppcp-switch-settings-ui',
+						'PayPalCommerceGatewayOrderTrackingInfo',
+						array()
+					);
+
+					wp_enqueue_script( 'ppcp-switch-settings-ui' );
 				}
 			);
 
