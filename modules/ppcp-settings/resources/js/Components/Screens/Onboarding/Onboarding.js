@@ -1,5 +1,5 @@
 import Container from '../../ReusableComponents/Container';
-import { useOnboardingStep } from '../../../data';
+import { OnboardingHooks } from '../../../data';
 import { getSteps } from './availableSteps';
 import Navigation from '../../ReusableComponents/Navigation';
 
@@ -15,7 +15,7 @@ const getCurrentStep = ( requestedStep, steps ) => {
 };
 
 const Onboarding = () => {
-	const { step, setStep, setCompleted, flags } = useOnboardingStep();
+	const { step, setStep, setCompleted, flags } = OnboardingHooks.useSteps();
 	const steps = getSteps( flags );
 
 	const CurrentStepComponent = getCurrentStep( step, steps );

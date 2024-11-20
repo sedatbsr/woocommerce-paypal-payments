@@ -3,8 +3,7 @@ import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
 import SelectBox from '../../ReusableComponents/SelectBox';
 import { __ } from '@wordpress/i18n';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
-import { useOnboardingStepBusiness } from '../../../data';
-import { BUSINESS_TYPES } from '../../../data/constants';
+import { OnboardingHooks, BUSINESS_TYPES } from '../../../data';
 
 const BUSINESS_RADIO_GROUP_NAME = 'business';
 
@@ -14,7 +13,7 @@ const StepBusiness = ( {
 	stepperOrder,
 	setCompleted,
 } ) => {
-	const { isCasualSeller, setIsCasualSeller } = useOnboardingStepBusiness();
+	const { isCasualSeller, setIsCasualSeller } = OnboardingHooks.useBusiness();
 
 	const handleSellerTypeChange = ( value ) => {
 		setIsCasualSeller( BUSINESS_TYPES.CASUAL_SELLER === value );
