@@ -67,7 +67,7 @@ class FilePathPluginFactory implements FilePathPluginFactoryInterface {
 			'RequiresPlugins' => 'Requires Plugins',
 		);
 
-		$plugin_data = get_file_data( $filePath, $default_headers, 'plugin' );
+		$plugin_data = \get_file_data( $filePath, $default_headers, 'plugin' );
 
 		if ( empty( $plugin_data ) ) {
 			throw new UnexpectedValueException(
