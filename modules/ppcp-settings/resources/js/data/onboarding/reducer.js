@@ -45,17 +45,17 @@ const [ setTransient, setPersistent ] = createSetters(
 );
 
 const onboardingReducer = createReducer( defaultTransient, defaultPersistent, {
-	[ ACTION_TYPES.SET_TRANSIENT ]: ( state, { payload } ) =>
+	[ ACTION_TYPES.SET_TRANSIENT ]: ( state, payload ) =>
 		setTransient( state, payload ),
 
-	[ ACTION_TYPES.SET_PERSISTENT ]: ( state, { payload } ) =>
+	[ ACTION_TYPES.SET_PERSISTENT ]: ( state, payload ) =>
 		setPersistent( state, payload ),
 
 	[ ACTION_TYPES.RESET ]: ( state ) =>
 		setPersistent( state, defaultPersistent ),
 
-	[ ACTION_TYPES.HYDRATE ]: ( state, { payload } ) => {
-		const newState = setPersistent( payload );
+	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) => {
+		const newState = setPersistent( state, payload.data );
 
 		// Flags are not updated by `setPersistent()`.
 		if ( payload.flags ) {
