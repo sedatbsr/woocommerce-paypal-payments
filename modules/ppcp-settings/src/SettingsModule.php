@@ -88,10 +88,13 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 			$endpoint = $container->get( 'settings.switch-ui.endpoint' );
 			assert( $endpoint instanceof SwitchSettingsUiEndpoint );
 
-			add_action( 'wc_ajax_' . SwitchSettingsUiEndpoint::ENDPOINT, array(
-				$endpoint,
-				'handle_request',
-			) );
+			add_action(
+				'wc_ajax_' . SwitchSettingsUiEndpoint::ENDPOINT,
+				array(
+					$endpoint,
+					'handle_request',
+				)
+			);
 
 			return true;
 		}
