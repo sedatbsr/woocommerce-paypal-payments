@@ -76,7 +76,7 @@ class HeaderRenderer {
 						. __( 'Submit a bug', 'woocommerce-paypal-payments' ) .
 					'</a>
 				</span>
-				' . do_action( 'woocommerce_paypal_payments_inside_settings_page_header' ) . '
+				' . apply_filters( 'woocommerce_paypal_payments_inside_settings_page_header', '' ) . '
 			</div>
 
 			<div class="ppcp-notice-wrapper"></div>

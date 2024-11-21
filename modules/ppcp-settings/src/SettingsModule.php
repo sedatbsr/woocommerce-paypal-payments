@@ -29,7 +29,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	public static function should_use_the_old_ui(): bool {
 		return apply_filters(
 			'woocommerce_paypal_payments_should_use_the_old_ui',
-			get_option(SwitchSettingsUiEndpoint::OPTION_NAME_SHOULD_USE_OLD_UI) === '1'
+			( bool ) get_option(SwitchSettingsUiEndpoint::OPTION_NAME_SHOULD_USE_OLD_UI) === true
 		);
 	}
 
@@ -45,14 +45,12 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	 */
 	public function run( ContainerInterface $container ) : bool {
 		if ( self::should_use_the_old_ui() ) {
-			add_action(
+			add_filter(
 				'woocommerce_paypal_payments_inside_settings_page_header',
-				static function () : void {
-					echo sprintf(
-						'<a href="#" class="button button-settings-switch-ui">%s</a>',
-						esc_html__( 'Switch to new settings UI', 'woocommerce-paypal-payments' )
-					);
-				}
+				static fn() : string => sprintf(
+					'<a href="#" class="button button-settings-switch-ui">%s</a>',
+					esc_html__( 'Switch to new settings UI', 'woocommerce-paypal-payments' )
+				)
 			);
 
 			add_action(
