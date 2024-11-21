@@ -19,6 +19,17 @@ import { STORE_NAME } from './constants';
  */
 
 /**
+ * Persistent. Set the full onboarding details, usually during app initialization.
+ *
+ * @param {{data: {}, flags?: {}}} payload
+ * @return {Action} The action.
+ */
+export const hydrate = ( payload ) => ( {
+	type: ACTION_TYPES.HYDRATE,
+	payload,
+} );
+
+/**
  * Transient. Marks the onboarding details as "ready", i.e., fully initialized.
  *
  * @param {boolean} isReady
