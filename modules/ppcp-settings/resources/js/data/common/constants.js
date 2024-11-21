@@ -34,3 +34,13 @@ export const REST_PERSIST_PATH = '/wc/v3/wc_paypal/common';
  * @type {string}
  */
 export const REST_MANUAL_CONNECTION_PATH = '/wc/v3/wc_paypal/connect_manual';
+
+/**
+ * REST path to generate an ISU URL for the sandbox-login.
+ *
+ * Used by: Controls
+ * See: LoginLinkRestEndpoint.php
+ *
+ * @type {string}
+ */
+export const REST_SANDBOX_CONNECTION_PATH = '/wc/v3/wc_paypal/login_link';

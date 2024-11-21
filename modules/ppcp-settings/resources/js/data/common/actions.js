@@ -118,6 +118,20 @@ export const persist = function* () {
 };
 
 /**
+ * Side effect. Initiates the sandbox login ISU.
+ *
+ * @return {Action} The action.
+ */
+export const connectViaSandbox = function* () {
+	yield setIsBusy( true );
+
+	const result = yield { type: ACTION_TYPES.DO_SANDBOX_LOGIN };
+	yield setIsBusy( false );
+
+	return result;
+};
+
+/**
  * Side effect. Initiates a manual connection attempt using the provided client ID and secret.
  *
  * @return {Action} The action.

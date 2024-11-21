@@ -11,7 +11,8 @@ import { OnboardingHooks, CommonHooks } from '../../../../data';
 
 const AdvancedOptionsForm = ( { setCompleted } ) => {
 	const { isBusy } = CommonHooks.useBusyState();
-	const { isSandboxMode, setSandboxMode } = CommonHooks.useSandbox();
+	const { isSandboxMode, setSandboxMode, connectViaSandbox } =
+		CommonHooks.useSandbox();
 	const {
 		isManualConnectionMode,
 		setManualConnectionMode,
@@ -81,6 +82,21 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 		setCompleted( true );
 	};
 
+	const handleSandboxConnect = async () => {
+		const res = await connectViaSandbox();
+
+		if ( ! res.success || ! res.data ) {
+			handleServerError(
+				res,
+				__(
+					'Could not generate a Sandbox login link.',
+					'woocommerce-paypal-payments'
+				)
+			);
+			return;
+		}
+	};
+
 	const handleConnect = async () => {
 		if ( ! handleFormValidation() ) {
 			return;
@@ -117,8 +133,9 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 				) }
 				isToggled={ !! isSandboxMode }
 				setToggled={ setSandboxMode }
+				isLoading={ isBusy }
 			>
-				<Button variant="secondary">
+				<Button onClick={ handleSandboxConnect } variant="secondary">
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>

@@ -9,7 +9,11 @@
 
 import apiFetch from '@wordpress/api-fetch';
 
-import { REST_PERSIST_PATH, REST_MANUAL_CONNECTION_PATH } from './constants';
+import {
+	REST_PERSIST_PATH,
+	REST_MANUAL_CONNECTION_PATH,
+	REST_SANDBOX_CONNECTION_PATH,
+} from './constants';
 import ACTION_TYPES from './action-types';
 
 export const controls = {
@@ -23,6 +27,28 @@ export const controls = {
 		} catch ( error ) {
 			console.error( 'Error saving data.', error );
 		}
+	},
+
+	async [ ACTION_TYPES.DO_SANDBOX_LOGIN ]() {
+		let result = null;
+
+		try {
+			result = await apiFetch( {
+				path: REST_SANDBOX_CONNECTION_PATH,
+				method: 'POST',
+				data: {
+					environment: 'sandbox',
+					products: [ 'EXPRESS_CHECKOUT' ],
+				},
+			} );
+		} catch ( e ) {
+			result = {
+				success: false,
+				error: e,
+			};
+		}
+
+		return result;
 	},
 
 	async [ ACTION_TYPES.DO_MANUAL_CONNECTION ]( {

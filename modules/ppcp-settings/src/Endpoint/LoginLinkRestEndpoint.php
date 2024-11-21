@@ -47,14 +47,18 @@ class LoginLinkRestEndpoint extends RestEndpoint {
 	public function register_routes() {
 		register_rest_route(
 			$this->namespace,
-			'/' . $this->rest_base . '/(?P<environment>[\w]+)',
+			'/' . $this->rest_base,
 			array(
 				array(
-					'methods'             => WP_REST_Server::READABLE,
+					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => array( $this, 'get_login_url' ),
 					'permission_callback' => array( $this, 'check_permission' ),
 					'args'                => array(
-						'products' => array(
+						'environment' => array(
+							'required' => true,
+							'type'     => 'string',
+						),
+						'products'    => array(
 							'required'          => true,
 							'type'              => 'array',
 							'items'             => array(
