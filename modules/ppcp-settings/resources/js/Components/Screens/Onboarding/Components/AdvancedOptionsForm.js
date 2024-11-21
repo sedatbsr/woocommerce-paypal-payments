@@ -122,7 +122,7 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>
-			<Separator className="ppcp-r-page-welcome-mode-separator" />
+			<Separator withLine={ false } />
 			<SettingsToggleBlock
 				label={
 					__( 'Manually Connect', 'woocommerce-paypal-payments' ) +
