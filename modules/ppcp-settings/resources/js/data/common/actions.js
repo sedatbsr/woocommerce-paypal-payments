@@ -7,7 +7,10 @@
  * @file
  */
 
+import { select } from '@wordpress/data';
+
 import ACTION_TYPES from './action-types';
+import { STORE_NAME } from './constants';
 
 /**
  * @typedef {Object} Action An action object that is handled by a reducer or control.
@@ -103,4 +106,26 @@ export const persist = function* () {
 		type: ACTION_TYPES.DO_PERSIST_DATA,
 	};
 	yield setIsBusy( false );
+};
+
+/**
+ * Side effect. Initiates a manual connection attempt using the provided client ID and secret.
+ *
+ * @return {Action} The action.
+ */
+export const connectViaIdAndSecret = function* () {
+	const { clientId, clientSecret, useSandbox } =
+		yield select( STORE_NAME ).persistentData();
+
+	yield setIsBusy( true );
+
+	const result = yield {
+		type: ACTION_TYPES.DO_MANUAL_CONNECTION,
+		clientId,
+		clientSecret,
+		useSandbox,
+	};
+	yield setIsBusy( false );
+
+	return result;
 };

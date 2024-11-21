@@ -7,9 +7,10 @@
  * @file
  */
 
-import { useSelect } from '@wordpress/data';
+import { useDispatch, useSelect } from '@wordpress/data';
 
 import { STORE_NAME } from './constants';
+import { useCallback } from '@wordpress/element';
 
 const useTransient = ( key ) =>
 	useSelect(
@@ -23,6 +24,52 @@ const usePersistent = ( key ) =>
 		[ key ]
 	);
 
+const useHooks = () => {
+	const {
+		persist,
+		setSandboxMode,
+		setManualConnectionMode,
+		setClientId,
+		setClientSecret,
+		connectViaIdAndSecret,
+	} = useDispatch( STORE_NAME );
+
+	// Transient accessors.
+	const isReady = useTransient( 'isReady' );
+
+	// Persistent accessors.
+	const clientId = usePersistent( 'clientId' );
+	const clientSecret = usePersistent( 'clientSecret' );
+	const isSandboxMode = usePersistent( 'useSandbox' );
+	const isManualConnectionMode = usePersistent( 'useManualConnection' );
+
+	const savePersistent = async ( setter, value ) => {
+		setter( value );
+		await persist();
+	};
+
+	return {
+		isReady,
+		isSandboxMode,
+		setSandboxMode: ( state ) => {
+			return savePersistent( setSandboxMode, state );
+		},
+		isManualConnectionMode,
+		setManualConnectionMode: ( state ) => {
+			return savePersistent( setManualConnectionMode, state );
+		},
+		clientId,
+		setClientId: ( value ) => {
+			return savePersistent( setClientId, value );
+		},
+		clientSecret,
+		setClientSecret: ( value ) => {
+			return savePersistent( setClientSecret, value );
+		},
+		connectViaIdAndSecret,
+	};
+};
+
 export const useBusyState = () => {
 	const { setIsBusy } = useDispatch( STORE_NAME );
 	const isBusy = useTransient( 'isBusy' );
@@ -30,5 +77,33 @@ export const useBusyState = () => {
 	return {
 		isBusy,
 		setIsBusy: useCallback( ( busy ) => setIsBusy( busy ), [ setIsBusy ] ),
+	};
+};
+
+export const useSandbox = () => {
+	const { isSandboxMode, setSandboxMode } = useHooks();
+
+	return { isSandboxMode, setSandboxMode };
+};
+
+export const useManualConnection = () => {
+	const {
+		isManualConnectionMode,
+		setManualConnectionMode,
+		clientId,
+		setClientId,
+		clientSecret,
+		setClientSecret,
+		connectViaIdAndSecret,
+	} = useHooks();
+
+	return {
+		isManualConnectionMode,
+		setManualConnectionMode,
+		clientId,
+		setClientId,
+		clientSecret,
+		setClientSecret,
+		connectViaIdAndSecret,
 	};
 };

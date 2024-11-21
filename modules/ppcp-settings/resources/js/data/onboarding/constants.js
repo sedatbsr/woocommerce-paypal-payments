@@ -26,13 +26,3 @@ export const REST_HYDRATE_PATH = '/wc/v3/wc_paypal/onboarding';
  * @type {string}
  */
 export const REST_PERSIST_PATH = '/wc/v3/wc_paypal/onboarding';
-
-/**
- * REST path to perform the manual connection check, using client ID and secret,
- *
- * Used by: Controls
- * See: ConnectManualRestEndpoint.php
- *
- * @type {string}
- */
-export const REST_MANUAL_CONNECTION_PATH = '/wc/v3/wc_paypal/connect_manual';

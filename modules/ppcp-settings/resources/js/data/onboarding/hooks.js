@@ -24,18 +24,9 @@ const usePersistent = ( key ) =>
 		[ key ]
 	);
 
-const useOnboardingDetails = () => {
-	const {
-		persist,
-		setStep,
-		setCompleted,
-		setSandboxMode,
-		setManualConnectionMode,
-		setClientId,
-		setClientSecret,
-		setIsCasualSeller,
-		setProducts,
-	} = useDispatch( STORE_NAME );
+const useHooks = () => {
+	const { persist, setStep, setCompleted, setIsCasualSeller, setProducts } =
+		useDispatch( STORE_NAME );
 
 	// Read-only flags.
 	const flags = useSelect( ( select ) => select( STORE_NAME ).flags(), [] );
@@ -46,21 +37,10 @@ const useOnboardingDetails = () => {
 	// Persistent accessors.
 	const step = usePersistent( 'step' );
 	const completed = usePersistent( 'completed' );
-	const clientId = usePersistent( 'clientId' );
-	const clientSecret = usePersistent( 'clientSecret' );
-	const isSandboxMode = usePersistent( 'useSandbox' );
-	const isManualConnectionMode = usePersistent( 'useManualConnection' );
 	const isCasualSeller = usePersistent( 'isCasualSeller' );
 	const products = usePersistent( 'products' );
 
-	const toggleProduct = ( list ) => {
-		const validProducts = list.filter( ( item ) =>
-			Object.values( PRODUCT_TYPES ).includes( item )
-		);
-		return setDetailAndPersist( setProducts, validProducts );
-	};
-
-	const setDetailAndPersist = async ( setter, value ) => {
+	const savePersistent = async ( setter, value ) => {
 		setter( value );
 		await persist();
 	};
@@ -69,75 +49,42 @@ const useOnboardingDetails = () => {
 		flags,
 		isReady,
 		step,
-		setStep: ( value ) => setDetailAndPersist( setStep, value ),
+		setStep: ( value ) => {
+			return savePersistent( setStep, value );
+		},
 		completed,
-		setCompleted: ( state ) => setDetailAndPersist( setCompleted, state ),
-		isSandboxMode,
-		setSandboxMode: ( state ) =>
-			setDetailAndPersist( setSandboxMode, state ),
-		isManualConnectionMode,
-		setManualConnectionMode: ( state ) =>
-			setDetailAndPersist( setManualConnectionMode, state ),
-		clientId,
-		setClientId: ( value ) => setDetailAndPersist( setClientId, value ),
-		clientSecret,
-		setClientSecret: ( value ) =>
-			setDetailAndPersist( setClientSecret, value ),
+		setCompleted: ( state ) => {
+			return savePersistent( setCompleted, state );
+		},
 		isCasualSeller,
-		setIsCasualSeller: ( value ) =>
-			setDetailAndPersist( setIsCasualSeller, value ),
+		setIsCasualSeller: ( value ) => {
+			return savePersistent( setIsCasualSeller, value );
+		},
 		products,
-		toggleProduct,
-	};
-};
-
-export const useConnection = () => {
-	const {
-		isSandboxMode,
-		setSandboxMode,
-		isManualConnectionMode,
-		setManualConnectionMode,
-		clientId,
-		setClientId,
-		clientSecret,
-		setClientSecret,
-	} = useOnboardingDetails();
-
-	return {
-		isSandboxMode,
-		setSandboxMode,
-		isManualConnectionMode,
-		setManualConnectionMode,
-		clientId,
-		setClientId,
-		clientSecret,
-		setClientSecret,
+		setProducts: ( activeProducts ) => {
+			const validProducts = activeProducts.filter( ( item ) =>
+				Object.values( PRODUCT_TYPES ).includes( item )
+			);
+			return savePersistent( setProducts, validProducts );
+		},
 	};
 };
 
 export const useBusiness = () => {
-	const { isCasualSeller, setIsCasualSeller } = useOnboardingDetails();
+	const { isCasualSeller, setIsCasualSeller } = useHooks();
 
 	return { isCasualSeller, setIsCasualSeller };
 };
 
 export const useProducts = () => {
-	const { products, toggleProduct } = useOnboardingDetails();
+	const { products, setProducts } = useHooks();
 
-	return { products, toggleProduct };
+	return { products, setProducts };
 };
 
 export const useSteps = () => {
-	const { isReady, step, setStep, completed, setCompleted, flags } =
-		useOnboardingDetails();
+	const { flags, isReady, step, setStep, completed, setCompleted } =
+		useHooks();
 
-	return { isReady, step, setStep, completed, setCompleted, flags };
-};
-
-export const useManualConnect = () => {
-	const { connectViaIdAndSecret } = useDispatch( STORE_NAME );
-
-	return {
-		connectManual: connectViaIdAndSecret,
-	};
+	return { flags, isReady, step, setStep, completed, setCompleted };
 };

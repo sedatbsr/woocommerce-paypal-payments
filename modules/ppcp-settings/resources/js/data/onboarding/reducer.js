@@ -26,10 +26,6 @@ const defaultTransient = {
 const defaultPersistent = {
 	completed: false,
 	step: 0,
-	useSandbox: false,
-	useManualConnection: false,
-	clientId: '',
-	clientSecret: '',
 	isCasualSeller: null, // null value will uncheck both options in the UI.
 	products: [],
 };

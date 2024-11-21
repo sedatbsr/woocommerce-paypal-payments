@@ -145,22 +145,3 @@ export const persist = function* () {
 
 	yield { type: ACTION_TYPES.DO_PERSIST_DATA, data };
 };
-
-/**
- * Side effect. Initiates a manual connection attempt using the provided client ID and secret.
- *
- * @return {Action} The action.
- */
-export const connectViaIdAndSecret = function* () {
-	const { clientId, clientSecret, useSandbox } =
-		yield select( STORE_NAME ).persistentData();
-
-	const result = yield {
-		type: ACTION_TYPES.DO_MANUAL_CONNECTION,
-		clientId,
-		clientSecret,
-		useSandbox,
-	};
-
-	return result;
-};

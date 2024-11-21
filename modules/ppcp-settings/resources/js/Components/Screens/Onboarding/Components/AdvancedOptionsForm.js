@@ -11,20 +11,19 @@ import { OnboardingHooks, CommonHooks } from '../../../../data';
 
 const AdvancedOptionsForm = ( { setCompleted } ) => {
 	const { isBusy } = CommonHooks.useBusyState();
+	const { isSandboxMode, setSandboxMode } = CommonHooks.useSandbox();
 	const {
-		isSandboxMode,
-		setSandboxMode,
 		isManualConnectionMode,
 		setManualConnectionMode,
 		clientId,
 		setClientId,
 		clientSecret,
 		setClientSecret,
-	} = OnboardingHooks.useConnection();
+		connectViaIdAndSecret,
+	} = CommonHooks.useManualConnection();
 
 	const { createSuccessNotice, createErrorNotice } =
 		useDispatch( noticesStore );
-	const { connectManual } = OnboardingHooks.useManualConnect();
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
@@ -87,7 +86,7 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 			return;
 		}
 
-		const res = await connectManual();
+		const res = await connectViaIdAndSecret();
 
 		if ( res.success ) {
 			handleServerSuccess();
