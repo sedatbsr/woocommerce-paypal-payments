@@ -26,17 +26,6 @@ import { STORE_NAME } from './constants';
 export const reset = () => ( { type: ACTION_TYPES.RESET } );
 
 /**
- * Transient. Marks the onboarding details as "ready", i.e., fully initialized.
- *
- * @param {boolean} isReady
- * @return {Action} The action.
- */
-export const setIsReady = ( isReady ) => ( {
-	type: ACTION_TYPES.SET_TRANSIENT,
-	payload: { isReady },
-} );
-
-/**
  * Persistent. Set the full onboarding details, usually during app initialization.
  *
  * @param {{data: {}, flags?: {}}} payload
@@ -45,6 +34,17 @@ export const setIsReady = ( isReady ) => ( {
 export const hydrate = ( payload ) => ( {
 	type: ACTION_TYPES.HYDRATE,
 	payload,
+} );
+
+/**
+ * Transient. Marks the onboarding details as "ready", i.e., fully initialized.
+ *
+ * @param {boolean} isReady
+ * @return {Action} The action.
+ */
+export const setIsReady = ( isReady ) => ( {
+	type: ACTION_TYPES.SET_TRANSIENT,
+	payload: { isReady },
 } );
 
 /**
@@ -67,50 +67,6 @@ export const setCompleted = ( completed ) => ( {
 export const setStep = ( step ) => ( {
 	type: ACTION_TYPES.SET_PERSISTENT,
 	payload: { step },
-} );
-
-/**
- * Persistent. Sets the sandbox mode on or off.
- *
- * @param {boolean} useSandbox
- * @return {Action} The action.
- */
-export const setSandboxMode = ( useSandbox ) => ( {
-	type: ACTION_TYPES.SET_PERSISTENT,
-	payload: { useSandbox },
-} );
-
-/**
- * Persistent. Toggles the "Manual Connection" mode on or off.
- *
- * @param {boolean} useManualConnection
- * @return {Action} The action.
- */
-export const setManualConnectionMode = ( useManualConnection ) => ( {
-	type: ACTION_TYPES.SET_PERSISTENT,
-	payload: { useManualConnection },
-} );
-
-/**
- * Persistent. Changes the "client ID" value.
- *
- * @param {string} clientId
- * @return {Action} The action.
- */
-export const setClientId = ( clientId ) => ( {
-	type: ACTION_TYPES.SET_PERSISTENT,
-	payload: { clientId },
-} );
-
-/**
- * Persistent. Changes the "client secret" value.
- *
- * @param {string} clientSecret
- * @return {Action} The action.
- */
-export const setClientSecret = ( clientSecret ) => ( {
-	type: ACTION_TYPES.SET_PERSISTENT,
-	payload: { clientSecret },
 } );
 
 /**

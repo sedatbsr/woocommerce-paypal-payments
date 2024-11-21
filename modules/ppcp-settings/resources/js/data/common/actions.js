@@ -101,11 +101,9 @@ export const setClientSecret = ( clientSecret ) => ( {
  * @return {Action} The action.
  */
 export const persist = function* () {
-	yield setIsBusy( true );
-	yield {
-		type: ACTION_TYPES.DO_PERSIST_DATA,
-	};
-	yield setIsBusy( false );
+	const data = yield select( STORE_NAME ).persistentData();
+
+	yield { type: ACTION_TYPES.DO_PERSIST_DATA, data };
 };
 
 /**
