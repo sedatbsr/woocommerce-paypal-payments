@@ -15,5 +15,4 @@ export default {
 
 	// Controls - always start with "DO_".
 	DO_PERSIST_DATA: 'ONBOARDING:DO_PERSIST_DATA',
-	DO_MANUAL_CONNECTION: 'ONBOARDING:DO_MANUAL_CONNECTION',
 };

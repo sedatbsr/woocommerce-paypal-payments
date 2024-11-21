@@ -14,4 +14,5 @@ export default {
 
 	// Controls - always start with "DO_".
 	DO_PERSIST_DATA: 'COMMON:DO_PERSIST_DATA',
+	DO_MANUAL_CONNECTION: 'COMMON:DO_MANUAL_CONNECTION',
 };

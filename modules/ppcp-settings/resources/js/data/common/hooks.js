@@ -8,9 +8,9 @@
  */
 
 import { useDispatch, useSelect } from '@wordpress/data';
+import { useCallback } from '@wordpress/element';
 
 import { STORE_NAME } from './constants';
-import { useCallback } from '@wordpress/element';
 
 const useTransient = ( key ) =>
 	useSelect(
