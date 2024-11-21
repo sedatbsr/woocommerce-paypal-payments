@@ -8,6 +8,7 @@ import SettingsToggleBlock from '../../../ReusableComponents/SettingsToggleBlock
 import Separator from '../../../ReusableComponents/Separator';
 import DataStoreControl from '../../../ReusableComponents/DataStoreControl';
 import { CommonHooks } from '../../../../data';
+import { openPopup } from '../../../../utils/window';
 
 const AdvancedOptionsForm = ( { setCompleted } ) => {
 	const { isBusy } = CommonHooks.useBusyState();
@@ -87,9 +88,21 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 			);
 			return;
 		}
+
+		const connectionUrl = res.data;
+		const popup = openPopup( connectionUrl );
+
+		if ( ! popup ) {
+			createErrorNotice(
+				__(
+					'Popup blocked. Please allow popups for this site to connect to PayPal.',
+					'woocommerce-paypal-payments'
+				)
+			);
+		}
 	};
 
-	const handleConnect = async () => {
+	const handleManualConnect = async () => {
 		if ( ! handleFormValidation() ) {
 			return;
 		}
@@ -183,7 +196,7 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 					onChange={ setClientSecret }
 					type="password"
 				/>
-				<Button variant="secondary" onClick={ handleConnect }>
+				<Button variant="secondary" onClick={ handleManualConnect }>
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>
