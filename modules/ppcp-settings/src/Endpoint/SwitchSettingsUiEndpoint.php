@@ -11,15 +11,12 @@ namespace WooCommerce\PayPalCommerce\Settings\Endpoint;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use WooCommerce\PayPalCommerce\ApiClient\Endpoint\RequestTrait;
 use WooCommerce\PayPalCommerce\Button\Endpoint\RequestData;
 
 /**
  * Class SwitchSettingsUiEndpoint
  */
 class SwitchSettingsUiEndpoint {
-
-	use RequestTrait;
 
 	public const ENDPOINT                      = 'ppcp-settings-switch-ui';
 	public const OPTION_NAME_SHOULD_USE_OLD_UI = 'woocommerce_ppcp-settings-should-use-old-ui';
