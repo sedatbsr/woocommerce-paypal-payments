@@ -178,24 +178,13 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 
 		$host = $use_sandbox ? $this->sandbox_host : $this->live_host;
 
-		$empty_settings = new class() implements ContainerInterface
-		{
-			public function get( string $id ) {
-				throw new NotFoundException();
-			}
-
-			public function has( string $id ) {
-				return false;
-			}
-		};
-
 		$bearer = new PayPalBearer(
 			new InMemoryCache(),
 			$host,
 			$client_id,
 			$client_secret,
 			$this->logger,
-			$empty_settings
+			null
 		);
 
 		$orders = new Orders(

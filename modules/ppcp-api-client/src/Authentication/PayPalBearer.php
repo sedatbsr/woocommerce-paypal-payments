@@ -28,7 +28,7 @@ class PayPalBearer implements Bearer {
 	/**
 	 * The settings.
 	 *
-	 * @var ContainerInterface
+	 * @var ?ContainerInterface
 	 */
 	protected $settings;
 
@@ -70,11 +70,12 @@ class PayPalBearer implements Bearer {
 	/**
 	 * PayPalBearer constructor.
 	 *
-	 * @param Cache              $cache    The cache.
-	 * @param string             $host     The host.
-	 * @param string             $key      The key.
-	 * @param string             $secret   The secret.
-	 * @param LoggerInterface    $logger   The logger.
+	 * @param Cache               $cache    The cache.
+	 * @param string              $host     The host.
+	 * @param string              $key      The key.
+	 * @param string              $secret   The secret.
+	 * @param LoggerInterface     $logger   The logger.
+	 * @param ?ContainerInterface $settings The settings.
 	 */
 	public function __construct(
 		Cache $cache,
@@ -82,7 +83,7 @@ class PayPalBearer implements Bearer {
 		string $key,
 		string $secret,
 		LoggerInterface $logger,
-		ContainerInterface $settings
+		?ContainerInterface $settings
 	) {
 
 		$this->cache    = $cache;
@@ -110,14 +111,48 @@ class PayPalBearer implements Bearer {
 	}
 
 	/**
+	 * Retrieves the client key for authentication.
+	 *
+	 * @return string The client ID from settings, or the key defined via constructor.
+	 */
+	private function get_key() : string {
+		if (
+			$this->settings
+			&& $this->settings->has( 'client_id' )
+			&& $this->settings->get( 'client_id' )
+		) {
+			return $this->settings->get( 'client_id' );
+		}
+
+		return $this->key;
+	}
+
+	/**
+	 * Retrieves the client secret for authentication.
+	 *
+	 * @return string The client secret from settings, or the value defined via constructor.
+	 */
+	private function get_secret() : string {
+		if (
+			$this->settings
+			&& $this->settings->has( 'client_secret' )
+			&& $this->settings->get( 'client_secret' )
+		) {
+			return $this->settings->get( 'client_secret' );
+		}
+
+		return $this->secret;
+	}
+
+	/**
 	 * Creates a new bearer token.
 	 *
 	 * @throws RuntimeException When request fails.
 	 * @return Token
 	 */
-	private function newBearer(): Token {
-		$key    = $this->settings->has( 'client_id' ) && $this->settings->get( 'client_id' ) ? $this->settings->get( 'client_id' ) : $this->key;
-		$secret = $this->settings->has( 'client_secret' ) && $this->settings->get( 'client_secret' ) ? $this->settings->get( 'client_secret' ) : $this->secret;
+	private function newBearer() : Token {
+		$key    = $this->get_key();
+		$secret = $this->get_secret();
 		$url    = trailingslashit( $this->host ) . 'v1/oauth2/token?grant_type=client_credentials';
 
 		$args     = array(
