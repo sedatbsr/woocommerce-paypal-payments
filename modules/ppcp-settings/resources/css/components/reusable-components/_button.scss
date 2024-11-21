@@ -5,7 +5,6 @@ button.components-button, a.components-button {
 		}
 
 		&:disabled {
-			background-color: $color-gray-500;
 			color: $color-white;
 		}
 
@@ -16,16 +15,20 @@ button.components-button, a.components-button {
 
 	&.is-primary {
 		@include font(13, 20, 400);
-		color:$color-white;
+
+		&:not(:disabled) {
+			background-color: $color-blueberry;
+		}
 	}
 
 	&.is-secondary:not(:disabled) {
-		border-color:$color-blueberry;
-		background-color:$color-white;
-		color:$color-blueberry;
-		&:hover{
-			background-color:$color-white;
-			background:none;
+		border-color: $color-blueberry;
+		background-color: $color-white;
+		color: $color-blueberry;
+
+		&:hover {
+			background-color: $color-white;
+			background: none;
 		}
 	}
 

@@ -17,8 +17,7 @@ const ModalPayPal = ( { setModalIsVisible } ) => {
 	return (
 		<PaymentMethodModal
 			setModalIsVisible={ setModalIsVisible }
-			icon="payment-method-paypal"
-			container="small"
+			icon="payment-method-paypal-big"
 			title={ __( 'PayPal', 'woocommerce-paypal-payments' ) }
 		>
 			<div className="ppcp-r-modal__field-rows">
@@ -53,7 +52,6 @@ const ModalPayPal = ( { setModalIsVisible } ) => {
 				</div>
 				<div className="ppcp-r-modal__field-row">
 					<ToggleControl
-						className="ppcp-r-modal__inverted-toggle-control"
 						label={ __(
 							'Show logo',
 							'woocommerce-paypal-payments'

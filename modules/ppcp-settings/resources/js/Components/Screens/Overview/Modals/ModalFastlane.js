@@ -17,8 +17,9 @@ const ModalFastlane = ( { setModalIsVisible } ) => {
 	return (
 		<PaymentMethodModal
 			setModalIsVisible={ setModalIsVisible }
-			icon="payment-method-fastlane"
+			icon="payment-method-fastlane-big"
 			title={ __( 'Fastlane by PayPal', 'woocommerce-paypal-payments' ) }
+			size="small"
 		>
 			<div className="ppcp-r-modal__field-rows ppcp-r-modal__field-rows--fastlane">
 				<div className="ppcp-r-modal__field-row">

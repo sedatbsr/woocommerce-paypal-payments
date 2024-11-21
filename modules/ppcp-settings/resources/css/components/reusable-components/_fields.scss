@@ -3,12 +3,20 @@
 	&__radio-value {
 		@include hide-input-field;
 
-		&:checked {
-			+ .ppcp-r__radio-presentation {
-				background: $color-white;
-				width: 20px;
-				height: 20px;
-				border: 6px solid $color-blueberry;
+		&:checked + .ppcp-r__radio-presentation {
+			position: relative;
+
+			&::before {
+				content: '';
+				width: 12px;
+				height: 12px;
+				border-radius: 12px;
+				background-color: $color-blueberry;
+				display: block;
+				position: absolute;
+				transform: translate(-50%, -50%);
+				left: 50%;
+				top: 50%;
 			}
 		}
 	}
@@ -104,7 +112,7 @@ select {
 	.components-base-control__field {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 0;
 		margin: 0;
 	}
 }
