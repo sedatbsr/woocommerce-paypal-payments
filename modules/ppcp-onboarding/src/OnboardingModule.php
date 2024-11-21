@@ -44,26 +44,33 @@ class OnboardingModule implements ServiceModule, ExtendingModule, ExecutableModu
 	 */
 	public function run( ContainerInterface $c ): bool {
 
-		$asset_loader = $c->get( 'onboarding.assets' );
-		/**
-		 * The OnboardingAssets.
-		 *
-		 * @var OnboardingAssets $asset_loader
-		 */
-		add_action(
-			'admin_enqueue_scripts',
-			array(
-				$asset_loader,
-				'register',
-			)
-		);
-		add_action(
-			'woocommerce_settings_checkout',
-			array(
-				$asset_loader,
-				'enqueue',
-			)
-		);
+		if ( ! apply_filters(
+			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+			'woocommerce.feature-flags.woocommerce_paypal_payments.settings_enabled',
+			getenv( 'PCP_SETTINGS_ENABLED' ) === '1'
+		) ) {
+
+			$asset_loader = $c->get( 'onboarding.assets' );
+			/**
+			 * The OnboardingAssets.
+			 *
+			 * @var OnboardingAssets $asset_loader
+			 */
+			add_action(
+				'admin_enqueue_scripts',
+				array(
+					$asset_loader,
+					'register',
+				)
+			);
+			add_action(
+				'woocommerce_settings_checkout',
+				array(
+					$asset_loader,
+					'enqueue',
+				)
+			);
+		}
 
 		add_filter(
 			'woocommerce_form_field',

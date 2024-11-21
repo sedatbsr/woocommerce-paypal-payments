@@ -1,5 +1,4 @@
 import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
-import Navigation from '../../ReusableComponents/Navigation';
 import { __ } from '@wordpress/i18n';
 import SelectBox from '../../ReusableComponents/SelectBox';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
@@ -20,7 +19,7 @@ const StepProducts = ( {
 		<div className="ppcp-r-page-products">
 			<OnboardingHeader
 				title={ __(
-					'Tell Us About the Products You Sell',
+					'Tell us about the products you sell',
 					'woocommerce-paypal-payments'
 				) }
 			/>
@@ -29,10 +28,9 @@ const StepProducts = ( {
 					<SelectBox
 						title={ __( 'Virtual', 'woocommerce-paypal-payments' ) }
 						description={ __(
-							'Digital items or services that don’t require shipping.',
+							'Items do not require shipping.',
 							'woocommerce-paypal-payments'
 						) }
-						icon="icon-product-virtual.svg"
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
 						value={ PRODUCT_TYPES.VIRTUAL }
 						changeCallback={ toggleProduct }
@@ -72,10 +70,9 @@ const StepProducts = ( {
 							'woocommerce-paypal-payments'
 						) }
 						description={ __(
-							'Items that need to be shipped.',
+							'Items require shipping.',
 							'woocommerce-paypal-payments'
 						) }
-						icon="icon-product-physical.svg"
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
 						value={ PRODUCT_TYPES.PHYSICAL }
 						changeCallback={ toggleProduct }
@@ -100,10 +97,9 @@ const StepProducts = ( {
 							'woocommerce-paypal-payments'
 						) }
 						description={ __(
-							'Recurring payments for physical goods or services.',
+							'Recurring payments for either physical goods or services.',
 							'woocommerce-paypal-payments'
 						) }
-						icon="icon-product-subscription.svg"
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
 						value={ PRODUCT_TYPES.SUBSCRIPTIONS }
 						changeCallback={ toggleProduct }
@@ -121,13 +117,6 @@ const StepProducts = ( {
 						</a>
 					</SelectBox>
 				</SelectBoxWrapper>
-				<Navigation
-					setStep={ setStep }
-					currentStep={ currentStep }
-					stepperOrder={ stepperOrder }
-					setCompleted={ setCompleted }
-					canProceeedCallback={ () => products.length > 0 }
-				/>
 			</div>
 		</div>
 	);

@@ -9,7 +9,10 @@ module.exports = {
 	target: 'web',
 	plugins: [ new DependencyExtractionWebpackPlugin() ],
 	entry: {
-		'index': path.resolve( './resources/js/index.js' ),
+		index: path.resolve( './resources/js/index.js' ),
+		PayPalInsightsLoader: path.resolve(
+			'./resources/js/plugins/PayPalInsightsLoader.js'
+		),
 		gateway: path.resolve( './resources/css/gateway.scss' ),
 	},
 	output: {

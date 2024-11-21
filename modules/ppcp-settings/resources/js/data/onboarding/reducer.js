@@ -3,6 +3,7 @@ import ACTION_TYPES from './action-types';
 const defaultState = {
 	isReady: false,
 	isSaving: false,
+	isManualConnectionBusy: false,
 
 	// Data persisted to the server.
 	data: {
@@ -58,6 +59,9 @@ export const onboardingReducer = (
 
 		case ACTION_TYPES.SET_IS_SAVING_ONBOARDING:
 			return setTransient( { isSaving: action.isSaving } );
+
+		case ACTION_TYPES.SET_MANUAL_CONNECTION_BUSY:
+			return setTransient( { isManualConnectionBusy: action.isBusy } );
 
 		// Persistent data.
 		case ACTION_TYPES.SET_ONBOARDING_DETAILS:

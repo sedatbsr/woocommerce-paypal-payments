@@ -8,21 +8,12 @@
 	&-inner-container {
 		margin-left: auto;
 		margin-right: auto;
-		padding: 0 16px 72px;
-		box-sizing: border-box;
+		padding: 0 16px 48px;
+		box-sizing: content-box;
 
 		@media screen and (max-width: 480px) {
 			padding-bottom: 36px;
 		}
-	}
-
-	&-container {
-		box-shadow: $shadow-card;
-	}
-
-	&-card {
-		box-shadow: 0 3px 6px 0 rgba(0, 0, 0, 0.15);
-		background-color: $color-white;
 	}
 
 	&-settings-card {
