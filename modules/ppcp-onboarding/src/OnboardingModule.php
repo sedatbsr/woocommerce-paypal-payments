@@ -13,6 +13,7 @@ use WooCommerce\PayPalCommerce\Onboarding\Endpoint\UpdateSignupLinksEndpoint;
 use WooCommerce\PayPalCommerce\Onboarding\Assets\OnboardingAssets;
 use WooCommerce\PayPalCommerce\Onboarding\Endpoint\LoginSellerEndpoint;
 use WooCommerce\PayPalCommerce\Onboarding\Render\OnboardingRenderer;
+use WooCommerce\PayPalCommerce\Settings\SettingsModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
@@ -48,7 +49,8 @@ class OnboardingModule implements ServiceModule, ExtendingModule, ExecutableModu
 			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
 			'woocommerce.feature-flags.woocommerce_paypal_payments.settings_enabled',
 			getenv( 'PCP_SETTINGS_ENABLED' ) === '1'
-		) ) {
+		) || SettingsModule::should_use_the_old_ui()
+		) {
 
 			$asset_loader = $c->get( 'onboarding.assets' );
 			/**

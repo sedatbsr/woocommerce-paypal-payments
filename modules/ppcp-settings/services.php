@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace WooCommerce\PayPalCommerce\Settings;
 
 use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
@@ -108,5 +109,11 @@ return array(
 		$eligible_countries = $container->get( 'settings.casual-selling.supported-countries' );
 
 		return in_array( $country, $eligible_countries, true );
+	},
+	'settings.switch-ui.endpoint'                 => static function ( ContainerInterface $container ) : SwitchSettingsUiEndpoint {
+		return new SwitchSettingsUiEndpoint(
+			$container->get( 'woocommerce.logger.woocommerce' ),
+			$container->get( 'button.request-data' ),
+		);
 	},
 );
