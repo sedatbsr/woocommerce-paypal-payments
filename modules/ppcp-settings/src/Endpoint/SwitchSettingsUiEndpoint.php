@@ -21,8 +21,8 @@ class SwitchSettingsUiEndpoint {
 
 	use RequestTrait;
 
-	public const ENDPOINT = 'ppcp-settings-switch-ui';
-	public const OPTION_NAME_SHOULD_USE_OLD_UI  = 'woocommerce_ppcp-settings-should-use-old-ui';
+	public const ENDPOINT                      = 'ppcp-settings-switch-ui';
+	public const OPTION_NAME_SHOULD_USE_OLD_UI = 'woocommerce_ppcp-settings-should-use-old-ui';
 
 	/**
 	 * The RequestData.
@@ -41,15 +41,15 @@ class SwitchSettingsUiEndpoint {
 	/**
 	 * SwitchSettingsUiEndpoint constructor.
 	 *
-	 * @param LoggerInterface          $logger The logger.
-	 * @param RequestData              $request_data The Request data.
+	 * @param LoggerInterface $logger The logger.
+	 * @param RequestData     $request_data The Request data.
 	 */
 	public function __construct(
 		LoggerInterface $logger,
 		RequestData $request_data
 	) {
-		$this->logger             = $logger;
-		$this->request_data       = $request_data;
+		$this->logger       = $logger;
+		$this->request_data = $request_data;
 	}
 
 	/**

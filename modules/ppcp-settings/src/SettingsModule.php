@@ -29,7 +29,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	public static function should_use_the_old_ui(): bool {
 		return apply_filters(
 			'woocommerce_paypal_payments_should_use_the_old_ui',
-			( bool ) get_option(SwitchSettingsUiEndpoint::OPTION_NAME_SHOULD_USE_OLD_UI) === true
+			(bool) get_option( SwitchSettingsUiEndpoint::OPTION_NAME_SHOULD_USE_OLD_UI ) === true
 		);
 	}
 
@@ -56,7 +56,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 			add_action(
 				'admin_enqueue_scripts',
 				static function () use ( $container ) {
-					$module_url = $container->get('settings.url');
+					$module_url        = $container->get( 'settings.url' );
 					$script_asset_file = require dirname( realpath( __FILE__ ) ?: '', 2 ) . '/assets/switchSettingsUi.asset.php';
 
 					wp_register_script(

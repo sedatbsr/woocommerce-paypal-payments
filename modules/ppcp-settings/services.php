@@ -110,7 +110,7 @@ return array(
 
 		return in_array( $country, $eligible_countries, true );
 	},
-	'settings.switch-ui.endpoint'                => static function ( ContainerInterface $container ) : SwitchSettingsUiEndpoint {
+	'settings.switch-ui.endpoint'                 => static function ( ContainerInterface $container ) : SwitchSettingsUiEndpoint {
 		return new SwitchSettingsUiEndpoint(
 			$container->get( 'woocommerce.logger.woocommerce' ),
 			$container->get( 'button.request-data' ),
