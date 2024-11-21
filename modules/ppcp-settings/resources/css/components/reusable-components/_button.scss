@@ -8,16 +8,16 @@ button.components-button, a.components-button {
 			color: $color-white;
 		}
 
-		border-radius: 2px;
-		padding: 14px 17px;
+		border-radius: 50px;
+		padding: 15px 32px;
 		height: auto;
 	}
 
 	&.is-primary {
-		@include font(13, 20, 400);
+		@include font(14, 18, 900);
 
 		&:not(:disabled) {
-			background-color: $color-blueberry;
+			background-color: $color-black;
 		}
 	}
 
