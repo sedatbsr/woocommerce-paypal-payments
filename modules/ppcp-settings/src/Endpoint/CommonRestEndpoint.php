@@ -109,11 +109,7 @@ class CommonRestEndpoint extends RestEndpoint {
 			$this->field_map
 		);
 
-		return rest_ensure_response(
-			array(
-				'data' => $js_data,
-			)
-		);
+		return $this->return_success( $js_data );
 	}
 
 	/**

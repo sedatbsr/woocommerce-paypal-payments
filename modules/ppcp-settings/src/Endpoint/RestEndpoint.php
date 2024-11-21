@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace WooCommerce\PayPalCommerce\Settings\Endpoint;
 
 use WC_REST_Controller;
+use WP_REST_Response;
 
 /**
  * Base class for REST controllers in the settings module.
@@ -29,6 +30,54 @@ abstract class RestEndpoint extends WC_REST_Controller {
 	 */
 	public function check_permission() : bool {
 		return current_user_can( 'manage_woocommerce' );
+	}
+
+	/**
+	 * Returns a successful REST API response.
+	 *
+	 * @param mixed $data  The main response data.
+	 * @param array $extra Optional, additional response data.
+	 *
+	 * @return WP_REST_Response The successful response.
+	 */
+	protected function return_success( $data, array $extra = array() ) : WP_REST_Response {
+		$response = array(
+			'success' => true,
+			'data'    => $data,
+		);
+
+		if ( $extra ) {
+			foreach ( $extra as $key => $value ) {
+				if ( isset( $response[ $key ] ) ) {
+					continue;
+				}
+
+				$response[ $key ] = $value;
+			}
+		}
+
+		return rest_ensure_response( $response );
+	}
+
+	/**
+	 * Returns an error REST API response.
+	 *
+	 * @param string $reason  The reason for the error.
+	 * @param mixed  $details Optional details about the error.
+	 *
+	 * @return WP_REST_Response The error response.
+	 */
+	protected function return_error( string $reason, $details = null ) : WP_REST_Response {
+		$response = array(
+			'success' => false,
+			'message' => $reason,
+		);
+
+		if ( ! is_null( $details ) ) {
+			$response['details'] = $details;
+		}
+
+		return rest_ensure_response( $response );
 	}
 
 	/**

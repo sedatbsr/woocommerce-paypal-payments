@@ -131,9 +131,9 @@ class OnboardingRestEndpoint extends RestEndpoint {
 			$this->flag_map
 		);
 
-		return rest_ensure_response(
+		return $this->return_success(
+			$js_data,
 			array(
-				'data'  => $js_data,
 				'flags' => $js_flags,
 			)
 		);

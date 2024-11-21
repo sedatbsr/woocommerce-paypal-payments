@@ -93,12 +93,9 @@ class LoginLinkRestEndpoint extends RestEndpoint {
 		try {
 			$url = $url_generator->generate( $products );
 
-			return rest_ensure_response( $url );
+			return $this->return_success( $url );
 		} catch ( \Exception $e ) {
-			return new WP_REST_Response(
-				array( 'error' => $e->getMessage() ),
-				500
-			);
+			return $this->return_error( $e->getMessage() );
 		}
 	}
 }

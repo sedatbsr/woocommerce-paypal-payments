@@ -126,33 +126,22 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 		$use_sandbox   = (bool) ( $data['use_sandbox'] ?? false );
 
 		if ( empty( $client_id ) || empty( $client_secret ) ) {
-			return rest_ensure_response(
-				array(
-					'success' => false,
-					'message' => 'No client ID or secret provided.',
-				)
-			);
+			return $this->return_error( 'No client ID or secret provided.' );
 		}
 
 		try {
 			$payee = $this->request_payee( $client_id, $client_secret, $use_sandbox );
 		} catch ( Exception $exception ) {
-			return rest_ensure_response(
-				array(
-					'success' => false,
-					'message' => $exception->getMessage(),
-				)
-			);
-
+			return $this->return_error( $exception->getMessage() );
 		}
 
-		$result = array(
-			'merchantId' => $payee->merchant_id,
-			'email'      => $payee->email_address,
-			'success'    => true,
+		return $this->return_success(
+			array(
+				'merchantId' => $payee->merchant_id,
+				'email'      => $payee->email_address,
+				'success'    => true,
+			)
 		);
-
-		return rest_ensure_response( $result );
 	}
 
 	/**
