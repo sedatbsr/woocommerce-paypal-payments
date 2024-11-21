@@ -7,11 +7,11 @@ import { store as noticesStore } from '@wordpress/notices';
 import SettingsToggleBlock from '../../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../../ReusableComponents/Separator';
 import DataStoreControl from '../../../ReusableComponents/DataStoreControl';
-import { OnboardingHooks } from '../../../../data';
+import { OnboardingHooks, CommonHooks } from '../../../../data';
 
 const AdvancedOptionsForm = ( { setCompleted } ) => {
+	const { isBusy } = CommonHooks.useBusyState();
 	const {
-		isBusy,
 		isSandboxMode,
 		setSandboxMode,
 		isManualConnectionMode,

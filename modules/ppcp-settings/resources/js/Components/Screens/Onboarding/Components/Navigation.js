@@ -22,8 +22,8 @@ const Navigation = ( { setStep, setCompleted, currentStep, stepperOrder } ) => {
 		}
 	};
 
-	const { products, toggleProduct } = OnboardingHooks.useProducts();
-	const { isCasualSeller, setIsCasualSeller } = OnboardingHooks.useBusiness();
+	const { products } = OnboardingHooks.useProducts();
+	const { isCasualSeller } = OnboardingHooks.useBusiness();
 
 	let navigationTitle = '';
 	let disabled = false;

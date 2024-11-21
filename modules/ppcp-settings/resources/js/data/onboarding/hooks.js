@@ -41,9 +41,7 @@ const useOnboardingDetails = () => {
 	const flags = useSelect( ( select ) => select( STORE_NAME ).flags(), [] );
 
 	// Transient accessors.
-	const isSaving = useTransient( 'isSaving' );
 	const isReady = useTransient( 'isReady' );
-	const isBusy = useTransient( 'isBusy' );
 
 	// Persistent accessors.
 	const step = usePersistent( 'step' );
@@ -68,9 +66,8 @@ const useOnboardingDetails = () => {
 	};
 
 	return {
-		isSaving,
+		flags,
 		isReady,
-		isBusy,
 		step,
 		setStep: ( value ) => setDetailAndPersist( setStep, value ),
 		completed,
@@ -91,14 +88,11 @@ const useOnboardingDetails = () => {
 			setDetailAndPersist( setIsCasualSeller, value ),
 		products,
 		toggleProduct,
-		flags,
 	};
 };
 
 export const useConnection = () => {
 	const {
-		isSaving,
-		isBusy,
 		isSandboxMode,
 		setSandboxMode,
 		isManualConnectionMode,
@@ -110,8 +104,6 @@ export const useConnection = () => {
 	} = useOnboardingDetails();
 
 	return {
-		isSaving,
-		isBusy,
 		isSandboxMode,
 		setSandboxMode,
 		isManualConnectionMode,

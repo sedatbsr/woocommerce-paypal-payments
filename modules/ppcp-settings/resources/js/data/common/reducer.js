@@ -14,7 +14,6 @@ import ACTION_TYPES from './action-types';
 
 const defaultTransient = {
 	isReady: false,
-	isSaving: false,
 	isBusy: false,
 };
 

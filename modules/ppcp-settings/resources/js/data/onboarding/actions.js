@@ -37,28 +37,6 @@ export const setIsReady = ( isReady ) => ( {
 } );
 
 /**
- * Transient. Changes the "saving" flag.
- *
- * @param {boolean} isSaving
- * @return {Action} The action.
- */
-export const setIsSaving = ( isSaving ) => ( {
-	type: ACTION_TYPES.SET_TRANSIENT,
-	payload: { isSaving },
-} );
-
-/**
- * Transient. Changes the "manual connection is busy" flag.
- *
- * @param {boolean} isBusy
- * @return {Action} The action.
- */
-export const setIsBusy = ( isBusy ) => ( {
-	type: ACTION_TYPES.SET_TRANSIENT,
-	payload: { isBusy },
-} );
-
-/**
  * Persistent. Set the full onboarding details, usually during app initialization.
  *
  * @param {{data: {}, flags?: {}}} payload
@@ -165,9 +143,7 @@ export const setProducts = ( products ) => ( {
 export const persist = function* () {
 	const data = yield select( STORE_NAME ).persistentData();
 
-	yield setIsSaving( true );
 	yield { type: ACTION_TYPES.DO_PERSIST_DATA, data };
-	yield setIsSaving( false );
 };
 
 /**
@@ -179,15 +155,12 @@ export const connectViaIdAndSecret = function* () {
 	const { clientId, clientSecret, useSandbox } =
 		yield select( STORE_NAME ).persistentData();
 
-	yield setIsBusy( true );
-
 	const result = yield {
 		type: ACTION_TYPES.DO_MANUAL_CONNECTION,
 		clientId,
 		clientSecret,
 		useSandbox,
 	};
-	yield setIsBusy( false );
 
 	return result;
 };

@@ -22,3 +22,13 @@ const usePersistent = ( key ) =>
 		( select ) => select( STORE_NAME ).persistentData()?.[ key ],
 		[ key ]
 	);
+
+export const useBusyState = () => {
+	const { setIsBusy } = useDispatch( STORE_NAME );
+	const isBusy = useTransient( 'isBusy' );
+
+	return {
+		isBusy,
+		setIsBusy: useCallback( ( busy ) => setIsBusy( busy ), [ setIsBusy ] ),
+	};
+};
