@@ -9,17 +9,28 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings;
 
+use WooCommerce\PayPalCommerce\Settings\Endpoint\RestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
-use WooCommerce\PayPalCommerce\Settings\Endpoint\RestEndpoint;
 
 /**
  * Class SettingsModule
  */
 class SettingsModule implements ServiceModule, ExecutableModule {
 	use ModuleClassNameIdTrait;
+
+	/**
+	 * Returns whether the old settings UI should be loaded.
+	 */
+	public static function should_use_the_old_ui() : bool {
+		return apply_filters(
+			'woocommerce_paypal_payments_should_use_the_old_ui',
+			(bool) get_option( SwitchSettingsUiEndpoint::OPTION_NAME_SHOULD_USE_OLD_UI ) === true
+		);
+	}
 
 	/**
 	 * {@inheritDoc}
@@ -32,6 +43,59 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	 * {@inheritDoc}
 	 */
 	public function run( ContainerInterface $container ) : bool {
+		if ( self::should_use_the_old_ui() ) {
+			add_filter(
+				'woocommerce_paypal_payments_inside_settings_page_header',
+				static fn() : string => sprintf(
+					'<a href="#" class="button button-settings-switch-ui">%s</a>',
+					esc_html__( 'Switch to new settings UI', 'woocommerce-paypal-payments' )
+				)
+			);
+
+			add_action(
+				'admin_enqueue_scripts',
+				static function () use ( $container ) {
+					$module_url = $container->get( 'settings.url' );
+
+					/**
+					 * Require resolves.
+					 *
+					 * @psalm-suppress UnresolvableInclude
+					 */
+					$script_asset_file = require dirname( realpath( __FILE__ ) ?: '', 2 ) . '/assets/switchSettingsUi.asset.php';
+
+					wp_register_script(
+						'ppcp-switch-settings-ui',
+						untrailingslashit( $module_url ) . '/assets/switchSettingsUi.js',
+						$script_asset_file['dependencies'],
+						$script_asset_file['version'],
+						true
+					);
+
+					wp_localize_script(
+						'ppcp-switch-settings-ui',
+						'ppcpSwitchSettingsUi',
+						array(
+							'endpoint' => \WC_AJAX::get_endpoint( SwitchSettingsUiEndpoint::ENDPOINT ),
+							'nonce'    => wp_create_nonce( SwitchSettingsUiEndpoint::nonce() ),
+						)
+					);
+
+					wp_enqueue_script( 'ppcp-switch-settings-ui' );
+				}
+			);
+
+			$endpoint = $container->get( 'settings.switch-ui.endpoint' );
+			assert( $endpoint instanceof SwitchSettingsUiEndpoint );
+
+			add_action( 'wc_ajax_' . SwitchSettingsUiEndpoint::ENDPOINT, array(
+				$endpoint,
+				'handle_request',
+			) );
+
+			return true;
+		}
+
 		add_action(
 			'admin_enqueue_scripts',
 			/**

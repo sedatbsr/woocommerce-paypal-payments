@@ -10,14 +10,15 @@ declare( strict_types = 1 );
 namespace WooCommerce\PayPalCommerce\Settings;
 
 use WooCommerce\PayPalCommerce\ApiClient\Helper\Cache;
+use WooCommerce\PayPalCommerce\Settings\Data\CommonSettings;
 use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\CommonRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\LoginLinkRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Service\ConnectionUrlGenerator;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
-use WooCommerce\PayPalCommerce\Settings\Endpoint\LoginLinkRestEndpoint;
-use WooCommerce\PayPalCommerce\Settings\Data\CommonSettings;
-use WooCommerce\PayPalCommerce\Settings\Endpoint\CommonRestEndpoint;
 
 return array(
 	'settings.url'                                => static function ( ContainerInterface $container ) : string {
@@ -153,5 +154,11 @@ return array(
 		}
 
 		return $generators;
+	},
+	'settings.switch-ui.endpoint'                 => static function ( ContainerInterface $container ) : SwitchSettingsUiEndpoint {
+		return new SwitchSettingsUiEndpoint(
+			$container->get( 'woocommerce.logger.woocommerce' ),
+			$container->get( 'button.request-data' ),
+		);
 	},
 );
