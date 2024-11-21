@@ -78,9 +78,9 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 	/**
 	 * ConnectManualRestEndpoint constructor.
 	 *
-	 * @param string          $live_host The API host for the live mode.
+	 * @param string          $live_host    The API host for the live mode.
 	 * @param string          $sandbox_host The API host for the sandbox mode.
-	 * @param LoggerInterface $logger The logger.
+	 * @param LoggerInterface $logger       The logger.
 	 */
 	public function __construct(
 		string $live_host,
@@ -159,14 +159,16 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 	 * Retrieves the payee object with the merchant data
 	 * by creating a minimal PayPal order.
 	 *
-	 * @param string $client_id The client ID.
-	 * @param string $client_secret The client secret.
-	 * @param bool   $use_sandbox Whether to use the sandbox mode.
-	 * @return stdClass The payee object.
 	 * @throws Exception When failed to retrieve payee.
 	 *
 	 * phpcs:disable Squiz.Commenting
 	 * phpcs:disable Generic.Commenting
+	 *
+	 * @param string $client_secret The client secret.
+	 * @param bool   $use_sandbox   Whether to use the sandbox mode.
+	 * @param string $client_id     The client ID.
+	 *
+	 * @return stdClass The payee object.
 	 */
 	private function request_payee(
 		string $client_id,

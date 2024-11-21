@@ -5,7 +5,7 @@
  * @package WooCommerce\PayPalCommerce\ApiClient\Authentication
  */
 
-declare(strict_types=1);
+declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\ApiClient\Authentication;
 
@@ -70,12 +70,11 @@ class PayPalBearer implements Bearer {
 	/**
 	 * PayPalBearer constructor.
 	 *
-	 * @param Cache              $cache The cache.
-	 * @param string             $host The host.
-	 * @param string             $key The key.
-	 * @param string             $secret The secret.
-	 * @param LoggerInterface    $logger The logger.
-	 * @param ContainerInterface $settings The settings.
+	 * @param Cache              $cache    The cache.
+	 * @param string             $host     The host.
+	 * @param string             $key      The key.
+	 * @param string             $secret   The secret.
+	 * @param LoggerInterface    $logger   The logger.
 	 */
 	public function __construct(
 		Cache $cache,
@@ -97,12 +96,13 @@ class PayPalBearer implements Bearer {
 	/**
 	 * Returns a bearer token.
 	 *
-	 * @return Token
 	 * @throws RuntimeException When request fails.
+	 * @return Token
 	 */
-	public function bearer(): Token {
+	public function bearer() : Token {
 		try {
 			$bearer = Token::from_json( (string) $this->cache->get( self::CACHE_KEY ) );
+
 			return ( $bearer->is_valid() ) ? $bearer : $this->newBearer();
 		} catch ( RuntimeException $error ) {
 			return $this->newBearer();
@@ -112,8 +112,8 @@ class PayPalBearer implements Bearer {
 	/**
 	 * Creates a new bearer token.
 	 *
-	 * @return Token
 	 * @throws RuntimeException When request fails.
+	 * @return Token
 	 */
 	private function newBearer(): Token {
 		$key    = $this->settings->has( 'client_id' ) && $this->settings->get( 'client_id' ) ? $this->settings->get( 'client_id' ) : $this->key;
@@ -127,10 +127,7 @@ class PayPalBearer implements Bearer {
 				'Authorization' => 'Basic ' . base64_encode( $key . ':' . $secret ),
 			),
 		);
-		$response = $this->request(
-			$url,
-			$args
-		);
+		$response = $this->request( $url, $args );
 
 		if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
 			$error = new RuntimeException(
@@ -148,6 +145,7 @@ class PayPalBearer implements Bearer {
 
 		$token = Token::from_json( $response['body'] );
 		$this->cache->set( self::CACHE_KEY, $token->as_json() );
+
 		return $token;
 	}
 }
