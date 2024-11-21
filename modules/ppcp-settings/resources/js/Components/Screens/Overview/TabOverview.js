@@ -24,7 +24,6 @@ const TabOverview = () => {
 			{ todosData.length > 0 && (
 				<SettingsCard
 					className="ppcp-r-tab-overview-todo"
-					icon="icon-overview-list.svg"
 					title={ __(
 						'Things to do next',
 						'woocommerce-paypal-payments'
@@ -52,7 +51,6 @@ const TabOverview = () => {
 			) }
 			<SettingsCard
 				className="ppcp-r-tab-overview-support"
-				icon="icon-overview-support.svg"
 				title={ __( 'Status', 'woocommerce-paypal-payments' ) }
 				description={ __(
 					'Your PayPal account connection details, along with available products and features.',
