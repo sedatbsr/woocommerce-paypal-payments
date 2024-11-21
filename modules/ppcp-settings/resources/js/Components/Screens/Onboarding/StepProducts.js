@@ -1,17 +1,13 @@
-import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import { __ } from '@wordpress/i18n';
+
+import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import SelectBox from '../../ReusableComponents/SelectBox';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
 import { OnboardingHooks, PRODUCT_TYPES } from '../../../data';
 
 const PRODUCTS_CHECKBOX_GROUP_NAME = 'products';
 
-const StepProducts = ( {
-	setStep,
-	currentStep,
-	stepperOrder,
-	setCompleted,
-} ) => {
+const StepProducts = () => {
 	const { products, toggleProduct } = OnboardingHooks.useProducts();
 
 	return (
