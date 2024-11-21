@@ -7,7 +7,7 @@ import { store as noticesStore } from '@wordpress/notices';
 import SettingsToggleBlock from '../../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../../ReusableComponents/Separator';
 import DataStoreControl from '../../../ReusableComponents/DataStoreControl';
-import { OnboardingHooks, CommonHooks } from '../../../../data';
+import { CommonHooks } from '../../../../data';
 
 const AdvancedOptionsForm = ( { setCompleted } ) => {
 	const { isBusy } = CommonHooks.useBusyState();
@@ -61,17 +61,9 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 		return true;
 	};
 
-	const handleServerError = ( res ) => {
-		if ( res.message ) {
-			createErrorNotice( res.message );
-		} else {
-			createErrorNotice(
-				__(
-					'Could not connect to PayPal. Please make sure your Client ID and Secret Key are correct.',
-					'woocommerce-paypal-payments'
-				)
-			);
-		}
+	const handleServerError = ( res, genericMessage ) => {
+		console.error( 'Connection error', res );
+		createErrorNotice( res?.message ?? genericMessage );
 	};
 
 	const handleServerSuccess = () => {
@@ -107,7 +99,13 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 		if ( res.success ) {
 			handleServerSuccess();
 		} else {
-			handleServerError( res );
+			handleServerError(
+				res,
+				__(
+					'Could not connect to PayPal. Please make sure your Client ID and Secret Key are correct.',
+					'woocommerce-paypal-payments'
+				)
+			);
 		}
 	};
 
