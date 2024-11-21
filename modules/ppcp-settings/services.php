@@ -16,6 +16,8 @@ use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Service\ConnectionUrlGenerator;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\LoginLinkRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Data\CommonSettings;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\CommonRestEndpoint;
 
 return array(
 	'settings.url'                                => static function ( ContainerInterface $container ) : string {
@@ -46,8 +48,14 @@ return array(
 			$can_use_card_payments
 		);
 	},
+	'settings.data.common'                        => static function ( ContainerInterface $container ) : CommonSettings {
+		return new CommonSettings();
+	},
 	'settings.rest.onboarding'                    => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );
+	},
+	'settings.rest.common'                        => static function ( ContainerInterface $container ) : CommonRestEndpoint {
+		return new CommonRestEndpoint( $container->get( 'settings.data.common' ) );
 	},
 	'settings.rest.connect_manual'                => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
 		return new ConnectManualRestEndpoint(

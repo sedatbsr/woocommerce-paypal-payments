@@ -1,6 +1,6 @@
 <?php
 /**
- * REST endpoint to manage the onboarding module.
+ * REST endpoint to manage the common module.
  *
  * @package WooCommerce\PayPalCommerce\Settings\Endpoint
  */
@@ -12,28 +12,29 @@ namespace WooCommerce\PayPalCommerce\Settings\Endpoint;
 use WP_REST_Server;
 use WP_REST_Response;
 use WP_REST_Request;
-use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
+use WooCommerce\PayPalCommerce\Settings\Data\CommonSettings;
 
 /**
- * REST controller for the onboarding module.
+ * REST controller for "common" settings, which are used and modified by
+ * multiple components. Those settings mainly define connection details.
  *
  * This API acts as the intermediary between the "external world" and our
  * internal data model.
  */
-class OnboardingRestEndpoint extends RestEndpoint {
+class CommonRestEndpoint extends RestEndpoint {
 	/**
 	 * The base path for this REST controller.
 	 *
 	 * @var string
 	 */
-	protected $rest_base = 'onboarding';
+	protected $rest_base = 'common';
 
 	/**
 	 * The settings instance.
 	 *
-	 * @var OnboardingProfile
+	 * @var CommonSettings
 	 */
-	protected OnboardingProfile $profile;
+	protected CommonSettings $settings;
 
 	/**
 	 * Field mapping for request to profile transformation.
@@ -41,49 +42,31 @@ class OnboardingRestEndpoint extends RestEndpoint {
 	 * @var array
 	 */
 	private array $field_map = array(
-		'completed'        => array(
-			'js_name'  => 'completed',
+		'use_sandbox'           => array(
+			'js_name'  => 'useSandbox',
 			'sanitize' => 'to_boolean',
 		),
-		'step'             => array(
-			'js_name'  => 'step',
-			'sanitize' => 'to_number',
-		),
-		'is_casual_seller' => array(
-			'js_name'  => 'isCasualSeller',
+		'use_manual_connection' => array(
+			'js_name'  => 'useManualConnection',
 			'sanitize' => 'to_boolean',
 		),
-		'products'         => array(
-			'js_name' => 'products',
+		'client_id'             => array(
+			'js_name'  => 'clientId',
+			'sanitize' => 'sanitize_text_field',
 		),
-	);
-
-	/**
-	 * Map the internal flags to JS names.
-	 *
-	 * @var array
-	 */
-	private array $flag_map = array(
-		'can_use_casual_selling' => array(
-			'js_name' => 'canUseCasualSelling',
-		),
-		'can_use_vaulting'       => array(
-			'js_name' => 'canUseVaulting',
-		),
-		'can_use_card_payments'  => array(
-			'js_name' => 'canUseCardPayments',
+		'client_secret'         => array(
+			'js_name'  => 'clientSecret',
+			'sanitize' => 'sanitize_text_field',
 		),
 	);
 
 	/**
 	 * Constructor.
 	 *
-	 * @param OnboardingProfile $profile The settings instance.
+	 * @param CommonSettings $settings The settings instance.
 	 */
-	public function __construct( OnboardingProfile $profile ) {
-		$this->profile = $profile;
-
-		$this->field_map['products']['sanitize'] = fn( $list ) => array_map( 'sanitize_text_field', $list );
+	public function __construct( CommonSettings $settings ) {
+		$this->settings = $settings;
 	}
 
 	/**
@@ -116,35 +99,29 @@ class OnboardingRestEndpoint extends RestEndpoint {
 	}
 
 	/**
-	 * Returns all details of the current onboarding wizard progress.
+	 * Returns all common details from the DB.
 	 *
-	 * @return WP_REST_Response The current state of the onboarding wizard.
+	 * @return WP_REST_Response The common settings.
 	 */
 	public function get_details() : WP_REST_Response {
 		$js_data = $this->sanitize_for_javascript(
-			$this->profile->to_array(),
+			$this->settings->to_array(),
 			$this->field_map
-		);
-
-		$js_flags = $this->sanitize_for_javascript(
-			$this->profile->get_flags(),
-			$this->flag_map
 		);
 
 		return rest_ensure_response(
 			array(
-				'data'  => $js_data,
-				'flags' => $js_flags,
+				'data' => $js_data,
 			)
 		);
 	}
 
 	/**
-	 * Updates onboarding details based on the request.
+	 * Updates common details based on the request.
 	 *
 	 * @param WP_REST_Request $request Full data about the request.
 	 *
-	 * @return WP_REST_Response The updated state of the onboarding wizard.
+	 * @return WP_REST_Response The new common settings.
 	 */
 	public function update_details( WP_REST_Request $request ) : WP_REST_Response {
 		$wp_data = $this->sanitize_for_wordpress(
@@ -152,8 +129,8 @@ class OnboardingRestEndpoint extends RestEndpoint {
 			$this->field_map
 		);
 
-		$this->profile->from_array( $wp_data );
-		$this->profile->save();
+		$this->settings->from_array( $wp_data );
+		$this->settings->save();
 
 		return $this->get_details();
 	}

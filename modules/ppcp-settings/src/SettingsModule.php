@@ -110,6 +110,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 			static function () use ( $container ) : void {
 				$endpoints = array(
 					$container->get( 'settings.rest.onboarding' ),
+					$container->get( 'settings.rest.common' ),
 					$container->get( 'settings.rest.connect_manual' ),
 					$container->get( 'settings.rest.login_link' ),
 				);
