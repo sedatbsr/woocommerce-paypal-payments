@@ -23,7 +23,7 @@ class LoginLinkRestEndpoint extends RestEndpoint {
 	 *
 	 * @var string
 	 */
-	protected string $rest_base = 'login_link';
+	protected $rest_base = 'login_link';
 
 	/**
 	 * Link generator list, with environment name as array key.

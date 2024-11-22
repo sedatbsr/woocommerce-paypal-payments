@@ -27,7 +27,7 @@ class CommonRestEndpoint extends RestEndpoint {
 	 *
 	 * @var string
 	 */
-	protected string $rest_base = 'common';
+	protected $rest_base = 'common';
 
 	/**
 	 * The settings instance.
