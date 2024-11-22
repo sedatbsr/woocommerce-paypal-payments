@@ -10,17 +10,16 @@ declare( strict_types = 1 );
 namespace WooCommerce\PayPalCommerce\Settings\Endpoint;
 
 use Exception;
-use Psr\Log\LoggerInterface;
-use RuntimeException;
 use stdClass;
+use RuntimeException;
+use Psr\Log\LoggerInterface;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_REST_Server;
 use WooCommerce\PayPalCommerce\ApiClient\Authentication\PayPalBearer;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\Orders;
 use WooCommerce\PayPalCommerce\ApiClient\Helper\InMemoryCache;
-use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
-use WooCommerce\PayPalCommerce\WcGateway\Exception\NotFoundException;
-use WP_REST_Server;
-use WP_REST_Response;
-use WP_REST_Request;
+use WooCommerce\PayPalCommerce\Settings\Data\GeneralSettings;
 
 /**
  * REST controller for connection via manual credentials input.
@@ -56,6 +55,13 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 	protected $rest_base = 'connect_manual';
 
 	/**
+	 * Settings instance.
+	 *
+	 * @var GeneralSettings
+	 */
+	private $settings = null;
+
+	/**
 	 * Field mapping for request.
 	 *
 	 * @var array
@@ -81,16 +87,18 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 	 * @param string          $live_host    The API host for the live mode.
 	 * @param string          $sandbox_host The API host for the sandbox mode.
 	 * @param LoggerInterface $logger       The logger.
+	 * @param GeneralSettings $settings     Settings instance.
 	 */
 	public function __construct(
 		string $live_host,
 		string $sandbox_host,
-		LoggerInterface $logger
+		LoggerInterface $logger,
+		GeneralSettings $settings
 	) {
-
 		$this->live_host    = $live_host;
 		$this->sandbox_host = $sandbox_host;
 		$this->logger       = $logger;
+		$this->settings     = $settings;
 	}
 
 	/**
@@ -135,11 +143,25 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 			return $this->return_error( $exception->getMessage() );
 		}
 
+		if ( $use_sandbox ) {
+			$this->settings->set_is_sandbox( true );
+			$this->settings->set_sandbox_client_id( $client_id );
+			$this->settings->set_sandbox_client_secret( $client_secret );
+			$this->settings->set_sandbox_merchant_id( $payee->merchant_id );
+			$this->settings->set_sandbox_merchant_email( $payee->email_address );
+		} else {
+			$this->settings->set_is_sandbox( false );
+			$this->settings->set_live_client_id( $client_id );
+			$this->settings->set_live_client_secret( $client_secret );
+			$this->settings->set_live_merchant_id( $payee->merchant_id );
+			$this->settings->set_live_merchant_email( $payee->email_address );
+		}
+		$this->settings->save();
+
 		return $this->return_success(
 			array(
 				'merchantId' => $payee->merchant_id,
 				'email'      => $payee->email_address,
-				'success'    => true,
 			)
 		);
 	}

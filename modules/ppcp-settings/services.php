@@ -11,6 +11,7 @@ namespace WooCommerce\PayPalCommerce\Settings;
 
 use WooCommerce\PayPalCommerce\ApiClient\Helper\Cache;
 use WooCommerce\PayPalCommerce\Settings\Data\CommonSettings;
+use WooCommerce\PayPalCommerce\Settings\Data\GeneralSettings;
 use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\CommonRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
@@ -49,6 +50,9 @@ return array(
 			$can_use_card_payments
 		);
 	},
+	'settings.data.general'                       => static function ( ContainerInterface $container ) : GeneralSettings {
+		return new GeneralSettings();
+	},
 	'settings.data.common'                        => static function ( ContainerInterface $container ) : CommonSettings {
 		return new CommonSettings();
 	},
@@ -62,7 +66,8 @@ return array(
 		return new ConnectManualRestEndpoint(
 			$container->get( 'api.paypal-host-production' ),
 			$container->get( 'api.paypal-host-sandbox' ),
-			$container->get( 'woocommerce.logger.woocommerce' )
+			$container->get( 'woocommerce.logger.woocommerce' ),
+			$container->get( 'settings.data.general' )
 		);
 	},
 	'settings.rest.login_link'                    => static function ( ContainerInterface $container ) : LoginLinkRestEndpoint {
