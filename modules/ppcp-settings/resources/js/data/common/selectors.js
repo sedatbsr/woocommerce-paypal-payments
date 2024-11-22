@@ -16,10 +16,6 @@ export const persistentData = ( state ) => {
 };
 
 export const transientData = ( state ) => {
-	const { data, flags, ...transientState } = getState( state );
+	const { data, ...transientState } = getState( state );
 	return transientState || EMPTY_OBJ;
-};
-
-export const flags = ( state ) => {
-	return getState( state ).flags || EMPTY_OBJ;
 };

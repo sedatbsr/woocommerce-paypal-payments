@@ -1,13 +1,9 @@
-import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import { __ } from '@wordpress/i18n';
 import { Button, Icon } from '@wordpress/components';
 
-const StepCompleteSetup = ( {
-	setStep,
-	currentStep,
-	stepperOrder,
-	setCompleted,
-} ) => {
+import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
+
+const StepCompleteSetup = ( { setCompleted } ) => {
 	const ButtonIcon = () => (
 		<Icon
 			icon={ () => (

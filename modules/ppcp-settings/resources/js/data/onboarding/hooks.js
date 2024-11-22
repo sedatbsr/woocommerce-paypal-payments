@@ -1,163 +1,90 @@
+/**
+ * Hooks: Provide the main API for components to interact with the store.
+ *
+ * These encapsulate store interactions, offering a consistent interface.
+ * Hooks simplify data access and manipulation for components.
+ *
+ * @file
+ */
+
 import { useSelect, useDispatch } from '@wordpress/data';
-import apiFetch from '@wordpress/api-fetch';
-import { NAMESPACE, PRODUCT_TYPES, STORE_NAME } from '../constants';
-import { getFlags } from './selectors';
 
-const useOnboardingDetails = () => {
-	const {
-		persist,
-		setOnboardingStep,
-		setCompleted,
-		setSandboxMode,
-		setManualConnectionMode,
-		setClientId,
-		setClientSecret,
-		setIsCasualSeller,
-		setProducts,
-	} = useDispatch( STORE_NAME );
+import { PRODUCT_TYPES } from '../constants';
+import { STORE_NAME } from './constants';
 
-	// Transient accessors.
-	const isSaving = useSelect( ( select ) => {
-		return select( STORE_NAME ).getTransientData().isSaving;
-	}, [] );
+const useTransient = ( key ) =>
+	useSelect(
+		( select ) => select( STORE_NAME ).transientData()?.[ key ],
+		[ key ]
+	);
 
-	const isReady = useSelect( ( select ) => {
-		return select( STORE_NAME ).getTransientData().isReady;
-	} );
+const usePersistent = ( key ) =>
+	useSelect(
+		( select ) => select( STORE_NAME ).persistentData()?.[ key ],
+		[ key ]
+	);
 
-	const isManualConnectionBusy = useSelect( ( select ) => {
-		return select( STORE_NAME ).getTransientData().isManualConnectionBusy;
-	}, [] );
+const useHooks = () => {
+	const { persist, setStep, setCompleted, setIsCasualSeller, setProducts } =
+		useDispatch( STORE_NAME );
 
 	// Read-only flags.
-	const flags = useSelect( ( select ) => {
-		return select( STORE_NAME ).getFlags();
-	} );
+	const flags = useSelect( ( select ) => select( STORE_NAME ).flags(), [] );
+
+	// Transient accessors.
+	const isReady = useTransient( 'isReady' );
 
 	// Persistent accessors.
-	const step = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().step || 0;
-	} );
+	const step = usePersistent( 'step' );
+	const completed = usePersistent( 'completed' );
+	const isCasualSeller = usePersistent( 'isCasualSeller' );
+	const products = usePersistent( 'products' );
 
-	const completed = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().completed;
-	} );
-
-	const clientId = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().clientId;
-	}, [] );
-
-	const clientSecret = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().clientSecret;
-	}, [] );
-
-	const isSandboxMode = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().useSandbox;
-	}, [] );
-
-	const isManualConnectionMode = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().useManualConnection;
-	}, [] );
-
-	const isCasualSeller = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().isCasualSeller;
-	}, [] );
-
-	const products = useSelect( ( select ) => {
-		return select( STORE_NAME ).getPersistentData().products || [];
-	}, [] );
-
-	const toggleProduct = ( list ) => {
-		const validProducts = list.filter( ( item ) =>
-			Object.values( PRODUCT_TYPES ).includes( item )
-		);
-		return setDetailAndPersist( setProducts, validProducts );
-	};
-
-	const setDetailAndPersist = async ( setter, value ) => {
+	const savePersistent = async ( setter, value ) => {
 		setter( value );
 		await persist();
 	};
 
 	return {
-		isSaving,
-		isReady,
-		isManualConnectionBusy,
-		step,
-		setStep: ( value ) => setDetailAndPersist( setOnboardingStep, value ),
-		completed,
-		setCompleted: ( state ) => setDetailAndPersist( setCompleted, state ),
-		isSandboxMode,
-		setSandboxMode: ( state ) =>
-			setDetailAndPersist( setSandboxMode, state ),
-		isManualConnectionMode,
-		setManualConnectionMode: ( state ) =>
-			setDetailAndPersist( setManualConnectionMode, state ),
-		clientId,
-		setClientId: ( value ) => setDetailAndPersist( setClientId, value ),
-		clientSecret,
-		setClientSecret: ( value ) =>
-			setDetailAndPersist( setClientSecret, value ),
-		isCasualSeller,
-		setIsCasualSeller: ( value ) =>
-			setDetailAndPersist( setIsCasualSeller, value ),
-		products,
-		toggleProduct,
 		flags,
+		isReady,
+		step,
+		setStep: ( value ) => {
+			return savePersistent( setStep, value );
+		},
+		completed,
+		setCompleted: ( state ) => {
+			return savePersistent( setCompleted, state );
+		},
+		isCasualSeller,
+		setIsCasualSeller: ( value ) => {
+			return savePersistent( setIsCasualSeller, value );
+		},
+		products,
+		setProducts: ( activeProducts ) => {
+			const validProducts = activeProducts.filter( ( item ) =>
+				Object.values( PRODUCT_TYPES ).includes( item )
+			);
+			return savePersistent( setProducts, validProducts );
+		},
 	};
 };
 
-export const useOnboardingStepWelcome = () => {
-	const {
-		isSaving,
-		isManualConnectionBusy,
-		isSandboxMode,
-		setSandboxMode,
-		isManualConnectionMode,
-		setManualConnectionMode,
-		clientId,
-		setClientId,
-		clientSecret,
-		setClientSecret,
-	} = useOnboardingDetails();
-
-	return {
-		isSaving,
-		isManualConnectionBusy,
-		isSandboxMode,
-		setSandboxMode,
-		isManualConnectionMode,
-		setManualConnectionMode,
-		clientId,
-		setClientId,
-		clientSecret,
-		setClientSecret,
-	};
-};
-
-export const useOnboardingStepBusiness = () => {
-	const { isCasualSeller, setIsCasualSeller } = useOnboardingDetails();
+export const useBusiness = () => {
+	const { isCasualSeller, setIsCasualSeller } = useHooks();
 
 	return { isCasualSeller, setIsCasualSeller };
 };
 
-export const useOnboardingStepProducts = () => {
-	const { products, toggleProduct } = useOnboardingDetails();
+export const useProducts = () => {
+	const { products, setProducts } = useHooks();
 
-	return { products, toggleProduct };
+	return { products, setProducts };
 };
 
-export const useOnboardingStep = () => {
-	const { isReady, step, setStep, completed, setCompleted, flags } =
-		useOnboardingDetails();
+export const useSteps = () => {
+	const { flags, isReady, step, setStep, completed, setCompleted } =
+		useHooks();
 
-	return { isReady, step, setStep, completed, setCompleted, flags };
-};
-
-export const useManualConnect = () => {
-	const { connectViaIdAndSecret } = useDispatch( STORE_NAME );
-
-	return {
-		connectManual: connectViaIdAndSecret,
-	};
+	return { flags, isReady, step, setStep, completed, setCompleted };
 };

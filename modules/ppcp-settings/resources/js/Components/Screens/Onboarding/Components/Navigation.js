@@ -1,10 +1,8 @@
 import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import {
-	useOnboardingStepBusiness,
-	useOnboardingStepProducts,
-} from '../../data';
-import data from '../../utils/data';
+
+import { OnboardingHooks } from '../../../../data';
+import data from '../../../../utils/data';
 
 const Navigation = ( { setStep, setCompleted, currentStep, stepperOrder } ) => {
 	const isLastStep = () => currentStep + 1 === stepperOrder.length;
@@ -24,8 +22,8 @@ const Navigation = ( { setStep, setCompleted, currentStep, stepperOrder } ) => {
 		}
 	};
 
-	const { products, toggleProduct } = useOnboardingStepProducts();
-	const { isCasualSeller, setIsCasualSeller } = useOnboardingStepBusiness();
+	const { products } = OnboardingHooks.useProducts();
+	const { isCasualSeller } = OnboardingHooks.useBusiness();
 
 	let navigationTitle = '';
 	let disabled = false;
