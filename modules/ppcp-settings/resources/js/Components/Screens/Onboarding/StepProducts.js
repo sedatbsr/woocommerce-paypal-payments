@@ -1,19 +1,14 @@
-import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import { __ } from '@wordpress/i18n';
+
+import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import SelectBox from '../../ReusableComponents/SelectBox';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
-import { useOnboardingStepProducts } from '../../../data';
-import { PRODUCT_TYPES } from '../../../data/constants';
+import { OnboardingHooks, PRODUCT_TYPES } from '../../../data';
 
 const PRODUCTS_CHECKBOX_GROUP_NAME = 'products';
 
-const StepProducts = ( {
-	setStep,
-	currentStep,
-	stepperOrder,
-	setCompleted,
-} ) => {
-	const { products, toggleProduct } = useOnboardingStepProducts();
+const StepProducts = () => {
+	const { products, setProducts } = OnboardingHooks.useProducts();
 
 	return (
 		<div className="ppcp-r-page-products">
@@ -33,7 +28,7 @@ const StepProducts = ( {
 						) }
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
 						value={ PRODUCT_TYPES.VIRTUAL }
-						changeCallback={ toggleProduct }
+						changeCallback={ setProducts }
 						currentValue={ products }
 						type="checkbox"
 					>
@@ -75,7 +70,7 @@ const StepProducts = ( {
 						) }
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
 						value={ PRODUCT_TYPES.PHYSICAL }
-						changeCallback={ toggleProduct }
+						changeCallback={ setProducts }
 						currentValue={ products }
 						type="checkbox"
 					>
@@ -102,7 +97,7 @@ const StepProducts = ( {
 						) }
 						name={ PRODUCTS_CHECKBOX_GROUP_NAME }
 						value={ PRODUCT_TYPES.SUBSCRIPTIONS }
-						changeCallback={ toggleProduct }
+						changeCallback={ setProducts }
 						currentValue={ products }
 						type="checkbox"
 					>

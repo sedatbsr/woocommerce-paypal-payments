@@ -2671,9 +2671,9 @@
     mime "^3.0.0"
     web-vitals "^4.2.1"
 
-"@wordpress/element@^6.1.0":
+"@wordpress/element@*", "@wordpress/element@^6.1.0":
   version "6.11.0"
-  resolved "https://registry.npmjs.org/@wordpress/element/-/element-6.11.0.tgz"
+  resolved "https://registry.yarnpkg.com/@wordpress/element/-/element-6.11.0.tgz#7bc3e453a95bb806a707b4dc617373afa108af19"
   integrity sha512-UvHFYkT+EEaXEyEfw+iqLHRO9OwBjjsUydEMHcqntzkNcsYeAbmaL9V8R9ikXHLe6ftdbkwoXgF85xVPhVsL+Q==
   dependencies:
     "@babel/runtime" "7.25.7"
@@ -2715,6 +2715,15 @@
     globals "^13.12.0"
     requireindex "^1.2.0"
 
+"@wordpress/icons@^10.11.0":
+  version "10.11.0"
+  resolved "https://registry.yarnpkg.com/@wordpress/icons/-/icons-10.11.0.tgz#0beedef8ee49c135412fb81fc59440dd48d652aa"
+  integrity sha512-RMetpFwUIeh3sVj2+p6+QX5AW8pF7DvQzxH9jUr8YjaF2iLE64vy6m0cZz/X8xkSktHrXMuPJIr7YIVF20TEyw==
+  dependencies:
+    "@babel/runtime" "7.25.7"
+    "@wordpress/element" "*"
+    "@wordpress/primitives" "*"
+
 "@wordpress/jest-console@*":
   version "8.11.0"
   resolved "https://registry.npmjs.org/@wordpress/jest-console/-/jest-console-8.11.0.tgz"
@@ -2748,6 +2757,15 @@
   version "4.11.0"
   resolved "https://registry.npmjs.org/@wordpress/prettier-config/-/prettier-config-4.11.0.tgz"
   integrity sha512-Aoc8+xWOyiXekodjaEjS44z85XK877LzHZqsQuhC0kNgneDLrKkwI5qNgzwzAMbJ9jI58MPqVISCOX0bDLUPbw==
+
+"@wordpress/primitives@*":
+  version "4.11.0"
+  resolved "https://registry.yarnpkg.com/@wordpress/primitives/-/primitives-4.11.0.tgz#7bc24c07ed11057340832791c1c21e75a5181194"
+  integrity sha512-CoBXbh0mOSxcZtuzL7gK3RVumFx71DXQBfd3IkbRHuuVxa+2hI4KDuFyomSsbjQDshHsfuVrKUvuT3UGt6pdpQ==
+  dependencies:
+    "@babel/runtime" "7.25.7"
+    "@wordpress/element" "*"
+    clsx "^2.1.1"
 
 "@wordpress/scripts@~30.0.0":
   version "30.0.6"
@@ -3726,6 +3744,11 @@ clone-deep@^4.0.1:
     is-plain-object "^2.0.4"
     kind-of "^6.0.2"
     shallow-clone "^3.0.0"
+
+clsx@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-2.1.1.tgz#eed397c9fd8bd882bfb18deab7102049a2f32999"
+  integrity sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==
 
 co@^4.6.0:
   version "4.6.0"

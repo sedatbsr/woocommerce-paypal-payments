@@ -10,18 +10,16 @@ declare( strict_types = 1 );
 namespace WooCommerce\PayPalCommerce\Settings\Endpoint;
 
 use Exception;
-use Psr\Log\LoggerInterface;
-use RuntimeException;
 use stdClass;
+use RuntimeException;
+use Psr\Log\LoggerInterface;
+use WP_REST_Request;
+use WP_REST_Response;
+use WP_REST_Server;
 use WooCommerce\PayPalCommerce\ApiClient\Authentication\PayPalBearer;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\Orders;
 use WooCommerce\PayPalCommerce\ApiClient\Helper\InMemoryCache;
 use WooCommerce\PayPalCommerce\Settings\Data\GeneralSettings;
-use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
-use WooCommerce\PayPalCommerce\WcGateway\Exception\NotFoundException;
-use WP_REST_Server;
-use WP_REST_Response;
-use WP_REST_Request;
 
 /**
  * REST controller for connection via manual credentials input.
@@ -86,10 +84,10 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 	/**
 	 * ConnectManualRestEndpoint constructor.
 	 *
-	 * @param string          $live_host The API host for the live mode.
+	 * @param string          $live_host    The API host for the live mode.
 	 * @param string          $sandbox_host The API host for the sandbox mode.
-	 * @param LoggerInterface $logger The logger.
-	 * @param GeneralSettings $settings Settings instance.
+	 * @param LoggerInterface $logger       The logger.
+	 * @param GeneralSettings $settings     Settings instance.
 	 */
 	public function __construct(
 		string $live_host,
@@ -97,7 +95,6 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 		LoggerInterface $logger,
 		GeneralSettings $settings
 	) {
-
 		$this->live_host    = $live_host;
 		$this->sandbox_host = $sandbox_host;
 		$this->logger       = $logger;
@@ -137,24 +134,13 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 		$use_sandbox   = (bool) ( $data['use_sandbox'] ?? false );
 
 		if ( empty( $client_id ) || empty( $client_secret ) ) {
-			return rest_ensure_response(
-				array(
-					'success' => false,
-					'message' => 'No client ID or secret provided.',
-				)
-			);
+			return $this->return_error( 'No client ID or secret provided.' );
 		}
 
 		try {
 			$payee = $this->request_payee( $client_id, $client_secret, $use_sandbox );
 		} catch ( Exception $exception ) {
-			return rest_ensure_response(
-				array(
-					'success' => false,
-					'message' => $exception->getMessage(),
-				)
-			);
-
+			return $this->return_error( $exception->getMessage() );
 		}
 
 		if ( $use_sandbox ) {
@@ -172,27 +158,28 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 		}
 		$this->settings->save();
 
-		$result = array(
-			'merchantId' => $payee->merchant_id,
-			'email'      => $payee->email_address,
-			'success'    => true,
+		return $this->return_success(
+			array(
+				'merchantId' => $payee->merchant_id,
+				'email'      => $payee->email_address,
+			)
 		);
-
-		return rest_ensure_response( $result );
 	}
 
 	/**
 	 * Retrieves the payee object with the merchant data
 	 * by creating a minimal PayPal order.
 	 *
-	 * @param string $client_id The client ID.
-	 * @param string $client_secret The client secret.
-	 * @param bool   $use_sandbox Whether to use the sandbox mode.
-	 * @return stdClass The payee object.
 	 * @throws Exception When failed to retrieve payee.
 	 *
 	 * phpcs:disable Squiz.Commenting
 	 * phpcs:disable Generic.Commenting
+	 *
+	 * @param string $client_secret The client secret.
+	 * @param bool   $use_sandbox   Whether to use the sandbox mode.
+	 * @param string $client_id     The client ID.
+	 *
+	 * @return stdClass The payee object.
 	 */
 	private function request_payee(
 		string $client_id,
@@ -202,24 +189,13 @@ class ConnectManualRestEndpoint extends RestEndpoint {
 
 		$host = $use_sandbox ? $this->sandbox_host : $this->live_host;
 
-		$empty_settings = new class() implements ContainerInterface
-		{
-			public function get( string $id ) {
-				throw new NotFoundException();
-			}
-
-			public function has( string $id ) {
-				return false;
-			}
-		};
-
 		$bearer = new PayPalBearer(
 			new InMemoryCache(),
 			$host,
 			$client_id,
 			$client_secret,
 			$this->logger,
-			$empty_settings
+			null
 		);
 
 		$orders = new Orders(
