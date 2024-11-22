@@ -1,7 +1,6 @@
-import TabNavigation from '../ReusableComponents/TabNavigation';
-import { getSettingsTabs } from './tabs';
 import { useOnboardingStep } from '../../data';
 import Onboarding from './Onboarding/Onboarding';
+import SettingsScreen from './SettingsScreen';
 
 const Settings = () => {
 	const onboardingProgress = useOnboardingStep();
@@ -15,9 +14,7 @@ const Settings = () => {
 		return <Onboarding />;
 	}
 
-	const tabs = getSettingsTabs( onboardingProgress );
-
-	return <TabNavigation tabs={ tabs }></TabNavigation>;
+	return <SettingsScreen />;
 };
 
 export default Settings;

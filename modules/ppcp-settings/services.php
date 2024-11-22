@@ -11,6 +11,7 @@ namespace WooCommerce\PayPalCommerce\Settings;
 
 use WooCommerce\PayPalCommerce\Settings\Data\GeneralSettings;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
@@ -44,7 +45,10 @@ return array(
 			$can_use_card_payments
 		);
 	},
-	'settings.rest.onboarding'                    => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
+	'settings.general'                            => static function ( ContainerInterface $container ) : GeneralSettings {
+		return new GeneralSettings();
+  },
+  'settings.rest.onboarding'                    => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );
 	},
 	'settings.rest.connect_manual'                => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
@@ -111,7 +115,10 @@ return array(
 
 		return in_array( $country, $eligible_countries, true );
 	},
-	'settings.general'                            => static function ( ContainerInterface $container ) : GeneralSettings {
-		return new GeneralSettings();
+	'settings.switch-ui.endpoint'                 => static function ( ContainerInterface $container ) : SwitchSettingsUiEndpoint {
+		return new SwitchSettingsUiEndpoint(
+			$container->get( 'woocommerce.logger.woocommerce' ),
+			$container->get( 'button.request-data' ),
+		);
 	},
 );

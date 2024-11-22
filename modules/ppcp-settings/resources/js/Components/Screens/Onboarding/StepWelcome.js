@@ -18,7 +18,7 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 					'woocommerce-paypal-payments'
 				) }
 				description={ __(
-					'Your all-in-one integration for PayPal checkout solutions that enable buyers<br/> to pay via PayPal, Pay Later, all major credit/debit cards, Apple Pay, Google Pay, and more.',
+					'Your all-in-one integration for PayPal checkout solutions that enable buyers to pay via PayPal, Pay Later, all major credit/debit cards, Apple Pay, Google Pay, and more.',
 					'woocommerce-paypal-payments'
 				) }
 			/>
@@ -44,12 +44,12 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 			</div>
 			<Separator className="ppcp-r-page-welcome-mode-separator" />
 			<WelcomeDocs
-                useAcdc = { true }
-                isFastlane = { true }
-                isPayLater = { true }
-                storeCountry = { 'us' }
-                storeCurrency = { 'usd' }
-            />
+				useAcdc={ true }
+				isFastlane={ true }
+				isPayLater={ true }
+				storeCountry={ 'us' }
+				storeCurrency={ 'usd' }
+			/>
 			<Separator text={ __( 'or', 'woocommerce-paypal-payments' ) } />
 			<AccordionSection
 				title={ __(
@@ -95,5 +95,4 @@ const WelcomeFeatures = () => {
 		</div>
 	);
 };
-
 export default StepWelcome;
