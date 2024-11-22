@@ -247,12 +247,6 @@ class AxoModule implements ServiceModule, ExtendingModule, ExecutableModule {
 					function () use ( $c ) {
 						// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
 						echo '<script async src="https://www.paypalobjects.com/insights/v1/paypal-insights.sandbox.min.js"></script>';
-
-						// Add meta tag to allow feature-detection of the site's AXO payment state.
-						$dcc_configuration = $c->get( 'wcgateway.configuration.dcc' );
-						assert( $dcc_configuration instanceof DCCGatewayConfiguration );
-
-						$this->add_feature_detection_tag( $dcc_configuration->use_fastlane() );
 					}
 				);
 
@@ -309,6 +303,17 @@ class AxoModule implements ServiceModule, ExtendingModule, ExecutableModule {
 				$this->add_checkout_loader_markup( $c );
 			},
 			1
+		);
+
+		add_action(
+			'wp_head',
+			function () use ( $c ) {
+				// Add meta tag to allow feature-detection of the site's AXO payment state.
+				$dcc_configuration = $c->get( 'wcgateway.configuration.dcc' );
+				assert( $dcc_configuration instanceof DCCGatewayConfiguration );
+
+				$this->add_feature_detection_tag( $dcc_configuration->use_fastlane() );
+			}
 		);
 
 		add_action(
