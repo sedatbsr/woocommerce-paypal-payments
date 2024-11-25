@@ -252,17 +252,17 @@ class SavePaymentMethodsModule implements ServiceModule, ExtendingModule, Execut
 
 		add_filter(
 			'woocommerce_paypal_payments_disable_add_payment_method',
-			function ( $value ) use ( $c ) {
+			function ( bool $value ) use ( $c ): bool {
 				if ( ! self::vault_enabled( $c ) ) {
 					return $value;
 				}
-				return fasle;
+				return false;
 			}
 		);
 
 		add_filter(
 			'woocommerce_paypal_payments_should_render_card_custom_fields',
-			function ( $value ) use ( $c ) {
+			function ( bool $value ) use ( $c ): bool {
 				if ( ! self::vault_enabled( $c ) ) {
 					return $value;
 				}
