@@ -451,7 +451,7 @@ class SavePaymentMethodsModule implements ServiceModule, ExtendingModule, Execut
 
 		add_filter(
 			'woocommerce_paypal_payments_save_payment_methods_eligible',
-			function( $value ) use ( $c ) {
+			function( bool $value ) use ( $c ): bool {
 				if ( ! self::vault_enabled( $c ) ) {
 					return $value;
 				}
