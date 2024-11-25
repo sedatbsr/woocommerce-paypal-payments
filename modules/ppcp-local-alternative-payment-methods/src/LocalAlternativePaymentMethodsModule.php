@@ -226,7 +226,7 @@ class LocalAlternativePaymentMethodsModule implements ServiceModule, ExtendingMo
 	/**
 	 * Check if the local APMs should be added to the available payment gateways.
 	 *
-	 * @param ContainerInterface $container Container
+	 * @param ContainerInterface $container Container.
 	 * @return bool
 	 */
 	private function should_add_local_apm_gateways( ContainerInterface $container ): bool {
