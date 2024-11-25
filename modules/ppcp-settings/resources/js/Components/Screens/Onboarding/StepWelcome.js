@@ -48,7 +48,7 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 				isFastlane={ true }
 				isPayLater={ true }
 				storeCountry={ 'us' }
-				storeCurrency={ 'usd' }
+				storeCurrency={ 'USD' }
 			/>
 			<Separator text={ __( 'or', 'woocommerce-paypal-payments' ) } />
 			<AccordionSection
