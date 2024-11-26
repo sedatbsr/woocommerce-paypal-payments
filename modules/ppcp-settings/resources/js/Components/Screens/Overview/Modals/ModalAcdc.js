@@ -14,7 +14,7 @@ const ModalAcdc = ( { setModalIsVisible } ) => {
 	return (
 		<PaymentMethodModal
 			setModalIsVisible={ setModalIsVisible }
-			icon="payment-method-cards"
+			icon="payment-method-cards-big"
 			title={ __(
 				'Advanced Credit and Debit Card Payments',
 				'woocommerce-paypal-payments'
@@ -64,8 +64,7 @@ const ModalAcdc = ( { setModalIsVisible } ) => {
 						'woocommerce-paypal-payments'
 					) }
 				/>
-			</div>
-			<div className="ppcp-r-modal__field-rows">
+
 				<div className="ppcp-r-modal__field-row ppcp-r-modal__field-row--save">
 					<Button variant="primary">
 						{ __( 'Save changes', 'woocommerce-paypal-payments' ) }

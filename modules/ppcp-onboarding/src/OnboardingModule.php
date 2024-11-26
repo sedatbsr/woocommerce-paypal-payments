@@ -13,6 +13,7 @@ use WooCommerce\PayPalCommerce\Onboarding\Endpoint\UpdateSignupLinksEndpoint;
 use WooCommerce\PayPalCommerce\Onboarding\Assets\OnboardingAssets;
 use WooCommerce\PayPalCommerce\Onboarding\Endpoint\LoginSellerEndpoint;
 use WooCommerce\PayPalCommerce\Onboarding\Render\OnboardingRenderer;
+use WooCommerce\PayPalCommerce\Settings\SettingsModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
@@ -44,22 +45,29 @@ class OnboardingModule implements ServiceModule, ExtendingModule, ExecutableModu
 	 */
 	public function run( ContainerInterface $c ): bool {
 
-		add_action(
-			'admin_enqueue_scripts',
-			function() use ( $c ) {
-				$asset_loader = $c->get( 'onboarding.assets' );
-				assert( $asset_loader instanceof OnboardingAssets );
+		if ( ! apply_filters(
+			// phpcs:ignore WordPress.NamingConventions.ValidHookName.UseUnderscores
+			'woocommerce.feature-flags.woocommerce_paypal_payments.settings_enabled',
+			getenv( 'PCP_SETTINGS_ENABLED' ) === '1'
+		) || SettingsModule::should_use_the_old_ui()
+		) {
+			add_action(
+				'admin_enqueue_scripts',
+				function() use ( $c ) {
+					$asset_loader = $c->get( 'onboarding.assets' );
+					assert( $asset_loader instanceof OnboardingAssets );
 
-				$asset_loader->register();
-				add_action(
-					'woocommerce_settings_checkout',
-					array(
-						$asset_loader,
-						'enqueue',
-					)
-				);
-			}
-		);
+					$asset_loader->register();
+					add_action(
+						'woocommerce_settings_checkout',
+						array(
+							$asset_loader,
+							'enqueue',
+						)
+					);
+				}
+			);
+		}
 
 		add_filter(
 			'woocommerce_form_field',

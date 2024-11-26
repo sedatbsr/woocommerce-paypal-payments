@@ -172,6 +172,10 @@ class VaultingModule implements ServiceModule, ExtendingModule, ExecutableModule
 		add_action(
 			'wp',
 			function() use ( $container ) {
+				if ( $container->get( 'vaulting.vault-v3-enabled' ) ) {
+					return;
+				}
+
 				global $wp;
 
 				if ( isset( $wp->query_vars['delete-payment-method'] ) ) {

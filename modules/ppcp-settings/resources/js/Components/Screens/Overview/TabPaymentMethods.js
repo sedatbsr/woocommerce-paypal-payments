@@ -7,9 +7,16 @@ import ModalAcdc from './Modals/ModalAcdc';
 
 const TabPaymentMethods = () => {
 	const renderPaymentMethods = ( data ) => {
-		return data.map( ( paymentMethod ) => (
-			<PaymentMethodItem key={ paymentMethod.id } { ...paymentMethod } />
-		) );
+		return (
+			<div className="ppcp-r-payment-method-item-list">
+				{ data.map( ( paymentMethod ) => (
+					<PaymentMethodItem
+						key={ paymentMethod.id }
+						{ ...paymentMethod }
+					/>
+				) ) }
+			</div>
+		);
 	};
 
 	return (
@@ -110,7 +117,7 @@ const paymentMethodsOnlineCardPaymentsDefault = [
 			"Present custom credit and debit card fields to your payers so they can pay with credit and debit cards using your site's branding.",
 			'woocommerce-paypal-payments'
 		),
-		icon: 'payment-method-cards',
+		icon: 'payment-method-advanced-cards',
 		modal: ModalAcdc,
 	},
 	{
