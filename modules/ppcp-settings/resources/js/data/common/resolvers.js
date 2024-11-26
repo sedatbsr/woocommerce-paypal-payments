@@ -27,7 +27,7 @@ export const resolvers = {
 		} catch ( e ) {
 			yield dispatch( 'core/notices' ).createErrorNotice(
 				__(
-					'Error retrieving onboarding details.',
+					'Error retrieving plugin details.',
 					'woocommerce-paypal-payments'
 				)
 			);
