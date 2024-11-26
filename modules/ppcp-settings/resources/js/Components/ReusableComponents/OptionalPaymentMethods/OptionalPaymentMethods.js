@@ -7,7 +7,6 @@ const OptionalPaymentMethods = ( {
 	isPayLater,
 	storeCountry,
 	storeCurrency,
-	countryPriceInfo,
 } ) => {
 	return (
 		<div className="ppcp-r-optional-payment-methods">
@@ -17,14 +16,12 @@ const OptionalPaymentMethods = ( {
 					isPayLater={ isPayLater }
 					storeCountry={ storeCountry }
 					storeCurrency={ storeCurrency }
-					countryPriceInfo={ countryPriceInfo }
 				/>
 			) : (
 				<BcdcOptionalPaymentMethods
 					isPayLater={ isPayLater }
 					storeCountry={ storeCountry }
 					storeCurrency={ storeCurrency }
-					countryPriceInfo={ countryPriceInfo }
 				/>
 			) }
 		</div>

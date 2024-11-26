@@ -1,12 +1,12 @@
 import BadgeBox from '../BadgeBox';
 import { __, sprintf } from '@wordpress/i18n';
 import generatePriceText from '../../../utils/badgeBoxUtils';
+import { countryPriceInfo } from '../../../utils/countryPriceInfo';
 
 const BcdcOptionalPaymentMethods = ( {
 	isPayLater,
 	storeCountry,
 	storeCurrency,
-	countryPriceInfo,
 } ) => {
 	if ( isPayLater && storeCountry === 'us' ) {
 		return (

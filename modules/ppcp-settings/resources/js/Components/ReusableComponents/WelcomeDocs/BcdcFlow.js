@@ -2,14 +2,10 @@ import BadgeBox, { BADGE_BOX_TITLE_BIG } from '../BadgeBox';
 import { __, sprintf } from '@wordpress/i18n';
 import Separator from '../Separator';
 import generatePriceText from '../../../utils/badgeBoxUtils';
+import { countryPriceInfo } from '../../../utils/countryPriceInfo';
 import OptionalPaymentMethods from '../OptionalPaymentMethods/OptionalPaymentMethods';
 
-const BcdcFlow = ( {
-	isPayLater,
-	storeCountry,
-	storeCurrency,
-	countryPriceInfo,
-} ) => {
+const BcdcFlow = ( { isPayLater, storeCountry, storeCurrency } ) => {
 	if ( isPayLater && storeCountry === 'us' ) {
 		return (
 			<div className="ppcp-r-welcome-docs__wrapper">
@@ -115,7 +111,6 @@ const BcdcFlow = ( {
 						isPayLater={ isPayLater }
 						storeCountry={ storeCountry }
 						storeCurrency={ storeCurrency }
-						countryPriceInfo={ countryPriceInfo }
 					/>
 				</div>
 			</div>
@@ -187,7 +182,6 @@ const BcdcFlow = ( {
 				isPayLater={ isPayLater }
 				storeCountry={ storeCountry }
 				storeCurrency={ storeCurrency }
-				countryPriceInfo={ countryPriceInfo }
 			/>
 		</div>
 	);

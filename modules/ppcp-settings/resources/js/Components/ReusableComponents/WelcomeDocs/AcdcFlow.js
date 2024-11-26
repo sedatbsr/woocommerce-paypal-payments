@@ -2,6 +2,8 @@ import BadgeBox, { BADGE_BOX_TITLE_BIG } from '../BadgeBox';
 import { __, sprintf } from '@wordpress/i18n';
 import Separator from '../Separator';
 import generatePriceText from '../../../utils/badgeBoxUtils';
+import { countryPriceInfo } from '../../../utils/countryPriceInfo';
+
 import OptionalPaymentMethods from '../OptionalPaymentMethods/OptionalPaymentMethods';
 
 const AcdcFlow = ( {
@@ -9,7 +11,6 @@ const AcdcFlow = ( {
 	isPayLater,
 	storeCountry,
 	storeCurrency,
-	countryPriceInfo,
 } ) => {
 	if ( isFastlane && isPayLater && storeCountry === 'us' ) {
 		return (
@@ -116,7 +117,6 @@ const AcdcFlow = ( {
 						isPayLater={ isPayLater }
 						storeCountry={ storeCountry }
 						storeCurrency={ storeCurrency }
-						countryPriceInfo={ countryPriceInfo }
 					/>
 				</div>
 			</div>
@@ -202,7 +202,6 @@ const AcdcFlow = ( {
 						isPayLater={ isPayLater }
 						storeCountry={ storeCountry }
 						storeCurrency={ storeCurrency }
-						countryPriceInfo={ countryPriceInfo }
 					/>
 				</div>
 			</div>
@@ -282,7 +281,6 @@ const AcdcFlow = ( {
 					isPayLater={ isPayLater }
 					storeCountry={ storeCountry }
 					storeCurrency={ storeCurrency }
-					countryPriceInfo={ countryPriceInfo }
 				/>
 			</div>
 		</div>
