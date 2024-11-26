@@ -27,6 +27,7 @@ const WelcomeDocs = ( {
 			ccf: 2.59,
 			dw: 2.59,
 			apm: 2.59,
+			fastlane: 2.59,
 			standardCardFields: 2.99,
 		},
 		uk: {
@@ -119,7 +120,7 @@ const WelcomeDocs = ( {
 				/>
 			) }
 			<p
-				className="ppcp-r-welcome-docs__description"
+				className="ppcp-r-optional-payment-methods__description"
 				dangerouslySetInnerHTML={ { __html: pricesBasedDescription } }
 			></p>
 		</div>

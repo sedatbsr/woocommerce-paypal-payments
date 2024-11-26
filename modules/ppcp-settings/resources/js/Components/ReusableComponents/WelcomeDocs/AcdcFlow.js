@@ -2,6 +2,7 @@ import BadgeBox, { BADGE_BOX_TITLE_BIG } from '../BadgeBox';
 import { __, sprintf } from '@wordpress/i18n';
 import Separator from '../Separator';
 import generatePriceText from '../../../utils/badgeBoxUtils';
+import OptionalPaymentMethods from '../OptionalPaymentMethods/OptionalPaymentMethods';
 
 const AcdcFlow = ( {
 	isFastlane,
@@ -20,9 +21,10 @@ const AcdcFlow = ( {
 							'woocommerce-paypal-payments'
 						) }
 						titleType={ BADGE_BOX_TITLE_BIG }
-						textBadge={ __(
-							'from 3.49% + $0.49 USD<sup>1</sup>',
-							'woocommerce-paypal-payments'
+						textBadge={ generatePriceText(
+							'checkout',
+							countryPriceInfo[ storeCountry ],
+							storeCurrency
 						) }
 						description={ __(
 							'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
@@ -108,96 +110,13 @@ const AcdcFlow = ( {
 							'woocommerce-paypal-payments'
 						) }
 					/>
-					<BadgeBox
-						title={ __(
-							'Custom Card Fields',
-							'woocommerce-paypal-payments'
-						) }
-						imageBadge={ [
-							'icon-button-visa.svg',
-							'icon-button-mastercard.svg',
-							'icon-button-amex.svg',
-							'icon-button-discover.svg',
-						] }
-						textBadge={ __(
-							'from 2.59% + $0.49 USD<sup>1</sup>',
-							'woocommerce-paypal-payments'
-						) }
-						description={ sprintf(
-							// translators: %s: Link to PayPal business fees guide
-							__(
-								'Style the credit card fields to match your own style. Includes advanced processing with risk management, 3D Secure, fraud protection options, and chargeback protection. <a target="_blank" href="%s">Learn more</a>',
-								'woocommerce-paypal-payments'
-							),
-							'https://www.paypal.com/us/business/paypal-business-fees'
-						) }
-					/>
-					<Separator className="ppcp-r-page-welcome-mode-separator" />
-					<BadgeBox
-						title={ __(
-							'Digital Wallets',
-							'woocommerce-paypal-payments'
-						) }
-						imageBadge={ [
-							'icon-button-apple-pay.svg',
-							'icon-button-google-pay.svg',
-						] }
-						textBadge={ __(
-							'from 2.59% + $0.49 USD<sup>1</sup>',
-							'woocommerce-paypal-payments'
-						) }
-						description={ sprintf(
-							// translators: %s: Link to PayPal business fees guide
-							__(
-								'Accept Apple Pay on eligible devices and Google Pay through mobile and web. <a target="_blank" href="%s">Learn more</a>',
-								'woocommerce-paypal-payments'
-							),
-							'https://www.paypal.com/us/business/paypal-business-fees'
-						) }
-					/>
-					<Separator className="ppcp-r-page-welcome-mode-separator" />
-					<BadgeBox
-						title={ __(
-							'Alternative Payment Methods',
-							'woocommerce-paypal-payments'
-						) }
-						imageBadge={ [
-							'icon-button-sepa.svg',
-							'icon-button-ideal.svg',
-							'icon-button-blik.svg',
-							'icon-button-bancontact.svg',
-						] }
-						textBadge={ __(
-							'from 2.59% + $0.49 USD<sup>1</sup>',
-							'woocommerce-paypal-payments'
-						) }
-						description={ sprintf(
-							// translators: %s: Link to PayPal business fees guide
-							__(
-								'Seamless payments for customers across the globe using their preferred payment methods. <a target="_blank" href="%s">Learn more</a>',
-								'woocommerce-paypal-payments'
-							),
-							'https://www.paypal.com/us/business/paypal-business-fees'
-						) }
-					/>
-					<Separator className="ppcp-r-page-welcome-mode-separator" />
-					<BadgeBox
-						title={ __( '', 'woocommerce-paypal-payments' ) }
-						imageBadge={ [
-							'icon-payment-method-fastlane-small.svg',
-						] }
-						textBadge={ __(
-							'from 2.59% + $0.49 USD<sup>1</sup>',
-							'woocommerce-paypal-payments'
-						) }
-						description={ sprintf(
-							// translators: %s: Link to PayPal business fees guide
-							__(
-								'Speed up guest checkout with Fatslane. Link a customer\'s email address to their payment details. <a target="_blank" href="%s">Learn more</a>',
-								'woocommerce-paypal-payments'
-							),
-							'https://www.paypal.com/us/business/paypal-business-fees'
-						) }
+					<OptionalPaymentMethods
+						useAcdc={ true }
+						isFastlane={ isFastlane }
+						isPayLater={ isPayLater }
+						storeCountry={ storeCountry }
+						storeCurrency={ storeCurrency }
+						countryPriceInfo={ countryPriceInfo }
 					/>
 				</div>
 			</div>
@@ -214,9 +133,10 @@ const AcdcFlow = ( {
 							'woocommerce-paypal-payments'
 						) }
 						titleType={ BADGE_BOX_TITLE_BIG }
-						textBadge={ __(
-							'from 2.90% + £0.30 GBP<sup>1</sup>',
-							'woocommerce-paypal-payments'
+						textBadge={ generatePriceText(
+							'checkout',
+							countryPriceInfo[ storeCountry ],
+							storeCurrency
 						) }
 						description={ __(
 							'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
@@ -276,77 +196,13 @@ const AcdcFlow = ( {
 							'woocommerce-paypal-payments'
 						) }
 					/>
-					<BadgeBox
-						title={ __(
-							'Custom Card Fields',
-							'woocommerce-paypal-payments'
-						) }
-						imageBadge={ [
-							'icon-button-visa.svg',
-							'icon-button-mastercard.svg',
-							'icon-button-amex.svg',
-							'icon-button-discover.svg',
-						] }
-						textBadge={ __(
-							'from 1.20% + £0.30 GBP<sup>1</sup>',
-							'woocommerce-paypal-payments'
-						) }
-						description={ sprintf(
-							// translators: %s: Link to PayPal business fees guide
-							__(
-								'Style the credit card fields to match your own style. Includes advanced processing with risk management, 3D Secure, fraud protection options, and chargeback protection. <a target="_blank" href="%s">Learn more</a>',
-								'woocommerce-paypal-payments'
-							),
-							'https://www.paypal.com/us/business/paypal-business-fees'
-						) }
-					/>
-					<Separator className="ppcp-r-page-welcome-mode-separator" />
-					<BadgeBox
-						title={ __(
-							'Digital Wallets',
-							'woocommerce-paypal-payments'
-						) }
-						imageBadge={ [
-							'icon-button-apple-pay.svg',
-							'icon-button-google-pay.svg',
-						] }
-						textBadge={ __(
-							'from 1.20% + £0.30 GBP<sup>1</sup>',
-							'woocommerce-paypal-payments'
-						) }
-						description={ sprintf(
-							// translators: %s: Link to PayPal business fees guide
-							__(
-								'Accept Apple Pay on eligible devices and Google Pay through mobile and web. <a target="_blank" href="%s">Learn more</a>',
-								'woocommerce-paypal-payments'
-							),
-							'https://www.paypal.com/us/business/paypal-business-fees'
-						) }
-					/>
-					<Separator className="ppcp-r-page-welcome-mode-separator" />
-					<BadgeBox
-						title={ __(
-							'Alternative Payment Methods',
-							'woocommerce-paypal-payments'
-						) }
-						imageBadge={ [
-							'icon-button-sepa.svg',
-							'icon-button-ideal.svg',
-							'icon-button-blik.svg',
-							'icon-button-bancontact.svg',
-						] }
-						textBadge={ __(
-							'from 1.20% + £0.30 GBP<sup>1</sup>',
-							'woocommerce-paypal-payments'
-						) }
-						description={ sprintf(
-							// translators: %s: Link to PayPal business fees guide
-							__(
-								'Seamless payments for customers across the globe using their preferred payment methods. <a target="_blank" href="%s">Learn more</a>',
-								'woocommerce-paypal-payments'
-							),
-							'https://www.paypal.com/us/business/paypal-business-fees'
-						) }
+					<OptionalPaymentMethods
+						useAcdc={ true }
+						isFastlane={ isFastlane }
+						isPayLater={ isPayLater }
+						storeCountry={ storeCountry }
+						storeCurrency={ storeCurrency }
+						countryPriceInfo={ countryPriceInfo }
 					/>
 				</div>
 			</div>
@@ -420,80 +276,13 @@ const AcdcFlow = ( {
 						'woocommerce-paypal-payments'
 					) }
 				/>
-				<BadgeBox
-					title={ __(
-						'Custom Card Fields',
-						'woocommerce-paypal-payments'
-					) }
-					imageBadge={ [
-						'icon-button-visa.svg',
-						'icon-button-mastercard.svg',
-						'icon-button-amex.svg',
-						'icon-button-discover.svg',
-					] }
-					textBadge={ generatePriceText(
-						'ccf',
-						countryPriceInfo[ storeCountry ],
-						storeCurrency
-					) }
-					description={ sprintf(
-						// translators: %s: Link to PayPal business fees guide
-						__(
-							'Style the credit card fields to match your own style. Includes advanced processing with risk management, 3D Secure, fraud protection options, and chargeback protection. <a target="_blank" href="%s">Learn more</a>',
-							'woocommerce-paypal-payments'
-						),
-						'https://www.paypal.com/us/business/paypal-business-fees'
-					) }
-				/>
-				<Separator className="ppcp-r-page-welcome-mode-separator" />
-				<BadgeBox
-					title={ __(
-						'Digital Wallets',
-						'woocommerce-paypal-payments'
-					) }
-					imageBadge={ [
-						'icon-button-apple-pay.svg',
-						'icon-button-google-pay.svg',
-					] }
-					textBadge={ generatePriceText(
-						'dw',
-						countryPriceInfo[ storeCountry ],
-						storeCurrency
-					) }
-					description={ sprintf(
-						// translators: %s: Link to PayPal business fees guide
-						__(
-							'Accept Apple Pay on eligible devices and Google Pay through mobile and web. <a target="_blank" href="%s">Learn more</a>',
-							'woocommerce-paypal-payments'
-						),
-						'https://www.paypal.com/us/business/paypal-business-fees'
-					) }
-				/>
-				<Separator className="ppcp-r-page-welcome-mode-separator" />
-				<BadgeBox
-					title={ __(
-						'Alternative Payment Methods',
-						'woocommerce-paypal-payments'
-					) }
-					imageBadge={ [
-						'icon-button-sepa.svg',
-						'icon-button-ideal.svg',
-						'icon-button-blik.svg',
-						'icon-button-bancontact.svg',
-					] }
-					textBadge={ generatePriceText(
-						'apm',
-						countryPriceInfo[ storeCountry ],
-						storeCurrency
-					) }
-					description={ sprintf(
-						// translators: %s: Link to PayPal business fees guide
-						__(
-							'Seamless payments for customers across the globe using their preferred payment methods. <a target="_blank" href="%s">Learn more</a>',
-							'woocommerce-paypal-payments'
-						),
-						'https://www.paypal.com/us/business/paypal-business-fees'
-					) }
+				<OptionalPaymentMethods
+					useAcdc={ true }
+					isFastlane={ isFastlane }
+					isPayLater={ isPayLater }
+					storeCountry={ storeCountry }
+					storeCurrency={ storeCurrency }
+					countryPriceInfo={ countryPriceInfo }
 				/>
 			</div>
 		</div>
