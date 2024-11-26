@@ -1,23 +1,36 @@
-import data from '../../utils/data';
+import { CheckboxControl } from '@wordpress/components';
 
 export const PayPalCheckbox = ( props ) => {
 	return (
 		<div className="ppcp-r__checkbox">
-			<input
-				className="ppcp-r__checkbox-value"
-				type="checkbox"
-				checked={ props.currentValue.includes( props.value ) }
-				name={ props.name }
+			<CheckboxControl
+				label={ props?.label ? props.label : '' }
 				value={ props.value }
-				onChange={ ( e ) =>
-					props.handleCheckboxState( e.target.checked, props )
+				checked={ props.currentValue.includes( props.value ) }
+				onChange={ ( checked ) =>
+					handleCheckboxState( checked, props )
 				}
 			/>
-			<span className="ppcp-r__checkbox-presentation">
-				{ data().getImage( 'icon-checkbox.svg' ) }
-			</span>
 		</div>
 	);
+};
+
+export const PayPalCheckboxGroup = ( props ) => {
+	const renderCheckboxGroup = () => {
+		return props.value.map( ( checkbox ) => {
+			return (
+				<PayPalCheckbox
+					label={ checkbox.label }
+					value={ checkbox.value }
+					key={ checkbox.value }
+					currentValue={ props.currentValue }
+					changeCallback={ props.changeCallback }
+				/>
+			);
+		} );
+	};
+
+	return <>{ renderCheckboxGroup() }</>;
 };
 
 export const PayPalRdb = ( props ) => {
@@ -75,7 +88,6 @@ export const handleCheckboxState = ( checked, props ) => {
 	let newValue = null;
 	if ( checked ) {
 		newValue = [ ...props.currentValue, props.value ];
-		props.changeCallback( newValue );
 	} else {
 		newValue = props.currentValue.filter(
 			( value ) => value !== props.value

@@ -1874,6 +1874,13 @@
     "@parcel/watcher-win32-ia32" "2.5.0"
     "@parcel/watcher-win32-x64" "2.5.0"
 
+"@paypal/paypal-js@^8.1.2":
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/@paypal/paypal-js/-/paypal-js-8.1.2.tgz#3b6199e1c9e3b2a3e444309e0d0ff63556e3ef86"
+  integrity sha512-EKshGSWRxLWU1NyPB9P1TiOkPajVmpTo5I9HuZKoSv8y2uk0XIskXqMkAJ/Y9qAg9iJyP102Jb/atX63tTy24w==
+  dependencies:
+    promise-polyfill "^8.3.0"
+
 "@pkgr/core@^0.1.0":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.1.1.tgz#1ec17e2edbec25c8306d424ecfbf13c7de1aaa31"
@@ -9364,6 +9371,11 @@ progress@2.0.3, progress@^2.0.3:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
+
+promise-polyfill@^8.3.0:
+  version "8.3.0"
+  resolved "https://registry.yarnpkg.com/promise-polyfill/-/promise-polyfill-8.3.0.tgz#9284810268138d103807b11f4e23d5e945a4db63"
+  integrity sha512-H5oELycFml5yto/atYqmjyigJoAo3+OXwolYiH7OfQuYlAqhxNvTfiNMbV9hsC6Yp83yE5r2KTVmtrG6R9i6Pg==
 
 prompts@^2.0.1, prompts@^2.4.2:
   version "2.4.2"

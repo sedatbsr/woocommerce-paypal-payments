@@ -1,15 +1,28 @@
 import PaymentMethodModal from '../../../ReusableComponents/PaymentMethodModal';
 import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
-import {
-	PayPalRdb,
-	PayPalRdbWithContent,
-} from '../../../ReusableComponents/Fields';
 import { useState } from '@wordpress/element';
+import { RadioControl } from '@wordpress/components';
 
-const THREED_SECURE_GROUP_NAME = 'threed-secure';
 const ModalAcdc = ( { setModalIsVisible } ) => {
 	const [ threeDSecure, setThreeDSecure ] = useState( 'no-3d-secure' );
+	const acdcOptions = [
+		{
+			label: __( 'No 3D Secure', 'woocommerce-paypal-payments' ),
+			value: 'no-3d-secure',
+		},
+		{
+			label: __( 'Only when required', 'woocommerce-paypal-payments' ),
+			value: 'only-required-3d-secure',
+		},
+		{
+			label: __(
+				'Always require 3D Secure',
+				'woocommerce-paypal-payments'
+			),
+			value: 'always-3d-secure',
+		},
+	];
 
 	return (
 		<PaymentMethodModal
@@ -30,39 +43,10 @@ const ModalAcdc = ( { setModalIsVisible } ) => {
 				) }
 			</p>
 			<div className="ppcp-r-modal__field-rows ppcp-r-modal__field-rows--acdc">
-				<PayPalRdbWithContent
-					id="no-3d-secure"
-					name={ THREED_SECURE_GROUP_NAME }
-					value="no-3d-secure"
-					currentValue={ threeDSecure }
-					handleRdbState={ setThreeDSecure }
-					label={ __(
-						'No 3D Secure',
-						'woocommerce-paypal-payments'
-					) }
-				/>
-				<PayPalRdbWithContent
-					id="only-required-3d-secure"
-					name={ THREED_SECURE_GROUP_NAME }
-					value="only-required-3d-secure"
-					currentValue={ threeDSecure }
-					handleRdbState={ setThreeDSecure }
-					label={ __(
-						'Only when required',
-						'woocommerce-paypal-payments'
-					) }
-				/>
-
-				<PayPalRdbWithContent
-					id="always-3d-secure"
-					name={ THREED_SECURE_GROUP_NAME }
-					value="always-3d-secure"
-					currentValue={ threeDSecure }
-					handleRdbState={ setThreeDSecure }
-					label={ __(
-						'Always require 3D Secure',
-						'woocommerce-paypal-payments'
-					) }
+				<RadioControl
+					onChange={ setThreeDSecure }
+					selected={ threeDSecure }
+					options={ acdcOptions }
 				/>
 
 				<div className="ppcp-r-modal__field-row ppcp-r-modal__field-row--save">
