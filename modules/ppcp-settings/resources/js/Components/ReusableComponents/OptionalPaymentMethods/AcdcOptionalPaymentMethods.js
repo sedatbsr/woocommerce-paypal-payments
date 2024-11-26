@@ -38,7 +38,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'https://www.paypal.com/us/business/paypal-business-fees'
 					) }
 				/>
-				<Separator className="ppcp-r-page-welcome-mode-separator" />
+				<Separator className="ppcp-r-optional-payment-methods__separator" />
 				<BadgeBox
 					title={ __(
 						'Digital Wallets',
@@ -62,7 +62,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'https://www.paypal.com/us/business/paypal-business-fees'
 					) }
 				/>
-				<Separator className="ppcp-r-page-welcome-mode-separator" />
+				<Separator className="ppcp-r-optional-payment-methods__separator" />
 				<BadgeBox
 					title={ __(
 						'Alternative Payment Methods',
@@ -88,7 +88,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'https://www.paypal.com/us/business/paypal-business-fees'
 					) }
 				/>
-				<Separator className="ppcp-r-page-welcome-mode-separator" />
+				<Separator className="ppcp-r-optional-payment-methods__separator" />
 				<BadgeBox
 					title={ __( '', 'woocommerce-paypal-payments' ) }
 					imageBadge={ [ 'icon-payment-method-fastlane-small.svg' ] }
@@ -138,7 +138,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'https://www.paypal.com/us/business/paypal-business-fees'
 					) }
 				/>
-				<Separator className="ppcp-r-page-welcome-mode-separator" />
+				<Separator className="ppcp-r-optional-payment-methods__separator" />
 				<BadgeBox
 					title={ __(
 						'Digital Wallets',
@@ -162,7 +162,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'https://www.paypal.com/us/business/paypal-business-fees'
 					) }
 				/>
-				<Separator className="ppcp-r-page-welcome-mode-separator" />
+				<Separator className="ppcp-r-optional-payment-methods__separator" />
 				<BadgeBox
 					title={ __(
 						'Alternative Payment Methods',
@@ -219,7 +219,7 @@ const AcdcOptionalPaymentMethods = ( {
 					'https://www.paypal.com/us/business/paypal-business-fees'
 				) }
 			/>
-			<Separator className="ppcp-r-page-welcome-mode-separator" />
+			<Separator className="ppcp-r-optional-payment-methods__separator" />
 			<BadgeBox
 				title={ __( 'Digital Wallets', 'woocommerce-paypal-payments' ) }
 				imageBadge={ [
@@ -240,7 +240,7 @@ const AcdcOptionalPaymentMethods = ( {
 					'https://www.paypal.com/us/business/paypal-business-fees'
 				) }
 			/>
-			<Separator className="ppcp-r-page-welcome-mode-separator" />
+			<Separator className="ppcp-r-optional-payment-methods__separator" />
 			<BadgeBox
 				title={ __(
 					'Alternative Payment Methods',
