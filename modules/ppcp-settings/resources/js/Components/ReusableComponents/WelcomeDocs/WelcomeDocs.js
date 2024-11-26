@@ -22,8 +22,8 @@ const WelcomeDocs = ( { useAcdc, isFastlane, isPayLater, storeCountry, storeCurr
                 <BcdcFlow isPayLater={ isPayLater } storeCountry={ storeCountry } />
             )}
             <p
-                className="ppcp-r-welcome-docs__description"
-                dangerouslySetInnerHTML={{__html: pricesBasedDescription,}}
+                className="ppcp-r-optional-payment-methods__description"
+                dangerouslySetInnerHTML={ { __html: pricesBasedDescription } }
             ></p>
         </div>
     );

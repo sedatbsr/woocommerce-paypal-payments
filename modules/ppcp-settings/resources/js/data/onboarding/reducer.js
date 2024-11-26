@@ -27,6 +27,7 @@ const defaultPersistent = {
 	completed: false,
 	step: 0,
 	isCasualSeller: null, // null value will uncheck both options in the UI.
+	areOptionalPaymentMethodsEnabled: true,
 	products: [],
 };
 

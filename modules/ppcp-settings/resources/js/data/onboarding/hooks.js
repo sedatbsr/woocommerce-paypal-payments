@@ -25,8 +25,14 @@ const usePersistent = ( key ) =>
 	);
 
 const useHooks = () => {
-	const { persist, setStep, setCompleted, setIsCasualSeller, setProducts } =
-		useDispatch( STORE_NAME );
+	const {
+		persist,
+		setStep,
+		setCompleted,
+		setIsCasualSeller,
+		setAreOptionalPaymentMethodsEnabled,
+		setProducts,
+	} = useDispatch( STORE_NAME );
 
 	// Read-only flags.
 	const flags = useSelect( ( select ) => select( STORE_NAME ).flags(), [] );
@@ -38,6 +44,9 @@ const useHooks = () => {
 	const step = usePersistent( 'step' );
 	const completed = usePersistent( 'completed' );
 	const isCasualSeller = usePersistent( 'isCasualSeller' );
+	const areOptionalPaymentMethodsEnabled = usePersistent(
+		'areOptionalPaymentMethodsEnabled'
+	);
 	const products = usePersistent( 'products' );
 
 	const savePersistent = async ( setter, value ) => {
@@ -60,6 +69,10 @@ const useHooks = () => {
 		setIsCasualSeller: ( value ) => {
 			return savePersistent( setIsCasualSeller, value );
 		},
+		areOptionalPaymentMethodsEnabled,
+		setAreOptionalPaymentMethodsEnabled: ( value ) => {
+			return savePersistent( setAreOptionalPaymentMethodsEnabled, value );
+		},
 		products,
 		setProducts: ( activeProducts ) => {
 			const validProducts = activeProducts.filter( ( item ) =>
@@ -80,6 +93,18 @@ export const useProducts = () => {
 	const { products, setProducts } = useHooks();
 
 	return { products, setProducts };
+};
+
+export const useOptionalPaymentMethods = () => {
+	const {
+		areOptionalPaymentMethodsEnabled,
+		setAreOptionalPaymentMethodsEnabled,
+	} = useHooks();
+
+	return {
+		areOptionalPaymentMethodsEnabled,
+		setAreOptionalPaymentMethodsEnabled,
+	};
 };
 
 export const useSteps = () => {
