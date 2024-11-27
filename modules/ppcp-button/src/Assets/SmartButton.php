@@ -1594,10 +1594,15 @@ document.querySelector("#payment").before(document.querySelector(".ppcp-messages
 		 *
 		 * @internal Matches filter name in APM extension.
 		 *
-		 * @param array $components The array of components already registered.
+		 * @param array  $components The array of components already registered.
+		 * @param string $context    The SmartButton context.
 		 */
 		return array_unique(
-			(array) apply_filters( 'woocommerce_paypal_payments_sdk_components_hook', $components )
+			(array) apply_filters(
+				'woocommerce_paypal_payments_sdk_components_hook',
+				$components,
+				$this->context()
+			)
 		);
 	}
 
