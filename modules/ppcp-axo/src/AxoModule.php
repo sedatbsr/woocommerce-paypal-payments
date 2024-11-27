@@ -230,6 +230,16 @@ class AxoModule implements ServiceModule, ExtendingModule, ExecutableModule {
 				);
 
 				/**
+				 * Late loading locations because of trouble with some shipping plugins
+				 */
+				add_filter(
+					'woocommerce_paypal_payments_axo_shipping_wc_enabled_locations',
+					function ( array $locations ) use ( $c ): array {
+						return array_merge( $locations, $c->get( 'axo.shipping-wc-enabled-locations' ) );
+					}
+				);
+
+				/**
 				 * Param types removed to avoid third-party issues.
 				 *
 				 * @psalm-suppress MissingClosureParamType
