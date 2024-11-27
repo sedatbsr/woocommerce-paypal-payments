@@ -13,8 +13,11 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use WC_Order;
 use WC_Payment_Gateway;
+use WooCommerce\PayPalCommerce\ApiClient\Endpoint\Orders;
+use WooCommerce\PayPalCommerce\ApiClient\Factory\PurchaseUnitFactory;
 use WooCommerce\PayPalCommerce\Session\SessionHandler;
 use WooCommerce\PayPalCommerce\WcGateway\Exception\GatewayGenericException;
+use WooCommerce\PayPalCommerce\WcGateway\Gateway\PayPalGateway;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\ProcessPaymentTrait;
 use WooCommerce\PayPalCommerce\WcGateway\Gateway\TransactionUrlProvider;
 use WooCommerce\PayPalCommerce\WcGateway\Processor\OrderProcessor;
@@ -24,9 +27,24 @@ use WooCommerce\PayPalCommerce\WcGateway\Processor\RefundProcessor;
  * Class SEPAGateway
  */
 class SEPAGateway extends WC_Payment_Gateway {
+
 	use ProcessPaymentTrait;
 
 	const ID = 'ppcp-sepa';
+
+	/**
+	 * PayPal Orders endpoint.
+	 *
+	 * @var Orders
+	 */
+	private $orders_endpoint;
+
+	/**
+	 * Purchase unit factory.
+	 *
+	 * @var PurchaseUnitFactory
+	 */
+	private $purchase_unit_factory;
 
 	/**
 	 * The processor for orders.
@@ -81,6 +99,8 @@ class SEPAGateway extends WC_Payment_Gateway {
 	 * @param LoggerInterface         $logger The logger.
 	 */
 	public function __construct(
+		Orders $orders_endpoint,
+		PurchaseUnitFactory $purchase_unit_factory,
 		OrderProcessor $order_processor,
 		callable $paypal_checkout_url_factory,
 		RefundProcessor $refund_processor,
@@ -103,6 +123,8 @@ class SEPAGateway extends WC_Payment_Gateway {
 
 		$this->init_form_fields();
 		$this->init_settings();
+
+		$this->orders_endpoint             = $orders_endpoint;
 		$this->order_processor             = $order_processor;
 		$this->paypal_checkout_url_factory = $paypal_checkout_url_factory;
 		$this->refund_processor            = $refund_processor;
@@ -117,6 +139,7 @@ class SEPAGateway extends WC_Payment_Gateway {
 				'process_admin_options',
 			)
 		);
+		$this->purchase_unit_factory = $purchase_unit_factory;
 	}
 
 	/**
@@ -165,7 +188,78 @@ class SEPAGateway extends WC_Payment_Gateway {
 			);
 		}
 
-		return $this->handle_payment_success( $wc_order );
+		$purchase_unit = $this->purchase_unit_factory->from_wc_order( $wc_order );
+		$amount        = $purchase_unit->amount()->to_array();
+
+		$request_body = array(
+			'intent'         => 'CAPTURE',
+			'purchase_units' => array(
+				array(
+					'reference_id' => $purchase_unit->reference_id(),
+					'amount'       => array(
+						'currency_code' => $amount['currency_code'],
+						'value'         => $amount['value'],
+					),
+					'custom_id'    => $purchase_unit->custom_id(),
+					'invoice_id'   => $purchase_unit->invoice_id(),
+				),
+			),
+		);
+
+		$response = $this->orders_endpoint->create( $request_body );
+		$body     = json_decode( $response['body'] );
+
+		$request_body = array(
+			'payment_source' => array(
+				'bank' => array(
+					'sepa_debit' => array(
+						'iban'                => 'DE92612623452402508108',
+						'account_holder_name' => 'John Doe',
+						'billing_address'     => array(
+							'address_line_1' => 'Kantstraße 64',
+							'address_line_2' => '#100',
+							'admin_area_1'   => 'Freistaat Sachsen',
+							'admin_area_2'   => 'Annaberg-buchholz',
+							'postal_code'    => '09456',
+							'country_code'   => 'DE',
+						),
+						'attributes'          => array(
+							'mandate'  => array(
+								'type' => 'ONE_OFF',
+							),
+							'customer' => array(
+								'id' => 'jd120252fg4dm',
+							),
+						),
+						'experience_context'  => array(
+							'locale'     => 'en-DE',
+							'return_url' => $this->get_return_url( $wc_order ),
+							'cancel_url' => add_query_arg( 'cancelled', 'true', $this->get_return_url( $wc_order ) ),
+						),
+					),
+				),
+			),
+		);
+
+		$response = $this->orders_endpoint->confirm_payment_source( $request_body, $body->id );
+		$body     = json_decode( $response['body'] );
+
+		$payer_action = '';
+		foreach ( $body->links as $link ) {
+			if ( $link->rel === 'payer-action' ) {
+				$payer_action = $link->href;
+			}
+		}
+
+		WC()->cart->empty_cart();
+
+		$wc_order->update_meta_data( PayPalGateway::ORDER_ID_META_KEY, $body->id );
+		$wc_order->save_meta_data();
+
+		return array(
+			'result'   => 'success',
+			'redirect' => esc_url( $payer_action ),
+		);
 	}
 
 	/**
@@ -174,9 +268,9 @@ class SEPAGateway extends WC_Payment_Gateway {
 	 * If the gateway declares 'refunds' support, this will allow it to refund.
 	 * a passed in amount.
 	 *
-	 * @param  int    $order_id Order ID.
-	 * @param  float  $amount Refund amount.
-	 * @param  string $reason Refund reason.
+	 * @param int    $order_id Order ID.
+	 * @param float  $amount Refund amount.
+	 * @param string $reason Refund reason.
 	 * @return boolean True or false based on success, or a WP_Error object.
 	 */
 	public function process_refund( $order_id, $amount = null, $reason = '' ) {

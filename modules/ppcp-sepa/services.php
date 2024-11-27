@@ -15,6 +15,8 @@ use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 return array(
 	'sepa.wc-gateway' => static function ( ContainerInterface $container ): SEPAGateway {
 		return new SEPAGateway(
+			$container->get( 'api.endpoint.orders' ),
+			$container->get( 'api.factory.purchase-unit' ),
 			$container->get( 'wcgateway.order-processor' ),
 			$container->get( 'api.factory.paypal-checkout-url' ),
 			$container->get( 'wcgateway.processor.refunds' ),
