@@ -1,9 +1,11 @@
 import BadgeBox, { BADGE_BOX_TITLE_BIG } from '../BadgeBox';
 import { __, sprintf } from '@wordpress/i18n';
 import Separator from '../Separator';
+import generatePriceText from '../../../utils/badgeBoxUtils';
+import { countryPriceInfo } from '../../../utils/countryPriceInfo';
 import OptionalPaymentMethods from '../OptionalPaymentMethods/OptionalPaymentMethods';
 
-const BcdcFlow = ( { isPayLater, storeCountry } ) => {
+const BcdcFlow = ( { isPayLater, storeCountry, storeCurrency } ) => {
 	if ( isPayLater && storeCountry === 'us' ) {
 		return (
 			<div className="ppcp-r-welcome-docs__wrapper">
@@ -14,9 +16,10 @@ const BcdcFlow = ( { isPayLater, storeCountry } ) => {
 							'woocommerce-paypal-payments'
 						) }
 						titleType={ BADGE_BOX_TITLE_BIG }
-						textBadge={ __(
-							'from 3.49% + $0.49 USD<sup>1</sup>',
-							'woocommerce-paypal-payments'
+						textBadge={ generatePriceText(
+							'checkout',
+							countryPriceInfo[ storeCountry ],
+							storeCurrency
 						) }
 						description={ __(
 							'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
@@ -107,6 +110,7 @@ const BcdcFlow = ( { isPayLater, storeCountry } ) => {
 						isFastlane={ false }
 						isPayLater={ isPayLater }
 						storeCountry={ storeCountry }
+						storeCurrency={ storeCurrency }
 					/>
 				</div>
 			</div>
@@ -118,9 +122,10 @@ const BcdcFlow = ( { isPayLater, storeCountry } ) => {
 			<BadgeBox
 				title={ __( 'PayPal Checkout', 'woocommerce-paypal-payments' ) }
 				titleType={ BADGE_BOX_TITLE_BIG }
-				textBadge={ __(
-					'from 3.40% + €0.35 EUR<sup>1</sup>',
-					'woocommerce-paypal-payments'
+				textBadge={ generatePriceText(
+					'checkout',
+					countryPriceInfo[ storeCountry ],
+					storeCurrency
 				) }
 				description={ __(
 					'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
@@ -176,6 +181,7 @@ const BcdcFlow = ( { isPayLater, storeCountry } ) => {
 				isFastlane={ false }
 				isPayLater={ isPayLater }
 				storeCountry={ storeCountry }
+				storeCurrency={ storeCurrency }
 			/>
 		</div>
 	);
