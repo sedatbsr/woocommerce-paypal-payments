@@ -14,19 +14,5 @@ module.exports = {
 			),
 			style: path.resolve( process.cwd(), 'resources/css', 'style.scss' ),
 		},
-		resolve: {
-			...defaultConfig.resolve,
-			...{
-				alias: {
-					...defaultConfig.resolve.alias,
-					...{
-						ppcpButton: path.resolve(
-							__dirname,
-							'../ppcp-button/resources/js'
-						),
-					},
-				},
-			},
-		},
 	},
 };

@@ -15,6 +15,7 @@
     "dependencies": {
         "@paypal/paypal-js": "^8.1.2",
         "@woocommerce/settings": "^1.0.0",
+        "deepmerge": "^4.3.1",
         "react-select": "^5.8.3"
     }
 }

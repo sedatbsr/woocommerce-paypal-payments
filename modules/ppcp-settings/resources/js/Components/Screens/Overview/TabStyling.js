@@ -2,6 +2,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import { SelectControl, RadioControl } from '@wordpress/components';
 import { PayPalCheckboxGroup } from '../../ReusableComponents/Fields';
 import { useState, useMemo, useEffect } from '@wordpress/element';
+import Renderer from '../../../../../../ppcp-button/resources/js/modules/Renderer/Renderer';
 import {
 	defaultLocationSettings,
 	paymentMethodOptions,
@@ -10,7 +11,6 @@ import {
 	buttonLayoutOptions,
 	buttonLabelOptions,
 } from '../../../data/settings/tab-styling-data';
-import Renderer from '../../../utils/renderer';
 
 const TabStyling = () => {
 	useEffect( () => {
@@ -178,11 +178,8 @@ const TabStyling = () => {
 					</TabStylingSection>
 				) }
 			</div>
-			<div
-				id="ppcp-r-styling-preview"
-				className="ppcp-r-styling__preview"
-			>
-				<div className="ppcp-preview"></div>
+			<div className="ppcp-preview ppcp-r-button-preview ppcp-r-styling__preview">
+				<div id="ppcp-r-styling-preview"></div>
 			</div>
 		</div>
 	);
@@ -229,28 +226,73 @@ const SectionIntro = () => {
 };
 
 const generatePreview = () => {
-	const settings = {
-		button: {
-			wrapper: '#ppcp-r-styling-preview',
-			style: {
-				color: 'gold',
-				shape: 'rect',
-				label: 'paypal',
-				tagline: false,
-				layout: 'horizontal',
+	const render = () => {
+		const settings = {
+			button: {
+				wrapper: '#ppcp-r-styling-preview',
+				style: {
+					color: 'gold',
+					shape: 'rect',
+					label: 'paypal',
+					tagline: false,
+					layout: 'horizontal',
+				},
 			},
-		},
-		separate_buttons: {},
+			separate_buttons: {},
+		};
+		const wrapperSelector =
+			Object.values( settings.separate_buttons ).length > 0
+				? Object.values( settings.separate_buttons )[ 0 ].wrapper
+				: settings.button.wrapper;
+		const wrapper = document.querySelector( wrapperSelector );
+		if ( ! wrapper ) {
+			return;
+		}
+		wrapper.innerHTML = '';
+
+		const renderer = new Renderer(
+			null,
+			settings,
+			( data, actions ) => actions.reject(),
+			null
+		);
+
+		try {
+			renderer.render( {} );
+			jQuery( document ).trigger(
+				'ppcp_paypal_render_preview',
+				settings
+			);
+		} catch ( err ) {
+			console.error( err );
+		}
 	};
-	const renderer = new Renderer(
-		null,
-		settings,
-		( data, actions ) => actions.reject(),
-		null
-	);
-	jQuery( document ).trigger( 'ppcp_paypal_render_preview', settings );
 
-	renderer.render( {} );
+	renderPreview( () => {
+		console.log( 'CALLBACK' );
+	}, render );
 };
+function renderPreview( settingsCallback, render ) {
+	let oldSettings = settingsCallback();
+	const form = jQuery( '#mainform' );
 
+	form.on( 'change', ':input', () => {
+		const newSettings = settingsCallback();
+		if ( JSON.stringify( oldSettings ) === JSON.stringify( newSettings ) ) {
+			return;
+		}
+
+		render( newSettings );
+
+		oldSettings = newSettings;
+	} );
+
+	jQuery( document ).on( 'ppcp_paypal_script_loaded', () => {
+		oldSettings = settingsCallback();
+
+		render( oldSettings );
+	} );
+
+	render( oldSettings );
+}
 export default TabStyling;
