@@ -61,6 +61,39 @@ class SEPAModule implements ServiceModule, ExtendingModule, ExecutableModule {
 			}
 		);
 
+		add_filter(
+			'woocommerce_gateway_description',
+			/**
+			 * Param types removed to avoid third-party issues.
+			 *
+			 * @psalm-suppress MissingClosureParamType
+			 */
+			function( $description, $id ): string {
+				if ( ! is_string( $description ) || ! is_string( $id ) || $id !== SEPAGateway::ID ) {
+					return $description;
+				}
+
+				ob_start();
+
+				woocommerce_form_field(
+					'ppcp_sepa_iban',
+					array(
+						'type'     => 'text',
+						'label'    => esc_html__( 'IBAN', 'woocommerce-paypal-payments' ),
+						'class'    => array( 'form-row-wide' ),
+						'required' => true,
+						'clear'    => true,
+					)
+				);
+
+				$description .= ob_get_clean() ?: '';
+
+				return $description;
+			},
+			10,
+			2
+		);
+
 		return true;
 	}
 }

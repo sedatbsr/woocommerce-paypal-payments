@@ -188,6 +188,7 @@ class SEPAGateway extends WC_Payment_Gateway {
 			);
 		}
 
+		$iban          = wc_clean( wp_unslash( $_POST['ppcp_sepa_iban'] ?? '' ) );
 		$purchase_unit = $this->purchase_unit_factory->from_wc_order( $wc_order );
 		$amount        = $purchase_unit->amount()->to_array();
 
@@ -213,7 +214,7 @@ class SEPAGateway extends WC_Payment_Gateway {
 			'payment_source' => array(
 				'bank' => array(
 					'sepa_debit' => array(
-						'iban'                => 'DE92612623452402508108',
+						'iban'                => $iban,
 						'account_holder_name' => 'John Doe',
 						'billing_address'     => array(
 							'address_line_1' => 'Kantstraße 64',
