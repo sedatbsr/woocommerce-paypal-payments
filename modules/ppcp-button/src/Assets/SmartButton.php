@@ -1596,7 +1596,9 @@ document.querySelector("#payment").before(document.querySelector(".ppcp-messages
 		 *
 		 * @param array $components The array of components already registered.
 		 */
-		return apply_filters( 'woocommerce_paypal_payments_sdk_components_hook', $components );
+		return array_unique(
+			(array) apply_filters( 'woocommerce_paypal_payments_sdk_components_hook', $components )
+		);
 	}
 
 	/**
