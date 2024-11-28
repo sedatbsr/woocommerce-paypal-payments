@@ -64,11 +64,11 @@ class OnboardingProfile extends AbstractDataModel {
 	 */
 	protected function get_defaults() : array {
 		return array(
-			'completed'        => false,
-			'step'             => 0,
-			'is_casual_seller' => null,
+			'completed'                            => false,
+			'step'                                 => 0,
+			'is_casual_seller'                     => null,
 			'are_optional_payment_methods_enabled' => true,
-			'products'         => array(),
+			'products'                             => array(),
 		);
 	}
 
