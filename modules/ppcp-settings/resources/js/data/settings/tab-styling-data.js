@@ -54,19 +54,19 @@ export const paymentMethodOptions = [
 		label: __( 'Venmo', 'woocommerce-paypal-payments' ),
 	},
 	{
-		value: 'pay-later',
+		value: 'paylater',
 		label: __( 'Pay Later', 'woocommerce-paypal-payments' ),
 	},
 	{
-		value: 'debit-or-credit-card',
+		value: 'card',
 		label: __( 'Debit or Credit Card', 'woocommerce-paypal-payments' ),
 	},
 	{
-		value: 'google-pay',
+		value: 'googlepay',
 		label: __( 'Google Pay', 'woocommerce-paypal-payments' ),
 	},
 	{
-		value: 'apple-pay',
+		value: 'applepay',
 		label: __( 'Apple Pay', 'woocommerce-paypal-payments' ),
 	},
 ];
