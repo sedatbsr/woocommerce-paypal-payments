@@ -94,13 +94,6 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 	private $supported_country_card_type_matrix;
 
 	/**
-	 * The list of WooCommerce enabled shipping locations.
-	 *
-	 * @var array
-	 */
-	private array $enabled_shipping_locations;
-
-	/**
 	 * AdvancedCardPaymentMethod constructor.
 	 *
 	 * @param string                        $module_url The URL of this module.
@@ -113,7 +106,6 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 	 * @param string                        $wcgateway_module_url The WcGateway module URL.
 	 * @param array                         $payment_method_selected_map Mapping of payment methods to the PayPal Insights 'payment_method_selected' types.
 	 * @param array                         $supported_country_card_type_matrix The supported country card type matrix for Axo.
-	 * @param array                         $enabled_shipping_locations The list of WooCommerce enabled shipping locations.
 	 */
 	public function __construct(
 	string $module_url,
@@ -125,8 +117,7 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 	Environment $environment,
 	string $wcgateway_module_url,
 	array $payment_method_selected_map,
-	array $supported_country_card_type_matrix,
-	array $enabled_shipping_locations
+	array $supported_country_card_type_matrix
 	) {
 		$this->name                               = AxoGateway::ID;
 		$this->module_url                         = $module_url;
@@ -139,7 +130,6 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 		$this->wcgateway_module_url               = $wcgateway_module_url;
 		$this->payment_method_selected_map        = $payment_method_selected_map;
 		$this->supported_country_card_type_matrix = $supported_country_card_type_matrix;
-		$this->enabled_shipping_locations         = $enabled_shipping_locations;
 	}
 	/**
 	 * {@inheritDoc}
@@ -237,7 +227,7 @@ class AxoBlockPaymentMethod extends AbstractPaymentMethodType {
 			),
 			'allowed_cards'              => $this->supported_country_card_type_matrix,
 			'disable_cards'              => $this->settings->has( 'disable_cards' ) ? (array) $this->settings->get( 'disable_cards' ) : array(),
-			'enabled_shipping_locations' => $this->enabled_shipping_locations,
+			'enabled_shipping_locations' => apply_filters( 'woocommerce_paypal_payments_axo_shipping_wc_enabled_locations', array() ),
 			'style_options'              => array(
 				'root'  => array(
 					'backgroundColor' => $this->settings->has( 'axo_style_root_bg_color' ) ? $this->settings->get( 'axo_style_root_bg_color' ) : '',
