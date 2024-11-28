@@ -36,10 +36,6 @@ const TabStyling = () => {
 		}
 	}, [] );
 
-	document.addEventListener( 'DOMContentLoaded', () => {
-		setCanRender( true );
-	} );
-
 	const currentLocationSettings = useMemo( () => {
 		return locationSettings[ location ];
 	}, [ location, locationSettings ] );
