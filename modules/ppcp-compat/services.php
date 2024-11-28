@@ -122,6 +122,11 @@ return array(
 	 * @returns SettingsMap[]
 	 */
 	'compat.setting.new-to-old-map'                  => function( ContainerInterface $container ) : array {
+		$are_new_settings_enabled = $container->get( 'wcgateway.settings.admin-settings-enabled' );
+		if ( ! $are_new_settings_enabled ) {
+			return array();
+		}
+
 		return array(
 			new SettingsMap(
 				$container->get( 'settings.data.common' ),
