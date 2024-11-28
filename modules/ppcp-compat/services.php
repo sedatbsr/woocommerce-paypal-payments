@@ -131,7 +131,6 @@ return array(
 			new SettingsMap(
 				$container->get( 'settings.data.common' ),
 				array(
-					'use_sandbox'   => 'sandbox_on',
 					'client_id'     => 'client_id',
 					'client_secret' => 'client_secret',
 				)

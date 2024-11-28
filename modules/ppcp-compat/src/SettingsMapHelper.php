@@ -44,8 +44,12 @@ class SettingsMapHelper {
 		foreach ( $this->settings_map as $settings_map ) {
 			$mapped_key   = array_search( $key, $settings_map->get_map(), true );
 			$new_settings = $settings_map->get_model()->to_array();
-			return $new_settings[ $mapped_key ] ?? null;
+			if ( ! empty( $new_settings[ $mapped_key ] ) ) {
+				return $new_settings[ $mapped_key ];
+			}
 		}
+
+		return null;
 	}
 
 	/**
