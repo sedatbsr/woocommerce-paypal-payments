@@ -40,8 +40,8 @@ class SEPAPaymentMethod extends AbstractPaymentMethodType {
 	/**
 	 * SEPAPaymentMethod constructor.
 	 *
-	 * @param string            $module_url The URL of this module.
-	 * @param string            $version The assets version.
+	 * @param string      $module_url The URL of this module.
+	 * @param string      $version The assets version.
 	 * @param SEPAGateway $gateway SEPA WC gateway.
 	 */
 	public function __construct(
@@ -74,7 +74,7 @@ class SEPAPaymentMethod extends AbstractPaymentMethodType {
 	public function get_payment_method_script_handles() {
 		wp_register_script(
 			'ppcp-sepa-payment-method',
-			trailingslashit( $this->module_url ) . 'assets/js/index.js',
+			trailingslashit( $this->module_url ) . 'assets/index.js',
 			array(),
 			$this->version,
 			true

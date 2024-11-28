@@ -1,11 +1,12 @@
-import { registerPaymentMethod } from '@woocommerce/blocks-registry';
+import { SEPA } from './SEPA';
 
+const { registerPaymentMethod } = window.wc.wcBlocksRegistry;
 const config = wc.wcSettings.getSetting( 'ppcp-sepa_data' );
 
 registerPaymentMethod( {
 	name: config.id,
 	label: <div dangerouslySetInnerHTML={ { __html: config.title } } />,
-	content: <div>Content goes here</div>,
+	content: <SEPA />,
 	edit: <div></div>,
 	ariaLabel: config.title,
 	canMakePayment: () => {
