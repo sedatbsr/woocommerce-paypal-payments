@@ -9,6 +9,9 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\Compat;
 
+use WooCommerce\PayPalCommerce\Settings\Data\CommonSettings;
+use WooCommerce\PayPalCommerce\Settings\Data\GeneralSettings;
+use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\Compat\Assets\CompatAssets;
 
@@ -114,5 +117,48 @@ return array(
 			$container->get( 'compat.wc_shipping_tax.is_supported_plugin_version_active' ),
 			$container->get( 'api.bearer' )
 		);
+	},
+
+	/**
+	 * Configuration for the new/old settings map.
+	 *
+	 * @returns SettingsMap[]
+	 */
+	'compat.setting.new-to-old-map'                  => function( ContainerInterface $container ) : array {
+		return array(
+			new SettingsMap(
+				$container->get( CommonSettings::class ),
+				array(
+					'use_sandbox'   => 'sandbox_on',
+					'client_id'     => 'client_id',
+					'client_secret' => 'client_secret',
+				)
+			),
+			new SettingsMap(
+				$container->get( GeneralSettings::class ),
+				array(
+					'is_sandbox'             => 'sandbox_on',
+					'live_client_id'         => 'client_id_production',
+					'live_client_secret'     => 'client_secret_production',
+					'live_merchant_id'       => 'merchant_id_production',
+					'live_merchant_email'    => 'merchant_email_production',
+					'sandbox_client_id'      => 'client_id_sandbox',
+					'sandbox_client_secret'  => 'client_secret_sandbox',
+					'sandbox_merchant_id'    => 'merchant_id_sandbox',
+					'sandbox_merchant_email' => 'merchant_email_sandbox',
+				)
+			),
+			new SettingsMap(
+				$container->get( OnboardingProfile::class ),
+				array(
+					'is_casual_seller'                     => null,
+					'are_optional_payment_methods_enabled' => true,
+					'products'                             => array(),
+				)
+			),
+		);
+	},
+	'compat.settings.settings_map_helper'            => static function( ContainerInterface $container ) : SettingsMapHelper {
+		return new SettingsMapHelper( $container->get( 'compat.setting.new-to-old-map' ) );
 	},
 );
