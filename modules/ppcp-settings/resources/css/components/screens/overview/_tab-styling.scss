@@ -33,15 +33,28 @@
 	&__preview {
 		width: calc(100% - 422px);
 		background-color: #FAF8F5;
+		display: flex;
+		align-items: center;
+
+		&-inner {
+			width: 100%;
+			padding: 24px;
+		}
 	}
 
-	&__section--rc{
+	&__section--rc {
 		.ppcp-r-styling__title {
 			@include font(13, 20, 600);
 			color: $color-black;
 			display: block;
 			margin: 0 0 18px 0;
 		}
+	}
+
+	&__section--empty.ppcp-r-styling__section {
+		padding-bottom: 0;
+		margin-bottom: 0;
+		border-bottom: none;
 	}
 
 	&__select {

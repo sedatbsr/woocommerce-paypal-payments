@@ -1,12 +1,20 @@
 import { CheckboxControl } from '@wordpress/components';
 
 export const PayPalCheckbox = ( props ) => {
+	let isChecked = null;
+
+	if ( Array.isArray( props.currentValue ) ) {
+		isChecked = props.currentValue.includes( props.value );
+	} else {
+		isChecked = props.currentValue;
+	}
+
 	return (
 		<div className="ppcp-r__checkbox">
 			<CheckboxControl
 				label={ props?.label ? props.label : '' }
 				value={ props.value }
-				checked={ props.currentValue.includes( props.value ) }
+				checked={ isChecked }
 				onChange={ ( checked ) =>
 					handleCheckboxState( checked, props )
 				}
@@ -86,7 +94,9 @@ export const PayPalRdbWithContent = ( props ) => {
 
 export const handleCheckboxState = ( checked, props ) => {
 	let newValue = null;
-	if ( checked ) {
+	if ( ! Array.isArray( props.currentValue ) ) {
+		newValue = checked;
+	} else if ( checked ) {
 		newValue = [ ...props.currentValue, props.value ];
 	} else {
 		newValue = props.currentValue.filter(

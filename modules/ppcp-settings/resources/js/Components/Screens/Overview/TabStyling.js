@@ -2,7 +2,8 @@ import { __, sprintf } from '@wordpress/i18n';
 import { SelectControl, RadioControl } from '@wordpress/components';
 import { PayPalCheckboxGroup } from '../../ReusableComponents/Fields';
 import { useState, useMemo, useEffect } from '@wordpress/element';
-import Renderer from '../../../../../../ppcp-button/resources/js/modules/Renderer/Renderer';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
+
 import {
 	defaultLocationSettings,
 	paymentMethodOptions,
@@ -13,13 +14,30 @@ import {
 } from '../../../data/settings/tab-styling-data';
 
 const TabStyling = () => {
-	useEffect( () => {
-		generatePreview();
-	}, [] );
-
 	const [ location, setLocation ] = useState( 'cart' );
+	const [ canRender, setCanRender ] = useState( false );
 	const [ locationSettings, setLocationSettings ] = useState( {
 		...defaultLocationSettings,
+	} );
+
+	// Sometimes buttons won't render. This fixes the timing problem.
+	useEffect( () => {
+		const handleDOMContentLoaded = () => setCanRender( true );
+		if (
+			document.readyState === 'interactive' ||
+			document.readyState === 'complete'
+		) {
+			handleDOMContentLoaded();
+		} else {
+			document.addEventListener(
+				'DOMContentLoaded',
+				handleDOMContentLoaded
+			);
+		}
+	}, [] );
+
+	document.addEventListener( 'DOMContentLoaded', () => {
+		setCanRender( true );
 	} );
 
 	const currentLocationSettings = useMemo( () => {
@@ -41,145 +59,80 @@ const TabStyling = () => {
 	}, [] );
 
 	const updateButtonSettings = ( key, value ) => {
-		const updatedLocationSettings = { ...currentLocationSettings };
-
-		updatedLocationSettings.settings = {
-			...updatedLocationSettings.settings,
-			...{ [ key ]: value },
-		};
-
 		setLocationSettings( {
 			...locationSettings,
-			[ location ]: { ...updatedLocationSettings },
+			[ location ]: {
+				...currentLocationSettings,
+				settings: {
+					...currentLocationSettings.settings,
+					[ key ]: value,
+				},
+			},
 		} );
 	};
+
+	const updateButtonStyle = ( key, value ) => {
+		setLocationSettings( {
+			...locationSettings,
+			[ location ]: {
+				...currentLocationSettings,
+				settings: {
+					...currentLocationSettings.settings,
+					style: {
+						...currentLocationSettings.settings.style,
+						[ key ]: value,
+					},
+				},
+			},
+		} );
+	};
+
+	if ( ! canRender ) {
+		return <></>;
+	}
 
 	return (
 		<div className="ppcp-r-styling">
 			<div className="ppcp-r-styling__settings">
 				<SectionIntro />
-				<TabStylingSection className="ppcp-r-styling__section--rc">
-					<SelectControl
-						className="ppcp-r-styling__select"
-						value={ location }
-						onChange={ ( newLocation ) =>
-							setLocation( newLocation )
-						}
-						label={ __(
-							'Locations',
-							'woocommerce-paypal-payments'
-						) }
-						options={ locationOptions }
-					/>
-				</TabStylingSection>
-				<TabStylingSection
-					title={ __(
-						'Payment Methods',
-						'woocommerce-paypal-payments'
-					) }
-					className="ppcp-r-styling__section--rc"
-				>
-					<div className="ppcp-r-styling__payment-method-checkboxes">
-						<PayPalCheckboxGroup
-							value={ paymentMethodOptions }
-							changeCallback={ ( newValue ) =>
-								updateButtonSettings(
-									'paymentMethods',
-									newValue
-								)
-							}
-							currentValue={
-								currentLocationSettings.settings.paymentMethods
-							}
-						/>
-					</div>
-				</TabStylingSection>
-				{ currentLocationSettings.settings?.buttonLayout && (
-					<TabStylingSection
-						className="ppcp-r-styling__section--rc"
-						title={ __(
-							'Button Layout',
-							'woocommerce-paypal-payments'
-						) }
-					>
-						<RadioControl
-							className="ppcp-r__horizontal-control"
-							onChange={ ( newValue ) =>
-								updateButtonSettings( 'buttonLayout', newValue )
-							}
-							selected={
-								currentLocationSettings.settings.buttonLayout
-							}
-							options={ buttonLayoutOptions }
-						/>
-					</TabStylingSection>
-				) }
-				<TabStylingSection
-					title={ __( 'Shape', 'woocommerce-paypal-payments' ) }
-					className="ppcp-r-styling__section--rc"
-				>
-					<RadioControl
-						className="ppcp-r__horizontal-control"
-						onChange={ ( newValue ) =>
-							updateButtonSettings( 'shape', newValue )
-						}
-						selected={ currentLocationSettings.settings.shape }
-						options={ shapeOptions }
-					/>
-				</TabStylingSection>
-				<TabStylingSection>
-					<SelectControl
-						className="ppcp-r-styling__select"
-						onChange={ ( newValue ) =>
-							updateButtonSettings( 'buttonLabel', newValue )
-						}
-						selected={
-							currentLocationSettings.settings.buttonLabel
-						}
-						label={ __(
-							'Button Label',
-							'woocommerce-paypal-payments'
-						) }
-						options={ buttonLabelOptions }
-					/>
-				</TabStylingSection>
-				<TabStylingSection>
-					<SelectControl
-						className="ppcp-r-styling__select"
-						label={ __(
-							'Button Color',
-							'woocommerce-paypal-payments'
-						) }
-						options={ colorOptions }
-					/>
-				</TabStylingSection>
-				{ currentLocationSettings.settings?.tagLine && (
-					<TabStylingSection
-						title={ __( 'Tagline', 'woocommerce-paypal-payments' ) }
-						className="ppcp-r-styling__section--rc"
-					>
-						<PayPalCheckboxGroup
-							value={ [
-								{
-									value: 'enable-tagline',
-									label: __(
-										'Enable Tagline',
-										'woocommerce-paypal-payments'
-									),
-								},
-							] }
-							changeCallback={ ( newValue ) =>
-								updateButtonSettings( 'tagLine', newValue )
-							}
-							currentValue={
-								currentLocationSettings.settings.tagLine
-							}
-						/>
-					</TabStylingSection>
-				) }
+				<SectionLocations
+					locationOptions={ locationOptions }
+					location={ location }
+					setLocation={ setLocation }
+				/>
+				<SectionPaymentMethods
+					locationSettings={ currentLocationSettings }
+					updateButtonSettings={ updateButtonSettings }
+				/>
+
+				<SectionButtonLayout
+					locationSettings={ currentLocationSettings }
+					updateButtonStyle={ updateButtonStyle }
+				/>
+
+				<SectionButtonShape
+					locationSettings={ currentLocationSettings }
+					updateButtonStyle={ updateButtonStyle }
+				/>
+				<SectionButtonLabel
+					locationSettings={ currentLocationSettings }
+					updateButtonStyle={ updateButtonStyle }
+				/>
+				<SectionButtonColor
+					locationSettings={ currentLocationSettings }
+					updateButtonStyle={ updateButtonStyle }
+				/>
+				<SectionButtonTagline
+					locationSettings={ currentLocationSettings }
+					updateButtonStyle={ updateButtonStyle }
+				/>
 			</div>
 			<div className="ppcp-preview ppcp-r-button-preview ppcp-r-styling__preview">
-				<div id="ppcp-r-styling-preview"></div>
+				<div className="ppcp-r-styling__preview-inner">
+					<SectionButtonPreview
+						locationSettings={ currentLocationSettings }
+					/>
+				</div>
 			</div>
 		</div>
 	);
@@ -225,74 +178,165 @@ const SectionIntro = () => {
 	);
 };
 
-const generatePreview = () => {
-	const render = () => {
-		const settings = {
-			button: {
-				wrapper: '#ppcp-r-styling-preview',
-				style: {
-					color: 'gold',
-					shape: 'rect',
-					label: 'paypal',
-					tagline: false,
-					layout: 'horizontal',
-				},
-			},
-			separate_buttons: {},
-		};
-		const wrapperSelector =
-			Object.values( settings.separate_buttons ).length > 0
-				? Object.values( settings.separate_buttons )[ 0 ].wrapper
-				: settings.button.wrapper;
-		const wrapper = document.querySelector( wrapperSelector );
-		if ( ! wrapper ) {
-			return;
-		}
-		wrapper.innerHTML = '';
-
-		const renderer = new Renderer(
-			null,
-			settings,
-			( data, actions ) => actions.reject(),
-			null
-		);
-
-		try {
-			renderer.render( {} );
-			jQuery( document ).trigger(
-				'ppcp_paypal_render_preview',
-				settings
-			);
-		} catch ( err ) {
-			console.error( err );
-		}
-	};
-
-	renderPreview( () => {
-		console.log( 'CALLBACK' );
-	}, render );
+const SectionLocations = ( { locationOptions, location, setLocation } ) => {
+	return (
+		<TabStylingSection className="ppcp-r-styling__section--rc">
+			<SelectControl
+				className="ppcp-r-styling__select"
+				value={ location }
+				onChange={ ( newLocation ) => setLocation( newLocation ) }
+				label={ __( 'Locations', 'woocommerce-paypal-payments' ) }
+				options={ locationOptions }
+			/>
+		</TabStylingSection>
+	);
 };
-function renderPreview( settingsCallback, render ) {
-	let oldSettings = settingsCallback();
-	const form = jQuery( '#mainform' );
 
-	form.on( 'change', ':input', () => {
-		const newSettings = settingsCallback();
-		if ( JSON.stringify( oldSettings ) === JSON.stringify( newSettings ) ) {
-			return;
-		}
+const SectionPaymentMethods = ( {
+	locationSettings,
+	updateButtonSettings,
+} ) => {
+	return (
+		<TabStylingSection
+			title={ __( 'Payment Methods', 'woocommerce-paypal-payments' ) }
+			className="ppcp-r-styling__section--rc"
+		>
+			<div className="ppcp-r-styling__payment-method-checkboxes">
+				<PayPalCheckboxGroup
+					value={ paymentMethodOptions }
+					changeCallback={ ( newValue ) =>
+						updateButtonSettings( 'paymentMethods', newValue )
+					}
+					currentValue={ locationSettings.settings.paymentMethods }
+				/>
+			</div>
+		</TabStylingSection>
+	);
+};
 
-		render( newSettings );
+const SectionButtonLayout = ( { locationSettings, updateButtonStyle } ) => {
+	const buttonLayoutIsAllowed =
+		locationSettings.settings.style?.layout &&
+		locationSettings.settings.style?.tagline === false;
+	return (
+		buttonLayoutIsAllowed && (
+			<TabStylingSection
+				className="ppcp-r-styling__section--rc"
+				title={ __( 'Button Layout', 'woocommerce-paypal-payments' ) }
+			>
+				<RadioControl
+					className="ppcp-r__horizontal-control"
+					onChange={ ( newValue ) =>
+						updateButtonStyle( 'layout', newValue )
+					}
+					selected={ locationSettings.settings.style.layout }
+					options={ buttonLayoutOptions }
+				/>
+			</TabStylingSection>
+		)
+	);
+};
 
-		oldSettings = newSettings;
-	} );
+const SectionButtonShape = ( { locationSettings, updateButtonStyle } ) => {
+	return (
+		<TabStylingSection
+			title={ __( 'Shape', 'woocommerce-paypal-payments' ) }
+			className="ppcp-r-styling__section--rc"
+		>
+			<RadioControl
+				className="ppcp-r__horizontal-control"
+				onChange={ ( newValue ) =>
+					updateButtonStyle( 'shape', newValue )
+				}
+				selected={ locationSettings.settings.style.shape }
+				options={ shapeOptions }
+			/>
+		</TabStylingSection>
+	);
+};
 
-	jQuery( document ).on( 'ppcp_paypal_script_loaded', () => {
-		oldSettings = settingsCallback();
+const SectionButtonLabel = ( { locationSettings, updateButtonStyle } ) => {
+	return (
+		<TabStylingSection>
+			<SelectControl
+				className="ppcp-r-styling__select"
+				onChange={ ( newValue ) =>
+					updateButtonStyle( 'label', newValue )
+				}
+				value={ locationSettings.settings.style.label }
+				label={ __( 'Button Label', 'woocommerce-paypal-payments' ) }
+				options={ buttonLabelOptions }
+			/>
+		</TabStylingSection>
+	);
+};
 
-		render( oldSettings );
-	} );
+const SectionButtonColor = ( { locationSettings, updateButtonStyle } ) => {
+	return (
+		<TabStylingSection>
+			<SelectControl
+				className=" ppcp-r-styling__select"
+				label={ __( 'Button Color', 'woocommerce-paypal-payments' ) }
+				onChange={ ( newValue ) =>
+					updateButtonStyle( 'color', newValue )
+				}
+				value={ locationSettings.settings.style.color }
+				options={ colorOptions }
+			/>
+		</TabStylingSection>
+	);
+};
 
-	render( oldSettings );
-}
+const SectionButtonTagline = ( { locationSettings, updateButtonStyle } ) => {
+	const taglineIsAllowed =
+		locationSettings.settings.style.hasOwnProperty( 'tagline' ) &&
+		locationSettings.settings.style?.layout === 'horizontal';
+
+	return (
+		taglineIsAllowed && (
+			<TabStylingSection
+				title={ __( 'Tagline', 'woocommerce-paypal-payments' ) }
+				className="ppcp-r-styling__section--rc"
+			>
+				<PayPalCheckboxGroup
+					value={ [
+						{
+							value: 'tagline',
+							label: __(
+								'Enable Tagline',
+								'woocommerce-paypal-payments'
+							),
+						},
+					] }
+					changeCallback={ ( newValue ) => {
+						updateButtonStyle( 'tagline', newValue );
+					} }
+					currentValue={ locationSettings.settings.style.tagline }
+				/>
+			</TabStylingSection>
+		)
+	);
+};
+
+const SectionButtonPreview = ( { locationSettings } ) => {
+	return (
+		<PayPalScriptProvider
+			options={ {
+				clientId: 'test',
+				merchantId: 'QTQX5NP6N9WZU',
+				components: 'buttons,googlepay',
+				'buyer-country': 'US',
+				currency: 'USD',
+			} }
+		>
+			<PayPalButtons
+				style={ locationSettings.settings.style }
+				forceReRender={ [ locationSettings.settings.style ] }
+			>
+				Error
+			</PayPalButtons>
+		</PayPalScriptProvider>
+	);
+};
+
 export default TabStyling;

@@ -1,19 +1,23 @@
 import { __ } from '@wordpress/i18n';
 
-const settings = {
-	paymentMethods: [],
-	buttonLayout: 'horizontal',
-	shape: null,
-	buttonLabel: 'paypal',
-	buttonColor: 'gold',
-	tagLine: [],
-};
-
 const cartAndExpressCheckoutSettings = {
 	paymentMethods: [],
-	shape: null,
-	buttonLabel: 'paypal',
-	buttonColor: 'gold',
+	style: {
+		shape: 'pill',
+		label: 'paypal',
+		color: 'gold',
+	},
+};
+
+const settings = {
+	paymentMethods: [],
+	style: {
+		layout: 'vertical',
+		shape: cartAndExpressCheckoutSettings.style.shape,
+		label: cartAndExpressCheckoutSettings.style.label,
+		color: cartAndExpressCheckoutSettings.style.color,
+		tagline: false,
+	},
 };
 
 export const defaultLocationSettings = {
@@ -77,11 +81,11 @@ export const buttonLabelOptions = [
 		label: __( 'Checkout', 'woocommerce-paypal-payments' ),
 	},
 	{
-		value: 'paypal-buy-now',
+		value: 'buynow',
 		label: __( 'PayPal Buy Now', 'woocommerce-paypal-payments' ),
 	},
 	{
-		value: 'pay-with-paypal',
+		value: 'pay',
 		label: __( 'Pay with PayPal', 'woocommerce-paypal-payments' ),
 	},
 ];
@@ -126,7 +130,7 @@ export const shapeOptions = [
 		label: __( 'Pill', 'woocommerce-paypal-payments' ),
 	},
 	{
-		value: 'rectangle',
+		value: 'rect',
 		label: __( 'Rectangle', 'woocommerce-paypal-payments' ),
 	},
 ];
