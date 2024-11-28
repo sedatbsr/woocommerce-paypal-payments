@@ -4,17 +4,7 @@
 	&__title {
 		text-align: center;
 		@include font(20, 28, 700);
-		margin: 0 0 32px 0;
-	}
-
-	&__description {
-		text-align: center;
-		@include font(14, 22, 400);
-		font-style: italic;
-
-		a {
-			color: $color-gray-700;
-		}
+		margin: 32px 0 32px 0;
 	}
 
 	&__wrapper {

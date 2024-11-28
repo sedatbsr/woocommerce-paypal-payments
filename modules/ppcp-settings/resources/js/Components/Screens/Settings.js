@@ -1,9 +1,9 @@
-import { useOnboardingStep } from '../../data';
+import { OnboardingHooks } from '../../data';
 import Onboarding from './Onboarding/Onboarding';
 import SettingsScreen from './SettingsScreen';
 
 const Settings = () => {
-	const onboardingProgress = useOnboardingStep();
+	const onboardingProgress = OnboardingHooks.useSteps();
 
 	if ( ! onboardingProgress.isReady ) {
 		// TODO: Use better loading state indicator.

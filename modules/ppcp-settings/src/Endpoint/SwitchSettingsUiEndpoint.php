@@ -15,6 +15,8 @@ use WooCommerce\PayPalCommerce\Button\Endpoint\RequestData;
 
 /**
  * Class SwitchSettingsUiEndpoint
+ *
+ * Note: This is an ajax handler, not a REST endpoint
  */
 class SwitchSettingsUiEndpoint {
 

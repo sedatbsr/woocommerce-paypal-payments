@@ -9,8 +9,7 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings;
 
-use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
-use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\RestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
@@ -26,7 +25,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 	/**
 	 * Returns whether the old settings UI should be loaded.
 	 */
-	public static function should_use_the_old_ui(): bool {
+	public static function should_use_the_old_ui() : bool {
 		return apply_filters(
 			'woocommerce_paypal_payments_should_use_the_old_ui',
 			(bool) get_option( SwitchSettingsUiEndpoint::OPTION_NAME_SHOULD_USE_OLD_UI ) === true
@@ -89,7 +88,13 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 			$endpoint = $container->get( 'settings.switch-ui.endpoint' );
 			assert( $endpoint instanceof SwitchSettingsUiEndpoint );
 
-			add_action( 'wc_ajax_' . SwitchSettingsUiEndpoint::ENDPOINT, array( $endpoint, 'handle_request' ) );
+			add_action(
+				'wc_ajax_' . SwitchSettingsUiEndpoint::ENDPOINT,
+				array(
+					$endpoint,
+					'handle_request',
+				)
+			);
 
 			return true;
 		}
@@ -170,13 +175,17 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 		add_action(
 			'rest_api_init',
 			static function () use ( $container ) : void {
-				$onboarding_endpoint = $container->get( 'settings.rest.onboarding' );
-				assert( $onboarding_endpoint instanceof OnboardingRestEndpoint );
-				$onboarding_endpoint->register_routes();
+				$endpoints = array(
+					$container->get( 'settings.rest.onboarding' ),
+					$container->get( 'settings.rest.common' ),
+					$container->get( 'settings.rest.connect_manual' ),
+					$container->get( 'settings.rest.login_link' ),
+				);
 
-				$connect_manual_endpoint = $container->get( 'settings.rest.connect_manual' );
-				assert( $connect_manual_endpoint instanceof ConnectManualRestEndpoint );
-				$connect_manual_endpoint->register_routes();
+				foreach ( $endpoints as $endpoint ) {
+					assert( $endpoint instanceof RestEndpoint );
+					$endpoint->register_routes();
+				}
 			}
 		);
 

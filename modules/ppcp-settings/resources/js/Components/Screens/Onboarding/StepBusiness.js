@@ -1,20 +1,14 @@
+import { __ } from '@wordpress/i18n';
+
 import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
 import SelectBox from '../../ReusableComponents/SelectBox';
-import { __ } from '@wordpress/i18n';
-import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
-import { useOnboardingStepBusiness } from '../../../data';
-import { BUSINESS_TYPES } from '../../../data/constants';
+import { OnboardingHooks, BUSINESS_TYPES } from '../../../data';
 
 const BUSINESS_RADIO_GROUP_NAME = 'business';
 
-const StepBusiness = ( {
-	setStep,
-	currentStep,
-	stepperOrder,
-	setCompleted,
-} ) => {
-	const { isCasualSeller, setIsCasualSeller } = useOnboardingStepBusiness();
+const StepBusiness = ( {} ) => {
+	const { isCasualSeller, setIsCasualSeller } = OnboardingHooks.useBusiness();
 
 	const handleSellerTypeChange = ( value ) => {
 		setIsCasualSeller( BUSINESS_TYPES.CASUAL_SELLER === value );
@@ -40,23 +34,22 @@ const StepBusiness = ( {
 			/>
 			<div className="ppcp-r-inner-container">
 				<SelectBoxWrapper>
-                    <SelectBox
-                        title={ __(
-                            'Business',
-                            'woocommerce-paypal-payments'
-                        ) }
-                        description={ __(
-                            'Recommended for individuals and organizations that primarily use PayPal to sell goods or services or receive donations, even if your business is not incorporated.',
-                            'woocommerce-paypal-payments'
-                        ) }
-                        name={ BUSINESS_RADIO_GROUP_NAME }
-                        value={ BUSINESS_TYPES.BUSINESS }
-                        changeCallback={ handleSellerTypeChange }
-                        currentValue={ getCurrentValue() }
-                        checked={ isCasualSeller === false }
-                        type="radio"
-                    >
-                    </SelectBox>
+					<SelectBox
+						title={ __(
+							'Business',
+							'woocommerce-paypal-payments'
+						) }
+						description={ __(
+							'Recommended for individuals and organizations that primarily use PayPal to sell goods or services or receive donations, even if your business is not incorporated.',
+							'woocommerce-paypal-payments'
+						) }
+						name={ BUSINESS_RADIO_GROUP_NAME }
+						value={ BUSINESS_TYPES.BUSINESS }
+						changeCallback={ handleSellerTypeChange }
+						currentValue={ getCurrentValue() }
+						checked={ isCasualSeller === false }
+						type="radio"
+					></SelectBox>
 					<SelectBox
 						title={ __(
 							'Personal Account',
@@ -72,8 +65,7 @@ const StepBusiness = ( {
 						currentValue={ getCurrentValue() }
 						checked={ isCasualSeller === true }
 						type="radio"
-					>
-					</SelectBox>
+					></SelectBox>
 				</SelectBoxWrapper>
 			</div>
 		</div>
