@@ -329,12 +329,9 @@ class PurchaseUnitFactory {
 	 * @return string The sanitized soft descriptor.
 	 */
 	private function sanitize_soft_descriptor( string $soft_descriptor ) : string {
-		$decoded = html_entity_decode(
-			$soft_descriptor,
-			ENT_QUOTES | ENT_HTML5 | ENT_SUBSTITUTE,
-			'UTF-8'
-		);
+		$decoded   = html_entity_decode( $soft_descriptor, ENT_QUOTES, 'UTF-8' );
+		$sanitized = preg_replace( '/[^a-zA-Z0-9 *\-.]/', '', $decoded ) ?: '';
 
-		return substr( $decoded, 0, 22 ) ?: '';
+		return substr( $sanitized, 0, 22 ) ?: '';
 	}
 }
