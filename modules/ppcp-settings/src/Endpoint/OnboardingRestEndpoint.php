@@ -53,6 +53,10 @@ class OnboardingRestEndpoint extends RestEndpoint {
 			'js_name'  => 'isCasualSeller',
 			'sanitize' => 'to_boolean',
 		),
+		'are_optional_payment_methods_enabled' => array(
+			'js_name'  => 'areOptionalPaymentMethodsEnabled',
+			'sanitize' => 'to_boolean',
+		),
 		'products'         => array(
 			'js_name' => 'products',
 		),

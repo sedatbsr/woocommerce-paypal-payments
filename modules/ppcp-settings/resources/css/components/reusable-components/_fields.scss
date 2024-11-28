@@ -21,23 +21,25 @@
 		}
 	}
 
-	&__checkbox-value {
-		@include hide-input-field;
+	&__checkbox {
+		position: relative;
 
-		&:not(:checked) + .ppcp-r__checkbox-presentation img {
-			display: none;
+		input {
+			margin: 0;
+			border-color: $color-gray-600;
+
+			&:checked {
+				background-color: $color-blueberry;
+				border-color:$color-blueberry;
+			}
 		}
 
-		&:checked {
-			+ .ppcp-r__checkbox-presentation {
-				width: 20px;
-				height: 20px;
-				border: none;
+		.components-checkbox-control__input-container {
+			margin: 0;
+		}
 
-				img {
-					border-radius: 2px;
-				}
-			}
+		.components-base-control__field {
+			margin: 0;
 		}
 	}
 

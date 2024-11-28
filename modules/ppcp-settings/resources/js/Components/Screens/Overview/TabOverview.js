@@ -2,7 +2,6 @@ import SettingsCard from '../../ReusableComponents/SettingsCard';
 import { __ } from '@wordpress/i18n';
 import {
 	PayPalCheckbox,
-	handleCheckboxState,
 } from '../../ReusableComponents/Fields';
 import { useState } from '@wordpress/element';
 import data from '../../../utils/data';
@@ -41,7 +40,7 @@ const TabOverview = () => {
 								value={ todo.value }
 								currentValue={ todos }
 								changeCallback={ setTodos }
-								description={ todo.description }
+								label={ todo.description }
 								changeTodos={ setTodosData }
 								todosData={ todosData }
 							/>
@@ -144,10 +143,8 @@ const TodoItem = ( props ) => {
 				<PayPalCheckbox
 					{ ...{
 						...props,
-						handleCheckboxState,
 					} }
 				/>{ ' ' }
-				<p>{ props.description }</p>
 			</div>
 			<div
 				className="ppcp-r-todo-item__close"
