@@ -153,9 +153,9 @@ return array(
 			new SettingsMap(
 				$container->get( 'settings.data.onboarding' ),
 				array(
-					'is_casual_seller'                     => null,
-					'are_optional_payment_methods_enabled' => true,
-					'products'                             => array(),
+					'is_casual_seller'                     => '',
+					'are_optional_payment_methods_enabled' => '',
+					'products'                             => '',
 				)
 			),
 		);
