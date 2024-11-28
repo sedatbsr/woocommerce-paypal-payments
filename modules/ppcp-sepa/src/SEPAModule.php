@@ -9,6 +9,7 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\SEPA;
 
+use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 use WC_Payment_Gateway;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExecutableModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
@@ -92,6 +93,16 @@ class SEPAModule implements ServiceModule, ExtendingModule, ExecutableModule {
 			},
 			10,
 			2
+		);
+
+		add_action(
+			'woocommerce_blocks_payment_method_type_registration',
+			function( PaymentMethodRegistry $payment_method_registry ) use ( $c ): void {
+				$sepa_payment_method = $c->get( 'sepa.payment-method' );
+				assert( $sepa_payment_method instanceof SEPAPaymentMethod );
+
+				$payment_method_registry->register( $sepa_payment_method );
+			}
 		);
 
 		return true;
