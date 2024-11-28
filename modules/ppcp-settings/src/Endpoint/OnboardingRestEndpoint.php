@@ -41,15 +41,15 @@ class OnboardingRestEndpoint extends RestEndpoint {
 	 * @var array
 	 */
 	private array $field_map = array(
-		'completed'        => array(
+		'completed'                            => array(
 			'js_name'  => 'completed',
 			'sanitize' => 'to_boolean',
 		),
-		'step'             => array(
+		'step'                                 => array(
 			'js_name'  => 'step',
 			'sanitize' => 'to_number',
 		),
-		'is_casual_seller' => array(
+		'is_casual_seller'                     => array(
 			'js_name'  => 'isCasualSeller',
 			'sanitize' => 'to_boolean',
 		),
@@ -57,7 +57,7 @@ class OnboardingRestEndpoint extends RestEndpoint {
 			'js_name'  => 'areOptionalPaymentMethodsEnabled',
 			'sanitize' => 'to_boolean',
 		),
-		'products'         => array(
+		'products'                             => array(
 			'js_name' => 'products',
 		),
 	);
