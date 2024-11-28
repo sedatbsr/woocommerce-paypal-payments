@@ -9,9 +9,6 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\Compat;
 
-use WooCommerce\PayPalCommerce\Settings\Data\CommonSettings;
-use WooCommerce\PayPalCommerce\Settings\Data\GeneralSettings;
-use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\Compat\Assets\CompatAssets;
 
@@ -127,7 +124,7 @@ return array(
 	'compat.setting.new-to-old-map'                  => function( ContainerInterface $container ) : array {
 		return array(
 			new SettingsMap(
-				$container->get( CommonSettings::class ),
+				$container->get( 'settings.data.common' ),
 				array(
 					'use_sandbox'   => 'sandbox_on',
 					'client_id'     => 'client_id',
@@ -135,7 +132,7 @@ return array(
 				)
 			),
 			new SettingsMap(
-				$container->get( GeneralSettings::class ),
+				$container->get( 'settings.data.general' ),
 				array(
 					'is_sandbox'             => 'sandbox_on',
 					'live_client_id'         => 'client_id_production',
@@ -149,7 +146,7 @@ return array(
 				)
 			),
 			new SettingsMap(
-				$container->get( OnboardingProfile::class ),
+				$container->get( 'settings.data.onboarding' ),
 				array(
 					'is_casual_seller'                     => null,
 					'are_optional_payment_methods_enabled' => true,
