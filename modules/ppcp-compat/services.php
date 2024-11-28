@@ -150,14 +150,6 @@ return array(
 					'sandbox_merchant_email' => 'merchant_email_sandbox',
 				)
 			),
-			new SettingsMap(
-				$container->get( 'settings.data.onboarding' ),
-				array(
-					'is_casual_seller'                     => '',
-					'are_optional_payment_methods_enabled' => '',
-					'products'                             => '',
-				)
-			),
 		);
 	},
 	'compat.settings.settings_map_helper'            => static function( ContainerInterface $container ) : SettingsMapHelper {
