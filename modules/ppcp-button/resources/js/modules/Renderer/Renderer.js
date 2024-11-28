@@ -56,12 +56,14 @@ class Renderer {
 			Object.keys( enabledSeparateGateways ).length !== 0;
 
 		if ( ! hasEnabledSeparateGateways ) {
-			this.renderButtons(
-				settings.button.wrapper,
-				settings.button.style,
-				contextConfig,
-				hasEnabledSeparateGateways
-			);
+			if ( this.useSmartButtons ) {
+				this.renderButtons(
+					settings.button.wrapper,
+					settings.button.style,
+					contextConfig,
+					hasEnabledSeparateGateways
+				);
+			}
 		} else {
 			// render each button separately
 			for ( const fundingSource of paypal
