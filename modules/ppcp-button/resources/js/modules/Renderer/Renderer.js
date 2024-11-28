@@ -28,6 +28,18 @@ class Renderer {
 		this.reloadEventName = 'ppcp-reload-buttons';
 	}
 
+	/**
+	 * Determine is PayPal smart buttons are used by inspecting the existing plugin configuration:
+	 * If the url-param "components" contains a "buttons" element, smart buttons are enabled.
+	 *
+	 * @return {boolean} True, if smart buttons are present on the page.
+	 */
+	get useSmartButtons() {
+		const components = this.defaultSettings?.url_params?.components || '';
+
+		return components.split( ',' ).includes( 'buttons' );
+	}
+
 	render(
 		contextConfig,
 		settingsOverride = {},
