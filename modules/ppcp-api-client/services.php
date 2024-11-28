@@ -621,6 +621,7 @@ return array(
 			'CZK',
 			'DKK',
 			'EUR',
+			'HKD',
 			'GBP',
 			'HUF',
 			'ILS',
@@ -630,6 +631,7 @@ return array(
 			'NZD',
 			'PHP',
 			'PLN',
+			'SGD',
 			'SEK',
 			'THB',
 			'TWD',
@@ -677,14 +679,7 @@ return array(
 				'ES' => $default_currencies,
 				'SE' => $default_currencies,
 				'GB' => $default_currencies,
-				'US' => array(
-					'AUD',
-					'CAD',
-					'EUR',
-					'GBP',
-					'JPY',
-					'USD',
-				),
+				'US' => $default_currencies,
 				'NO' => $default_currencies,
 			)
 		);
