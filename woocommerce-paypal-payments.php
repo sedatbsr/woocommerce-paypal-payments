@@ -90,32 +90,28 @@ define( 'PPCP_PAYPAL_BN_CODE', 'Woo_PPCP' );
 		'plugins_loaded',
 		function () {
 			init();
+			add_action(
+				'init',
+				function () {
+					$current_plugin_version   = (string) PPCP::container()->get( 'ppcp.plugin' )->getVersion();
+					$installed_plugin_version = get_option( 'woocommerce-ppcp-version' );
+					if ( $installed_plugin_version !== $current_plugin_version ) {
+						/**
+						 * The hook fired when the plugin is installed or updated.
+						 */
+						do_action( 'woocommerce_paypal_payments_gateway_migrate', $installed_plugin_version );
 
-			if ( ! function_exists( 'get_plugin_data' ) ) {
-				/**
-				 * Skip check for WP files.
-				 *
-				 * @psalm-suppress MissingFile
-				 */
-				require_once ABSPATH . 'wp-admin/includes/plugin.php';
-			}
-			$plugin_data              = get_plugin_data( __DIR__ . '/woocommerce-paypal-payments.php', false );
-			$plugin_version           = $plugin_data['Version'] ?? null;
-			$installed_plugin_version = get_option( 'woocommerce-ppcp-version' );
-			if ( $installed_plugin_version !== $plugin_version ) {
-				/**
-				 * The hook fired when the plugin is installed or updated.
-				 */
-				do_action( 'woocommerce_paypal_payments_gateway_migrate', $installed_plugin_version );
-
-				if ( $installed_plugin_version ) {
-					/**
-					 * The hook fired when the plugin is updated.
-					 */
-					do_action( 'woocommerce_paypal_payments_gateway_migrate_on_update' );
-				}
-				update_option( 'woocommerce-ppcp-version', $plugin_version );
-			}
+						if ( $installed_plugin_version ) {
+							/**
+							 * The hook fired when the plugin is updated.
+							 */
+							do_action( 'woocommerce_paypal_payments_gateway_migrate_on_update' );
+						}
+						update_option( 'woocommerce-ppcp-version', $current_plugin_version );
+					}
+				},
+				-1
+			);
 		}
 	);
 	register_activation_hook(
