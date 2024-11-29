@@ -144,8 +144,8 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 		if ( $is_axo_enabled ) {
 			add_action(
 				'wp_enqueue_scripts',
-				function () use ($c) {
-					$this->enqueue_paypal_insights_script($c);
+				function () use ( $c ) {
+					$this->enqueue_paypal_insights_script( $c );
 				}
 			);
 		}
