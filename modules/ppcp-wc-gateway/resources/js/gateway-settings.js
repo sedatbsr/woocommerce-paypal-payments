@@ -134,11 +134,12 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	function createButtonPreview( settingsCallback ) {
 		const render = ( settings ) => {
-			const wrapperSelector =
-				Object.values( settings.separate_buttons ).length > 0
-					? Object.values( settings.separate_buttons )[ 0 ].wrapper
-					: settings.button.wrapper;
+			const { button, separate_buttons } = settings;
+			const wrapperSelector = (
+				Object.values( separate_buttons )[ 0 ] ?? button
+			)?.wrapper;
 			const wrapper = document.querySelector( wrapperSelector );
+
 			if ( ! wrapper ) {
 				return;
 			}
