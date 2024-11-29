@@ -1,6 +1,6 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, TextControl } from '@wordpress/components';
-import { useRef } from '@wordpress/element';
+import { useRef, useMemo } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
 
@@ -29,38 +29,13 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
-	const handleFormValidation = () => {
-		const fields = [
-			{
-				ref: refClientId,
-				value: clientId,
-				errorMessage: __(
-					'Please enter your Client ID',
-					'woocommerce-paypal-payments'
-				),
-			},
-			{
-				ref: refClientSecret,
-				value: clientSecret,
-				errorMessage: __(
-					'Please enter your Secret Key',
-					'woocommerce-paypal-payments'
-				),
-			},
-		];
+	const isValidClientId = useMemo( () => {
+		return clientId ? /^A[\w-]{79}$/.test( clientId ) : true;
+	}, [ clientId ] );
 
-		for ( const { ref, value, errorMessage } of fields ) {
-			if ( value ) {
-				continue;
-			}
-
-			ref?.current?.focus();
-			createErrorNotice( errorMessage );
-			return false;
-		}
-
-		return true;
-	};
+	const isFormValid = useMemo( () => {
+		return isValidClientId && clientId && clientSecret;
+	}, [ isValidClientId, clientId, clientSecret ] );
 
 	const handleServerError = ( res, genericMessage ) => {
 		console.error( 'Connection error', res );
@@ -71,7 +46,6 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 		createSuccessNotice(
 			__( 'Connected to PayPal', 'woocommerce-paypal-payments' )
 		);
-
 		setCompleted( true );
 	};
 
@@ -103,10 +77,6 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 	};
 
 	const handleManualConnect = async () => {
-		if ( ! handleFormValidation() ) {
-			return;
-		}
-
 		const res = await connectViaIdAndSecret();
 
 		if ( res.success ) {
@@ -177,7 +147,18 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 					}
 					value={ clientId }
 					onChange={ setClientId }
+					className={
+						clientId && ! isValidClientId ? 'has-error' : ''
+					}
 				/>
+				{ clientId && ! isValidClientId && (
+					<p className="client-id-error">
+						{ __(
+							'Please enter a valid Client ID',
+							'woocommerce-paypal-payments'
+						) }
+					</p>
+				) }
 				<DataStoreControl
 					control={ TextControl }
 					ref={ refClientSecret }
@@ -196,7 +177,11 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 					onChange={ setClientSecret }
 					type="password"
 				/>
-				<Button variant="secondary" onClick={ handleManualConnect }>
+				<Button
+					variant="secondary"
+					onClick={ handleManualConnect }
+					disabled={ ! isFormValid }
+				>
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>

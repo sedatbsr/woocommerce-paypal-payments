@@ -26,6 +26,12 @@
 		border: none;
 	}
 
+	.client-id-error {
+		color: #cc1818;
+		margin: -16px 0 24px;
+		@include font(11, 16, 450);
+	}
+
 	.onboarding-advanced-options {
 		max-width: 800px;
 	}
