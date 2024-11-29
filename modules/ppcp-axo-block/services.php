@@ -39,8 +39,7 @@ return array(
 			$container->get( 'onboarding.environment' ),
 			$container->get( 'wcgateway.url' ),
 			$container->get( 'axo.payment_method_selected_map' ),
-			$container->get( 'axo.supported-country-card-type-matrix' ),
-			$container->get( 'axo.shipping-wc-enabled-locations' )
+			$container->get( 'axo.supported-country-card-type-matrix' )
 		);
 	},
 );
