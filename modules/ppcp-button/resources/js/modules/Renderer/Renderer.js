@@ -160,7 +160,7 @@ class Renderer {
 			// Check the condition and add the handler if needed
 			if ( this.shouldEnableShippingCallback() ) {
 				options.onShippingOptionsChange = ( data, actions ) => {
-                    let shippingOptionsChange =
+					const shippingOptionsChange =
 					! this.isVenmoButtonClickedWhenVaultingIsEnabled(
 						venmoButtonClicked
 					)
@@ -171,10 +171,10 @@ class Renderer {
 						  )
 						: null;
 
-                    return shippingOptionsChange
+					return shippingOptionsChange;
 				};
 				options.onShippingAddressChange = ( data, actions ) => {
-                    let shippingAddressChange =
+					const shippingAddressChange =
 					! this.isVenmoButtonClickedWhenVaultingIsEnabled(
 						venmoButtonClicked
 					)
@@ -185,7 +185,7 @@ class Renderer {
 						  )
 						: null;
 
-                    return shippingAddressChange
+					return shippingAddressChange;
 				};
 			}
 
@@ -247,8 +247,13 @@ class Renderer {
 	};
 
     shouldEnableShippingCallback = () => {
-        let needShipping = this.defaultSettings.needShipping || this.defaultSettings.context === 'product'
-        return this.defaultSettings.should_handle_shipping_in_paypal && needShipping
+		const needShipping =
+			this.defaultSettings.needShipping ||
+			this.defaultSettings.context === 'product';
+		return (
+			this.defaultSettings.should_handle_shipping_in_paypal &&
+			needShipping
+		);
     };
 
 	isAlreadyRendered( wrapper, fundingSource ) {
