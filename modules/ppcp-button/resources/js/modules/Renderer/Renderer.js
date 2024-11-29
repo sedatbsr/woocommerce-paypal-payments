@@ -7,6 +7,7 @@ import {
 	handleShippingOptionsChange,
 	handleShippingAddressChange,
 } from '../Helper/ShippingHandler.js';
+import { PaymentContext } from '../Helper/CheckoutMethodState';
 
 class Renderer {
 	constructor(
@@ -35,6 +36,10 @@ class Renderer {
 	 * @return {boolean} True, if smart buttons are present on the page.
 	 */
 	get useSmartButtons() {
+		if ( PaymentContext.Preview === this.defaultSettings?.context ) {
+			return true;
+		}
+
 		const components = this.defaultSettings?.url_params?.components || '';
 
 		return components.split( ',' ).includes( 'buttons' );
