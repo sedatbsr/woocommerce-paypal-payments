@@ -2,7 +2,7 @@
     "name": "woocommerce/woocommerce-paypal-payments",
     "type": "wordpress-plugin",
     "description": "PayPal Commerce Platform for WooCommerce",
-    "license": "GPL-2.0",
+    "license": "GPL-2.0-or-later",
     "require": {
         "php": "^7.4 | ^8.0",
         "ext-json": "*",
@@ -23,8 +23,8 @@
         "woocommerce/woocommerce-sniffs": "^0.1.0",
         "phpunit/phpunit": "^7.0 | ^8.0 | ^9.0",
         "brain/monkey": "^2.4",
-        "php-stubs/wordpress-stubs": "^5.0@stable",
-        "php-stubs/woocommerce-stubs": "^8.0@stable",
+        "php-stubs/wordpress-stubs": "^v6.7.1",
+        "php-stubs/woocommerce-stubs": "^v8.9.1",
         "vimeo/psalm": "^4.0",
         "vlucas/phpdotenv": "^5"
     },
