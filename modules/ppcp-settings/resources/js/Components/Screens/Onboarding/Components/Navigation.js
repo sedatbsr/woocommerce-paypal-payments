@@ -48,6 +48,7 @@ const Navigation = ( { setStep, setCompleted, currentStep, stepperOrder } ) => {
 				'Choose checkout options',
 				'woocommerce-paypal-payments'
 			);
+			break;
 		case 4:
 			navigationTitle = __(
 				'Connect your PayPal account',
