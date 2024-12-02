@@ -24,6 +24,10 @@ $max-width-onboarding: 1024px;
 $max-width-onboarding-content: 500px;
 $max-width-settings: 938px;
 
+:root {
+	--ppcp-color-app-bg: #{$color-white};
+}
+
 #ppcp-settings-container {
 	--max-width-settings: #{$max-width-settings};
 	--max-width-onboarding: #{$max-width-onboarding};
