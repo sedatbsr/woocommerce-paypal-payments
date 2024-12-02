@@ -135,20 +135,12 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 			}
 		);
 
-		// Enqueue the PayPal Insights script.
-		$dcc_configuration = $c->get( 'wcgateway.configuration.dcc' );
-		assert( $dcc_configuration instanceof DCCGatewayConfiguration );
-
-		$is_axo_enabled = $dcc_configuration->use_fastlane();
-
-		if ( $is_axo_enabled ) {
-			add_action(
-				'wp_enqueue_scripts',
-				function () use ( $c ) {
-					$this->enqueue_paypal_insights_script( $c );
-				}
-			);
-		}
+		add_action(
+			'wp_enqueue_scripts',
+			function () use ( $c ) {
+				$this->enqueue_paypal_insights_script( $c );
+			}
+		);
 
 		return true;
 	}
@@ -192,6 +184,11 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 	 */
 	private function enqueue_paypal_insights_script( ContainerInterface $c ): void {
 		if ( ! has_block( 'woocommerce/checkout' ) || WC()->cart->is_empty() ) {
+			return;
+		}
+
+		$dcc_configuration = $c->get( 'wcgateway.configuration.dcc' );
+		if ( ! $dcc_configuration->use_fastlane() ) {
 			return;
 		}
 
