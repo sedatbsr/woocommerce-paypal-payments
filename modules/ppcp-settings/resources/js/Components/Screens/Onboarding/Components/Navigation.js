@@ -4,7 +4,13 @@ import { __ } from '@wordpress/i18n';
 import { OnboardingHooks } from '../../../../data';
 import data from '../../../../utils/data';
 
-const Navigation = ( { setStep, setCompleted, currentStep, stepperOrder } ) => {
+const Navigation = ( {
+	setStep,
+	setCompleted,
+	currentStep,
+	stepperOrder,
+	title,
+} ) => {
 	const isLastStep = () => currentStep + 1 === stepperOrder.length;
 	const isFistStep = () => currentStep === 0;
 	const navigateBy = ( stepDirection ) => {
@@ -25,41 +31,15 @@ const Navigation = ( { setStep, setCompleted, currentStep, stepperOrder } ) => {
 	const { products } = OnboardingHooks.useProducts();
 	const { isCasualSeller } = OnboardingHooks.useBusiness();
 
-	let navigationTitle = '';
 	let disabled = false;
 
 	switch ( currentStep ) {
 		case 1:
-			navigationTitle = __(
-				'Set up store type',
-				'woocommerce-paypal-payments'
-			);
 			disabled = isCasualSeller === null;
 			break;
 		case 2:
-			navigationTitle = __(
-				'Select product types',
-				'woocommerce-paypal-payments'
-			);
 			disabled = products.length < 1;
 			break;
-		case 3:
-			navigationTitle = __(
-				'Choose checkout options',
-				'woocommerce-paypal-payments'
-			);
-			break;
-		case 4:
-			navigationTitle = __(
-				'Connect your PayPal account',
-				'woocommerce-paypal-payments'
-			);
-			break;
-		default:
-			navigationTitle = __(
-				'PayPal Payments',
-				'woocommerce-paypal-payments'
-			);
 	}
 
 	return (
@@ -72,7 +52,7 @@ const Navigation = ( { setStep, setCompleted, currentStep, stepperOrder } ) => {
 							variant="tertiary"
 							onClick={ () => navigateBy( -1 ) }
 						>
-							{ navigationTitle }
+							{ title }
 						</Button>
 					) : (
 						<a
@@ -83,7 +63,7 @@ const Navigation = ( { setStep, setCompleted, currentStep, stepperOrder } ) => {
 								'woocommerce-paypal-payments'
 							) }
 						>
-							{ navigationTitle }
+							{ title }
 						</a>
 					) }
 				</div>

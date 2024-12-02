@@ -8,7 +8,7 @@ const Onboarding = () => {
 	const { step, setStep, setCompleted, flags } = OnboardingHooks.useSteps();
 
 	const Steps = getSteps( flags );
-	const CurrentStepComponent = getCurrentStep( step, Steps );
+	const { StepComponent, title } = getCurrentStep( step, Steps );
 
 	return (
 		<>
@@ -17,10 +17,11 @@ const Onboarding = () => {
 				currentStep={ step }
 				setCompleted={ setCompleted }
 				stepperOrder={ Steps }
+				title={ title }
 			/>
 			<Container page="onboarding">
 				<div className="ppcp-r-card">
-					<CurrentStepComponent
+					<StepComponent
 						setStep={ setStep }
 						currentStep={ step }
 						setCompleted={ setCompleted }
