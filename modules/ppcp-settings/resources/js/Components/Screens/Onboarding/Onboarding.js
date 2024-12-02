@@ -8,20 +8,26 @@ const Onboarding = () => {
 	const { step, setStep, setCompleted, flags } = OnboardingHooks.useSteps();
 
 	const Steps = getSteps( flags );
-	const { StepComponent, title } = getCurrentStep( step, Steps );
+	const currentStep = getCurrentStep( step, Steps );
+
+	const handleNext = () => setStep( currentStep.nextStep );
+	const handlePrev = () => setStep( currentStep.prevStep );
+	const handleExit = () => {
+		window.location.href = window.ppcpSettings.wcPaymentsTabUrl;
+	};
 
 	return (
 		<>
 			<Navigation
-				setStep={ setStep }
-				currentStep={ step }
-				setCompleted={ setCompleted }
-				stepperOrder={ Steps }
-				title={ title }
+				stepDetails={ currentStep }
+				onNext={ handleNext }
+				onPrev={ handlePrev }
+				onExit={ handleExit }
 			/>
+
 			<Container page="onboarding">
 				<div className="ppcp-r-card">
-					<StepComponent
+					<currentStep.StepComponent
 						setStep={ setStep }
 						currentStep={ step }
 						setCompleted={ setCompleted }
