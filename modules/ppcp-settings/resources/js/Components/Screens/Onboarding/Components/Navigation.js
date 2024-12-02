@@ -1,8 +1,8 @@
-import { Button } from '@wordpress/components';
+import { Button, Icon } from '@wordpress/components';
+import { chevronLeft } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
 import { OnboardingHooks } from '../../../../data';
-import data from '../../../../utils/data';
 
 const Navigation = ( {
 	setStep,
@@ -46,7 +46,7 @@ const Navigation = ( {
 		<div className="ppcp-r-navigation-container">
 			<div className="ppcp-r-navigation">
 				<div className="ppcp-r-navigation--left">
-					<span>{ data().getImage( 'icon-arrow-left.svg' ) }</span>
+					<Icon icon={ chevronLeft } />
 					{ ! isFistStep() ? (
 						<Button
 							variant="tertiary"
