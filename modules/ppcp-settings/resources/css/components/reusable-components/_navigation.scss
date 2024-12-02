@@ -1,10 +1,15 @@
 .ppcp-r-navigation-container {
-	padding: 24px 48px;
-	margin: 0 -20px 48px -20px;
-	border-bottom: 1px solid $color-gray-300;
-	position: relative;
+	position: sticky;
+	top: var(--wp-admin--admin-bar--height);
+	z-index: 10;
 
-	--color-accent: #{$color-blueberry};
+	padding: 10px 48px;
+	margin: 0 -20px 48px -20px;
+
+	box-shadow: 0 -1px 0 0 $color-gray-300 inset;
+	background: var(--ppcp-color-app-bg);
+
+	--wp-components-color-accent: #{$color-blueberry};
 	--color-text: #{$color-gray-900};
 	--color-disabled: #CCC;
 
@@ -18,7 +23,7 @@
 			@include font(13, 20, 400);
 
 			&.is-primary {
-				background-color: var(--color-accent);
+				background-color: var(--wp-components-color-accent);
 				padding: 10px 18px;
 				justify-content: center;
 				margin: 0 0 0 12px;
@@ -29,7 +34,7 @@
 			}
 
 			&.is-link {
-				color: var(--color-accent);
+				color: var(--wp-components-color-accent);
 				text-decoration: none;
 
 				&:disabled {
@@ -60,7 +65,7 @@
 			position: absolute;
 			bottom: 0;
 			left: 0;
-			background-color: var(--color-accent);
+			background-color: var(--wp-components-color-accent);
 			height: 4px;
 			transition: width 0.3s;
 		}
