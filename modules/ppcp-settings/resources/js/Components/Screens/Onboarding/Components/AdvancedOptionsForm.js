@@ -30,7 +30,7 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 	const refClientSecret = useRef( null );
 
 	const isValidClientId = useMemo( () => {
-		return clientId ? /^A[\w-]{79}$/.test( clientId ) : true;
+		return /^A[\w-]{79}$/.test( clientId );
 	}, [ clientId ] );
 
 	const isFormValid = useMemo( () => {
