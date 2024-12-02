@@ -614,7 +614,7 @@ return array(
 	 */
 	'api.dcc-supported-country-currency-matrix'      => static function ( ContainerInterface $container ) : array {
 		$default_currencies = apply_filters(
-			'woocommerce_paypal_payments_default_currencies',
+			'woocommerce_paypal_payments_supported_currencies',
 			array(
 				'AUD',
 				'BRL',
