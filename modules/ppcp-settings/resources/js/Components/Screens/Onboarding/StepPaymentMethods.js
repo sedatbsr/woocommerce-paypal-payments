@@ -3,7 +3,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
 import SelectBox from '../../ReusableComponents/SelectBox';
-import { OnboardingHooks } from '../../../data';
+import { CommonHooks, OnboardingHooks } from '../../../data';
 import OptionalPaymentMethods from '../../ReusableComponents/OptionalPaymentMethods/OptionalPaymentMethods';
 
 const OPM_RADIO_GROUP_NAME = 'optional-payment-methods';
@@ -13,6 +13,9 @@ const StepPaymentMethods = ( {} ) => {
 		areOptionalPaymentMethodsEnabled,
 		setAreOptionalPaymentMethodsEnabled,
 	} = OnboardingHooks.useOptionalPaymentMethods();
+
+	const { storeCountry, storeCurrency } = CommonHooks.useWooSettings();
+
 	const pricesBasedDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
 		__(
@@ -42,8 +45,8 @@ const StepPaymentMethods = ( {} ) => {
 								useAcdc={ true }
 								isFastlane={ true }
 								isPayLater={ true }
-								storeCountry={ 'us' }
-								storeCurrency={ 'usd' }
+								storeCountry={ storeCountry }
+								storeCurrency={ storeCurrency }
 							/>
 						}
 						name={ OPM_RADIO_GROUP_NAME }

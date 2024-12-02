@@ -1,5 +1,5 @@
 export const countryPriceInfo = {
-	us: {
+	US: {
 		currencySymbol: '$',
 		fixedFee: 0.49,
 		checkout: 3.49,
@@ -9,7 +9,7 @@ export const countryPriceInfo = {
 		fastlane: 2.59,
 		standardCardFields: 2.99,
 	},
-	uk: {
+	UK: {
 		currencySymbol: '£',
 		fixedFee: 0.3,
 		checkout: 2.9,
@@ -18,7 +18,7 @@ export const countryPriceInfo = {
 		apm: 1.2,
 		standardCardFields: 1.2,
 	},
-	ca: {
+	CA: {
 		currencySymbol: '$',
 		fixedFee: 0.3,
 		checkout: 2.9,
@@ -27,7 +27,7 @@ export const countryPriceInfo = {
 		apm: 2.9,
 		standardCardFields: 2.9,
 	},
-	au: {
+	AU: {
 		currencySymbol: '$',
 		fixedFee: 0.3,
 		checkout: 2.6,
@@ -36,7 +36,7 @@ export const countryPriceInfo = {
 		apm: 2.6,
 		standardCardFields: 2.6,
 	},
-	fr: {
+	FR: {
 		currencySymbol: '€',
 		fixedFee: 0.35,
 		checkout: 2.9,
@@ -45,7 +45,7 @@ export const countryPriceInfo = {
 		apm: 1.2,
 		standardCardFields: 1.2,
 	},
-	it: {
+	IT: {
 		currencySymbol: '€',
 		fixedFee: 0.35,
 		checkout: 3.4,
@@ -54,7 +54,7 @@ export const countryPriceInfo = {
 		apm: 1.2,
 		standardCardFields: 1.2,
 	},
-	de: {
+	DE: {
 		currencySymbol: '€',
 		fixedFee: 0.39,
 		checkout: 2.99,
@@ -63,7 +63,7 @@ export const countryPriceInfo = {
 		apm: 2.99,
 		standardCardFields: 2.99,
 	},
-	es: {
+	ES: {
 		currencySymbol: '€',
 		fixedFee: 0.35,
 		checkout: 2.9,

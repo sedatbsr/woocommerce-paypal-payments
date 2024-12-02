@@ -61,6 +61,20 @@ class CommonRestEndpoint extends RestEndpoint {
 	);
 
 	/**
+	 * Map the internal flags to JS names.
+	 *
+	 * @var array
+	 */
+	private array $flag_map = array(
+		'country'  => array(
+			'js_name' => 'country',
+		),
+		'currency' => array(
+			'js_name' => 'currency',
+		),
+	);
+
+	/**
 	 * Constructor.
 	 *
 	 * @param CommonSettings $settings The settings instance.
@@ -103,13 +117,23 @@ class CommonRestEndpoint extends RestEndpoint {
 	 *
 	 * @return WP_REST_Response The common settings.
 	 */
-	public function get_details() : WP_REST_Response {
+	public function get_details(): WP_REST_Response {
 		$js_data = $this->sanitize_for_javascript(
 			$this->settings->to_array(),
 			$this->field_map
 		);
 
-		return $this->return_success( $js_data );
+		$js_flags = $this->sanitize_for_javascript(
+			$this->settings->get_flags(),
+			$this->flag_map
+		);
+
+		return $this->return_success(
+			$js_data,
+			array(
+				'flags' => $js_flags,
+			)
+		);
 	}
 
 	/**
