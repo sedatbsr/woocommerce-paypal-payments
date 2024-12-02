@@ -24,9 +24,10 @@
 
 			&.is-primary {
 				background-color: var(--wp-components-color-accent);
-				padding: 10px 18px;
+				padding: 10px 16px;
 				justify-content: center;
 				margin: 0 0 0 12px;
+				border-radius: 2px;
 
 				&:disabled {
 					background-color: var(--color-disabled);
@@ -59,6 +60,12 @@
 		&--left {
 			align-items: center;
 			display: inline-flex;
+		}
+
+		&--right {
+			.is-link {
+				padding: 10px 16px;
+			}
 		}
 
 		&--progress-bar {
