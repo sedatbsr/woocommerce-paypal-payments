@@ -9,7 +9,7 @@ export const getSteps = ( flags ) => {
 		StepWelcome,
 		StepBusiness,
 		StepProducts,
-        StepPaymentMethods,
+		StepPaymentMethods,
 		StepCompleteSetup,
 	];
 
@@ -18,4 +18,15 @@ export const getSteps = ( flags ) => {
 	}
 
 	return allSteps;
+};
+
+export const getCurrentStep = ( requestedStep, steps ) => {
+	const isValidStep = ( step ) =>
+		typeof step === 'number' &&
+		Number.isInteger( step ) &&
+		step >= 0 &&
+		step < steps.length;
+
+	const safeCurrentStep = isValidStep( requestedStep ) ? requestedStep : 0;
+	return steps[ safeCurrentStep ];
 };
