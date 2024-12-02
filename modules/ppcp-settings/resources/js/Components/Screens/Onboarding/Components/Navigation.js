@@ -14,12 +14,15 @@ const Navigation = ( { stepDetails, onNext, onPrev, onExit } ) => {
 		<div className="ppcp-r-navigation-container">
 			<div className="ppcp-r-navigation">
 				<div className="ppcp-r-navigation--left">
-					<Icon icon={ chevronLeft } />
 					<Button
-						variant="tertiary"
+						variant="link"
 						onClick={ isFirst ? onExit : onPrev }
+						className="is-title"
 					>
-						{ title }
+						<Icon icon={ chevronLeft } />
+						<span className={ 'title ' + ( isFirst ? 'big' : '' ) }>
+							{ title }
+						</span>
 					</Button>
 				</div>
 				{ ! isFirst &&
@@ -33,7 +36,7 @@ const Navigation = ( { stepDetails, onNext, onPrev, onExit } ) => {
 const NextButton = ( { showNext, isDisabled, onNext, onExit } ) => {
 	return (
 		<div className="ppcp-r-navigation--right">
-			<Button onClick={ onExit }>
+			<Button variant="link" onClick={ onExit }>
 				{ __( 'Save and exit', 'woocommerce-paypal-payments' ) }
 			</Button>
 			{ showNext && (
