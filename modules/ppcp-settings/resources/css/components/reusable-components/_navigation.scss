@@ -22,12 +22,15 @@
 			@include font(16, 24, 600);
 			color: $color-gray-900;
 			&:hover{
-				background-color:none;
-				background:none;
+				background-color: transparent;
+				background: none;
 			}
 		}
 
 		&--left {
+			align-items: center;
+			display: inline-flex;
+
 			&__link {
 				@include font(20, 28, 400);
 				color: $color-gray-900;
@@ -44,15 +47,17 @@
 
 		&--progress-bar {
 			position: absolute;
-			bottom: 0px;
+			bottom: 0;
 			left: 0;
 			background-color: $color-blueberry;
 			height: 4px;
+			transition: width 0.3s;
 		}
 	}
 
 	@media screen and (max-width: 480px) {
 		padding: 24px 35px;
+
 		.ppcp-r-navigation {
 			flex-wrap: wrap;
 			row-gap: 8px;
