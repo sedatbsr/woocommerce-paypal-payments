@@ -1,25 +1,64 @@
+import { __ } from '@wordpress/i18n';
+
 import StepWelcome from './StepWelcome';
 import StepBusiness from './StepBusiness';
 import StepProducts from './StepProducts';
 import StepPaymentMethods from './StepPaymentMethods';
 import StepCompleteSetup from './StepCompleteSetup';
 
-export const getSteps = ( flags ) => {
-	const allSteps = [
-		StepWelcome,
-		StepBusiness,
-		StepProducts,
-		StepPaymentMethods,
-		StepCompleteSetup,
-	];
+/**
+ * List of all onboarding screens that are available.
+ *
+ * The screens are displayed in the order in which they appear in this array
+ *
+ * @type {[{id, StepComponent, title}]}
+ */
+const ALL_STEPS = [
+	{
+		id: 'welcome',
+		title: __( 'PayPal Payments', 'woocommerce-paypal-payments' ),
+		StepComponent: StepWelcome,
+	},
+	{
+		id: 'business',
+		title: __( 'Set up store type', 'woocommerce-paypal-payments' ),
+		StepComponent: StepBusiness,
+	},
+	{
+		id: 'products',
+		title: __( 'Select product types', 'woocommerce-paypal-payments' ),
+		StepComponent: StepProducts,
+	},
+	{
+		id: 'methods',
+		title: __( 'Choose checkout options', 'woocommerce-paypal-payments' ),
+		StepComponent: StepPaymentMethods,
+	},
+	{
+		id: 'complete',
+		title: __(
+			'Connect your PayPal account',
+			'woocommerce-paypal-payments'
+		),
+		StepComponent: StepCompleteSetup,
+	},
+];
 
+export const getSteps = ( flags ) => {
 	if ( ! flags.canUseCasualSelling ) {
-		return allSteps.filter( ( step ) => step !== StepBusiness );
+		return ALL_STEPS.filter( ( step ) => 'business' !== step.id );
 	}
 
-	return allSteps;
+	return ALL_STEPS;
 };
 
+/**
+ * Returns the screen-details of the current step, based on the numeric step-index.
+ *
+ * @param {number} requestedStep Index of the screen to display.
+ * @param {[]}     steps         List of all available steps (see `getSteps()`)
+ * @return {{id, StepComponent, title}} The requested screen details, or the first welcome screen.
+ */
 export const getCurrentStep = ( requestedStep, steps ) => {
 	const isValidStep = ( step ) =>
 		typeof step === 'number' &&
