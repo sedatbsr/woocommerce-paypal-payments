@@ -33,28 +33,41 @@ const AdvancedOptionsForm = () => {
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
+	const errors = {
+		noClientId: __(
+			'Please enter a Client ID',
+			'woocommerce-paypal-payments'
+		),
+		noClientSecret: __(
+			'Please enter your Secret Key',
+			'woocommerce-paypal-payments'
+		),
+		invalidClientId: __(
+			'Please enter a valid Client ID',
+			'woocommerce-paypal-payments'
+		),
+	};
 
 	const validateManualConnectionForm = () => {
-		const fields = [
+		const checks = [
 			{
 				ref: refClientId,
-				valid: () => clientId && clientValid,
-				errorMessage: __(
-					'Please enter a valid Client ID',
-					'woocommerce-paypal-payments'
-				),
+				valid: () => clientId,
+				errorMessage: errors.noClientId,
+			},
+			{
+				ref: refClientId,
+				valid: () => clientValid,
+				errorMessage: errors.invalidClientId,
 			},
 			{
 				ref: refClientSecret,
 				valid: () => clientSecret && secretValid,
-				errorMessage: __(
-					'Please enter your Secret Key',
-					'woocommerce-paypal-payments'
-				),
+				errorMessage: errors.noClientSecret,
 			},
 		];
 
-		for ( const { ref, valid, errorMessage } of fields ) {
+		for ( const { ref, valid, errorMessage } of checks ) {
 			if ( valid() ) {
 				continue;
 			}
@@ -144,10 +157,7 @@ const AdvancedOptionsForm = () => {
 				/>
 				{ clientValid || (
 					<p className="client-id-error">
-						{ __(
-							'Please enter a valid Client ID',
-							'woocommerce-paypal-payments'
-						) }
+						{ errors.invalidClientId }
 					</p>
 				) }
 				<DataStoreControl
