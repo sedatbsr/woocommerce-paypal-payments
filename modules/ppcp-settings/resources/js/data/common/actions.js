@@ -132,6 +132,23 @@ export const connectViaSandbox = function* () {
 };
 
 /**
+ * Side effect. Initiates the production login ISU.
+ *
+ * @return {Action} The action.
+ */
+export const connectToProduction = function* () {
+	yield setIsBusy( true );
+
+	const result = yield {
+		type: ACTION_TYPES.DO_PRODUCTION_LOGIN,
+		products: [ 'EXPRESS_CHECKOUT' ],
+	};
+	yield setIsBusy( false );
+
+	return result;
+};
+
+/**
  * Side effect. Initiates a manual connection attempt using the provided client ID and secret.
  *
  * @return {Action} The action.

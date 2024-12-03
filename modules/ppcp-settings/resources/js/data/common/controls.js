@@ -12,7 +12,7 @@ import apiFetch from '@wordpress/api-fetch';
 import {
 	REST_PERSIST_PATH,
 	REST_MANUAL_CONNECTION_PATH,
-	REST_SANDBOX_CONNECTION_PATH,
+	REST_CONNECTION_URL_PATH,
 } from './constants';
 import ACTION_TYPES from './action-types';
 
@@ -34,11 +34,33 @@ export const controls = {
 
 		try {
 			result = await apiFetch( {
-				path: REST_SANDBOX_CONNECTION_PATH,
+				path: REST_CONNECTION_URL_PATH,
 				method: 'POST',
 				data: {
 					environment: 'sandbox',
-					products: [ 'EXPRESS_CHECKOUT' ],
+					products: [ 'EXPRESS_CHECKOUT' ], // Sandbox always uses EXPRESS_CHECKOUT.
+				},
+			} );
+		} catch ( e ) {
+			result = {
+				success: false,
+				error: e,
+			};
+		}
+
+		return result;
+	},
+
+	async [ ACTION_TYPES.DO_PRODUCTION_LOGIN ]( { products } ) {
+		let result = null;
+
+		try {
+			result = await apiFetch( {
+				path: REST_CONNECTION_URL_PATH,
+				method: 'POST',
+				data: {
+					environment: 'production',
+					products,
 				},
 			} );
 		} catch ( e ) {
