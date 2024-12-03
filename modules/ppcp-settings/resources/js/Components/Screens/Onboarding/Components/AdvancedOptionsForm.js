@@ -15,6 +15,21 @@ import {
 
 import ConnectionButton from './ConnectionButton';
 
+const FORM_ERRORS = {
+	noClientId: __(
+		'Please enter your Client ID',
+		'woocommerce-paypal-payments'
+	),
+	noClientSecret: __(
+		'Please enter your Secret Key',
+		'woocommerce-paypal-payments'
+	),
+	invalidClientId: __(
+		'Please enter a valid Client ID',
+		'woocommerce-paypal-payments'
+	),
+};
+
 const AdvancedOptionsForm = () => {
 	const [ clientValid, setClientValid ] = useState( false );
 	const [ secretValid, setSecretValid ] = useState( false );
@@ -36,37 +51,22 @@ const AdvancedOptionsForm = () => {
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
-	const errors = {
-		noClientId: __(
-			'Please enter a Client ID',
-			'woocommerce-paypal-payments'
-		),
-		noClientSecret: __(
-			'Please enter your Secret Key',
-			'woocommerce-paypal-payments'
-		),
-		invalidClientId: __(
-			'Please enter a valid Client ID',
-			'woocommerce-paypal-payments'
-		),
-	};
-
 	const validateManualConnectionForm = () => {
 		const checks = [
 			{
 				ref: refClientId,
 				valid: () => clientId,
-				errorMessage: errors.noClientId,
+				errorMessage: FORM_ERRORS.noClientId,
 			},
 			{
 				ref: refClientId,
 				valid: () => clientValid,
-				errorMessage: errors.invalidClientId,
+				errorMessage: FORM_ERRORS.invalidClientId,
 			},
 			{
 				ref: refClientSecret,
 				valid: () => clientSecret && secretValid,
-				errorMessage: errors.noClientSecret,
+				errorMessage: FORM_ERRORS.noClientSecret,
 			},
 		];
 
@@ -80,11 +80,10 @@ const AdvancedOptionsForm = () => {
 		}
 	};
 
-	const handleManualConnect = async () => {
-		await handleConnectViaIdAndSecret( {
+	const handleManualConnect = () =>
+		handleConnectViaIdAndSecret( {
 			validation: validateManualConnectionForm,
 		} );
-	};
 
 	useEffect( () => {
 		setClientValid( ! clientId || /^A[\w-]{79}$/.test( clientId ) );
@@ -163,7 +162,7 @@ const AdvancedOptionsForm = () => {
 				/>
 				{ clientValid || (
 					<p className="client-id-error">
-						{ errors.invalidClientId }
+						{ FORM_ERRORS.invalidClientId }
 					</p>
 				) }
 				<DataStoreControl
