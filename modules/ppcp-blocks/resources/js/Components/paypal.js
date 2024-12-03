@@ -9,7 +9,10 @@ import {
 import { convertKeysToSnakeCase } from '../Helper/Helper';
 import buttonModuleWatcher from '../../../../ppcp-button/resources/js/modules/ButtonModuleWatcher';
 import { normalizeStyleForFundingSource } from '../../../../ppcp-button/resources/js/modules/Helper/Style';
-import { isPayPalSubscription } from '../Helper/Subscription';
+import {
+	cartHasSubscriptionProducts,
+	isPayPalSubscription,
+} from '../Helper/Subscription';
 
 const PAYPAL_GATEWAY_ID = 'ppcp-gateway';
 
@@ -149,6 +152,7 @@ export const PayPalComponent = ( {
 
 				throw new Error( config.scriptData.labels.error.generic );
 			}
+
 			return json.data.id;
 		} catch ( err ) {
 			console.error( err );
@@ -646,6 +650,77 @@ export const PayPalComponent = ( {
 			return shippingAddressChange;
 		};
 	};
+
+	const createVaultSetupToken = async () => {
+		return fetch( config.scriptData.ajax.create_setup_token.endpoint, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify( {
+				nonce: config.scriptData.ajax.create_setup_token.nonce,
+				payment_method: 'ppcp-gateway',
+			} ),
+		} )
+			.then( ( response ) => response.json() )
+			.then( ( result ) => {
+				return result.data.id;
+			} )
+			.catch( ( err ) => {
+				console.error( err );
+			} );
+	};
+
+	const onApproveSavePayment = async ( { vaultSetupToken } ) => {
+		let endpoint =
+			config.scriptData.ajax.create_payment_token_for_guest.endpoint;
+		let bodyContent = {
+			nonce: config.scriptData.ajax.create_payment_token_for_guest.nonce,
+			vault_setup_token: vaultSetupToken,
+		};
+
+		if ( config.scriptData.user.is_logged_in ) {
+			endpoint = config.scriptData.ajax.create_payment_token.endpoint;
+
+			bodyContent = {
+				nonce: config.scriptData.ajax.create_payment_token.nonce,
+				vault_setup_token: vaultSetupToken,
+				is_free_trial_cart: config.scriptData.is_free_trial_cart,
+			};
+		}
+
+		const response = await fetch( endpoint, {
+			method: 'POST',
+			credentials: 'same-origin',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify( bodyContent ),
+		} );
+
+		const result = await response.json();
+		if ( result.success === true ) {
+			onSubmit();
+		}
+
+		console.error( result );
+	};
+
+	if (
+		cartHasSubscriptionProducts( config.scriptData ) &&
+		config.scriptData.is_free_trial_cart
+	) {
+		return (
+			<PayPalButton
+				style={ style }
+				onClick={ handleClick }
+				onCancel={ onClose }
+				onError={ onClose }
+				createVaultSetupToken={ createVaultSetupToken }
+				onApprove={ onApproveSavePayment }
+			/>
+		);
+	}
 
 	if ( isPayPalSubscription( config.scriptData ) ) {
 		return (
