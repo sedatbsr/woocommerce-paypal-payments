@@ -173,7 +173,7 @@ const paymentMethodsAlternativeDefault = [
 		id: 'eps',
 		title: __( 'eps', 'woocommerce-paypal-payments' ),
 		description: __(
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum porttitor massa ex, eget luctus lacus iaculis at.',
+			'An online payment method in Austria, enabling Austrian buyers to make secure payments directly through their bank accounts. Transactions are processed in EUR.',
 			'woocommerce-paypal-payments'
 		),
 		icon: 'payment-method-eps',
@@ -182,10 +182,46 @@ const paymentMethodsAlternativeDefault = [
 		id: 'blik',
 		title: __( 'BLIK', 'woocommerce-paypal-payments' ),
 		description: __(
-			'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum porttitor massa ex, eget luctus lacus iaculis at.',
+			'A widely used mobile payment method in Poland, allowing Polish customers to pay directly via their banking apps. Transactions are processed in PLN.',
 			'woocommerce-paypal-payments'
 		),
 		icon: 'payment-method-blik',
+	},
+	{
+		id: 'mybank',
+		title: __( 'MyBank', 'woocommerce-paypal-payments' ),
+		description: __(
+			'A European online banking payment solution primarily used in Italy, enabling customers to make secure bank transfers during checkout. Transactions are processed in EUR.',
+			'woocommerce-paypal-payments'
+		),
+		icon: 'payment-method-mybank',
+	},
+	{
+		id: 'przelewy24',
+		title: __( 'Przelewy24', 'woocommerce-paypal-payments' ),
+		description: __(
+			'A popular online payment gateway in Poland, offering various payment options for Polish customers. Transactions can be processed in PLN or EUR.',
+			'woocommerce-paypal-payments'
+		),
+		icon: 'payment-method-przelewy24',
+	},
+	{
+		id: 'trustly',
+		title: __( 'Trustly', 'woocommerce-paypal-payments' ),
+		description: __(
+			'A European payment method that allows buyers to make payments directly from their bank accounts, suitable for customers across multiple European countries. Supported currencies include EUR, DKK, SEK, GBP, and NOK.',
+			'woocommerce-paypal-payments'
+		),
+		icon: 'payment-method-trustly',
+	},
+	{
+		id: 'multibanco',
+		title: __( 'Multibanco', 'woocommerce-paypal-payments' ),
+		description: __(
+			'An online payment method in Portugal, enabling Portuguese buyers to make secure payments directly through their bank accounts. Transactions are processed in EUR.',
+			'woocommerce-paypal-payments'
+		),
+		icon: 'payment-method-multibanco',
 	},
 ];
 
