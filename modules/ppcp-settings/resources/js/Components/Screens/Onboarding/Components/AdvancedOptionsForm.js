@@ -18,6 +18,9 @@ import ConnectionButton from './ConnectionButton';
 const AdvancedOptionsForm = () => {
 	const [ clientValid, setClientValid ] = useState( false );
 	const [ secretValid, setSecretValid ] = useState( false );
+	const [ clientIdLabel, setClientIdLabel ] = useState( '' );
+	const [ secretKeyLabel, setSecretKeyLabel ] = useState( '' );
+
 	const { isBusy } = CommonHooks.useBusyState();
 	const { isSandboxMode, setSandboxMode } = useSandboxConnection();
 	const {
@@ -88,6 +91,19 @@ const AdvancedOptionsForm = () => {
 		setSecretValid( clientSecret && clientSecret.length > 0 );
 	}, [ clientId, clientSecret ] );
 
+	useEffect( () => {
+		setClientIdLabel(
+			isSandboxMode
+				? __( 'Sandbox Client ID', 'woocommerce-paypal-payments' )
+				: __( 'Live Client ID', 'woocommerce-paypal-payments' )
+		);
+		setSecretKeyLabel(
+			isSandboxMode
+				? __( 'Sandbox Secret Key', 'woocommerce-paypal-payments' )
+				: __( 'Live Secret Key', 'woocommerce-paypal-payments' )
+		);
+	}, [ isSandboxMode ] );
+
 	const advancedUsersDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
 		__(
@@ -138,17 +154,7 @@ const AdvancedOptionsForm = () => {
 				<DataStoreControl
 					control={ TextControl }
 					ref={ refClientId }
-					label={
-						isSandboxMode
-							? __(
-									'Sandbox Client ID',
-									'woocommerce-paypal-payments'
-							  )
-							: __(
-									'Live Client ID',
-									'woocommerce-paypal-payments'
-							  )
-					}
+					label={ clientIdLabel }
 					value={ clientId }
 					onChange={ setClientId }
 					className={ classNames( {
@@ -163,17 +169,7 @@ const AdvancedOptionsForm = () => {
 				<DataStoreControl
 					control={ TextControl }
 					ref={ refClientSecret }
-					label={
-						isSandboxMode
-							? __(
-									'Sandbox Secret Key',
-									'woocommerce-paypal-payments'
-							  )
-							: __(
-									'Live Secret Key',
-									'woocommerce-paypal-payments'
-							  )
-					}
+					label={ secretKeyLabel }
 					value={ clientSecret }
 					onChange={ setClientSecret }
 					type="password"
