@@ -1,6 +1,6 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, TextControl } from '@wordpress/components';
-import { useRef } from '@wordpress/element';
+import { useRef, useMemo } from '@wordpress/element';
 
 import SettingsToggleBlock from '../../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../../ReusableComponents/Separator';
@@ -29,43 +29,13 @@ const AdvancedOptionsForm = () => {
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
-	const validateManualConnectionForm = () => {
-		const fields = [
-			{
-				ref: refClientId,
-				value: clientId,
-				errorMessage: __(
-					'Please enter your Client ID',
-					'woocommerce-paypal-payments'
-				),
-			},
-			{
-				ref: refClientSecret,
-				value: clientSecret,
-				errorMessage: __(
-					'Please enter your Secret Key',
-					'woocommerce-paypal-payments'
-				),
-			},
-		];
+	const isValidClientId = useMemo( () => {
+		return /^A[\w-]{79}$/.test( clientId );
+	}, [ clientId ] );
 
-		for ( const { ref, value, errorMessage } of fields ) {
-			if ( value ) {
-				continue;
-			}
-
-			ref?.current?.focus();
-			throw new Error( errorMessage );
-		}
-
-		return true;
-	};
-
-	const handleManualConnect = async () => {
-		await handleConnectViaIdAndSecret( {
-			validation: validateManualConnectionForm,
-		} );
-	};
+	const isFormValid = useMemo( () => {
+		return isValidClientId && clientId && clientSecret;
+	}, [ isValidClientId, clientId, clientSecret ] );
 
 	const advancedUsersDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
@@ -130,7 +100,18 @@ const AdvancedOptionsForm = () => {
 					}
 					value={ clientId }
 					onChange={ setClientId }
+					className={
+						clientId && ! isValidClientId ? 'has-error' : ''
+					}
 				/>
+				{ clientId && ! isValidClientId && (
+					<p className="client-id-error">
+						{ __(
+							'Please enter a valid Client ID',
+							'woocommerce-paypal-payments'
+						) }
+					</p>
+				) }
 				<DataStoreControl
 					control={ TextControl }
 					ref={ refClientSecret }
@@ -149,7 +130,11 @@ const AdvancedOptionsForm = () => {
 					onChange={ setClientSecret }
 					type="password"
 				/>
-				<Button variant="secondary" onClick={ handleManualConnect }>
+				<Button
+					variant="secondary"
+					onClick={ handleConnectViaIdAndSecret }
+					disabled={ ! isFormValid }
+				>
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>
