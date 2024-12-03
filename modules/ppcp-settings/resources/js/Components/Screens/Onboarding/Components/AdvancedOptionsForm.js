@@ -1,6 +1,8 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, TextControl } from '@wordpress/components';
-import { useRef, useMemo } from '@wordpress/element';
+import { useRef, useState, useEffect } from '@wordpress/element';
+
+import classNames from 'classnames';
 
 import SettingsToggleBlock from '../../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../../ReusableComponents/Separator';
@@ -14,6 +16,8 @@ import {
 import ConnectionButton from './ConnectionButton';
 
 const AdvancedOptionsForm = () => {
+	const [ clientValid, setClientValid ] = useState( false );
+	const [ secretValid, setSecretValid ] = useState( false );
 	const { isBusy } = CommonHooks.useBusyState();
 	const { isSandboxMode, setSandboxMode } = useSandboxConnection();
 	const {
@@ -29,13 +33,10 @@ const AdvancedOptionsForm = () => {
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
-	const isValidClientId = useMemo( () => {
-		return /^A[\w-]{79}$/.test( clientId );
-	}, [ clientId ] );
-
-	const isFormValid = useMemo( () => {
-		return isValidClientId && clientId && clientSecret;
-	}, [ isValidClientId, clientId, clientSecret ] );
+	useEffect( () => {
+		setClientValid( ! clientId || /^A[\w-]{79}$/.test( clientId ) );
+		setSecretValid( clientSecret && clientSecret.length > 0 );
+	}, [ clientId, clientSecret ] );
 
 	const advancedUsersDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
@@ -100,11 +101,11 @@ const AdvancedOptionsForm = () => {
 					}
 					value={ clientId }
 					onChange={ setClientId }
-					className={
-						clientId && ! isValidClientId ? 'has-error' : ''
-					}
+					className={ classNames( {
+						'has-error': ! clientValid,
+					} ) }
 				/>
-				{ clientId && ! isValidClientId && (
+				{ clientValid || (
 					<p className="client-id-error">
 						{ __(
 							'Please enter a valid Client ID',
@@ -133,7 +134,7 @@ const AdvancedOptionsForm = () => {
 				<Button
 					variant="secondary"
 					onClick={ handleConnectViaIdAndSecret }
-					disabled={ ! isFormValid }
+					disabled={ ! ( clientId && clientValid && secretValid ) }
 				>
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
