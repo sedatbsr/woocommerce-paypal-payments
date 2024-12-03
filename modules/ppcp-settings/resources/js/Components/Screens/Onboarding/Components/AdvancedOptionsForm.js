@@ -33,6 +33,43 @@ const AdvancedOptionsForm = () => {
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
+
+	const validateManualConnectionForm = () => {
+		const fields = [
+			{
+				ref: refClientId,
+				valid: () => clientId && clientValid,
+				errorMessage: __(
+					'Please enter a valid Client ID',
+					'woocommerce-paypal-payments'
+				),
+			},
+			{
+				ref: refClientSecret,
+				valid: () => clientSecret && secretValid,
+				errorMessage: __(
+					'Please enter your Secret Key',
+					'woocommerce-paypal-payments'
+				),
+			},
+		];
+
+		for ( const { ref, valid, errorMessage } of fields ) {
+			if ( valid() ) {
+				continue;
+			}
+
+			ref?.current?.focus();
+			throw new Error( errorMessage );
+		}
+	};
+
+	const handleManualConnect = async () => {
+		await handleConnectViaIdAndSecret( {
+			validation: validateManualConnectionForm,
+		} );
+	};
+
 	useEffect( () => {
 		setClientValid( ! clientId || /^A[\w-]{79}$/.test( clientId ) );
 		setSecretValid( clientSecret && clientSecret.length > 0 );
@@ -131,11 +168,7 @@ const AdvancedOptionsForm = () => {
 					onChange={ setClientSecret }
 					type="password"
 				/>
-				<Button
-					variant="secondary"
-					onClick={ handleConnectViaIdAndSecret }
-					disabled={ ! ( clientId && clientValid && secretValid ) }
-				>
+				<Button variant="secondary" onClick={ handleManualConnect }>
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>
