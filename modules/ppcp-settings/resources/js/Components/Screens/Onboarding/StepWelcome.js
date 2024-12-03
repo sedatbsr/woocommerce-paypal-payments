@@ -10,8 +10,9 @@ import AccordionSection from '../../ReusableComponents/AccordionSection';
 import AdvancedOptionsForm from './Components/AdvancedOptionsForm';
 import { CommonHooks } from '../../../data';
 
-const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
+const StepWelcome = ( { setStep, currentStep } ) => {
 	const { storeCountry, storeCurrency } = CommonHooks.useWooSettings();
+
 	return (
 		<div className="ppcp-r-page-welcome">
 			<OnboardingHeader
@@ -61,7 +62,7 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 				className="onboarding-advanced-options"
 				id="advanced-options"
 			>
-				<AdvancedOptionsForm setCompleted={ setCompleted } />
+				<AdvancedOptionsForm />
 			</AccordionSection>
 		</div>
 	);

@@ -1,10 +1,9 @@
 import { __ } from '@wordpress/i18n';
-import { Button } from '@wordpress/components';
 
 import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
-import { openSignup } from '../../ReusableComponents/Icons';
+import ConnectionButton from './Components/ConnectionButton';
 
-const StepCompleteSetup = ( { setCompleted } ) => {
+const StepCompleteSetup = () => {
 	return (
 		<div className="ppcp-r-page-products">
 			<OnboardingHeader
@@ -19,18 +18,12 @@ const StepCompleteSetup = ( { setCompleted } ) => {
 			/>
 			<div className="ppcp-r-inner-container">
 				<div className="ppcp-r-onboarding-header__description">
-					<Button
-						variant="primary"
-						icon={ openSignup }
-						onClick={ () => {
-							setCompleted( true );
-						} }
-					>
-						{ __(
+					<ConnectionButton
+						title={ __(
 							'Connect to PayPal',
 							'woocommerce-paypal-payments'
 						) }
-					</Button>
+					/>
 				</div>
 			</div>
 		</div>
