@@ -4,12 +4,25 @@ import PaymentMethodItem from '../../ReusableComponents/PaymentMethodItem';
 import ModalPayPal from './Modals/ModalPayPal';
 import ModalFastlane from './Modals/ModalFastlane';
 import ModalAcdc from './Modals/ModalAcdc';
+import { CommonHooks } from '../../../data';
 
 const TabPaymentMethods = () => {
 	const renderPaymentMethods = ( data ) => {
+		const { storeCountry, storeCurrency } = CommonHooks.useWooSettings();
+
+		const conditionallyUpdatedPaymentMethods = [
+			...data,
+			...( storeCountry === 'DE' && storeCurrency === 'EUR'
+				? [ puiPaymentMethod ]
+				: [] ),
+			...( storeCountry === 'MX' && storeCurrency === 'MXN'
+				? [ oxxoPaymentMethod ]
+				: [] ),
+		];
+
 		return (
 			<div className="ppcp-r-payment-method-item-list">
-				{ data.map( ( paymentMethod ) => (
+				{ conditionallyUpdatedPaymentMethods.map( ( paymentMethod ) => (
 					<PaymentMethodItem
 						key={ paymentMethod.id }
 						{ ...paymentMethod }
@@ -224,5 +237,25 @@ const paymentMethodsAlternativeDefault = [
 		icon: 'payment-method-multibanco',
 	},
 ];
+
+const puiPaymentMethod = {
+	id: 'pui',
+	title: __( 'Pay upon Invoice', 'woocommerce-paypal-payments' ),
+	description: __(
+		'Pay upon Invoice is an invoice payment method in Germany. It is a local buy now, pay later payment method that allows the buyer to place an order, receive the goods, try them, verify they are in good order, and then pay the invoice within 30 days.',
+		'woocommerce-paypal-payments'
+	),
+	icon: 'payment-method-ratepay',
+};
+
+const oxxoPaymentMethod = {
+	id: 'oxxo',
+	title: __( 'OXXO', 'woocommerce-paypal-payments' ),
+	description: __(
+		'OXXO is a Mexican chain of convenience stores. *Get PayPal account permission to use OXXO payment functionality by contacting us at (+52) 800–925–0304',
+		'woocommerce-paypal-payments'
+	),
+	icon: 'payment-method-oxxo',
+};
 
 export default TabPaymentMethods;
