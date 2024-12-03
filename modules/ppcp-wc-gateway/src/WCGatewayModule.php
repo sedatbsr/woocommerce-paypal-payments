@@ -9,7 +9,6 @@ declare(strict_types=1);
 
 namespace WooCommerce\PayPalCommerce\WcGateway;
 
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\TaskLists;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Throwable;
@@ -868,11 +867,6 @@ class WCGatewayModule implements ServiceModule, ExtendingModule, ExecutableModul
 				$logger = $container->get( 'woocommerce.logger.woocommerce' );
 				assert( $logger instanceof LoggerInterface );
 				try {
-					$task_lists = TaskLists::get_lists();
-					if ( ! isset( $task_lists['extended'] ) ) {
-						return;
-					}
-
 					$simple_redirect_tasks = $container->get( 'wcgateway.settings.wc-tasks.simple-redirect-tasks' );
 					if ( empty( $simple_redirect_tasks ) ) {
 						return;
@@ -881,7 +875,7 @@ class WCGatewayModule implements ServiceModule, ExtendingModule, ExecutableModul
 					$task_registrar = $container->get( 'wcgateway.settings.wc-tasks.task-registrar' );
 					assert( $task_registrar instanceof TaskRegistrarInterface );
 
-					$task_registrar->register( $simple_redirect_tasks );
+					$task_registrar->register( 'extended', $simple_redirect_tasks );
 				} catch ( Exception $exception ) {
 					$logger->error( "Failed to create a task in the 'Things to do next' section of WC. " . $exception->getMessage() );
 				}
