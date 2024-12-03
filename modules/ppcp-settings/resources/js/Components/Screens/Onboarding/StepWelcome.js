@@ -8,8 +8,10 @@ import WelcomeDocs from '../../ReusableComponents/WelcomeDocs/WelcomeDocs';
 import AccordionSection from '../../ReusableComponents/AccordionSection';
 
 import AdvancedOptionsForm from './Components/AdvancedOptionsForm';
+import { CommonHooks } from '../../../data';
 
 const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
+	const { storeCountry, storeCurrency } = CommonHooks.useWooSettings();
 	return (
 		<div className="ppcp-r-page-welcome">
 			<OnboardingHeader
@@ -47,8 +49,8 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 				useAcdc={ true }
 				isFastlane={ true }
 				isPayLater={ true }
-				storeCountry={ 'us' }
-				storeCurrency={ 'USD' }
+				storeCountry={ storeCountry }
+				storeCurrency={ storeCurrency }
 			/>
 			<Separator text={ __( 'or', 'woocommerce-paypal-payments' ) } />
 			<AccordionSection

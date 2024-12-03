@@ -22,6 +22,10 @@ const defaultPersistent = {
 	useManualConnection: false,
 	clientId: '',
 	clientSecret: '',
+	flags: {
+		country: '',
+		currency: '',
+	},
 };
 
 // Reducer logic.
@@ -39,7 +43,10 @@ const commonReducer = createReducer( defaultTransient, defaultPersistent, {
 		setPersistent( state, action ),
 
 	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) =>
-		setPersistent( state, payload.data ),
+		setPersistent( state, {
+			...payload.data,
+			flags: payload.flags,
+		} ),
 } );
 
 export default commonReducer;

@@ -1,4 +1,4 @@
-import BadgeBox, { BADGE_BOX_TITLE_BIG } from '../BadgeBox';
+import BadgeBox from '../BadgeBox';
 import { __, sprintf } from '@wordpress/i18n';
 import Separator from '../Separator';
 import generatePriceText from '../../../utils/badgeBoxUtils';
@@ -10,7 +10,7 @@ const AcdcOptionalPaymentMethods = ( {
 	storeCountry,
 	storeCurrency,
 } ) => {
-	if ( isFastlane && isPayLater && storeCountry === 'us' ) {
+	if ( isFastlane && isPayLater && storeCountry === 'US' ) {
 		return (
 			<div className="ppcp-r-optional-payment-methods__wrapper">
 				<BadgeBox

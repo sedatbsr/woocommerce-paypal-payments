@@ -54,7 +54,10 @@ return array(
 		return new GeneralSettings();
 	},
 	'settings.data.common'                        => static function ( ContainerInterface $container ) : CommonSettings {
-		return new CommonSettings();
+		return new CommonSettings(
+			$container->get( 'api.shop.country' ),
+			$container->get( 'api.shop.currency.getter' )->get(),
+		);
 	},
 	'settings.rest.onboarding'                    => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );
