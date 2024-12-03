@@ -122,7 +122,7 @@ export const persist = function* () {
  *
  * @return {Action} The action.
  */
-export const connectViaSandbox = function* () {
+export const connectToSandbox = function* () {
 	yield setIsBusy( true );
 
 	const result = yield { type: ACTION_TYPES.DO_SANDBOX_LOGIN };
@@ -134,14 +134,15 @@ export const connectViaSandbox = function* () {
 /**
  * Side effect. Initiates the production login ISU.
  *
+ * @param {string[]} products Which products/features to display in the ISU popup.
  * @return {Action} The action.
  */
-export const connectToProduction = function* () {
+export const connectToProduction = function* ( products = [] ) {
 	yield setIsBusy( true );
 
 	const result = yield {
 		type: ACTION_TYPES.DO_PRODUCTION_LOGIN,
-		products: [ 'EXPRESS_CHECKOUT' ],
+		products,
 	};
 	yield setIsBusy( false );
 

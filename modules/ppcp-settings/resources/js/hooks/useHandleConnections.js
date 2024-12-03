@@ -26,12 +26,12 @@ const useCommonConnectionLogic = () => {
 };
 
 export const useSandboxConnection = () => {
-	const { connectViaSandbox, isSandboxMode, setSandboxMode } =
+	const { connectToSandbox, isSandboxMode, setSandboxMode } =
 		CommonHooks.useSandbox();
 	const { handleServerError, createErrorNotice } = useCommonConnectionLogic();
 
 	const handleSandboxConnect = async () => {
-		const res = await connectViaSandbox();
+		const res = await connectToSandbox();
 
 		if ( ! res.success || ! res.data ) {
 			handleServerError(
