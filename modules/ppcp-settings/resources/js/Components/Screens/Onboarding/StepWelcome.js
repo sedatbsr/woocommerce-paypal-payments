@@ -9,7 +9,7 @@ import AccordionSection from '../../ReusableComponents/AccordionSection';
 
 import AdvancedOptionsForm from './Components/AdvancedOptionsForm';
 
-const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
+const StepWelcome = ( { setStep, currentStep } ) => {
 	return (
 		<div className="ppcp-r-page-welcome">
 			<OnboardingHeader
@@ -59,7 +59,7 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 				className="onboarding-advanced-options"
 				id="advanced-options"
 			>
-				<AdvancedOptionsForm setCompleted={ setCompleted } />
+				<AdvancedOptionsForm />
 			</AccordionSection>
 		</div>
 	);
