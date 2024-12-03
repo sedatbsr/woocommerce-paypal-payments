@@ -525,6 +525,15 @@ export const PayPalComponent = ( {
 		}
 
 		const unsubscribeProcessing = onPaymentSetup( () => {
+			if (
+				cartHasSubscriptionProducts( config.scriptData ) &&
+				config.scriptData.is_free_trial_cart
+			) {
+				return {
+					type: responseTypes.SUCCESS,
+				};
+			}
+
 			if ( config.scriptData.continuation ) {
 				return {
 					type: responseTypes.SUCCESS,
