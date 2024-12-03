@@ -43,7 +43,11 @@ const useHooks = () => {
 	const clientSecret = usePersistent( 'clientSecret' );
 	const isSandboxMode = usePersistent( 'useSandbox' );
 	const isManualConnectionMode = usePersistent( 'useManualConnection' );
-	const flags = usePersistent( 'flags' );
+
+	const wooSettings = useSelect(
+		( select ) => select( STORE_NAME ).wooSettings(),
+		[]
+	);
 
 	const savePersistent = async ( setter, value ) => {
 		setter( value );
@@ -70,7 +74,7 @@ const useHooks = () => {
 		},
 		connectViaSandbox,
 		connectViaIdAndSecret,
-		flags,
+		wooSettings,
 	};
 };
 
@@ -113,7 +117,6 @@ export const useManualConnection = () => {
 };
 
 export const useWooSettings = () => {
-	const { flags = {} } = useHooks();
-	const { country, currency } = flags;
-	return { storeCountry: country, storeCurrency: currency };
+	const { wooSettings } = useHooks();
+	return wooSettings;
 };

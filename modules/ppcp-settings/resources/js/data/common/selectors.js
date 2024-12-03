@@ -16,6 +16,10 @@ export const persistentData = ( state ) => {
 };
 
 export const transientData = ( state ) => {
-	const { data, ...transientState } = getState( state );
+	const { data, wooSettings, ...transientState } = getState( state ); // ← extract the wooSettings, to ensure they are not part of the "transientState" collection.
 	return transientState || EMPTY_OBJ;
+};
+
+export const wooSettings = ( state ) => {
+	return getState( state ).wooSettings || EMPTY_OBJ;
 };

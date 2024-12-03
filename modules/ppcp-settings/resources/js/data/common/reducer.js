@@ -22,10 +22,6 @@ const defaultPersistent = {
 	useManualConnection: false,
 	clientId: '',
 	clientSecret: '',
-	flags: {
-		country: '',
-		currency: '',
-	},
 };
 
 // Reducer logic.
@@ -42,11 +38,18 @@ const commonReducer = createReducer( defaultTransient, defaultPersistent, {
 	[ ACTION_TYPES.SET_PERSISTENT ]: ( state, action ) =>
 		setPersistent( state, action ),
 
-	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) =>
-		setPersistent( state, {
-			...payload.data,
-			flags: payload.flags,
-		} ),
+	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) => {
+		const newState = setPersistent( state, payload.data );
+
+		if ( payload.wooSettings ) {
+			newState.wooSettings = {
+				...newState.wooSettings,
+				...payload.wooSettings,
+			};
+		}
+
+		return newState;
+	},
 } );
 
 export default commonReducer;

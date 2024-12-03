@@ -65,12 +65,12 @@ class CommonRestEndpoint extends RestEndpoint {
 	 *
 	 * @var array
 	 */
-	private array $flag_map = array(
+	private array $woo_settings_map = array(
 		'country'  => array(
-			'js_name' => 'country',
+			'js_name' => 'storeCountry',
 		),
 		'currency' => array(
-			'js_name' => 'currency',
+			'js_name' => 'storeCurrency',
 		),
 	);
 
@@ -123,15 +123,15 @@ class CommonRestEndpoint extends RestEndpoint {
 			$this->field_map
 		);
 
-		$js_flags = $this->sanitize_for_javascript(
-			$this->settings->get_flags(),
-			$this->flag_map
+		$js_woo_settings = $this->sanitize_for_javascript(
+			$this->settings->get_woo_settings(),
+			$this->woo_settings_map
 		);
 
 		return $this->return_success(
 			$js_data,
 			array(
-				'flags' => $js_flags,
+				'wooSettings' => $js_woo_settings,
 			)
 		);
 	}

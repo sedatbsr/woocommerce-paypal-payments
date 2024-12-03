@@ -34,7 +34,7 @@ class CommonSettings extends AbstractDataModel {
 	 *
 	 * @var array
 	 */
-	protected array $flags = array();
+	protected array $woo_settings = array();
 
 	/**
 	 * Constructor.
@@ -44,8 +44,8 @@ class CommonSettings extends AbstractDataModel {
 	 */
 	public function __construct( string $country, string $currency ) {
 		parent::__construct();
-		$this->flags['country']  = $country;
-		$this->flags['currency'] = $currency;
+		$this->woo_settings['country']  = $country;
+		$this->woo_settings['currency'] = $currency;
 	}
 
 	/**
@@ -141,7 +141,7 @@ class CommonSettings extends AbstractDataModel {
 	 *
 	 * @return array
 	 */
-	public function get_flags() : array {
-		return $this->flags;
+	public function get_woo_settings() : array {
+		return $this->woo_settings;
 	}
 }
