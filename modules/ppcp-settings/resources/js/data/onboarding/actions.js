@@ -81,16 +81,14 @@ export const setIsCasualSeller = ( isCasualSeller ) => ( {
 } );
 
 /**
- * Persistent. Sets the "areOptionalPaymentMethodsEnabled" value.
+ * Persistent. Sets the "useOptionalPaymentMethods" value.
  *
- * @param {boolean} areOptionalPaymentMethodsEnabled
+ * @param {boolean} useOptionalPaymentMethods
  * @return {Action} The action.
  */
-export const setAreOptionalPaymentMethodsEnabled = (
-	areOptionalPaymentMethodsEnabled
-) => ( {
+export const setUseOptionalPaymentMethods = ( useOptionalPaymentMethods ) => ( {
 	type: ACTION_TYPES.SET_PERSISTENT,
-	payload: { areOptionalPaymentMethodsEnabled },
+	payload: { useOptionalPaymentMethods },
 } );
 
 /**

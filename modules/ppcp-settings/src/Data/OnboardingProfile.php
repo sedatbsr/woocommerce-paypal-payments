@@ -64,11 +64,11 @@ class OnboardingProfile extends AbstractDataModel {
 	 */
 	protected function get_defaults() : array {
 		return array(
-			'completed'                            => false,
-			'step'                                 => 0,
-			'is_casual_seller'                     => null,
-			'are_optional_payment_methods_enabled' => true,
-			'products'                             => array(),
+			'completed'                    => false,
+			'step'                         => 0,
+			'is_casual_seller'             => null,
+			'use_optional_payment_methods' => true,
+			'products'                     => array(),
 		);
 	}
 
@@ -131,10 +131,11 @@ class OnboardingProfile extends AbstractDataModel {
 	/**
 	 * Sets the optional payment methods flag.
 	 *
-	 * @param bool|null $are_optional_payment_methods_enabled Whether the PayPal optional payment methods are enabled.
+	 * @param bool|null $use_optional_payment_methods Whether the PayPal optional payment methods
+	 *                                                are enabled.
 	 */
-	public function set_are_optional_payment_methods_enabled( ?bool $are_optional_payment_methods_enabled ) : void {
-		$this->data['are_optional_payment_methods_enabled'] = $are_optional_payment_methods_enabled;
+	public function set_use_optional_payment_methods( ?bool $use_optional_payment_methods ) : void {
+		$this->data['use_optional_payment_methods'] = $use_optional_payment_methods;
 	}
 
 	/**

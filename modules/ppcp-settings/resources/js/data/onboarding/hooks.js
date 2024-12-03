@@ -30,7 +30,7 @@ const useHooks = () => {
 		setStep,
 		setCompleted,
 		setIsCasualSeller,
-		setAreOptionalPaymentMethodsEnabled,
+		setUseOptionalPaymentMethods,
 		setProducts,
 	} = useDispatch( STORE_NAME );
 
@@ -44,8 +44,8 @@ const useHooks = () => {
 	const step = usePersistent( 'step' );
 	const completed = usePersistent( 'completed' );
 	const isCasualSeller = usePersistent( 'isCasualSeller' );
-	const areOptionalPaymentMethodsEnabled = usePersistent(
-		'areOptionalPaymentMethodsEnabled'
+	const useOptionalPaymentMethods = usePersistent(
+		'useOptionalPaymentMethods'
 	);
 	const products = usePersistent( 'products' );
 
@@ -69,9 +69,9 @@ const useHooks = () => {
 		setIsCasualSeller: ( value ) => {
 			return savePersistent( setIsCasualSeller, value );
 		},
-		areOptionalPaymentMethodsEnabled,
-		setAreOptionalPaymentMethodsEnabled: ( value ) => {
-			return savePersistent( setAreOptionalPaymentMethodsEnabled, value );
+		useOptionalPaymentMethods,
+		setUseOptionalPaymentMethods: ( value ) => {
+			return savePersistent( setUseOptionalPaymentMethods, value );
 		},
 		products,
 		setProducts: ( activeProducts ) => {
@@ -96,14 +96,12 @@ export const useProducts = () => {
 };
 
 export const useOptionalPaymentMethods = () => {
-	const {
-		areOptionalPaymentMethodsEnabled,
-		setAreOptionalPaymentMethodsEnabled,
-	} = useHooks();
+	const { useOptionalPaymentMethods, setUseOptionalPaymentMethods } =
+		useHooks();
 
 	return {
-		areOptionalPaymentMethodsEnabled,
-		setAreOptionalPaymentMethodsEnabled,
+		useOptionalPaymentMethods,
+		setUseOptionalPaymentMethods,
 	};
 };
 

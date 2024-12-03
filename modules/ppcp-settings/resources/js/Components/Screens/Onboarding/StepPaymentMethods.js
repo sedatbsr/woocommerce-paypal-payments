@@ -9,10 +9,8 @@ import OptionalPaymentMethods from '../../ReusableComponents/OptionalPaymentMeth
 const OPM_RADIO_GROUP_NAME = 'optional-payment-methods';
 
 const StepPaymentMethods = ( {} ) => {
-	const {
-		areOptionalPaymentMethodsEnabled,
-		setAreOptionalPaymentMethodsEnabled,
-	} = OnboardingHooks.useOptionalPaymentMethods();
+	const { useOptionalPaymentMethods, setUseOptionalPaymentMethods } =
+		OnboardingHooks.useOptionalPaymentMethods();
 	const pricesBasedDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
 		__(
@@ -48,8 +46,8 @@ const StepPaymentMethods = ( {} ) => {
 						}
 						name={ OPM_RADIO_GROUP_NAME }
 						value={ true }
-						changeCallback={ setAreOptionalPaymentMethodsEnabled }
-						currentValue={ areOptionalPaymentMethodsEnabled }
+						changeCallback={ setUseOptionalPaymentMethods }
+						currentValue={ useOptionalPaymentMethods }
 						type="radio"
 					></SelectBox>
 					<SelectBox
@@ -59,8 +57,8 @@ const StepPaymentMethods = ( {} ) => {
 						) }
 						name={ OPM_RADIO_GROUP_NAME }
 						value={ false }
-						changeCallback={ setAreOptionalPaymentMethodsEnabled }
-						currentValue={ areOptionalPaymentMethodsEnabled }
+						changeCallback={ setUseOptionalPaymentMethods }
+						currentValue={ useOptionalPaymentMethods }
 						type="radio"
 					></SelectBox>
 				</SelectBoxWrapper>
