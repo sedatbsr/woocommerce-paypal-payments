@@ -11,7 +11,7 @@
         "Edge >= 14"
     ],
     "dependencies": {
-        "@paypal/paypal-js": "^6.0.0",
+        "@paypal/paypal-js": "^8.1.2",
         "core-js": "^3.39",
         "deepmerge": "^4.3",
         "formdata-polyfill": "^4.0.10"

@@ -7,7 +7,7 @@ import {
 	handleShippingOptionsChange,
 	handleShippingAddressChange,
 } from '../Helper/ShippingHandler.js';
-import { PaymentContext } from '../Helper/CheckoutMethodState';
+import {getCurrentPaymentMethod, PaymentContext} from '../Helper/CheckoutMethodState';
 
 class Renderer {
 	constructor(
@@ -188,6 +188,10 @@ class Renderer {
 					return shippingAddressChange;
 				};
 			}
+
+            if (hasEnabledSeparateGateways && options.fundingSource === 'card') {
+                options.style.expandCardForm = true;
+            }
 
 			return options;
 		};
