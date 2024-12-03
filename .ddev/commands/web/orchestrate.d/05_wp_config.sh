@@ -15,6 +15,7 @@ if ( defined( "WP_CLI" ) && WP_CLI && ! isset( $_SERVER["HTTP_HOST"] ) ) {
   --force \
   --extra-php
 
+wp config set WP_ENVIRONMENT_TYPE 'local' --raw
 wp config set WP_DEBUG true --raw
 wp config set WP_DEBUG_DISPLAY true --raw
 wp config set WP_DEBUG_LOG true --raw
