@@ -2,16 +2,23 @@ import { Button, Icon } from '@wordpress/components';
 import { chevronLeft } from '@wordpress/icons';
 import { __ } from '@wordpress/i18n';
 
+import classNames from 'classnames';
+
 import { OnboardingHooks } from '../../../../data';
+import useIsScrolled from '../../../../hooks/useIsScrolled';
 
 const Navigation = ( { stepDetails, onNext, onPrev, onExit } ) => {
 	const { title, isFirst, percentage, showNext, canProceed } = stepDetails;
+	const { isScrolled } = useIsScrolled();
 
 	const state = OnboardingHooks.useNavigationState();
 	const isDisabled = ! canProceed( state );
+	const className = classNames( 'ppcp-r-navigation-container', {
+		'is-scrolled': isScrolled,
+	} );
 
 	return (
-		<div className="ppcp-r-navigation-container">
+		<div className={ className }>
 			<div className="ppcp-r-navigation">
 				<div className="ppcp-r-navigation--left">
 					<Button
