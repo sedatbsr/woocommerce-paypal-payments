@@ -15,6 +15,12 @@ import ACTION_TYPES from './action-types';
 const defaultTransient = {
 	isReady: false,
 	isBusy: false,
+
+	// Read only values, provided by the server via hydrate.
+	wooSettings: {
+		storeCountry: '',
+		storeCurrency: '',
+	},
 };
 
 const defaultPersistent = {
