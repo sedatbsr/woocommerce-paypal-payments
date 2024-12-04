@@ -117,7 +117,7 @@ class CommonRestEndpoint extends RestEndpoint {
 	 *
 	 * @return WP_REST_Response The common settings.
 	 */
-	public function get_details(): WP_REST_Response {
+	public function get_details() : WP_REST_Response {
 		$js_data = $this->sanitize_for_javascript(
 			$this->settings->to_array(),
 			$this->field_map

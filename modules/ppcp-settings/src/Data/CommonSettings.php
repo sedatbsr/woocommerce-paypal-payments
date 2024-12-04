@@ -39,7 +39,7 @@ class CommonSettings extends AbstractDataModel {
 	/**
 	 * Constructor.
 	 *
-	 * @param string $country WooCommerce store country.
+	 * @param string $country  WooCommerce store country.
 	 * @param string $currency WooCommerce store currency.
 	 */
 	public function __construct( string $country, string $currency ) {
@@ -137,7 +137,7 @@ class CommonSettings extends AbstractDataModel {
 	}
 
 	/**
-	 * Returns the list of read-only customization flags
+	 * Returns the list of read-only customization flags.
 	 *
 	 * @return array
 	 */
