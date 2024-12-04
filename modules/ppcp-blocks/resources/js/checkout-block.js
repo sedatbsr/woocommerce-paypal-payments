@@ -160,6 +160,15 @@ if ( blockEnabled ) {
 					}
 					await paypalScriptPromise;
 
+					if (
+						! config.scriptData.user.is_logged &&
+						config.scriptData.context === 'cart-block' &&
+						cartHasSubscriptionProducts( config.scriptData ) &&
+						config.scriptData.is_free_trial_cart
+					) {
+						return false;
+					}
+
 					return ppcpBlocksPaypalExpressButtons
 						.Buttons( { fundingSource } )
 						.isEligible();
