@@ -61,6 +61,20 @@ class CommonRestEndpoint extends RestEndpoint {
 	);
 
 	/**
+	 * Map the internal flags to JS names.
+	 *
+	 * @var array
+	 */
+	private array $woo_settings_map = array(
+		'country'  => array(
+			'js_name' => 'storeCountry',
+		),
+		'currency' => array(
+			'js_name' => 'storeCurrency',
+		),
+	);
+
+	/**
 	 * Constructor.
 	 *
 	 * @param CommonSettings $settings The settings instance.
@@ -109,7 +123,17 @@ class CommonRestEndpoint extends RestEndpoint {
 			$this->field_map
 		);
 
-		return $this->return_success( $js_data );
+		$js_woo_settings = $this->sanitize_for_javascript(
+			$this->settings->get_woo_settings(),
+			$this->woo_settings_map
+		);
+
+		return $this->return_success(
+			$js_data,
+			array(
+				'wooSettings' => $js_woo_settings,
+			)
+		);
 	}
 
 	/**
