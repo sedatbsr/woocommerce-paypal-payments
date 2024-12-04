@@ -113,3 +113,13 @@ export const useSteps = () => {
 
 	return { flags, isReady, step, setStep, completed, setCompleted };
 };
+
+export const useNavigationState = () => {
+	const products = useProducts();
+	const business = useBusiness();
+
+	return {
+		products,
+		business,
+	};
+};
