@@ -33,6 +33,16 @@ if ( cartHasSubscriptionProducts( config.scriptData ) ) {
 		blockEnabled = false;
 	}
 
+	// Don't show buttons on block cart page if user is not logged in and cart contains free trial product
+	if (
+		! config.scriptData.user.is_logged &&
+		config.scriptData.context === 'cart-block' &&
+		cartHasSubscriptionProducts( config.scriptData ) &&
+		config.scriptData.is_free_trial_cart
+	) {
+		blockEnabled = false;
+	}
+
 	// Don't render if vaulting disabled and is in vault subscription mode
 	if (
 		! isPayPalSubscription( config.scriptData ) &&
@@ -159,15 +169,6 @@ if ( blockEnabled ) {
 						} );
 					}
 					await paypalScriptPromise;
-
-					if (
-						! config.scriptData.user.is_logged &&
-						config.scriptData.context === 'cart-block' &&
-						cartHasSubscriptionProducts( config.scriptData ) &&
-						config.scriptData.is_free_trial_cart
-					) {
-						return false;
-					}
 
 					return ppcpBlocksPaypalExpressButtons
 						.Buttons( { fundingSource } )
