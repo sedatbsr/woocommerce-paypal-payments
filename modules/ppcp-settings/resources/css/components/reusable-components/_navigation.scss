@@ -80,18 +80,32 @@
 	}
 
 	&.is-scrolled {
-		box-shadow: 0 -1px 0 0 $color-gray-300 inset, 0 8px 8px 0 rgba(85,93,102,.3);
+		box-shadow: 0 -1px 0 0 $color-gray-300 inset, 0 8px 8px 0 rgba(85, 93, 102, .3);
 	}
 
-	@media screen and (max-width: 480px) {
-		padding: 24px 35px;
+	@media screen and (max-width: 782px) {
+		padding: 10px 12px;
 
 		.ppcp-r-navigation {
-			flex-wrap: wrap;
 			row-gap: 8px;
+			white-space: nowrap;
+
+			&--right {
+				position: absolute;
+				right: 10px;
+				z-index: 10;
+				background: var(--ppcp-color-app-bg);
+				box-shadow: -5px 0 8px var(--ppcp-color-app-bg);
+			}
 
 			&--progress-bar {
-				display: none;
+				height: 2px;
+			}
+
+			.components-button.is-title {
+				.title {
+					margin-left: 4px;
+				}
 			}
 		}
 	}
