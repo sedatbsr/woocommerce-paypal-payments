@@ -177,8 +177,6 @@ export const PayPalComponent = ( {
 
 	let handleShippingOptionsChange = null;
 	let handleShippingAddressChange = null;
-	let handleSubscriptionShippingOptionsChange = null;
-	let handleSubscriptionShippingAddressChange = null;
 
 	if ( shippingData.needsShipping && shouldHandleShippingInPayPal() ) {
 		handleShippingOptionsChange = async ( data, actions ) => {
@@ -213,55 +211,6 @@ export const PayPalComponent = ( {
 		};
 
 		handleShippingAddressChange = async ( data, actions ) => {
-			try {
-				const address = paypalAddressToWc(
-					convertKeysToSnakeCase( data.shippingAddress )
-				);
-
-				await wp.data.dispatch( 'wc/store/cart' ).updateCustomerData( {
-					shipping_address: address,
-				} );
-
-				await shippingData.setShippingAddress( address );
-
-				const res = await fetch( config.ajax.update_shipping.endpoint, {
-					method: 'POST',
-					credentials: 'same-origin',
-					body: JSON.stringify( {
-						nonce: config.ajax.update_shipping.nonce,
-						order_id: data.orderID,
-					} ),
-				} );
-
-				const json = await res.json();
-
-				if ( ! json.success ) {
-					throw new Error( json.data.message );
-				}
-			} catch ( e ) {
-				console.error( e );
-
-				actions.reject();
-			}
-		};
-
-		handleSubscriptionShippingOptionsChange = async ( data, actions ) => {
-			try {
-				const shippingOptionId = data.selectedShippingOption?.id;
-				if ( shippingOptionId ) {
-					await wp.data
-						.dispatch( 'wc/store/cart' )
-						.selectShippingRate( shippingOptionId );
-					await shippingData.setSelectedRates( shippingOptionId );
-				}
-			} catch ( e ) {
-				console.error( e );
-
-				actions.reject();
-			}
-		};
-
-		handleSubscriptionShippingAddressChange = async ( data, actions ) => {
 			try {
 				const address = paypalAddressToWc(
 					convertKeysToSnakeCase( data.shippingAddress )
