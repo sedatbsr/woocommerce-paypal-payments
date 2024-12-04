@@ -189,8 +189,8 @@ class Renderer {
 				};
 			}
 
-            if (hasEnabledSeparateGateways && options.fundingSource === 'card') {
-                options.style.expandCardForm = true;
+            if ( hasEnabledSeparateGateways && options.fundingSource === 'card' ) {
+                options.expandCardForm = true;
             }
 
 			return options;

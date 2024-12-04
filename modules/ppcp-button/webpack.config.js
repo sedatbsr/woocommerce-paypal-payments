@@ -14,6 +14,9 @@ module.exports = {
         path: path.resolve(__dirname, 'assets/'),
         filename: 'js/[name].js',
     },
+    watchOptions: {
+        ignored: /node_modules/
+    },
     module: {
         rules: [{
             test: /\.js?$/,
