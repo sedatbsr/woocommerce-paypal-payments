@@ -32,6 +32,7 @@ const useHooks = () => {
 		setClientId,
 		setClientSecret,
 		connectToSandbox,
+		connectToProduction,
 		connectViaIdAndSecret,
 	} = useDispatch( STORE_NAME );
 
@@ -73,6 +74,7 @@ const useHooks = () => {
 			return savePersistent( setClientSecret, value );
 		},
 		connectToSandbox,
+		connectToProduction,
 		connectViaIdAndSecret,
 		wooSettings,
 	};
@@ -92,6 +94,12 @@ export const useSandbox = () => {
 	const { isSandboxMode, setSandboxMode, connectToSandbox } = useHooks();
 
 	return { isSandboxMode, setSandboxMode, connectToSandbox };
+};
+
+export const useProduction = () => {
+	const { connectToProduction } = useHooks();
+
+	return { connectToProduction };
 };
 
 export const useManualConnection = () => {

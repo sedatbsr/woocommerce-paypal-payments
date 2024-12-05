@@ -3,7 +3,10 @@ import { Button } from '@wordpress/components';
 import classNames from 'classnames';
 
 import { openSignup } from '../../../ReusableComponents/Icons';
-import { useSandboxConnection } from '../../../../hooks/useHandleConnections';
+import {
+	useProductionConnection,
+	useSandboxConnection,
+} from '../../../../hooks/useHandleConnections';
 
 const ConnectionButton = ( {
 	title,
@@ -12,6 +15,7 @@ const ConnectionButton = ( {
 	showIcon = true,
 } ) => {
 	const { handleSandboxConnect } = useSandboxConnection();
+	const { handleProductionConnect } = useProductionConnection();
 	const className = classNames( 'ppcp-r-connection-button', {
 		'sandbox-mode': isSandbox,
 		'live-mode': ! isSandbox,
@@ -21,7 +25,7 @@ const ConnectionButton = ( {
 		if ( isSandbox ) {
 			await handleSandboxConnect();
 		} else {
-			console.warn( 'Live connection not implemented yet' );
+			await handleProductionConnect();
 		}
 	};
 
