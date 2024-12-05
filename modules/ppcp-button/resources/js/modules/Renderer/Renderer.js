@@ -7,7 +7,7 @@ import {
 	handleShippingOptionsChange,
 	handleShippingAddressChange,
 } from '../Helper/ShippingHandler.js';
-import {getCurrentPaymentMethod, PaymentContext} from '../Helper/CheckoutMethodState';
+import { PaymentContext } from '../Helper/CheckoutMethodState';
 
 class Renderer {
 	constructor(
