@@ -23,3 +23,18 @@ export const transientData = ( state ) => {
 export const flags = ( state ) => {
 	return getState( state ).flags || EMPTY_OBJ;
 };
+
+/**
+ * Returns the products that we use for the production login link in the last onboarding step.
+ *
+ * This selector does not return state-values, but uses the state to derive the products-array
+ * that should be returned.
+ *
+ * @param {{}} state
+ * @return {string[]} The ISU products, based on choices made in the onboarding wizard.
+ */
+export const determineProducts = ( state ) => {
+	const derivedProducts = [];
+
+	return derivedProducts;
+};

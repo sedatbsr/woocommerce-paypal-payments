@@ -82,6 +82,17 @@ export const useSandboxConnection = () => {
 	};
 };
 
+export const useProductionConnection = () => {
+	const { connectToProduction } = CommonHooks.useProduction();
+	const products = OnboardingHooks.useDetermineProducts();
+	const handleProductionConnect = useConnectionAttempt(
+		() => connectToProduction( products ),
+		MESSAGES.PRODUCTION_ERROR
+	);
+
+	return { handleProductionConnect };
+};
+
 export const useManualConnection = () => {
 	const { handleError, handleSuccess, createErrorNotice } =
 		useConnectionBase();
