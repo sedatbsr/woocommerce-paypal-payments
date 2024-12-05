@@ -37,6 +37,7 @@ return array(
 		$can_use_casual_selling = $container->get( 'settings.casual-selling.eligible' );
 		$can_use_vaulting       = $container->has( 'save-payment-methods.eligible' ) && $container->get( 'save-payment-methods.eligible' );
 		$can_use_card_payments  = $container->has( 'card-fields.eligible' ) && $container->get( 'card-fields.eligible' );
+		$can_use_subscriptions = $container->has( 'wc-subscriptions.helper' ) && $container->get( 'wc-subscriptions.helper' )->plugin_is_active();
 
 		// Card payments are disabled for this plugin when WooPayments is active.
 		// TODO: Move this condition to the card-fields.eligible service?
@@ -47,7 +48,8 @@ return array(
 		return new OnboardingProfile(
 			$can_use_casual_selling,
 			$can_use_vaulting,
-			$can_use_card_payments
+			$can_use_card_payments,
+			$can_use_subscriptions
 		);
 	},
 	'settings.data.general'                       => static function ( ContainerInterface $container ) : GeneralSettings {

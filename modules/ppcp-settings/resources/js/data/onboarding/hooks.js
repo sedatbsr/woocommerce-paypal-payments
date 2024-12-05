@@ -123,3 +123,8 @@ export const useNavigationState = () => {
 		business,
 	};
 };
+
+export const useFlags = () => {
+	const { flags } = useHooks();
+	return flags;
+};

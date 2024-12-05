@@ -48,13 +48,15 @@ class OnboardingProfile extends AbstractDataModel {
 	public function __construct(
 		bool $can_use_casual_selling = false,
 		bool $can_use_vaulting = false,
-		bool $can_use_card_payments = false
+		bool $can_use_card_payments = false,
+		bool $can_use_subscriptions = false
 	) {
 		parent::__construct();
 
 		$this->flags['can_use_casual_selling'] = $can_use_casual_selling;
 		$this->flags['can_use_vaulting']       = $can_use_vaulting;
 		$this->flags['can_use_card_payments']  = $can_use_card_payments;
+		$this->flags['can_use_subscriptions'] = $can_use_subscriptions;
 	}
 
 	/**
