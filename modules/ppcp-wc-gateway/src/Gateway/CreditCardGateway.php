@@ -483,27 +483,9 @@ class CreditCardGateway extends \WC_Payment_Gateway_CC {
 		 * If customer has chosen a saved credit card payment from checkout page.
 		 */
 		if ( $card_payment_token_id ) {
-			$customer_tokens = $this->wc_payment_tokens->customer_tokens( get_current_user_id() );
-
-			$wc_tokens = WC_Payment_Tokens::get_customer_tokens( get_current_user_id(), self::ID );
-
-			if ( $customer_tokens && empty( $wc_tokens ) ) {
-				$this->wc_payment_tokens->create_wc_tokens( $customer_tokens, get_current_user_id() );
-			}
-
-			$customer_token_ids = array();
-			foreach ( $customer_tokens as $customer_token ) {
-				$customer_token_ids[] = $customer_token['id'];
-			}
-
 			$tokens = WC_Payment_Tokens::get_customer_tokens( get_current_user_id() );
 			foreach ( $tokens as $token ) {
 				if ( $token->get_id() === (int) $card_payment_token_id ) {
-					if ( ! in_array( $token->get_token(), $customer_token_ids, true ) ) {
-						$token->delete();
-						continue;
-					}
-
 					$custom_id    = $wc_order->get_order_number();
 					$invoice_id   = $this->prefix . $wc_order->get_order_number();
 					$create_order = $this->capture_card_payment->create_order( $token->get_token(), $custom_id, $invoice_id, $wc_order );
