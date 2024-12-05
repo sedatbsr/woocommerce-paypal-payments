@@ -10,6 +10,7 @@ export default {
 
 	// Persistent data.
 	SET_PERSISTENT: 'COMMON:SET_PERSISTENT',
+	RESET: 'COMMON:RESET',
 	HYDRATE: 'COMMON:HYDRATE',
 
 	// Controls - always start with "DO_".

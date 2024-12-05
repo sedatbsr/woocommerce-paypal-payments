@@ -19,6 +19,13 @@ import { STORE_NAME } from './constants';
  */
 
 /**
+ * Special. Resets all values in the onboarding store to initial defaults.
+ *
+ * @return {Action} The action.
+ */
+export const reset = () => ( { type: ACTION_TYPES.RESET } );
+
+/**
  * Persistent. Set the full onboarding details, usually during app initialization.
  *
  * @param {{data: {}, flags?: {}}} payload

@@ -44,6 +44,19 @@ const commonReducer = createReducer( defaultTransient, defaultPersistent, {
 	[ ACTION_TYPES.SET_PERSISTENT ]: ( state, action ) =>
 		setPersistent( state, action ),
 
+	[ ACTION_TYPES.RESET ]: ( state ) => {
+		const cleanState = setTransient(
+			setPersistent( state, defaultPersistent ),
+			defaultTransient
+		);
+
+		// Keep "read-only" details and initialization flags.
+		cleanState.wooSettings = { ...state.wooSettings };
+		cleanState.isReady = true;
+
+		return cleanState;
+	},
+
 	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) => {
 		const newState = setPersistent( state, payload.data );
 

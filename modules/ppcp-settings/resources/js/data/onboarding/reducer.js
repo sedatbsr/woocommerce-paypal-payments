@@ -45,8 +45,18 @@ const onboardingReducer = createReducer( defaultTransient, defaultPersistent, {
 	[ ACTION_TYPES.SET_PERSISTENT ]: ( state, payload ) =>
 		setPersistent( state, payload ),
 
-	[ ACTION_TYPES.RESET ]: ( state ) =>
-		setPersistent( state, defaultPersistent ),
+	[ ACTION_TYPES.RESET ]: ( state ) => {
+		const cleanState = setTransient(
+			setPersistent( state, defaultPersistent ),
+			defaultTransient
+		);
+
+		// Keep "read-only" details and initialization flags.
+		cleanState.flags = { ...state.flags };
+		cleanState.isReady = true;
+
+		return cleanState;
+	},
 
 	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) => {
 		const newState = setPersistent( state, payload.data );
