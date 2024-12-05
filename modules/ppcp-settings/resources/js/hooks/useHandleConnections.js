@@ -25,6 +25,30 @@ const MESSAGES = {
 	),
 };
 
+const handlePopupOpen = ( url, onError ) => {
+	const popup = openPopup( url );
+	if ( ! popup ) {
+		onError( MESSAGES.POPUP_BLOCKED );
+		return false;
+	}
+	return true;
+};
+
+const useConnectionAttempt = ( connectFn, errorMessage ) => {
+	const { handleError, createErrorNotice } = useConnectionBase();
+
+	return async ( ...args ) => {
+		const res = await connectFn( ...args );
+
+		if ( ! res.success || ! res.data ) {
+			handleError( res, errorMessage );
+			return false;
+		}
+
+		return handlePopupOpen( res.data, createErrorNotice );
+	};
+};
+
 const useConnectionBase = () => {
 	const { setCompleted } = OnboardingHooks.useSteps();
 	const { createSuccessNotice, createErrorNotice } =
@@ -46,23 +70,10 @@ const useConnectionBase = () => {
 export const useSandboxConnection = () => {
 	const { connectToSandbox, isSandboxMode, setSandboxMode } =
 		CommonHooks.useSandbox();
-	const { handleError, createErrorNotice } = useConnectionBase();
-
-	const handleSandboxConnect = async () => {
-		const res = await connectToSandbox();
-
-		if ( ! res.success || ! res.data ) {
-			handleError( res, MESSAGES.SANDBOX_ERROR );
-			return;
-		}
-
-		const connectionUrl = res.data;
-		const popup = openPopup( connectionUrl );
-
-		if ( ! popup ) {
-			createErrorNotice( MESSAGES.POPUP_BLOCKED );
-		}
-	};
+	const handleSandboxConnect = useConnectionAttempt(
+		connectToSandbox,
+		MESSAGES.SANDBOX_ERROR
+	);
 
 	return {
 		handleSandboxConnect,
