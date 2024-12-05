@@ -59,14 +59,35 @@ export const setIsSaving = ( isSaving ) => ( {
 } );
 
 /**
- * Transient. Changes the "manual connection is busy" flag.
+ * Transient (Activity): Marks the start of an async activity
+ * Think of it as "setIsBusy(true)"
  *
- * @param {boolean} isBusy
+ * @param {string}  id          Internal ID/key of the action, used to stop it again.
+ * @param {?string} description Optional, description for logging/debugging
+ * @return {?Action} The action.
+ */
+export const startActivity = ( id, description = null ) => {
+	if ( ! id || 'string' !== typeof id ) {
+		console.warn( 'Activity ID must be a non-empty string' );
+		return null;
+	}
+
+	return {
+		type: ACTION_TYPES.START_ACTIVITY,
+		payload: { id, description },
+	};
+};
+
+/**
+ * Transient (Activity): Marks the end of an async activity.
+ * Think of it as "setIsBusy(false)"
+ *
+ * @param {string} id Internal ID/key of the action, used to stop it again.
  * @return {Action} The action.
  */
-export const setIsBusy = ( isBusy ) => ( {
-	type: ACTION_TYPES.SET_TRANSIENT,
-	payload: { isBusy },
+export const stopActivity = ( id ) => ( {
+	type: ACTION_TYPES.STOP_ACTIVITY,
+	payload: { id },
 } );
 
 /**
@@ -130,10 +151,8 @@ export const persist = function* () {
  * @return {Action} The action.
  */
 export const connectToSandbox = function* () {
-	yield setIsBusy( true );
 
 	const result = yield { type: ACTION_TYPES.DO_SANDBOX_LOGIN };
-	yield setIsBusy( false );
 
 	return result;
 };
@@ -145,13 +164,11 @@ export const connectToSandbox = function* () {
  * @return {Action} The action.
  */
 export const connectToProduction = function* ( products = [] ) {
-	yield setIsBusy( true );
 
 	const result = yield {
 		type: ACTION_TYPES.DO_PRODUCTION_LOGIN,
 		products,
 	};
-	yield setIsBusy( false );
 
 	return result;
 };
@@ -165,7 +182,6 @@ export const connectViaIdAndSecret = function* () {
 	const { clientId, clientSecret, useSandbox } =
 		yield select( STORE_NAME ).persistentData();
 
-	yield setIsBusy( true );
 
 	const result = yield {
 		type: ACTION_TYPES.DO_MANUAL_CONNECTION,
@@ -173,7 +189,6 @@ export const connectViaIdAndSecret = function* () {
 		clientSecret,
 		useSandbox,
 	};
-	yield setIsBusy( false );
 
 	return result;
 };

@@ -14,7 +14,7 @@ import ACTION_TYPES from './action-types';
 
 const defaultTransient = {
 	isReady: false,
-	isBusy: false,
+	activities: new Map(),
 
 	// Read only values, provided by the server via hydrate.
 	wooSettings: {
@@ -55,6 +55,21 @@ const commonReducer = createReducer( defaultTransient, defaultPersistent, {
 		cleanState.isReady = true;
 
 		return cleanState;
+	},
+
+	[ ACTION_TYPES.START_ACTIVITY ]: ( state, payload ) => {
+		return setTransient( state, {
+			activities: new Map( state.activities ).set(
+				payload.id,
+				payload.description
+			),
+		} );
+	},
+
+	[ ACTION_TYPES.STOP_ACTIVITY ]: ( state, payload ) => {
+		const newActivities = new Map( state.activities );
+		newActivities.delete( payload.id );
+		return setTransient( state, { activities: newActivities } );
 	},
 
 	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) => {
