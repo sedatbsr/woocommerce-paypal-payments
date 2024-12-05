@@ -25,6 +25,12 @@ const MESSAGES = {
 	),
 };
 
+const ACTIVITIES = {
+	CONNECT_SANDBOX: 'ISU_LOGIN_SANDBOX',
+	CONNECT_PRODUCTION: 'ISU_LOGIN_PRODUCTION',
+	CONNECT_MANUAL: 'MANUAL_LOGIN',
+};
+
 const handlePopupWithCompletion = ( url, onError ) => {
 	return new Promise( ( resolve ) => {
 		const popup = openPopup( url );
@@ -101,10 +107,19 @@ const useConnectionAttempt = ( connectFn, errorMessage ) => {
 export const useSandboxConnection = () => {
 	const { connectToSandbox, isSandboxMode, setSandboxMode } =
 		CommonHooks.useSandbox();
-	const handleSandboxConnect = useConnectionAttempt(
+	const { withActivity } = CommonHooks.useBusyState();
+	const connectionAttempt = useConnectionAttempt(
 		connectToSandbox,
 		MESSAGES.SANDBOX_ERROR
 	);
+
+	const handleSandboxConnect = async () => {
+		return withActivity(
+			ACTIVITIES.CONNECT_SANDBOX,
+			'Connecting to sandbox account',
+			connectionAttempt
+		);
+	};
 
 	return {
 		handleSandboxConnect,
@@ -115,11 +130,20 @@ export const useSandboxConnection = () => {
 
 export const useProductionConnection = () => {
 	const { connectToProduction } = CommonHooks.useProduction();
+	const { withActivity } = CommonHooks.useBusyState();
 	const products = OnboardingHooks.useDetermineProducts();
-	const handleProductionConnect = useConnectionAttempt(
+	const connectionAttempt = useConnectionAttempt(
 		() => connectToProduction( products ),
 		MESSAGES.PRODUCTION_ERROR
 	);
+
+	const handleProductionConnect = async () => {
+		return withActivity(
+			ACTIVITIES.CONNECT_PRODUCTION,
+			'Connecting to production account',
+			connectionAttempt
+		);
+	};
 
 	return { handleProductionConnect };
 };
@@ -127,6 +151,7 @@ export const useProductionConnection = () => {
 export const useManualConnection = () => {
 	const { handleError, handleSuccess, createErrorNotice } =
 		useConnectionBase();
+	const { withActivity } = CommonHooks.useBusyState();
 	const {
 		connectViaIdAndSecret,
 		isManualConnectionMode,
@@ -138,22 +163,30 @@ export const useManualConnection = () => {
 	} = CommonHooks.useManualConnection();
 
 	const handleConnectViaIdAndSecret = async ( { validation } = {} ) => {
-		if ( 'function' === typeof validation ) {
-			try {
-				validation();
-			} catch ( exception ) {
-				createErrorNotice( exception.message );
-				return;
+		return withActivity(
+			ACTIVITIES.CONNECT_MANUAL,
+			'Connecting manually via Client ID and Secret',
+			async () => {
+				if ( 'function' === typeof validation ) {
+					try {
+						validation();
+					} catch ( exception ) {
+						createErrorNotice( exception.message );
+						return;
+					}
+				}
+
+				const res = await connectViaIdAndSecret();
+
+				if ( res.success ) {
+					await handleSuccess();
+				} else {
+					handleError( res, MESSAGES.MANUAL_ERROR );
+				}
+
+				return res.success;
 			}
-		}
-
-		const res = await connectViaIdAndSecret();
-
-		if ( res.success ) {
-			await handleSuccess();
-		} else {
-			handleError( res, MESSAGES.MANUAL_ERROR );
-		}
+		);
 	};
 
 	return {
