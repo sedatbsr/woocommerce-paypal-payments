@@ -613,29 +613,32 @@ return array(
 	 * The matrix which countries and currency combinations can be used for DCC.
 	 */
 	'api.dcc-supported-country-currency-matrix'      => static function ( ContainerInterface $container ) : array {
-		$default_currencies = array(
-			'AUD',
-			'BRL',
-			'CAD',
-			'CHF',
-			'CZK',
-			'DKK',
-			'EUR',
-			'HKD',
-			'GBP',
-			'HUF',
-			'ILS',
-			'JPY',
-			'MXN',
-			'NOK',
-			'NZD',
-			'PHP',
-			'PLN',
-			'SGD',
-			'SEK',
-			'THB',
-			'TWD',
-			'USD',
+		$default_currencies = apply_filters(
+			'woocommerce_paypal_payments_supported_currencies',
+			array(
+				'AUD',
+				'BRL',
+				'CAD',
+				'CHF',
+				'CZK',
+				'DKK',
+				'EUR',
+				'HKD',
+				'GBP',
+				'HUF',
+				'ILS',
+				'JPY',
+				'MXN',
+				'NOK',
+				'NZD',
+				'PHP',
+				'PLN',
+				'SGD',
+				'SEK',
+				'THB',
+				'TWD',
+				'USD',
+			)
 		);
 
 		/**
