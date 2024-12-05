@@ -25,34 +25,34 @@ const MESSAGES = {
 	),
 };
 
-const useCommonConnectionLogic = () => {
+const useConnectionBase = () => {
 	const { setCompleted } = OnboardingHooks.useSteps();
 	const { createSuccessNotice, createErrorNotice } =
 		useDispatch( noticesStore );
 
-	const handleServerError = ( res, genericMessage ) => {
-		console.error( 'Connection error', res );
-		createErrorNotice( res?.message ?? genericMessage );
+	return {
+		handleError: ( res, genericMessage ) => {
+			console.error( 'Connection error', res );
+			createErrorNotice( res?.message ?? genericMessage );
+		},
+		handleSuccess: async () => {
+			createSuccessNotice( MESSAGES.CONNECTED );
+			return setCompleted( true );
+		},
+		createErrorNotice,
 	};
-
-	const handleServerSuccess = () => {
-		createSuccessNotice( MESSAGES.CONNECTED );
-		return setCompleted( true );
-	};
-
-	return { handleServerError, handleServerSuccess, createErrorNotice };
 };
 
 export const useSandboxConnection = () => {
 	const { connectToSandbox, isSandboxMode, setSandboxMode } =
 		CommonHooks.useSandbox();
-	const { handleServerError, createErrorNotice } = useCommonConnectionLogic();
+	const { handleError, createErrorNotice } = useConnectionBase();
 
 	const handleSandboxConnect = async () => {
 		const res = await connectToSandbox();
 
 		if ( ! res.success || ! res.data ) {
-			handleServerError( res, MESSAGES.SANDBOX_ERROR );
+			handleError( res, MESSAGES.SANDBOX_ERROR );
 			return;
 		}
 
@@ -81,8 +81,8 @@ export const useManualConnection = () => {
 		clientSecret,
 		setClientSecret,
 	} = CommonHooks.useManualConnection();
-	const { handleServerError, handleServerSuccess, createErrorNotice } =
-		useCommonConnectionLogic();
+	const { handleError, handleSuccess, createErrorNotice } =
+		useConnectionBase();
 
 	const handleConnectViaIdAndSecret = async ( { validation } = {} ) => {
 		if ( 'function' === typeof validation ) {
@@ -96,9 +96,9 @@ export const useManualConnection = () => {
 		const res = await connectViaIdAndSecret();
 
 		if ( res.success ) {
-			await handleServerSuccess();
+			await handleSuccess();
 		} else {
-			handleServerError( res, MESSAGES.MANUAL_ERROR );
+			handleError( res, MESSAGES.MANUAL_ERROR );
 		}
 	};
 
