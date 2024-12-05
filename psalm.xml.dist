@@ -58,7 +58,6 @@
         <FalsableReturnStatement errorLevel="error"/>
         <FalseOperand errorLevel="error"/>
         <ForbiddenCode errorLevel="error"/>
-        <ForbiddenEcho errorLevel="error"/>
         <InaccessibleClassConstant errorLevel="error"/>
         <InaccessibleMethod errorLevel="error"/>
         <InterfaceInstantiation errorLevel="error"/>
@@ -163,6 +162,8 @@
 		<ParamNameMismatch errorLevel="info"/>
 		<RedundantCastGivenDocblockType errorLevel="info"/>
 		<RiskyCast errorLevel="info"/>
+
+		<RiskyTruthyFalsyComparison errorLevel="info"/>
 
 		<TooManyArguments>
 			<errorLevel type="suppress">
