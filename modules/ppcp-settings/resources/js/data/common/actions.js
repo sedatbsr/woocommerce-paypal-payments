@@ -146,31 +146,22 @@ export const persist = function* () {
 };
 
 /**
- * Side effect. Initiates the sandbox login ISU.
+ * Side effect. Fetches the ISU-login URL for a sandbox account.
  *
  * @return {Action} The action.
  */
 export const connectToSandbox = function* () {
-
-	const result = yield { type: ACTION_TYPES.DO_SANDBOX_LOGIN };
-
-	return result;
+	return yield { type: ACTION_TYPES.DO_SANDBOX_LOGIN };
 };
 
 /**
- * Side effect. Initiates the production login ISU.
+ * Side effect. Fetches the ISU-login URL for a production account.
  *
  * @param {string[]} products Which products/features to display in the ISU popup.
  * @return {Action} The action.
  */
 export const connectToProduction = function* ( products = [] ) {
-
-	const result = yield {
-		type: ACTION_TYPES.DO_PRODUCTION_LOGIN,
-		products,
-	};
-
-	return result;
+	return yield { type: ACTION_TYPES.DO_PRODUCTION_LOGIN, products };
 };
 
 /**
@@ -182,13 +173,10 @@ export const connectViaIdAndSecret = function* () {
 	const { clientId, clientSecret, useSandbox } =
 		yield select( STORE_NAME ).persistentData();
 
-
-	const result = yield {
+	return yield {
 		type: ACTION_TYPES.DO_MANUAL_CONNECTION,
 		clientId,
 		clientSecret,
 		useSandbox,
 	};
-
-	return result;
 };
