@@ -36,5 +36,37 @@ export const flags = ( state ) => {
 export const determineProducts = ( state ) => {
 	const derivedProducts = [];
 
+	const { isCasualSeller, areOptionalPaymentMethodsEnabled } =
+		persistentData( state );
+	const { canUseVaulting, canUseCardPayments } = flags( state );
+
+	if ( ! canUseCardPayments || ! areOptionalPaymentMethodsEnabled ) {
+		/**
+		 * Branch 1: Credit Card Payments not available.
+		 * The store uses the Express-checkout product.
+		 */
+		derivedProducts.push( 'EXPRESS_CHECKOUT' );
+	} else if ( isCasualSeller ) {
+		/**
+		 * Branch 2: Merchant has no business.
+		 * The store uses the Express-checkout product.
+		 */
+		derivedProducts.push( 'EXPRESS_CHECKOUT' );
+
+		// TODO: Add the "BCDC" product/feature
+		// Requirement: "EXPRESS_CHECKOUT with BCDC"
+	} else {
+		/**
+		 * Branch 3: Merchant is business, and can use CC payments.
+		 * The store uses the advanced PPCP product.
+		 */
+		derivedProducts.push( 'PPCP' );
+	}
+
+	if ( canUseVaulting ) {
+		// TODO: Add the "Vaulting" product/feature
+		// Requirement: "... with Vault"
+	}
+
 	return derivedProducts;
 };
