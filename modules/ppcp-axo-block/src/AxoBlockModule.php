@@ -22,6 +22,7 @@ use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ExtendingModule;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ModuleClassNameIdTrait;
 use WooCommerce\PayPalCommerce\Vendor\Inpsyde\Modularity\Module\ServiceModule;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
+use WooCommerce\PayPalCommerce\WcGateway\Helper\DCCGatewayConfiguration;
 
 /**
  * Class AxoBlockModule
@@ -134,7 +135,6 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 			}
 		);
 
-		// Enqueue the PayPal Insights script.
 		add_action(
 			'wp_enqueue_scripts',
 			function () use ( $c ) {
@@ -184,6 +184,11 @@ class AxoBlockModule implements ServiceModule, ExtendingModule, ExecutableModule
 	 */
 	private function enqueue_paypal_insights_script( ContainerInterface $c ): void {
 		if ( ! has_block( 'woocommerce/checkout' ) || WC()->cart->is_empty() ) {
+			return;
+		}
+
+		$dcc_configuration = $c->get( 'wcgateway.configuration.dcc' );
+		if ( ! $dcc_configuration->use_fastlane() ) {
 			return;
 		}
 

@@ -2,7 +2,6 @@ import SettingsCard from '../../ReusableComponents/SettingsCard';
 import { __ } from '@wordpress/i18n';
 import {
 	PayPalCheckbox,
-	handleCheckboxState,
 } from '../../ReusableComponents/Fields';
 import { useState } from '@wordpress/element';
 import data from '../../../utils/data';
@@ -24,7 +23,6 @@ const TabOverview = () => {
 			{ todosData.length > 0 && (
 				<SettingsCard
 					className="ppcp-r-tab-overview-todo"
-					icon="icon-overview-list.svg"
 					title={ __(
 						'Things to do next',
 						'woocommerce-paypal-payments'
@@ -42,7 +40,7 @@ const TabOverview = () => {
 								value={ todo.value }
 								currentValue={ todos }
 								changeCallback={ setTodos }
-								description={ todo.description }
+								label={ todo.description }
 								changeTodos={ setTodosData }
 								todosData={ todosData }
 							/>
@@ -52,7 +50,6 @@ const TabOverview = () => {
 			) }
 			<SettingsCard
 				className="ppcp-r-tab-overview-support"
-				icon="icon-overview-support.svg"
 				title={ __( 'Status', 'woocommerce-paypal-payments' ) }
 				description={ __(
 					'Your PayPal account connection details, along with available products and features.',
@@ -146,10 +143,8 @@ const TodoItem = ( props ) => {
 				<PayPalCheckbox
 					{ ...{
 						...props,
-						handleCheckboxState,
 					} }
 				/>{ ' ' }
-				<p>{ props.description }</p>
 			</div>
 			<div
 				className="ppcp-r-todo-item__close"

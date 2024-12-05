@@ -1,5 +1,5 @@
 import data from '../../utils/data';
-import { PayPalCheckbox, PayPalRdb, handleCheckboxState } from './Fields';
+import { PayPalCheckbox, PayPalRdb } from './Fields';
 
 const SelectBox = ( props ) => {
 	let boxClassName = 'ppcp-r-select-box';
@@ -24,10 +24,7 @@ const SelectBox = ( props ) => {
 			) }
 			{ props.type === 'checkbox' && (
 				<PayPalCheckbox
-					{ ...{
-						...props,
-						handleCheckboxState,
-					} }
+					{ ...props }
 				/>
 			) }
 			<div className="ppcp-r-select-box__content">

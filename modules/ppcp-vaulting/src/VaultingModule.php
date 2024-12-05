@@ -51,10 +51,16 @@ class VaultingModule implements ServiceModule, ExtendingModule, ExecutableModule
 	 * @throws NotFoundException When service could not be found.
 	 */
 	public function run( ContainerInterface $container ): bool {
-		$listener = $container->get( 'vaulting.customer-approval-listener' );
-		assert( $listener instanceof CustomerApprovalListener );
 
-		$listener->listen();
+		add_action(
+			'woocommerce_init',
+			function() use ( $container ) {
+				$listener = $container->get( 'vaulting.customer-approval-listener' );
+				assert( $listener instanceof CustomerApprovalListener );
+
+				$listener->listen();
+			}
+		);
 
 		$subscription_helper = $container->get( 'wc-subscriptions.helper' );
 		add_action(

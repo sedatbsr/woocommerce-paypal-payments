@@ -24,6 +24,7 @@ use WooCommerce\PayPalCommerce\Googlepay\GooglePayGateway;
 use WooCommerce\PayPalCommerce\Onboarding\Environment;
 use WooCommerce\PayPalCommerce\Onboarding\Render\OnboardingOptionsRenderer;
 use WooCommerce\PayPalCommerce\Onboarding\State;
+use WooCommerce\PayPalCommerce\Settings\SettingsModule;
 use WooCommerce\PayPalCommerce\WcGateway\Admin\RenderReauthorizeAction;
 use WooCommerce\PayPalCommerce\WcGateway\Assets\VoidButtonAssets;
 use WooCommerce\PayPalCommerce\WcGateway\Endpoint\CaptureCardPayment;
@@ -336,7 +337,8 @@ return array(
 				$container->get( 'wcgateway.button.default-locations' ),
 				$container->get( 'wcgateway.settings.dcc-gateway-title.default' ),
 				$container->get( 'wcgateway.settings.pay-later.default-button-locations' ),
-				$container->get( 'wcgateway.settings.pay-later.default-messaging-locations' )
+				$container->get( 'wcgateway.settings.pay-later.default-messaging-locations' ),
+				$container->get( 'compat.settings.settings_map_helper' )
 			);
 		}
 	),
@@ -2067,6 +2069,6 @@ return array(
 	},
 
 	'wcgateway.settings.admin-settings-enabled'            => static function( ContainerInterface $container ): bool {
-		return $container->has( 'settings.url' );
+		return $container->has( 'settings.url' ) && ! SettingsModule::should_use_the_old_ui();
 	},
 );
