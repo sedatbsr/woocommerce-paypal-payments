@@ -34,21 +34,6 @@ const handlePopupOpen = ( url, onError ) => {
 	return true;
 };
 
-const useConnectionAttempt = ( connectFn, errorMessage ) => {
-	const { handleError, createErrorNotice } = useConnectionBase();
-
-	return async ( ...args ) => {
-		const res = await connectFn( ...args );
-
-		if ( ! res.success || ! res.data ) {
-			handleError( res, errorMessage );
-			return false;
-		}
-
-		return handlePopupOpen( res.data, createErrorNotice );
-	};
-};
-
 const useConnectionBase = () => {
 	const { setCompleted } = OnboardingHooks.useSteps();
 	const { createSuccessNotice, createErrorNotice } =
@@ -64,6 +49,21 @@ const useConnectionBase = () => {
 			return setCompleted( true );
 		},
 		createErrorNotice,
+	};
+};
+
+const useConnectionAttempt = ( connectFn, errorMessage ) => {
+	const { handleError, createErrorNotice } = useConnectionBase();
+
+	return async ( ...args ) => {
+		const res = await connectFn( ...args );
+
+		if ( ! res.success || ! res.data ) {
+			handleError( res, errorMessage );
+			return false;
+		}
+
+		return handlePopupOpen( res.data, createErrorNotice );
 	};
 };
 
@@ -83,6 +83,8 @@ export const useSandboxConnection = () => {
 };
 
 export const useManualConnection = () => {
+	const { handleError, handleSuccess, createErrorNotice } =
+		useConnectionBase();
 	const {
 		connectViaIdAndSecret,
 		isManualConnectionMode,
@@ -92,8 +94,6 @@ export const useManualConnection = () => {
 		clientSecret,
 		setClientSecret,
 	} = CommonHooks.useManualConnection();
-	const { handleError, handleSuccess, createErrorNotice } =
-		useConnectionBase();
 
 	const handleConnectViaIdAndSecret = async ( { validation } = {} ) => {
 		if ( 'function' === typeof validation ) {
@@ -104,6 +104,7 @@ export const useManualConnection = () => {
 				return;
 			}
 		}
+
 		const res = await connectViaIdAndSecret();
 
 		if ( res.success ) {
