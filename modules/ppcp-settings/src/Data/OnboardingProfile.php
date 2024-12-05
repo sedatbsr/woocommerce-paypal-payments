@@ -67,7 +67,7 @@ class OnboardingProfile extends AbstractDataModel {
 			'completed'                            => false,
 			'step'                                 => 0,
 			'is_casual_seller'                     => null,
-			'are_optional_payment_methods_enabled' => true,
+			'are_optional_payment_methods_enabled' => null,
 			'products'                             => array(),
 		);
 	}
