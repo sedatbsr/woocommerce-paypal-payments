@@ -5,6 +5,26 @@ import { store as noticesStore } from '@wordpress/notices';
 import { CommonHooks, OnboardingHooks } from '../data';
 import { openPopup } from '../utils/window';
 
+const MESSAGES = {
+	CONNECTED: __( 'Connected to PayPal', 'woocommerce-paypal-payments' ),
+	POPUP_BLOCKED: __(
+		'Popup blocked. Please allow popups for this site to connect to PayPal.',
+		'woocommerce-paypal-payments'
+	),
+	SANDBOX_ERROR: __(
+		'Could not generate a Sandbox login link.',
+		'woocommerce-paypal-payments'
+	),
+	PRODUCTION_ERROR: __(
+		'Could not generate a login link.',
+		'woocommerce-paypal-payments'
+	),
+	MANUAL_ERROR: __(
+		'Could not connect to PayPal. Please make sure your Client ID and Secret Key are correct.',
+		'woocommerce-paypal-payments'
+	),
+};
+
 const useCommonConnectionLogic = () => {
 	const { setCompleted } = OnboardingHooks.useSteps();
 	const { createSuccessNotice, createErrorNotice } =
@@ -16,10 +36,8 @@ const useCommonConnectionLogic = () => {
 	};
 
 	const handleServerSuccess = () => {
-		createSuccessNotice(
-			__( 'Connected to PayPal', 'woocommerce-paypal-payments' )
-		);
-		setCompleted( true );
+		createSuccessNotice( MESSAGES.CONNECTED );
+		return setCompleted( true );
 	};
 
 	return { handleServerError, handleServerSuccess, createErrorNotice };
@@ -34,13 +52,7 @@ export const useSandboxConnection = () => {
 		const res = await connectToSandbox();
 
 		if ( ! res.success || ! res.data ) {
-			handleServerError(
-				res,
-				__(
-					'Could not generate a Sandbox login link.',
-					'woocommerce-paypal-payments'
-				)
-			);
+			handleServerError( res, MESSAGES.SANDBOX_ERROR );
 			return;
 		}
 
@@ -48,12 +60,7 @@ export const useSandboxConnection = () => {
 		const popup = openPopup( connectionUrl );
 
 		if ( ! popup ) {
-			createErrorNotice(
-				__(
-					'Popup blocked. Please allow popups for this site to connect to PayPal.',
-					'woocommerce-paypal-payments'
-				)
-			);
+			createErrorNotice( MESSAGES.POPUP_BLOCKED );
 		}
 	};
 
@@ -89,15 +96,9 @@ export const useManualConnection = () => {
 		const res = await connectViaIdAndSecret();
 
 		if ( res.success ) {
-			handleServerSuccess();
+			await handleServerSuccess();
 		} else {
-			handleServerError(
-				res,
-				__(
-					'Could not connect to PayPal. Please make sure your Client ID and Secret Key are correct.',
-					'woocommerce-paypal-payments'
-				)
-			);
+			handleServerError( res, MESSAGES.MANUAL_ERROR );
 		}
 	};
 
