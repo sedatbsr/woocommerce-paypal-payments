@@ -25,13 +25,32 @@ const MESSAGES = {
 	),
 };
 
-const handlePopupOpen = ( url, onError ) => {
-	const popup = openPopup( url );
-	if ( ! popup ) {
-		onError( MESSAGES.POPUP_BLOCKED );
-		return false;
-	}
-	return true;
+const handlePopupWithCompletion = ( url, onError ) => {
+	return new Promise( ( resolve ) => {
+		const popup = openPopup( url );
+
+		if ( ! popup ) {
+			onError( MESSAGES.POPUP_BLOCKED );
+			resolve( false );
+			return;
+		}
+
+		// Check popup state every 500ms
+		const checkPopup = setInterval( () => {
+			if ( popup.closed ) {
+				clearInterval( checkPopup );
+				resolve( true );
+			}
+		}, 500 );
+
+		return () => {
+			clearInterval( checkPopup );
+
+			if ( popup && ! popup.closed ) {
+				popup.close();
+			}
+		};
+	} );
 };
 
 const useConnectionBase = () => {
@@ -46,6 +65,8 @@ const useConnectionBase = () => {
 		},
 		handleSuccess: async () => {
 			createSuccessNotice( MESSAGES.CONNECTED );
+
+			// TODO: Contact the plugin to confirm onboarding is completed.
 			return setCompleted( true );
 		},
 		createErrorNotice,
@@ -53,7 +74,8 @@ const useConnectionBase = () => {
 };
 
 const useConnectionAttempt = ( connectFn, errorMessage ) => {
-	const { handleError, createErrorNotice } = useConnectionBase();
+	const { handleError, createErrorNotice, handleSuccess } =
+		useConnectionBase();
 
 	return async ( ...args ) => {
 		const res = await connectFn( ...args );
@@ -63,7 +85,16 @@ const useConnectionAttempt = ( connectFn, errorMessage ) => {
 			return false;
 		}
 
-		return handlePopupOpen( res.data, createErrorNotice );
+		const popupClosed = await handlePopupWithCompletion(
+			res.data,
+			createErrorNotice
+		);
+
+		if ( popupClosed ) {
+			await handleSuccess();
+		}
+
+		return popupClosed;
 	};
 };
 
