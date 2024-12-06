@@ -123,17 +123,9 @@ class CommonRestEndpoint extends RestEndpoint {
 			$this->field_map
 		);
 
-		$js_woo_settings = $this->sanitize_for_javascript(
-			$this->settings->get_woo_settings(),
-			$this->woo_settings_map
-		);
+		$extra_data = $this->add_woo_settings( array() );
 
-		return $this->return_success(
-			$js_data,
-			array(
-				'wooSettings' => $js_woo_settings,
-			)
-		);
+		return $this->return_success( $js_data, $extra_data );
 	}
 
 	/**
@@ -153,5 +145,22 @@ class CommonRestEndpoint extends RestEndpoint {
 		$this->settings->save();
 
 		return $this->get_details();
+	}
+
+	/**
+	 * Appends the "wooSettings" attribute to the extra_data collection to
+	 * provide WooCommerce store details, like the store country and currency.
+	 *
+	 * @param array $extra_data Initial extra_data collection.
+	 *
+	 * @return array Updated extra_data collection.
+	 */
+	protected function add_woo_settings( array $extra_data ) : array {
+		$extra_data['wooSettings'] = $this->sanitize_for_javascript(
+			$this->settings->get_woo_settings(),
+			$this->woo_settings_map
+		);
+
+		return $extra_data;
 	}
 }
