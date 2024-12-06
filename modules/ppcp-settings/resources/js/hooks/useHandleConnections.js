@@ -23,6 +23,10 @@ const MESSAGES = {
 		'Could not connect to PayPal. Please make sure your Client ID and Secret Key are correct.',
 		'woocommerce-paypal-payments'
 	),
+	LOGIN_FAILED: __(
+		'Login was not successful. Please try again.',
+		'woocommerce-paypal-payments'
+	),
 };
 
 const ACTIVITIES = {
@@ -63,6 +67,7 @@ const useConnectionBase = () => {
 	const { setCompleted } = OnboardingHooks.useSteps();
 	const { createSuccessNotice, createErrorNotice } =
 		useDispatch( noticesStore );
+	const { verifyLoginStatus } = CommonHooks.useMerchantInfo();
 
 	return {
 		handleFailed: ( res, genericMessage ) => {
@@ -70,10 +75,18 @@ const useConnectionBase = () => {
 			createErrorNotice( res?.message ?? genericMessage );
 		},
 		handleCompleted: async () => {
-			createSuccessNotice( MESSAGES.CONNECTED );
+			try {
+				const loginSuccessful = await verifyLoginStatus();
 
-			// TODO: Contact the plugin to confirm onboarding is completed.
-			return setCompleted( true );
+				if ( loginSuccessful ) {
+					createSuccessNotice( MESSAGES.CONNECTED );
+					await setCompleted( true );
+				} else {
+					createErrorNotice( MESSAGES.LOGIN_FAILED );
+				}
+			} catch ( error ) {
+				createErrorNotice( error.message ?? MESSAGES.LOGIN_FAILED );
+			}
 		},
 		createErrorNotice,
 	};
