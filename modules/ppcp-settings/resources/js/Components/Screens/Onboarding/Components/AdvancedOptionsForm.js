@@ -1,6 +1,12 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, TextControl } from '@wordpress/components';
-import { useRef, useState, useEffect } from '@wordpress/element';
+import {
+	useRef,
+	useState,
+	useEffect,
+	useMemo,
+	useCallback,
+} from '@wordpress/element';
 
 import classNames from 'classnames';
 
@@ -33,8 +39,6 @@ const FORM_ERRORS = {
 const AdvancedOptionsForm = () => {
 	const [ clientValid, setClientValid ] = useState( false );
 	const [ secretValid, setSecretValid ] = useState( false );
-	const [ clientIdLabel, setClientIdLabel ] = useState( '' );
-	const [ secretKeyLabel, setSecretKeyLabel ] = useState( '' );
 
 	const { isBusy } = CommonHooks.useBusyState();
 	const { isSandboxMode, setSandboxMode } = useSandboxConnection();
@@ -51,7 +55,7 @@ const AdvancedOptionsForm = () => {
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
-	const validateManualConnectionForm = () => {
+	const validateManualConnectionForm = useCallback( () => {
 		const checks = [
 			{
 				ref: refClientId,
@@ -78,30 +82,36 @@ const AdvancedOptionsForm = () => {
 			ref?.current?.focus();
 			throw new Error( errorMessage );
 		}
-	};
+	}, [ clientId, clientSecret, clientValid, secretValid ] );
 
-	const handleManualConnect = () =>
-		handleConnectViaIdAndSecret( {
-			validation: validateManualConnectionForm,
-		} );
+	const handleManualConnect = useCallback(
+		() =>
+			handleConnectViaIdAndSecret( {
+				validation: validateManualConnectionForm,
+			} ),
+		[ validateManualConnectionForm ]
+	);
 
 	useEffect( () => {
 		setClientValid( ! clientId || /^A[\w-]{79}$/.test( clientId ) );
 		setSecretValid( clientSecret && clientSecret.length > 0 );
 	}, [ clientId, clientSecret ] );
 
-	useEffect( () => {
-		setClientIdLabel(
+	const clientIdLabel = useMemo(
+		() =>
 			isSandboxMode
 				? __( 'Sandbox Client ID', 'woocommerce-paypal-payments' )
-				: __( 'Live Client ID', 'woocommerce-paypal-payments' )
-		);
-		setSecretKeyLabel(
+				: __( 'Live Client ID', 'woocommerce-paypal-payments' ),
+		[ isSandboxMode ]
+	);
+
+	const secretKeyLabel = useMemo(
+		() =>
 			isSandboxMode
 				? __( 'Sandbox Secret Key', 'woocommerce-paypal-payments' )
-				: __( 'Live Secret Key', 'woocommerce-paypal-payments' )
-		);
-	}, [ isSandboxMode ] );
+				: __( 'Live Secret Key', 'woocommerce-paypal-payments' ),
+		[ isSandboxMode ]
+	);
 
 	const advancedUsersDescription = sprintf(
 		// translators: %s: Link to PayPal REST application guide
