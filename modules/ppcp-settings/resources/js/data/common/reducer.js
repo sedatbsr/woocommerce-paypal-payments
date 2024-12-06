@@ -12,30 +12,30 @@ import ACTION_TYPES from './action-types';
 
 // Store structure.
 
-const defaultTransient = {
+const defaultTransient = Object.freeze( {
 	isReady: false,
 	activities: new Map(),
 
 	// Read only values, provided by the server via hydrate.
-	merchant: {
+	merchant: Object.freeze( {
 		isConnected: false,
 		isSandbox: false,
 		id: '',
 		email: '',
-	},
+	} ),
 
-	wooSettings: {
+	wooSettings: Object.freeze( {
 		storeCountry: '',
 		storeCurrency: '',
-	},
-};
+	} ),
+} );
 
-const defaultPersistent = {
+const defaultPersistent = Object.freeze( {
 	useSandbox: false,
 	useManualConnection: false,
 	clientId: '',
 	clientSecret: '',
-};
+} );
 
 // Reducer logic.
 

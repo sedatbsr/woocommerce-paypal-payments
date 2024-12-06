@@ -12,24 +12,24 @@ import ACTION_TYPES from './action-types';
 
 // Store structure.
 
-const defaultTransient = {
+const defaultTransient = Object.freeze( {
 	isReady: false,
 
 	// Read only values, provided by the server.
-	flags: {
+	flags: Object.freeze( {
 		canUseCasualSelling: false,
 		canUseVaulting: false,
 		canUseCardPayments: false,
-	},
-};
+	} ),
+} );
 
-const defaultPersistent = {
+const defaultPersistent = Object.freeze( {
 	completed: false,
 	step: 0,
 	isCasualSeller: null, // null value will uncheck both options in the UI.
 	areOptionalPaymentMethodsEnabled: null,
 	products: [],
-};
+} );
 
 // Reducer logic.
 
@@ -63,7 +63,10 @@ const onboardingReducer = createReducer( defaultTransient, defaultPersistent, {
 
 		// Flags are not updated by `setPersistent()`.
 		if ( payload.flags ) {
-			newState.flags = { ...newState.flags, ...payload.flags };
+			newState.flags = Object.freeze( {
+				...newState.flags,
+				...payload.flags,
+			} );
 		}
 
 		return newState;
