@@ -2,6 +2,7 @@ import { Button } from '@wordpress/components';
 
 import classNames from 'classnames';
 
+import { CommonHooks } from '../../../../data';
 import { openSignup } from '../../../ReusableComponents/Icons';
 import {
 	useProductionConnection,
@@ -14,11 +15,13 @@ const ConnectionButton = ( {
 	variant = 'primary',
 	showIcon = true,
 } ) => {
+	const { isBusy } = CommonHooks.useBusyState();
 	const { handleSandboxConnect } = useSandboxConnection();
 	const { handleProductionConnect } = useProductionConnection();
 	const className = classNames( 'ppcp-r-connection-button', {
 		'sandbox-mode': isSandbox,
 		'live-mode': ! isSandbox,
+		'ppcp--is-loading': isBusy,
 	} );
 
 	const handleConnectClick = async () => {
@@ -35,6 +38,7 @@ const ConnectionButton = ( {
 			variant={ variant }
 			icon={ showIcon ? openSignup : null }
 			onClick={ handleConnectClick }
+			disabled={ isBusy }
 		>
 			<span className="button-title">{ title }</span>
 		</Button>
