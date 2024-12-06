@@ -80,38 +80,6 @@ const useHooks = () => {
 	};
 };
 
-export const useBusyState = () => {
-	const { startActivity, stopActivity } = useDispatch( STORE_NAME );
-
-	// Resolved value (object), contains a list of all running actions.
-	const activities = useSelect(
-		( select ) => select( STORE_NAME ).getActivityList(),
-		[]
-	);
-
-	// Derive isBusy state from activities
-	const isBusy = Object.keys( activities ).length > 0;
-
-	// HOC that starts and stops an activity while the callback is executed.
-	const withActivity = useCallback(
-		async ( id, description, asyncFn ) => {
-			startActivity( id, description );
-			try {
-				return await asyncFn();
-			} finally {
-				stopActivity( id );
-			}
-		},
-		[ startActivity, stopActivity ]
-	);
-
-	return {
-		withActivity, // HOC
-		isBusy, // Boolean.
-		activities, // Object.
-	};
-};
-
 export const useSandbox = () => {
 	const { isSandboxMode, setSandboxMode, connectToSandbox } = useHooks();
 
@@ -148,5 +116,40 @@ export const useManualConnection = () => {
 
 export const useWooSettings = () => {
 	const { wooSettings } = useHooks();
+
 	return wooSettings;
+};
+
+// -- Not using the `useHooks()` data provider --
+
+export const useBusyState = () => {
+	const { startActivity, stopActivity } = useDispatch( STORE_NAME );
+
+	// Resolved value (object), contains a list of all running actions.
+	const activities = useSelect(
+		( select ) => select( STORE_NAME ).getActivityList(),
+		[]
+	);
+
+	// Derive isBusy state from activities
+	const isBusy = Object.keys( activities ).length > 0;
+
+	// HOC that starts and stops an activity while the callback is executed.
+	const withActivity = useCallback(
+		async ( id, description, asyncFn ) => {
+			startActivity( id, description );
+			try {
+				return await asyncFn();
+			} finally {
+				stopActivity( id );
+			}
+		},
+		[ startActivity, stopActivity ]
+	);
+
+	return {
+		withActivity, // HOC
+		isBusy, // Boolean.
+		activities, // Object.
+	};
 };
