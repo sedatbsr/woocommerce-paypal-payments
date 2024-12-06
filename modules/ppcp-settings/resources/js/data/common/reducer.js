@@ -79,6 +79,11 @@ const commonReducer = createReducer( defaultTransient, defaultPersistent, {
 		return setTransient( state, { activities: newActivities } );
 	},
 
+	[ ACTION_TYPES.DO_REFRESH_MERCHANT ]: ( state ) => ( {
+		...state,
+		merchant: Object.freeze( { ...defaultTransient.merchant } ),
+	} ),
+
 	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) => {
 		const newState = setPersistent( state, payload.data );
 

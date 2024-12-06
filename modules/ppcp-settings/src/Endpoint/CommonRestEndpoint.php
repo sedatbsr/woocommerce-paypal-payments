@@ -130,6 +130,18 @@ class CommonRestEndpoint extends RestEndpoint {
 				),
 			)
 		);
+
+		register_rest_route(
+			$this->namespace,
+			"/$this->rest_base/merchant",
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_merchant_details' ),
+					'permission_callback' => array( $this, 'check_permission' ),
+				),
+			)
+		);
 	}
 
 	/**
@@ -166,6 +178,18 @@ class CommonRestEndpoint extends RestEndpoint {
 		$this->settings->save();
 
 		return $this->get_details();
+	}
+
+	/**
+	 * Returns only the (read-only) merchant details from the DB.
+	 *
+	 * @return WP_REST_Response Merchant details.
+	 */
+	public function get_merchant_details() : WP_REST_Response {
+		$js_data    = array(); // No persistent data.
+		$extra_data = $this->add_merchant_info( array() );
+
+		return $this->return_success( $js_data, $extra_data );
 	}
 
 	/**

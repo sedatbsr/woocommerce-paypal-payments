@@ -180,3 +180,12 @@ export const connectViaIdAndSecret = function* () {
 		useSandbox,
 	};
 };
+
+/**
+ * Side effect. Clears and refreshes the merchant data via a REST request.
+ *
+ * @return {Action} The action.
+ */
+export const refreshMerchantData = function* () {
+	return yield { type: ACTION_TYPES.DO_REFRESH_MERCHANT };
+};

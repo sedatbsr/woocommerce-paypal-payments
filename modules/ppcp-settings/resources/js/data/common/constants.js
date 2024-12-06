@@ -17,6 +17,15 @@ export const STORE_NAME = 'wc/paypal/common';
 export const REST_HYDRATE_PATH = '/wc/v3/wc_paypal/common';
 
 /**
+ * REST path to fetch merchant details from the WordPress DB.
+ *
+ * Used by controls.
+ *
+ * @type {string}
+ */
+export const REST_HYDRATE_MERCHANT_PATH = '/wc/v3/wc_paypal/common/merchant';
+
+/**
  * REST path to persist data of this module to the WP DB.
  *
  * Used by controls.
