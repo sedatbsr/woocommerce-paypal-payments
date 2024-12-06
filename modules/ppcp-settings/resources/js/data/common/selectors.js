@@ -26,6 +26,10 @@ export const getActivityList = ( state ) => {
 	return Object.fromEntries( activities );
 };
 
+export const merchant = ( state ) => {
+	return getState( state ).merchant || EMPTY_OBJ;
+};
+
 export const wooSettings = ( state ) => {
 	return getState( state ).wooSettings || EMPTY_OBJ;
 };
