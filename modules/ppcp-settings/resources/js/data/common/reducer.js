@@ -17,6 +17,13 @@ const defaultTransient = {
 	activities: new Map(),
 
 	// Read only values, provided by the server via hydrate.
+	merchant: {
+		isConnected: false,
+		isSandbox: false,
+		id: '',
+		email: '',
+	},
+
 	wooSettings: {
 		storeCountry: '',
 		storeCurrency: '',
@@ -75,12 +82,17 @@ const commonReducer = createReducer( defaultTransient, defaultPersistent, {
 	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) => {
 		const newState = setPersistent( state, payload.data );
 
-		if ( payload.wooSettings ) {
-			newState.wooSettings = {
-				...newState.wooSettings,
-				...payload.wooSettings,
-			};
-		}
+		// Populate read-only properties.
+		[ 'wooSettings', 'merchant' ].forEach( ( key ) => {
+			if ( ! payload[ key ] ) {
+				return;
+			}
+
+			newState[ key ] = Object.freeze( {
+				...newState[ key ],
+				...payload[ key ],
+			} );
+		} );
 
 		return newState;
 	},

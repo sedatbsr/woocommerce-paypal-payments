@@ -61,7 +61,27 @@ class CommonRestEndpoint extends RestEndpoint {
 	);
 
 	/**
-	 * Map the internal flags to JS names.
+	 * Map merchant details to JS names.
+	 *
+	 * @var array
+	 */
+	private array $merchant_info_map = array(
+		'merchant_connected' => array(
+			'js_name' => 'isConnected',
+		),
+		'sandbox_merchant'   => array(
+			'js_name' => 'isSandbox',
+		),
+		'merchant_id'        => array(
+			'js_name' => 'id',
+		),
+		'merchant_email'     => array(
+			'js_name' => 'email',
+		),
+	);
+
+	/**
+	 * Map woo-settings to JS names.
 	 *
 	 * @var array
 	 */
@@ -124,6 +144,7 @@ class CommonRestEndpoint extends RestEndpoint {
 		);
 
 		$extra_data = $this->add_woo_settings( array() );
+		$extra_data = $this->add_merchant_info( $extra_data );
 
 		return $this->return_success( $js_data, $extra_data );
 	}
@@ -145,6 +166,23 @@ class CommonRestEndpoint extends RestEndpoint {
 		$this->settings->save();
 
 		return $this->get_details();
+	}
+
+	/**
+	 * Appends the "merchant" attribute to the extra_data collection, which
+	 * contains details about the merchant's PayPal account, like the merchant ID.
+	 *
+	 * @param array $extra_data Initial extra_data collection.
+	 *
+	 * @return array Updated extra_data collection.
+	 */
+	protected function add_merchant_info( array $extra_data ) : array {
+		$extra_data['merchant'] = $this->sanitize_for_javascript(
+			$this->settings->to_array(),
+			$this->merchant_info_map
+		);
+
+		return $extra_data;
 	}
 
 	/**
