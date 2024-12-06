@@ -65,11 +65,11 @@ const useConnectionBase = () => {
 		useDispatch( noticesStore );
 
 	return {
-		handleError: ( res, genericMessage ) => {
+		handleFailed: ( res, genericMessage ) => {
 			console.error( 'Connection error', res );
 			createErrorNotice( res?.message ?? genericMessage );
 		},
-		handleSuccess: async () => {
+		handleCompleted: async () => {
 			createSuccessNotice( MESSAGES.CONNECTED );
 
 			// TODO: Contact the plugin to confirm onboarding is completed.
@@ -80,14 +80,14 @@ const useConnectionBase = () => {
 };
 
 const useConnectionAttempt = ( connectFn, errorMessage ) => {
-	const { handleError, createErrorNotice, handleSuccess } =
+	const { handleFailed, createErrorNotice, handleCompleted } =
 		useConnectionBase();
 
 	return async ( ...args ) => {
 		const res = await connectFn( ...args );
 
 		if ( ! res.success || ! res.data ) {
-			handleError( res, errorMessage );
+			handleFailed( res, errorMessage );
 			return false;
 		}
 
@@ -97,7 +97,7 @@ const useConnectionAttempt = ( connectFn, errorMessage ) => {
 		);
 
 		if ( popupClosed ) {
-			await handleSuccess();
+			await handleCompleted();
 		}
 
 		return popupClosed;
@@ -149,7 +149,7 @@ export const useProductionConnection = () => {
 };
 
 export const useManualConnection = () => {
-	const { handleError, handleSuccess, createErrorNotice } =
+	const { handleFailed, handleCompleted, createErrorNotice } =
 		useConnectionBase();
 	const { withActivity } = CommonHooks.useBusyState();
 	const {
@@ -179,9 +179,9 @@ export const useManualConnection = () => {
 				const res = await connectViaIdAndSecret();
 
 				if ( res.success ) {
-					await handleSuccess();
+					await handleCompleted();
 				} else {
-					handleError( res, MESSAGES.MANUAL_ERROR );
+					handleFailed( res, MESSAGES.MANUAL_ERROR );
 				}
 
 				return res.success;
