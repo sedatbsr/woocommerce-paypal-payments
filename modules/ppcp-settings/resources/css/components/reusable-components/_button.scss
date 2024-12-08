@@ -18,6 +18,7 @@ button.components-button, a.components-button {
 
 		&:not(:disabled) {
 			background-color: $color-blueberry;
+			color: $color-white;
 		}
 	}
 

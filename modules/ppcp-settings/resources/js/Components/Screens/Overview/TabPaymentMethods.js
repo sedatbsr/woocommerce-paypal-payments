@@ -1,24 +1,11 @@
-import SettingsCard from '../../ReusableComponents/SettingsCard';
 import { __ } from '@wordpress/i18n';
-import PaymentMethodItem from '../../ReusableComponents/PaymentMethodItem';
+import SettingsCard from '../../ReusableComponents/SettingsCard';
+import PaymentMethodsBlock from '../../ReusableComponents/SettingsBlocks/PaymentMethodsBlock';
 import ModalPayPal from './Modals/ModalPayPal';
 import ModalFastlane from './Modals/ModalFastlane';
 import ModalAcdc from './Modals/ModalAcdc';
 
 const TabPaymentMethods = () => {
-	const renderPaymentMethods = ( data ) => {
-		return (
-			<div className="ppcp-r-payment-method-item-list">
-				{ data.map( ( paymentMethod ) => (
-					<PaymentMethodItem
-						key={ paymentMethod.id }
-						{ ...paymentMethod }
-					/>
-				) ) }
-			</div>
-		);
-	};
-
 	return (
 		<div className="ppcp-r-payment-methods">
 			<SettingsCard
@@ -28,8 +15,11 @@ const TabPaymentMethods = () => {
 					'woocommerce-paypal-payments'
 				) }
 				icon="icon-checkout-standard.svg"
+				contentContainer={ false }
 			>
-				{ renderPaymentMethods( paymentMethodsPayPalCheckoutDefault ) }
+				<PaymentMethodsBlock
+					paymentMethods={ paymentMethodsPayPalCheckoutDefault }
+				/>
 			</SettingsCard>
 			<SettingsCard
 				title={ __(
@@ -41,10 +31,11 @@ const TabPaymentMethods = () => {
 					'woocommerce-paypal-payments'
 				) }
 				icon="icon-checkout-online-methods.svg"
+				contentContainer={ false }
 			>
-				{ renderPaymentMethods(
-					paymentMethodsOnlineCardPaymentsDefault
-				) }
+				<PaymentMethodsBlock
+					paymentMethods={ paymentMethodsOnlineCardPaymentsDefault }
+				/>
 			</SettingsCard>
 			<SettingsCard
 				title={ __(
@@ -56,8 +47,11 @@ const TabPaymentMethods = () => {
 					'woocommerce-paypal-payments'
 				) }
 				icon="icon-checkout-alternative-methods.svg"
+				contentContainer={ false }
 			>
-				{ renderPaymentMethods( paymentMethodsAlternativeDefault ) }
+				<PaymentMethodsBlock
+					paymentMethods={ paymentMethodsAlternativeDefault }
+				/>
 			</SettingsCard>
 		</div>
 	);
@@ -124,7 +118,7 @@ const paymentMethodsOnlineCardPaymentsDefault = [
 		id: 'fastlane',
 		title: __( 'Fastlane by PayPal', 'woocommerce-paypal-payments' ),
 		description: __(
-			'Tap into the scale and trust of PayPal’s customer network to recognize shoppers and make guest checkout more seamless than ever.',
+			"Tap into the scale and trust of PayPal's customer network to recognize shoppers and make guest checkout more seamless than ever.",
 			'woocommerce-paypal-payments'
 		),
 		icon: 'payment-method-fastlane',
