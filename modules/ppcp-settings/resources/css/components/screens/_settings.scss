@@ -49,6 +49,17 @@
 		}
 	}
 
+	.ppcp-r__checkbox {
+		.components-flex {
+			gap: 12px;
+		}
+
+		label {
+			@include font(13, 20, 400);
+			color: $color-blueberry;
+		}
+	}
+
 	&__description {
 		@include font(13, 20, 400);
 		color: $color-blueberry;

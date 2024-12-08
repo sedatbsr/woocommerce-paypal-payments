@@ -1,13 +1,13 @@
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
 
 import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import PaymentMethodIcons from '../../ReusableComponents/PaymentMethodIcons';
 import Separator from '../../ReusableComponents/Separator';
 import WelcomeDocs from '../../ReusableComponents/WelcomeDocs/WelcomeDocs';
+import AccordionSection from '../../ReusableComponents/AccordionSection';
 
 import AdvancedOptionsForm from './Components/AdvancedOptionsForm';
-import AccordionSection from '../../ReusableComponents/AccordionSection';
 
 const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 	return (
@@ -48,7 +48,7 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 				isFastlane={ true }
 				isPayLater={ true }
 				storeCountry={ 'us' }
-				storeCurrency={ 'usd' }
+				storeCurrency={ 'USD' }
 			/>
 			<Separator text={ __( 'or', 'woocommerce-paypal-payments' ) } />
 			<AccordionSection
@@ -57,7 +57,7 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 					'woocommerce-paypal-payments'
 				) }
 				className="onboarding-advanced-options"
-				initiallyOpen={ false }
+				id="advanced-options"
 			>
 				<AdvancedOptionsForm setCompleted={ setCompleted } />
 			</AccordionSection>

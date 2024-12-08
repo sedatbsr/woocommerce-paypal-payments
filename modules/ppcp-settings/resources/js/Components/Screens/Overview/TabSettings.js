@@ -25,7 +25,6 @@ const TabSettings = () => {
 		buttonLanguage: '',
 	} );
 	const updateFormValue = ( key, value ) => {
-		console.log( key, value );
 		setSettings( { ...settings, [ key ]: value } );
 	};
 

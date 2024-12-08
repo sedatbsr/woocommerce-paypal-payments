@@ -16,25 +16,20 @@
 		text-align: center;
 	}
 
-	.ppcp-r-page-welcome-or-separator {
-		margin: 0 0 16px 0;
-	}
-
-	.ppcp-r-page-welcome-mode-separator {
-		margin: 0 0 48px 0;
-
-		.ppcp-r-separator__line {
-			background-color: $color-gray-300;
-		}
-	}
-
 	.components-base-control__field {
 		margin: 0 0 24px 0;
 	}
+
 	.ppcp-r-toggle-block__toggled-content > button{
 		@include small-button;
 		color: $color-white;
 		border: none;
+	}
+
+	.client-id-error {
+		color: #cc1818;
+		margin: -16px 0 24px;
+		@include font(11, 16, 450);
 	}
 
 	.onboarding-advanced-options {

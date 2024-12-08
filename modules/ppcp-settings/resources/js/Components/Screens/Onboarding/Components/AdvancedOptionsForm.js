@@ -1,98 +1,94 @@
 import { __, sprintf } from '@wordpress/i18n';
 import { Button, TextControl } from '@wordpress/components';
-import { useRef } from '@wordpress/element';
+import { useRef, useMemo } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
 
 import SettingsToggleBlock from '../../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../../ReusableComponents/Separator';
 import DataStoreControl from '../../../ReusableComponents/DataStoreControl';
-import { useManualConnect, useOnboardingStepWelcome } from '../../../../data';
+import { CommonHooks } from '../../../../data';
+import { openPopup } from '../../../../utils/window';
 
 const AdvancedOptionsForm = ( { setCompleted } ) => {
+	const { isBusy } = CommonHooks.useBusyState();
+	const { isSandboxMode, setSandboxMode, connectViaSandbox } =
+		CommonHooks.useSandbox();
 	const {
-		isManualConnectionBusy,
-		isSandboxMode,
-		setSandboxMode,
 		isManualConnectionMode,
 		setManualConnectionMode,
 		clientId,
 		setClientId,
 		clientSecret,
 		setClientSecret,
-	} = useOnboardingStepWelcome();
+		connectViaIdAndSecret,
+	} = CommonHooks.useManualConnection();
 
 	const { createSuccessNotice, createErrorNotice } =
 		useDispatch( noticesStore );
-	const { connectManual } = useManualConnect();
 	const refClientId = useRef( null );
 	const refClientSecret = useRef( null );
 
-	const handleFormValidation = () => {
-		const fields = [
-			{
-				ref: refClientId,
-				value: clientId,
-				errorMessage: __(
-					'Please enter your Client ID',
-					'woocommerce-paypal-payments'
-				),
-			},
-			{
-				ref: refClientSecret,
-				value: clientSecret,
-				errorMessage: __(
-					'Please enter your Secret Key',
-					'woocommerce-paypal-payments'
-				),
-			},
-		];
+	const isValidClientId = useMemo( () => {
+		return /^A[\w-]{79}$/.test( clientId );
+	}, [ clientId ] );
 
-		for ( const { ref, value, errorMessage } of fields ) {
-			if ( value ) {
-				continue;
-			}
+	const isFormValid = useMemo( () => {
+		return isValidClientId && clientId && clientSecret;
+	}, [ isValidClientId, clientId, clientSecret ] );
 
-			ref?.current?.focus();
-			createErrorNotice( errorMessage );
-			return false;
-		}
-
-		return true;
-	};
-
-	const handleServerError = ( res ) => {
-		if ( res.message ) {
-			createErrorNotice( res.message );
-		} else {
-			createErrorNotice(
-				__(
-					'Could not connect to PayPal. Please make sure your Client ID and Secret Key are correct.',
-					'woocommerce-paypal-payments'
-				)
-			);
-		}
+	const handleServerError = ( res, genericMessage ) => {
+		console.error( 'Connection error', res );
+		createErrorNotice( res?.message ?? genericMessage );
 	};
 
 	const handleServerSuccess = () => {
 		createSuccessNotice(
 			__( 'Connected to PayPal', 'woocommerce-paypal-payments' )
 		);
-
 		setCompleted( true );
 	};
 
-	const handleConnect = async () => {
-		if ( ! handleFormValidation() ) {
+	const handleSandboxConnect = async () => {
+		const res = await connectViaSandbox();
+
+		if ( ! res.success || ! res.data ) {
+			handleServerError(
+				res,
+				__(
+					'Could not generate a Sandbox login link.',
+					'woocommerce-paypal-payments'
+				)
+			);
 			return;
 		}
 
-		const res = await connectManual();
+		const connectionUrl = res.data;
+		const popup = openPopup( connectionUrl );
+
+		if ( ! popup ) {
+			createErrorNotice(
+				__(
+					'Popup blocked. Please allow popups for this site to connect to PayPal.',
+					'woocommerce-paypal-payments'
+				)
+			);
+		}
+	};
+
+	const handleManualConnect = async () => {
+		const res = await connectViaIdAndSecret();
 
 		if ( res.success ) {
 			handleServerSuccess();
 		} else {
-			handleServerError( res );
+			handleServerError(
+				res,
+				__(
+					'Could not connect to PayPal. Please make sure your Client ID and Secret Key are correct.',
+					'woocommerce-paypal-payments'
+				)
+			);
 		}
 	};
 
@@ -118,21 +114,22 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 				) }
 				isToggled={ !! isSandboxMode }
 				setToggled={ setSandboxMode }
+				isLoading={ isBusy }
 			>
-				<Button variant="secondary">
+				<Button onClick={ handleSandboxConnect } variant="secondary">
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>
-			<Separator className="ppcp-r-page-welcome-mode-separator" />
+			<Separator withLine={ false } />
 			<SettingsToggleBlock
-				label={ __(
-					'Manually Connect',
-					'woocommerce-paypal-payments'
-				) }
+				label={
+					__( 'Manually Connect', 'woocommerce-paypal-payments' ) +
+					( isBusy ? ' ...' : '' )
+				}
 				description={ advancedUsersDescription }
 				isToggled={ !! isManualConnectionMode }
 				setToggled={ setManualConnectionMode }
-				isLoading={ isManualConnectionBusy }
+				isLoading={ isBusy }
 			>
 				<DataStoreControl
 					control={ TextControl }
@@ -150,7 +147,18 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 					}
 					value={ clientId }
 					onChange={ setClientId }
+					className={
+						clientId && ! isValidClientId ? 'has-error' : ''
+					}
 				/>
+				{ clientId && ! isValidClientId && (
+					<p className="client-id-error">
+						{ __(
+							'Please enter a valid Client ID',
+							'woocommerce-paypal-payments'
+						) }
+					</p>
+				) }
 				<DataStoreControl
 					control={ TextControl }
 					ref={ refClientSecret }
@@ -169,7 +177,11 @@ const AdvancedOptionsForm = ( { setCompleted } ) => {
 					onChange={ setClientSecret }
 					type="password"
 				/>
-				<Button variant="secondary" onClick={ handleConnect }>
+				<Button
+					variant="secondary"
+					onClick={ handleManualConnect }
+					disabled={ ! isFormValid }
+				>
 					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
 				</Button>
 			</SettingsToggleBlock>

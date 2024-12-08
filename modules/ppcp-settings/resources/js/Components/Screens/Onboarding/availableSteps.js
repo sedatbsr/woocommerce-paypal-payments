@@ -1,6 +1,7 @@
 import StepWelcome from './StepWelcome';
 import StepBusiness from './StepBusiness';
 import StepProducts from './StepProducts';
+import StepPaymentMethods from './StepPaymentMethods';
 import StepCompleteSetup from './StepCompleteSetup';
 
 export const getSteps = ( flags ) => {
@@ -8,6 +9,7 @@ export const getSteps = ( flags ) => {
 		StepWelcome,
 		StepBusiness,
 		StepProducts,
+        StepPaymentMethods,
 		StepCompleteSetup,
 	];
 
