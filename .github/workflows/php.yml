@@ -30,9 +30,8 @@ jobs:
       run: vendor/bin/phpunit
 
     - name: Psalm
+      if: ${{ matrix.php-versions == '7.4' }}
       run: ./vendor/bin/psalm --show-info=false --threads=8 --diff
-      with:
-        php-version: '7.4'
 
     - name: Run PHPCS
       run: ./vendor/bin/phpcs --runtime-set ignore_warnings_on_exit 1 src modules woocommerce-paypal-payments.php --extensions=php
