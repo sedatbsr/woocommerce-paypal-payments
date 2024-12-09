@@ -8,6 +8,7 @@ import {
 	useProductionConnection,
 	useSandboxConnection,
 } from '../../../../hooks/useHandleConnections';
+import BusyStateWrapper from '../../../ReusableComponents/BusyStateWrapper';
 
 const ConnectionButton = ( {
 	title,
@@ -15,13 +16,11 @@ const ConnectionButton = ( {
 	variant = 'primary',
 	showIcon = true,
 } ) => {
-	const { isBusy } = CommonHooks.useBusyState();
 	const { handleSandboxConnect } = useSandboxConnection();
 	const { handleProductionConnect } = useProductionConnection();
 	const className = classNames( 'ppcp-r-connection-button', {
 		'sandbox-mode': isSandbox,
 		'live-mode': ! isSandbox,
-		'ppcp--is-loading': isBusy,
 	} );
 
 	const handleConnectClick = async () => {
@@ -33,15 +32,16 @@ const ConnectionButton = ( {
 	};
 
 	return (
-		<Button
-			className={ className }
-			variant={ variant }
-			icon={ showIcon ? openSignup : null }
-			onClick={ handleConnectClick }
-			disabled={ isBusy }
-		>
-			<span className="button-title">{ title }</span>
-		</Button>
+		<BusyStateWrapper>
+			<Button
+				className={ className }
+				variant={ variant }
+				icon={ showIcon ? openSignup : null }
+				onClick={ handleConnectClick }
+			>
+				<span className="button-title">{ title }</span>
+			</Button>
+		</BusyStateWrapper>
 	);
 };
 

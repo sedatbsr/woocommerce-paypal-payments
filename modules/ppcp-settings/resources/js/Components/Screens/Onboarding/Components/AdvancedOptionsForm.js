@@ -20,6 +20,7 @@ import {
 } from '../../../../hooks/useHandleConnections';
 
 import ConnectionButton from './ConnectionButton';
+import BusyStateWrapper from '../../../ReusableComponents/BusyStateWrapper';
 
 const FORM_ERRORS = {
 	noClientId: __(
@@ -89,7 +90,7 @@ const AdvancedOptionsForm = () => {
 			handleConnectViaIdAndSecret( {
 				validation: validateManualConnectionForm,
 			} ),
-		[ validateManualConnectionForm ]
+		[ handleConnectViaIdAndSecret, validateManualConnectionForm ]
 	);
 
 	useEffect( () => {
@@ -124,69 +125,79 @@ const AdvancedOptionsForm = () => {
 
 	return (
 		<>
-			<SettingsToggleBlock
-				label={ __(
-					'Enable Sandbox Mode',
-					'woocommerce-paypal-payments'
-				) }
-				description={ __(
-					'Activate Sandbox mode to safely test PayPal with sample data. Once your store is ready to go live, you can easily switch to your production account.',
-					'woocommerce-paypal-payments'
-				) }
-				isToggled={ !! isSandboxMode }
-				setToggled={ setSandboxMode }
-				isLoading={ isBusy }
-			>
-				<ConnectionButton
-					title={ __(
-						'Connect Account',
+			<BusyStateWrapper>
+				<SettingsToggleBlock
+					label={ __(
+						'Enable Sandbox Mode',
 						'woocommerce-paypal-payments'
 					) }
-					showIcon={ false }
-					variant="secondary"
-					isSandbox={
-						true /* This button always connects to sandbox */
-					}
-				/>
-			</SettingsToggleBlock>
+					description={ __(
+						'Activate Sandbox mode to safely test PayPal with sample data. Once your store is ready to go live, you can easily switch to your production account.',
+						'woocommerce-paypal-payments'
+					) }
+					isToggled={ !! isSandboxMode }
+					setToggled={ setSandboxMode }
+				>
+					<ConnectionButton
+						title={ __(
+							'Connect Account',
+							'woocommerce-paypal-payments'
+						) }
+						showIcon={ false }
+						variant="secondary"
+						isSandbox={
+							true /* This button always connects to sandbox */
+						}
+					/>
+				</SettingsToggleBlock>
+			</BusyStateWrapper>
 			<Separator withLine={ false } />
-			<SettingsToggleBlock
-				label={
-					__( 'Manually Connect', 'woocommerce-paypal-payments' ) +
-					( isBusy ? ' ...' : '' )
-				}
-				description={ advancedUsersDescription }
-				isToggled={ !! isManualConnectionMode }
-				setToggled={ setManualConnectionMode }
-				isLoading={ isBusy }
+			<BusyStateWrapper
+				onBusy={ ( props ) => ( {
+					disabled: true,
+					label: props.label + ' ...',
+				} ) }
 			>
-				<DataStoreControl
-					control={ TextControl }
-					ref={ refClientId }
-					label={ clientIdLabel }
-					value={ clientId }
-					onChange={ setClientId }
-					className={ classNames( {
-						'has-error': ! clientValid,
-					} ) }
-				/>
-				{ clientValid || (
-					<p className="client-id-error">
-						{ FORM_ERRORS.invalidClientId }
-					</p>
-				) }
-				<DataStoreControl
-					control={ TextControl }
-					ref={ refClientSecret }
-					label={ secretKeyLabel }
-					value={ clientSecret }
-					onChange={ setClientSecret }
-					type="password"
-				/>
-				<Button variant="secondary" onClick={ handleManualConnect }>
-					{ __( 'Connect Account', 'woocommerce-paypal-payments' ) }
-				</Button>
-			</SettingsToggleBlock>
+				<SettingsToggleBlock
+					label={ __(
+						'Manually Connect',
+						'woocommerce-paypal-payments'
+					) }
+					description={ advancedUsersDescription }
+					isToggled={ !! isManualConnectionMode }
+					setToggled={ setManualConnectionMode }
+				>
+					<DataStoreControl
+						control={ TextControl }
+						ref={ refClientId }
+						label={ clientIdLabel }
+						value={ clientId }
+						onChange={ setClientId }
+						className={ classNames( {
+							'has-error': ! clientValid,
+						} ) }
+					/>
+					{ clientValid || (
+						<p className="client-id-error">
+							{ FORM_ERRORS.invalidClientId }
+						</p>
+					) }
+					<DataStoreControl
+						control={ TextControl }
+						ref={ refClientSecret }
+						label={ secretKeyLabel }
+						value={ clientSecret }
+						onChange={ setClientSecret }
+						type="password"
+					/>
+					<Button variant="secondary" onClick={ handleManualConnect }>
+						{ __(
+							'Connect Account',
+							'woocommerce-paypal-payments'
+						) }
+					</Button>
+				</SettingsToggleBlock>
+			</BusyStateWrapper>
 		</>
 	);
 };

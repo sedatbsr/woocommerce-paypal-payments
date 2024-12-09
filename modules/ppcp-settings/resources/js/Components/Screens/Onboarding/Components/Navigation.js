@@ -6,6 +6,7 @@ import classNames from 'classnames';
 
 import { OnboardingHooks } from '../../../../data';
 import useIsScrolled from '../../../../hooks/useIsScrolled';
+import BusyStateWrapper from '../../../ReusableComponents/BusyStateWrapper';
 
 const Navigation = ( { stepDetails, onNext, onPrev, onExit } ) => {
 	const { title, isFirst, percentage, showNext, canProceed } = stepDetails;
@@ -20,7 +21,10 @@ const Navigation = ( { stepDetails, onNext, onPrev, onExit } ) => {
 	return (
 		<div className={ className }>
 			<div className="ppcp-r-navigation">
-				<div className="ppcp-r-navigation--left">
+				<BusyStateWrapper
+					className="ppcp-r-navigation--left"
+					enabled={ ! isFirst }
+				>
 					<Button
 						variant="link"
 						onClick={ isFirst ? onExit : onPrev }
@@ -31,7 +35,7 @@ const Navigation = ( { stepDetails, onNext, onPrev, onExit } ) => {
 							{ title }
 						</span>
 					</Button>
-				</div>
+				</BusyStateWrapper>
 				{ ! isFirst &&
 					NextButton( { showNext, isDisabled, onNext, onExit } ) }
 				<ProgressBar percent={ percentage } />
@@ -42,7 +46,7 @@ const Navigation = ( { stepDetails, onNext, onPrev, onExit } ) => {
 
 const NextButton = ( { showNext, isDisabled, onNext, onExit } ) => {
 	return (
-		<div className="ppcp-r-navigation--right">
+		<BusyStateWrapper className="ppcp-r-navigation--right">
 			<Button variant="link" onClick={ onExit }>
 				{ __( 'Save and exit', 'woocommerce-paypal-payments' ) }
 			</Button>
@@ -55,7 +59,7 @@ const NextButton = ( { showNext, isDisabled, onNext, onExit } ) => {
 					{ __( 'Continue', 'woocommerce-paypal-payments' ) }
 				</Button>
 			) }
-		</div>
+		</BusyStateWrapper>
 	);
 };
 
