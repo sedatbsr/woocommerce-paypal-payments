@@ -42,6 +42,7 @@ class OnboardingProfile extends AbstractDataModel {
 	 * @param bool $can_use_casual_selling Whether casual selling is enabled in the store's country.
 	 * @param bool $can_use_vaulting       Whether vaulting is enabled in the store's country.
 	 * @param bool $can_use_card_payments  Whether credit card payments are possible.
+	 * @param bool $can_use_subscriptions  Whether WC Subscriptions plugin is active.
 	 *
 	 * @throws RuntimeException If the OPTION_KEY is not defined in the child class.
 	 */
@@ -56,7 +57,7 @@ class OnboardingProfile extends AbstractDataModel {
 		$this->flags['can_use_casual_selling'] = $can_use_casual_selling;
 		$this->flags['can_use_vaulting']       = $can_use_vaulting;
 		$this->flags['can_use_card_payments']  = $can_use_card_payments;
-		$this->flags['can_use_subscriptions'] = $can_use_subscriptions;
+		$this->flags['can_use_subscriptions']  = $can_use_subscriptions;
 	}
 
 	/**
