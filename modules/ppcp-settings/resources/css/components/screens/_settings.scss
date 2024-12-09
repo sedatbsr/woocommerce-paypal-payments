@@ -1,3 +1,5 @@
+@import "./settings/block-accordion";
+
 // Container and Tab Settings
 .ppcp-r-tabs.settings,
 .ppcp-r-container--settings {
@@ -275,7 +277,6 @@
 		align-items: center;
 	}
 
-	&.ppcp-r-settings-block__accordion,
 	&.ppcp-r-settings-block__feature {
 		.ppcp-r-settings-block__title {
 			@include font(13, 20, 600);
@@ -283,11 +284,6 @@
 			text-transform: none;
 		}
 
-		.ppcp-r-settings-block--accordion__title {
-			@include font(14, 20, 600);
-		}
-
-		.ppcp-r-settings-block--accordion__description,
 		.ppcp-r-settings-block__feature__description {
 			color: $color-gray-700;
 			@include font(13, 20, 400);
@@ -520,27 +516,6 @@
 
 		> .ppcp-r-settings-block__content {
 			@include vertical-layout-event-gap(24px);
-		}
-	}
-}
-
-.ppcp-r-settings-block__accordion {
-	.ppcp-r-settings-block--accordion__header {
-		gap: 4px;
-	}
-
-	&.ppcp-r-settings-block--content-visible .ppcp-r-settings-block--accordion__header {
-		margin-bottom: 24px;
-	}
-
-	&.ppcp-r-settings-block {
-		gap: 0;
-		.ppcp-r-settings-block:not(:last-child) {
-			&:not(.ppcp-r__radio-content-additional .ppcp-r-settings-block) {
-				padding-bottom: 32px;
-				margin-bottom: 32px;
-				border-bottom: 1px solid $color-divider;
-			}
 		}
 	}
 }
