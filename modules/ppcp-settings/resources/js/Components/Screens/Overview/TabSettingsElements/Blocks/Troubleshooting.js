@@ -1,65 +1,73 @@
-import SettingsBlock, {
-	SETTINGS_BLOCK_STYLING_TYPE_PRIMARY,
-	SETTINGS_BLOCK_STYLING_TYPE_SECONDARY,
-	SETTINGS_BLOCK_TYPE_BUTTON,
-	SETTINGS_BLOCK_TYPE_EMPTY,
-	SETTINGS_BLOCK_TYPE_TOGGLE,
-	SETTINGS_BLOCK_TYPE_TOGGLE_CONTENT,
-} from '../../../../ReusableComponents/SettingsBlock';
 import { __ } from '@wordpress/i18n';
+import {
+	Header,
+	Title,
+	Description,
+	AccordionSettingsBlock,
+	ToggleSettingsBlock,
+	ButtonSettingsBlock,
+} from '../../../../ReusableComponents/SettingsBlocks';
+import SettingsBlock from '../../../../ReusableComponents/SettingsBlocks/SettingsBlock';
 
 const Troubleshooting = ( { updateFormValue, settings } ) => {
 	return (
-		<SettingsBlock
+		<AccordionSettingsBlock
 			className="ppcp-r-settings-block--troubleshooting"
 			title={ __( 'Troubleshooting', 'woocommerce-paypal-payments' ) }
 			description={ __(
 				'Access tools to help debug and resolve issues.',
 				'woocommerce-paypal-payments'
 			) }
-			style={ SETTINGS_BLOCK_STYLING_TYPE_PRIMARY }
 			actionProps={ {
-				type: SETTINGS_BLOCK_TYPE_TOGGLE_CONTENT,
 				callback: updateFormValue,
 				key: 'payNowExperience',
 				value: settings.payNowExperience,
 			} }
 		>
-			<SettingsBlock
+			<ToggleSettingsBlock
 				title={ __( 'Logging', 'woocommerce-paypal-payments' ) }
 				description={ __(
 					'Log additional debugging information in the WooCommerce logs that can assist technical staff to determine issues.',
 					'woocommerce-paypal-payments'
 				) }
-				style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }
 				actionProps={ {
-					type: SETTINGS_BLOCK_TYPE_TOGGLE,
 					callback: updateFormValue,
 					key: 'logging',
 					value: settings.logging,
 				} }
 			/>
 			<SettingsBlock
-				title={ __(
-					'Subscribed PayPal webhooks',
-					'woocommerce-paypal-payments'
-				) }
-				description={ __(
-					'The following PayPal webhooks are subscribed. More information about the webhooks is available in the Webhook Status documentation.',
-					'woocommerce-paypal-payments'
-				) }
-				style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }
-				actionProps={ {
-					type: SETTINGS_BLOCK_TYPE_EMPTY,
-					callback: updateFormValue,
-					key: 'logging',
-					value: settings.logging,
-				} }
-			>
-				<HooksTable data={ hooksExampleData() } />
-			</SettingsBlock>
+				components={ [
+					() => (
+						<>
+							<Header>
+								<Title>
+									{ __(
+										'Subscribed PayPal webhooks',
+										'woocommerce-paypal-payments'
+									) }
+								</Title>
+								<Description>
+									{ __(
+										'The following PayPal webhooks are subscribed. More information about the webhooks is available in the',
+										'woocommerce-paypal-payments'
+									) }{ ' ' }
+									<a href="https://woocommerce.com/document/woocommerce-paypal-payments/#webhook-status">
+										{ __(
+											'Webhook Status documentation',
+											'woocommerce-paypal-payments'
+										) }
+									</a>
+									.
+								</Description>
+							</Header>
+							<HooksTable data={ hooksExampleData() } />
+						</>
+					),
+				] }
+			/>
 
-			<SettingsBlock
+			<ButtonSettingsBlock
 				title={ __(
 					'Resubscribe webhooks',
 					'woocommerce-paypal-payments'
@@ -68,9 +76,7 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 					'Click to remove the current webhook subscription and subscribe again, for example, if the website domain or URL structure changed.',
 					'woocommerce-paypal-payments'
 				) }
-				style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }
 				actionProps={ {
-					type: SETTINGS_BLOCK_TYPE_BUTTON,
 					buttonType: 'secondary',
 					callback: () =>
 						console.log(
@@ -83,14 +89,13 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 					),
 				} }
 			/>
-			<SettingsBlock
+
+			<ButtonSettingsBlock
 				title={ __(
 					'Simulate webhooks',
 					'woocommerce-paypal-payments'
 				) }
-				style={ SETTINGS_BLOCK_STYLING_TYPE_SECONDARY }
 				actionProps={ {
-					type: SETTINGS_BLOCK_TYPE_BUTTON,
 					buttonType: 'secondary',
 					callback: () =>
 						console.log(
@@ -103,7 +108,7 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 					),
 				} }
 			/>
-		</SettingsBlock>
+		</AccordionSettingsBlock>
 	);
 };
 

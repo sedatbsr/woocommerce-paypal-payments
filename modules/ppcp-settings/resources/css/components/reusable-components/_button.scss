@@ -17,7 +17,8 @@ button.components-button, a.components-button {
 		@include font(14, 18, 900);
 
 		&:not(:disabled) {
-			background-color: $color-black;
+			background-color: $color-blueberry;
+			color: $color-white;
 		}
 	}
 
