@@ -134,3 +134,8 @@ export const useDetermineProducts = () => {
 
 	return determineProducts;
 };
+
+export const useFlags = () => {
+	const { flags } = useHooks();
+	return flags;
+};
