@@ -23,6 +23,7 @@ const Navigation = ( { stepDetails, onNext, onPrev, onExit } ) => {
 			<div className="ppcp-r-navigation">
 				<BusyStateWrapper
 					className="ppcp-r-navigation--left"
+					busySpinner={ false }
 					enabled={ ! isFirst }
 				>
 					<Button
@@ -46,7 +47,10 @@ const Navigation = ( { stepDetails, onNext, onPrev, onExit } ) => {
 
 const NextButton = ( { showNext, isDisabled, onNext, onExit } ) => {
 	return (
-		<BusyStateWrapper className="ppcp-r-navigation--right">
+		<BusyStateWrapper
+			className="ppcp-r-navigation--right"
+			busySpinner={ false }
+		>
 			<Button variant="link" onClick={ onExit }>
 				{ __( 'Save and exit', 'woocommerce-paypal-payments' ) }
 			</Button>
