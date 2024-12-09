@@ -15,6 +15,12 @@ import ACTION_TYPES from './action-types';
 const defaultTransient = {
 	isReady: false,
 	isBusy: false,
+
+	// Read only values, provided by the server via hydrate.
+	wooSettings: {
+		storeCountry: '',
+		storeCurrency: '',
+	},
 };
 
 const defaultPersistent = {
@@ -38,8 +44,18 @@ const commonReducer = createReducer( defaultTransient, defaultPersistent, {
 	[ ACTION_TYPES.SET_PERSISTENT ]: ( state, action ) =>
 		setPersistent( state, action ),
 
-	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) =>
-		setPersistent( state, payload.data ),
+	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) => {
+		const newState = setPersistent( state, payload.data );
+
+		if ( payload.wooSettings ) {
+			newState.wooSettings = {
+				...newState.wooSettings,
+				...payload.wooSettings,
+			};
+		}
+
+		return newState;
+	},
 } );
 
 export default commonReducer;

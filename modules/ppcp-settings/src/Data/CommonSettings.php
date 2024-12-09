@@ -30,6 +30,25 @@ class CommonSettings extends AbstractDataModel {
 	protected const OPTION_KEY = 'woocommerce-ppcp-data-common';
 
 	/**
+	 * List of customization flags, provided by the server (read-only).
+	 *
+	 * @var array
+	 */
+	protected array $woo_settings = array();
+
+	/**
+	 * Constructor.
+	 *
+	 * @param string $country  WooCommerce store country.
+	 * @param string $currency WooCommerce store currency.
+	 */
+	public function __construct( string $country, string $currency ) {
+		parent::__construct();
+		$this->woo_settings['country']  = $country;
+		$this->woo_settings['currency'] = $currency;
+	}
+
+	/**
 	 * Get default values for the model.
 	 *
 	 * @return array
@@ -115,5 +134,14 @@ class CommonSettings extends AbstractDataModel {
 	 */
 	public function set_client_secret( string $client_secret ) : void {
 		$this->data['client_secret'] = sanitize_text_field( $client_secret );
+	}
+
+	/**
+	 * Returns the list of read-only customization flags.
+	 *
+	 * @return array
+	 */
+	public function get_woo_settings() : array {
+		return $this->woo_settings;
 	}
 }

@@ -6,7 +6,7 @@ import { countryPriceInfo } from '../../../utils/countryPriceInfo';
 import OptionalPaymentMethods from '../OptionalPaymentMethods/OptionalPaymentMethods';
 
 const BcdcFlow = ( { isPayLater, storeCountry, storeCurrency } ) => {
-	if ( isPayLater && storeCountry === 'us' ) {
+	if ( isPayLater && storeCountry === 'US' ) {
 		return (
 			<div className="ppcp-r-welcome-docs__wrapper">
 				<div className="ppcp-r-welcome-docs__col">

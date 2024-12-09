@@ -27,6 +27,10 @@ $max-width-settings: 938px;
 
 $card-vertical-gap: 48px;
 
+:root {
+	--ppcp-color-app-bg: #{$color-white};
+}
+
 #ppcp-settings-container {
 	--max-width-settings: #{$max-width-settings};
 	--max-width-onboarding: #{$max-width-onboarding};

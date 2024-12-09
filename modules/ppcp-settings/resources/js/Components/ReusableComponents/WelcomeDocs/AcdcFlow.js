@@ -12,7 +12,7 @@ const AcdcFlow = ( {
 	storeCountry,
 	storeCurrency,
 } ) => {
-	if ( isFastlane && isPayLater && storeCountry === 'us' ) {
+	if ( isFastlane && isPayLater && storeCountry === 'US' ) {
 		return (
 			<div className="ppcp-r-welcome-docs__wrapper">
 				<div className="ppcp-r-welcome-docs__col">
@@ -123,7 +123,7 @@ const AcdcFlow = ( {
 		);
 	}
 
-	if ( isPayLater && storeCountry === 'uk' ) {
+	if ( isPayLater && storeCountry === 'UK' ) {
 		return (
 			<div className="ppcp-r-welcome-docs__wrapper">
 				<div className="ppcp-r-welcome-docs__col">
