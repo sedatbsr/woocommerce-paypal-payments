@@ -20,6 +20,7 @@ const defaultTransient = {
 		canUseCasualSelling: false,
 		canUseVaulting: false,
 		canUseCardPayments: false,
+		canUseSubscriptions: false,
 	},
 };
 
