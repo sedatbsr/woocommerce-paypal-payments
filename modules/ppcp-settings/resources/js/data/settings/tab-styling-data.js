@@ -58,10 +58,6 @@ export const paymentMethodOptions = [
 		label: __( 'Pay Later', 'woocommerce-paypal-payments' ),
 	},
 	{
-		value: 'card',
-		label: __( 'Debit or Credit Card', 'woocommerce-paypal-payments' ),
-	},
-	{
 		value: 'googlepay',
 		label: __( 'Google Pay', 'woocommerce-paypal-payments' ),
 	},
