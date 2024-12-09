@@ -535,7 +535,7 @@ class WcSubscriptionsModule implements ServiceModule, ExtendingModule, Executabl
 	 * @param int $wc_payment_token_id
 	 * @param string $return_url
 	 * @param SessionHandler $session_handler
-	 * @return array|string[]
+	 * @return array
 	 */
 	private function add_payment_token_to_order(
 		WC_Order $wc_order,
