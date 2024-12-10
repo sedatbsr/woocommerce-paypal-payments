@@ -276,6 +276,7 @@ class WcSubscriptionsModule implements ServiceModule, ExtendingModule, Executabl
 					$session_handler = $c->get( 'session.handler' );
 					assert( $session_handler instanceof SessionHandler );
 
+					// phpcs:ignore WordPress.Security.NonceVerification.Missing
 					$wc_payment_token_id = wc_clean( wp_unslash( $_POST['wc-ppcp-credit-card-gateway-payment-token'] ?? '' ) );
 					if ( ! $wc_payment_token_id ) {
 						// phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -283,7 +284,7 @@ class WcSubscriptionsModule implements ServiceModule, ExtendingModule, Executabl
 					}
 
 					if ( $wc_payment_token_id ) {
-						return $this->add_payment_token_to_order( $wc_order, (int)$wc_payment_token_id, $return_url, $session_handler );
+						return $this->add_payment_token_to_order( $wc_order, (int) $wc_payment_token_id, $return_url, $session_handler );
 					}
 				}
 			},
@@ -531,11 +532,11 @@ class WcSubscriptionsModule implements ServiceModule, ExtendingModule, Executabl
 	/**
 	 * Adds the given WC payment token into the given WC Order.
 	 *
-	 * @param WC_Order $wc_order
-	 * @param int $wc_payment_token_id
-	 * @param string $return_url
-	 * @param SessionHandler $session_handler
-	 * @return array
+	 * @param WC_Order       $wc_order WC order.
+	 * @param int            $wc_payment_token_id WC payment token ID.
+	 * @param string         $return_url Return url.
+	 * @param SessionHandler $session_handler Session handler.
+	 * @return array{result: string, redirect: string, errorMessage?: string}
 	 */
 	private function add_payment_token_to_order(
 		WC_Order $wc_order,
