@@ -15,10 +15,11 @@ const ConnectionButton = ( {
 	isSandbox = false,
 	variant = 'primary',
 	showIcon = true,
+	className = '',
 } ) => {
 	const { handleSandboxConnect } = useSandboxConnection();
 	const { handleProductionConnect } = useProductionConnection();
-	const className = classNames( 'ppcp-r-connection-button', {
+	const buttonClassName = classNames( 'ppcp-r-connection-button', className, {
 		'sandbox-mode': isSandbox,
 		'live-mode': ! isSandbox,
 	} );
@@ -34,7 +35,7 @@ const ConnectionButton = ( {
 	return (
 		<BusyStateWrapper>
 			<Button
-				className={ className }
+				className={ buttonClassName }
 				variant={ variant }
 				icon={ showIcon ? openSignup : null }
 				onClick={ handleConnectClick }

@@ -145,6 +145,7 @@ const AdvancedOptionsForm = () => {
 						) }
 						showIcon={ false }
 						variant="secondary"
+						className="small-button"
 						isSandbox={
 							true /* This button always connects to sandbox */
 						}
@@ -190,7 +191,11 @@ const AdvancedOptionsForm = () => {
 						onChange={ setClientSecret }
 						type="password"
 					/>
-					<Button variant="secondary" onClick={ handleManualConnect }>
+					<Button
+						variant="secondary"
+						className="small-button"
+						onClick={ handleManualConnect }
+					>
 						{ __(
 							'Connect Account',
 							'woocommerce-paypal-payments'
