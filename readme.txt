@@ -179,7 +179,7 @@ If you encounter issues with the PayPal buttons not appearing after an update, p
 
 == Changelog ==
 
-= 2.9.5 - xxxx-xx-xx =
+= 2.9.5 - 2024-12-10 =
 Fix - Early translation loading triggers `Function _load_textdomain_just_in_time was called incorrectly.` notice #2816
 Fix - ACDC card fields not loading and payment not successful when Classic Checkout Smart Button Location disabled #2852
 Fix - ACDC gateway does not appear for guests when is Fastlane enabled and a subscription product is in the cart #2745
