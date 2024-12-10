@@ -19,6 +19,7 @@ use WooCommerce\PayPalCommerce\Settings\Endpoint\LoginLinkRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Service\ConnectionUrlGenerator;
+use WooCommerce\PayPalCommerce\Settings\Service\OnboardingUrlManager;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 
 return array(
@@ -37,7 +38,8 @@ return array(
 		$can_use_casual_selling = $container->get( 'settings.casual-selling.eligible' );
 		$can_use_vaulting       = $container->has( 'save-payment-methods.eligible' ) && $container->get( 'save-payment-methods.eligible' );
 		$can_use_card_payments  = $container->has( 'card-fields.eligible' ) && $container->get( 'card-fields.eligible' );
-		$can_use_subscriptions = $container->has( 'wc-subscriptions.helper' ) && $container->get( 'wc-subscriptions.helper' )->plugin_is_active();
+		$can_use_subscriptions  = $container->has( 'wc-subscriptions.helper' ) && $container->get( 'wc-subscriptions.helper' )
+				->plugin_is_active();
 
 		// Card payments are disabled for this plugin when WooPayments is active.
 		// TODO: Move this condition to the card-fields.eligible service?
@@ -139,6 +141,9 @@ return array(
 	'settings.service.signup-link-cache'          => static function ( ContainerInterface $container ) : Cache {
 		return new Cache( 'ppcp-paypal-signup-link' );
 	},
+	'settings.service.onboarding-url-manager'     => static function ( ContainerInterface $container ) : OnboardingUrlManager {
+		return new OnboardingUrlManager();
+	},
 	'settings.service.connection-url-generators'  => static function ( ContainerInterface $container ) : array {
 		// Define available environments.
 		$environments = array(
@@ -159,6 +164,7 @@ return array(
 				$container->get( 'api.repository.partner-referrals-data' ),
 				$container->get( 'settings.service.signup-link-cache' ),
 				$environment,
+				$container->get( 'settings.service.onboarding-url-manager' ),
 				$container->get( 'woocommerce.logger.woocommerce' )
 			);
 		}

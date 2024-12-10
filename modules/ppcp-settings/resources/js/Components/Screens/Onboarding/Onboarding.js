@@ -6,8 +6,7 @@ import Navigation from './Components/Navigation';
 import { useEffect } from '@wordpress/element';
 
 const Onboarding = () => {
-	const { step, setStep, setCompleted, flags } = OnboardingHooks.useSteps();
-
+	const { step, setStep, flags } = OnboardingHooks.useSteps();
 	const Steps = getSteps( flags );
 	const currentStep = getCurrentStep( step, Steps );
 
@@ -45,7 +44,6 @@ const Onboarding = () => {
 					<currentStep.StepComponent
 						setStep={ setStep }
 						currentStep={ step }
-						setCompleted={ setCompleted }
 						stepperOrder={ Steps }
 					/>
 				</div>

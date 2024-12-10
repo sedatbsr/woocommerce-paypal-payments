@@ -31,7 +31,8 @@ const useHooks = () => {
 		setManualConnectionMode,
 		setClientId,
 		setClientSecret,
-		connectViaSandbox,
+		connectToSandbox,
+		connectToProduction,
 		connectViaIdAndSecret,
 	} = useDispatch( STORE_NAME );
 
@@ -44,6 +45,10 @@ const useHooks = () => {
 	const isSandboxMode = usePersistent( 'useSandbox' );
 	const isManualConnectionMode = usePersistent( 'useManualConnection' );
 
+	const merchant = useSelect(
+		( select ) => select( STORE_NAME ).merchant(),
+		[]
+	);
 	const wooSettings = useSelect(
 		( select ) => select( STORE_NAME ).wooSettings(),
 		[]
@@ -72,26 +77,24 @@ const useHooks = () => {
 		setClientSecret: ( value ) => {
 			return savePersistent( setClientSecret, value );
 		},
-		connectViaSandbox,
+		connectToSandbox,
+		connectToProduction,
 		connectViaIdAndSecret,
+		merchant,
 		wooSettings,
 	};
 };
 
-export const useBusyState = () => {
-	const { setIsBusy } = useDispatch( STORE_NAME );
-	const isBusy = useTransient( 'isBusy' );
+export const useSandbox = () => {
+	const { isSandboxMode, setSandboxMode, connectToSandbox } = useHooks();
 
-	return {
-		isBusy,
-		setIsBusy: useCallback( ( busy ) => setIsBusy( busy ), [ setIsBusy ] ),
-	};
+	return { isSandboxMode, setSandboxMode, connectToSandbox };
 };
 
-export const useSandbox = () => {
-	const { isSandboxMode, setSandboxMode, connectViaSandbox } = useHooks();
+export const useProduction = () => {
+	const { connectToProduction } = useHooks();
 
-	return { isSandboxMode, setSandboxMode, connectViaSandbox };
+	return { connectToProduction };
 };
 
 export const useManualConnection = () => {
@@ -118,5 +121,61 @@ export const useManualConnection = () => {
 
 export const useWooSettings = () => {
 	const { wooSettings } = useHooks();
+
 	return wooSettings;
+};
+
+export const useMerchantInfo = () => {
+	const { merchant } = useHooks();
+	const { refreshMerchantData } = useDispatch( STORE_NAME );
+
+	const verifyLoginStatus = useCallback( async () => {
+		const result = await refreshMerchantData();
+
+		if ( ! result.success ) {
+			throw new Error( result?.message || result?.error?.message );
+		}
+
+		// Verify if the server state is "connected" and we have a merchant ID.
+		return merchant?.isConnected && merchant?.id;
+	}, [ refreshMerchantData, merchant ] );
+
+	return {
+		merchant, // Merchant details
+		verifyLoginStatus, // Callback
+	};
+};
+
+// -- Not using the `useHooks()` data provider --
+
+export const useBusyState = () => {
+	const { startActivity, stopActivity } = useDispatch( STORE_NAME );
+
+	// Resolved value (object), contains a list of all running actions.
+	const activities = useSelect(
+		( select ) => select( STORE_NAME ).getActivityList(),
+		[]
+	);
+
+	// Derive isBusy state from activities
+	const isBusy = Object.keys( activities ).length > 0;
+
+	// HOC that starts and stops an activity while the callback is executed.
+	const withActivity = useCallback(
+		async ( id, description, asyncFn ) => {
+			startActivity( id, description );
+			try {
+				return await asyncFn();
+			} finally {
+				stopActivity( id );
+			}
+		},
+		[ startActivity, stopActivity ]
+	);
+
+	return {
+		withActivity, // HOC
+		isBusy, // Boolean.
+		activities, // Object.
+	};
 };
