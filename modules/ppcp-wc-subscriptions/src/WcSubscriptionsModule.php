@@ -267,12 +267,7 @@ class WcSubscriptionsModule implements ServiceModule, ExtendingModule, Executabl
 				$subscription_helper = $c->get( 'wc-subscriptions.helper' );
 				assert( $subscription_helper instanceof SubscriptionHelper );
 
-				if (
-					// phpcs:ignore WordPress.Security.NonceVerification.Missing
-					isset( $_POST['woocommerce_change_payment'] )
-					&& $subscription_helper->has_subscription( $wc_order->get_id() )
-					&& $subscription_helper->is_subscription_change_payment()
-				) {
+				if ( $this->is_customer_changing_subscription_payment( $subscription_helper, $wc_order ) ) {
 					$session_handler = $c->get( 'session.handler' );
 					assert( $session_handler instanceof SessionHandler );
 
@@ -564,5 +559,19 @@ class WcSubscriptionsModule implements ServiceModule, ExtendingModule, Executabl
 			'redirect'     => wc_get_checkout_url(),
 			'errorMessage' => __( 'Could not change payment.', 'woocommerce-paypal-payments' ),
 		);
+	}
+
+	/**
+	 * Check whether customer is changing subscription payment.
+	 *
+	 * @param SubscriptionHelper $subscription_helper Subscription helper.
+	 * @param WC_Order           $wc_order WC order.
+	 * @return bool
+	 */
+	private function is_customer_changing_subscription_payment( SubscriptionHelper $subscription_helper, WC_Order $wc_order ): bool {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return isset( $_POST['woocommerce_change_payment'] )
+			&& $subscription_helper->has_subscription( $wc_order->get_id() )
+			&& $subscription_helper->is_subscription_change_payment();
 	}
 }
