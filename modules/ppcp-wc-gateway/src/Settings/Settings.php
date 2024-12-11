@@ -5,7 +5,7 @@
  * @package WooCommerce\PayPalCommerce\WcGateway\Settings
  */
 
-declare(strict_types=1);
+declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\WcGateway\Settings;
 
@@ -18,44 +18,46 @@ use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
  */
 class Settings implements ContainerInterface {
 
-	const KEY               = 'woocommerce-ppcp-settings';
+	const KEY = 'woocommerce-ppcp-settings';
+
 	const CONNECTION_TAB_ID = 'ppcp-connection';
-	const PAY_LATER_TAB_ID  = 'ppcp-pay-later';
+
+	const PAY_LATER_TAB_ID = 'ppcp-pay-later';
 
 	/**
 	 * The settings.
 	 *
 	 * @var array
 	 */
-	private $settings = array();
+	private array $settings = array();
 
 	/**
 	 * The list of selected default button locations.
 	 *
 	 * @var string[]
 	 */
-	protected $default_button_locations;
+	protected array $default_button_locations;
 
 	/**
 	 * The list of selected default pay later button locations.
 	 *
 	 * @var string[]
 	 */
-	protected $default_pay_later_button_locations;
+	protected array $default_pay_later_button_locations;
 
 	/**
 	 * The list of selected default pay later messaging locations.
 	 *
 	 * @var string[]
 	 */
-	protected $default_pay_later_messaging_locations;
+	protected array $default_pay_later_messaging_locations;
 
 	/**
 	 * The default ACDC gateway title.
 	 *
 	 * @var string
 	 */
-	protected $default_dcc_gateway_title;
+	protected string $default_dcc_gateway_title;
 
 	/**
 	 * A helper for mapping the new/old settings.
@@ -67,11 +69,17 @@ class Settings implements ContainerInterface {
 	/**
 	 * Settings constructor.
 	 *
-	 * @param string[]          $default_button_locations The list of selected default button locations.
-	 * @param string            $default_dcc_gateway_title The default ACDC gateway title.
-	 * @param string[]          $default_pay_later_button_locations The list of selected default pay later button locations.
-	 * @param string[]          $default_pay_later_messaging_locations The list of selected default pay later messaging locations.
-	 * @param SettingsMapHelper $settings_map_helper A helper for mapping the new/old settings.
+	 * @param string[]          $default_button_locations              The list of selected default
+	 *                                                                 button locations.
+	 * @param string            $default_dcc_gateway_title             The default ACDC gateway
+	 *                                                                 title.
+	 * @param string[]          $default_pay_later_button_locations    The list of selected default
+	 *                                                                 pay later button locations.
+	 * @param string[]          $default_pay_later_messaging_locations The list of selected default
+	 *                                                                 pay later messaging
+	 *                                                                 locations.
+	 * @param SettingsMapHelper $settings_map_helper                   A helper for mapping the
+	 *                                                                 new/old settings.
 	 */
 	public function __construct(
 		array $default_button_locations,
@@ -90,12 +98,13 @@ class Settings implements ContainerInterface {
 	/**
 	 * Returns the value for an id.
 	 *
-	 * @param string $id The value identificator.
+	 * @throws NotFoundException When nothing was found.
+	 *
+	 * @param string $id The value identifier.
 	 *
 	 * @return mixed
-	 * @throws NotFoundException When nothing was found.
 	 */
-	public function get( $id ) {
+	public function get( string $id ) {
 		if ( ! $this->has( $id ) ) {
 			throw new NotFoundException();
 		}
@@ -106,26 +115,27 @@ class Settings implements ContainerInterface {
 	/**
 	 * Whether a value exists.
 	 *
-	 * @param string $id The value identificator.
+	 * @param string $id The value identifier.
 	 *
 	 * @return bool
 	 */
-	public function has( $id ) {
+	public function has( string $id ) : bool {
 		if ( $this->settings_map_helper->has_mapped_key( $id ) ) {
 			return true;
 		}
 
 		$this->load();
+
 		return array_key_exists( $id, $this->settings );
 	}
 
 	/**
 	 * Sets a value.
 	 *
-	 * @param string $id The value identificator.
+	 * @param string $id    The value identifier.
 	 * @param mixed  $value The value.
 	 */
-	public function set( $id, $value ) {
+	public function set( string $id, $value ) : void {
 		$this->load();
 		$this->settings[ $id ] = $value;
 	}
@@ -133,18 +143,18 @@ class Settings implements ContainerInterface {
 	/**
 	 * Stores the settings to the database.
 	 */
-	public function persist() {
+	public function persist() : bool {
 		return update_option( self::KEY, $this->settings );
 	}
 
 	/**
 	 * Loads the settings.
 	 *
-	 * @return bool
+	 * @return void
 	 */
-	private function load(): bool {
+	private function load() : void {
 		if ( $this->settings ) {
-			return false;
+			return;
 		}
 		$this->settings = get_option( self::KEY, array() );
 
@@ -175,6 +185,6 @@ class Settings implements ContainerInterface {
 			}
 			$this->settings[ $key ] = $value;
 		}
-		return true;
+
 	}
 }
