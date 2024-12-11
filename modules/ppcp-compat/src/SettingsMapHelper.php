@@ -26,6 +26,13 @@ class SettingsMapHelper {
 	protected array $settings_map;
 
 	/**
+	 * Indexed map for faster lookups, initialized lazily.
+	 *
+	 * @var array|null Associative array where old keys map to metadata.
+	 */
+	protected ?array $key_to_model = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param SettingsMap[] $settings_map A list of settings maps containing key definitions.
@@ -66,12 +73,42 @@ class SettingsMapHelper {
 	 * @return bool True if the key exists in the new settings, false otherwise.
 	 */
 	public function has_mapped_key( string $old_key ) : bool {
-		foreach ( $this->settings_map as $settings_map ) {
-			if ( in_array( $old_key, $settings_map->get_map(), true ) ) {
-				return true;
+		$this->ensure_map_initialized();
+
+		return isset( $this->key_to_model[ $old_key ] );
+	}
+
+	/**
+	 * Ensures the map of old-to-new settings is initialized.
+	 *
+	 * This method initializes the `key_to_model` array lazily to improve performance.
+	 *
+	 * @return void
+	 */
+	protected function ensure_map_initialized() : void {
+		if ( $this->key_to_model === null ) {
+			$this->initialize_key_map();
+		}
+	}
+
+	/**
+	 * Initializes the indexed map of old-to-new settings keys.
+	 *
+	 * This method processes the provided settings maps and indexes the legacy
+	 * keys to their corresponding metadata for efficient lookup.
+	 *
+	 * @return void
+	 */
+	protected function initialize_key_map() : void {
+		$this->key_to_model = array();
+
+		foreach ( $this->settings_map as $settings_map_instance ) {
+			foreach ( $settings_map_instance->get_map() as $old_key => $new_key ) {
+				$this->key_to_model[ $old_key ] = array(
+					'new_key' => $new_key,
+					'model'   => $settings_map_instance->get_model(),
+				);
 			}
 		}
-
-		return false;
 	}
 }
