@@ -880,10 +880,11 @@ class WCGatewayModule implements ServiceModule, ExtendingModule, ExecutableModul
 					if ( empty( $simple_redirect_tasks ) ) {
 						return;
 					}
+
 					$task_registrar = $container->get( 'wcgateway.settings.wc-tasks.task-registrar' );
 					assert( $task_registrar instanceof TaskRegistrarInterface );
 
-					$task_registrar->register( $simple_redirect_tasks );
+					$task_registrar->register( 'extended', $simple_redirect_tasks );
 				} catch ( Exception $exception ) {
 					$logger->error( "Failed to create a task in the 'Things to do next' section of WC. " . $exception->getMessage() );
 				}
