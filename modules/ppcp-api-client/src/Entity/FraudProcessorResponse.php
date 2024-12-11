@@ -108,12 +108,12 @@ class FraudProcessorResponse {
 			'3' => __( '3: The merchant did not provide AVS information. Not processed.', 'woocommerce-paypal-payments' ),
 			'4' => __( '4: Address not checked, or acquirer had no response. Service not available.', 'woocommerce-paypal-payments' ),
 		);
+
 		/**
-		 * Translators: %s is fraud AVS code
-		 *
 		 * @psalm-suppress PossiblyNullArrayOffset
 		 * @psalm-suppress PossiblyNullArgument
 		 */
+		/* translators: %s is fraud AVS code */
 		return $messages[ $this->avs_code() ] ?? sprintf( __( '%s: Error', 'woocommerce-paypal-payments' ), $this->avs_code() );
 	}
 
@@ -145,12 +145,12 @@ class FraudProcessorResponse {
 			'3' => __( '3: Merchant has indicated that CVV2 is not present on card', 'woocommerce-paypal-payments' ),
 			'4' => __( '4: Service not available', 'woocommerce-paypal-payments' ),
 		);
+
 		/**
-		 * Translators: %s is fraud CVV2 code
-		 *
 		 * @psalm-suppress PossiblyNullArrayOffset
 		 * @psalm-suppress PossiblyNullArgument
 		 */
+		/* translators: %s is fraud CVV2 code */
 		return $messages[ $this->cvv_code() ] ?? sprintf( __( '%s: Error', 'woocommerce-paypal-payments' ), $this->cvv_code() );
 	}
 }
