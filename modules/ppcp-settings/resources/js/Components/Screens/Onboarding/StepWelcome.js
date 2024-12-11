@@ -9,9 +9,11 @@ import AccordionSection from '../../ReusableComponents/AccordionSection';
 
 import AdvancedOptionsForm from './Components/AdvancedOptionsForm';
 import { CommonHooks } from '../../../data';
+import BusyStateWrapper from '../../ReusableComponents/BusyStateWrapper';
 
-const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
+const StepWelcome = ( { setStep, currentStep } ) => {
 	const { storeCountry, storeCurrency } = CommonHooks.useWooSettings();
+
 	return (
 		<div className="ppcp-r-page-welcome">
 			<OnboardingHeader
@@ -33,16 +35,18 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 						'woocommerce-paypal-payments'
 					) }
 				</p>
-				<Button
-					className="ppcp-r-button-activate-paypal"
-					variant="primary"
-					onClick={ () => setStep( currentStep + 1 ) }
-				>
-					{ __(
-						'Activate PayPal Payments',
-						'woocommerce-paypal-payments'
-					) }
-				</Button>
+				<BusyStateWrapper>
+					<Button
+						className="ppcp-r-button-activate-paypal"
+						variant="primary"
+						onClick={ () => setStep( currentStep + 1 ) }
+					>
+						{ __(
+							'Activate PayPal Payments',
+							'woocommerce-paypal-payments'
+						) }
+					</Button>
+				</BusyStateWrapper>
 			</div>
 			<Separator className="ppcp-r-page-welcome-mode-separator" />
 			<WelcomeDocs
@@ -61,7 +65,7 @@ const StepWelcome = ( { setStep, currentStep, setCompleted } ) => {
 				className="onboarding-advanced-options"
 				id="advanced-options"
 			>
-				<AdvancedOptionsForm setCompleted={ setCompleted } />
+				<AdvancedOptionsForm />
 			</AccordionSection>
 		</div>
 	);

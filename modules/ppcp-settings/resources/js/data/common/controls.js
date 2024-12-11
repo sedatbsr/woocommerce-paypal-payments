@@ -7,12 +7,15 @@
  * @file
  */
 
+import { dispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 
 import {
+	STORE_NAME,
 	REST_PERSIST_PATH,
 	REST_MANUAL_CONNECTION_PATH,
-	REST_SANDBOX_CONNECTION_PATH,
+	REST_CONNECTION_URL_PATH,
+	REST_HYDRATE_MERCHANT_PATH,
 } from './constants';
 import ACTION_TYPES from './action-types';
 
@@ -34,11 +37,33 @@ export const controls = {
 
 		try {
 			result = await apiFetch( {
-				path: REST_SANDBOX_CONNECTION_PATH,
+				path: REST_CONNECTION_URL_PATH,
 				method: 'POST',
 				data: {
 					environment: 'sandbox',
-					products: [ 'EXPRESS_CHECKOUT' ],
+					products: [ 'EXPRESS_CHECKOUT' ], // Sandbox always uses EXPRESS_CHECKOUT.
+				},
+			} );
+		} catch ( e ) {
+			result = {
+				success: false,
+				error: e,
+			};
+		}
+
+		return result;
+	},
+
+	async [ ACTION_TYPES.DO_PRODUCTION_LOGIN ]( { products } ) {
+		let result = null;
+
+		try {
+			result = await apiFetch( {
+				path: REST_CONNECTION_URL_PATH,
+				method: 'POST',
+				data: {
+					environment: 'production',
+					products,
 				},
 			} );
 		} catch ( e ) {
@@ -68,6 +93,25 @@ export const controls = {
 					useSandbox,
 				},
 			} );
+		} catch ( e ) {
+			result = {
+				success: false,
+				error: e,
+			};
+		}
+
+		return result;
+	},
+
+	async [ ACTION_TYPES.DO_REFRESH_MERCHANT ]() {
+		let result = null;
+
+		try {
+			result = await apiFetch( { path: REST_HYDRATE_MERCHANT_PATH } );
+
+			if ( result.success && result.merchant ) {
+				await dispatch( STORE_NAME ).hydrate( result );
+			}
 		} catch ( e ) {
 			result = {
 				success: false,

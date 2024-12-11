@@ -66,7 +66,7 @@ const AcdcFlow = ( {
 						description={ sprintf(
 							// translators: %s: Link to PayPal business fees guide
 							__(
-								'Offer installment payment options and get paid upfront - at no extra cost to you. <a target="_blank" href="%s">Learn more</a>',
+								'Offer installment payment options and get paid upfront. <a target="_blank" href="%s">Learn more</a>',
 								'woocommerce-paypal-payments'
 							),
 							'https://www.paypal.com/us/business/paypal-business-fees'
@@ -256,7 +256,7 @@ const AcdcFlow = ( {
 					description={ sprintf(
 						// translators: %s: Link to PayPal REST application guide
 						__(
-							'Offer installment payment options and get paid upfront - at no extra cost to you. <a target="_blank" href="%s">Learn more</a>',
+							'Offer installment payment options and get paid upfront. <a target="_blank" href="%s">Learn more</a>',
 							'woocommerce-paypal-payments'
 						),
 						'https://woocommerce.com/document/woocommerce-paypal-payments/#manual-credential-input '
