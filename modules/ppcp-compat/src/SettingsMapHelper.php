@@ -10,12 +10,16 @@ declare( strict_types = 1 );
 namespace WooCommerce\PayPalCommerce\Compat;
 
 /**
- * A helper for mapping the new/old settings.
+ * A helper class to manage the transition between legacy and new settings.
+ *
+ * This utility provides mapping from old setting keys to new ones and retrieves
+ * their corresponding values from the appropriate models. The class uses lazy
+ * loading and caching to optimize performance during runtime.
  */
 class SettingsMapHelper {
 
 	/**
-	 * A list of mapped settings.
+	 * A list of settings maps containing mapping definitions.
 	 *
 	 * @var SettingsMap[]
 	 */
@@ -24,18 +28,18 @@ class SettingsMapHelper {
 	/**
 	 * Constructor.
 	 *
-	 * @param SettingsMap[] $settings_map A list of mapped settings.
+	 * @param SettingsMap[] $settings_map A list of settings maps containing key definitions.
 	 */
 	public function __construct( array $settings_map ) {
 		$this->settings_map = $settings_map;
 	}
 
 	/**
-	 * Retrieves the mapped value from the new settings.
+	 * Retrieves the value of a mapped key from the new settings.
 	 *
 	 * @param string $old_key The key from the legacy settings.
 	 *
-	 * @return ?mixed the mapped value or Null if it doesn't exist.
+	 * @return mixed|null The value of the mapped setting, or null if not found.
 	 */
 	public function mapped_value( string $old_key ) {
 		if ( ! $this->has_mapped_key( $old_key ) ) {
@@ -55,11 +59,11 @@ class SettingsMapHelper {
 	}
 
 	/**
-	 * Checks if the given key exists in the new settings.
+	 * Determines if a given legacy key exists in the new settings.
 	 *
 	 * @param string $old_key The key from the legacy settings.
 	 *
-	 * @return bool true if the given key exists in the new settings, otherwise false.
+	 * @return bool True if the key exists in the new settings, false otherwise.
 	 */
 	public function has_mapped_key( string $old_key ) : bool {
 		foreach ( $this->settings_map as $settings_map ) {
