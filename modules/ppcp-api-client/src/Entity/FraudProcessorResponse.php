@@ -64,8 +64,12 @@ class FraudProcessorResponse {
 	 */
 	public function to_array(): array {
 		return array(
-			'avs_code'  => $this->avs_code(),
-			'cvv2_code' => $this->cvv_code(),
+			'avs_code'      => $this->avs_code(),
+			'cvv2_code'     => $this->cvv_code(),
+			// For backwards compatibility.
+			'address_match' => $this->avs_code() === 'M' ? 'Y' : 'N',
+			'postal_match'  => $this->avs_code() === 'M' ? 'Y' : 'N',
+			'cvv_match'     => $this->cvv_code() === 'M' ? 'Y' : 'N',
 		);
 	}
 
@@ -77,36 +81,36 @@ class FraudProcessorResponse {
 	 *
 	 * @return string The AVS response code message. If the code is not found, an error message is returned.
 	 */
-	public function get_avs_code_messages(): string {
-		if ( $this->avs_code() ) {
+	public function get_avs_code_message(): string {
+		if ( ! $this->avs_code() ) {
 			return '';
 		}
 		$messages = array(
 			/* Visa, Mastercard, Discover, American Express */
-			'A' => __( 'A: Address - Address only (no ZIP code)', 'woocommerce-paypal-payments' ),
-			'B' => __( 'B: International "A" - Address only (no ZIP code)', 'woocommerce-paypal-payments' ),
-			'C' => __( 'C: International "N" - None. The transaction is declined.', 'woocommerce-paypal-payments' ),
-			'D' => __( 'D: International "X" - Address and Postal Code', 'woocommerce-paypal-payments' ),
-			'E' => __( 'E: Not allowed for MOTO (Internet/Phone) transactions - Not applicable. The transaction is declined.', 'woocommerce-paypal-payments' ),
-			'F' => __( 'F: UK-specific "X" - Address and Postal Code', 'woocommerce-paypal-payments' ),
-			'G' => __( 'G: Global Unavailable - Not applicable', 'woocommerce-paypal-payments' ),
-			'I' => __( 'I: International Unavailable - Not applicable', 'woocommerce-paypal-payments' ),
-			'M' => __( 'M: Address - Address and Postal Code', 'woocommerce-paypal-payments' ),
-			'N' => __( 'N: No - None. The transaction is declined.', 'woocommerce-paypal-payments' ),
-			'P' => __( 'P: Postal (International "Z") - Postal Code only (no Address)', 'woocommerce-paypal-payments' ),
-			'R' => __( 'R: Retry - Not applicable', 'woocommerce-paypal-payments' ),
-			'S' => __( 'S: Service not Supported - Not applicable', 'woocommerce-paypal-payments' ),
-			'U' => __( 'U: Unavailable / Address not checked, or acquirer had no response. Service not available.', 'woocommerce-paypal-payments' ),
-			'W' => __( 'W: Whole ZIP - Nine-digit ZIP code (no Address)', 'woocommerce-paypal-payments' ),
-			'X' => __( 'X: Exact match - Address and nine-digit ZIP code)', 'woocommerce-paypal-payments' ),
-			'Y' => __( 'Y: Yes - Address and five-digit ZIP', 'woocommerce-paypal-payments' ),
-			'Z' => __( 'Z: ZIP - Five-digit ZIP code (no Address)', 'woocommerce-paypal-payments' ),
+			'A' => 'A: Address - Address only (no ZIP code)',
+			'B' => 'B: International "A" - Address only (no ZIP code)',
+			'C' => 'C: International "N" - None. The transaction is declined.',
+			'D' => 'D: International "X" - Address and Postal Code',
+			'E' => 'E: Not allowed for MOTO (Internet/Phone) transactions - Not applicable. The transaction is declined.',
+			'F' => 'F: UK-specific "X" - Address and Postal Code',
+			'G' => 'G: Global Unavailable - Not applicable',
+			'I' => 'I: International Unavailable - Not applicable',
+			'M' => 'M: Address - Address and Postal Code',
+			'N' => 'N: No - None. The transaction is declined.',
+			'P' => 'P: Postal (International "Z") - Postal Code only (no Address)',
+			'R' => 'R: Retry - Not applicable',
+			'S' => 'S: Service not Supported - Not applicable',
+			'U' => 'U: Unavailable / Address not checked, or acquirer had no response. Service not available.',
+			'W' => 'W: Whole ZIP - Nine-digit ZIP code (no Address)',
+			'X' => 'X: Exact match - Address and nine-digit ZIP code)',
+			'Y' => 'Y: Yes - Address and five-digit ZIP',
+			'Z' => 'Z: ZIP - Five-digit ZIP code (no Address)',
 			/* Maestro */
-			'0' => __( '0: All the address information matched.', 'woocommerce-paypal-payments' ),
-			'1' => __( '1: None of the address information matched. The transaction is declined.', 'woocommerce-paypal-payments' ),
-			'2' => __( '2: Part of the address information matched.', 'woocommerce-paypal-payments' ),
-			'3' => __( '3: The merchant did not provide AVS information. Not processed.', 'woocommerce-paypal-payments' ),
-			'4' => __( '4: Address not checked, or acquirer had no response. Service not available.', 'woocommerce-paypal-payments' ),
+			'0' => '0: All the address information matched.',
+			'1' => '1: None of the address information matched. The transaction is declined.',
+			'2' => '2: Part of the address information matched.',
+			'3' => '3: The merchant did not provide AVS information. Not processed.',
+			'4' => '4: Address not checked, or acquirer had no response. Service not available.',
 		);
 
 		/**
@@ -115,8 +119,7 @@ class FraudProcessorResponse {
 		 * @psalm-suppress PossiblyNullArrayOffset
 		 * @psalm-suppress PossiblyNullArgument
 		 */
-		/* translators: %s is fraud AVS code */
-		return $messages[ $this->avs_code() ] ?? sprintf( __( '%s: Error', 'woocommerce-paypal-payments' ), $this->avs_code() );
+		return $messages[ $this->avs_code() ] ?? sprintf( '%s: Error', $this->avs_code() );
 	}
 
 	/**
@@ -126,26 +129,26 @@ class FraudProcessorResponse {
 	 *
 	 * @return string The descriptive message corresponding to the CVV2 code, or a formatted error message if the code is unrecognized.
 	 */
-	public function get_cvv2_code_messages(): string {
-		if ( $this->cvv_code() ) {
+	public function get_cvv2_code_message(): string {
+		if ( ! $this->cvv_code() ) {
 			return '';
 		}
 		$messages = array(
 			/* Visa, Mastercard, Discover, American Express */
-			'E' => __( 'E: Error - Unrecognized or Unknown response', 'woocommerce-paypal-payments' ),
-			'I' => __( 'I: Invalid or Null', 'woocommerce-paypal-payments' ),
-			'M' => __( 'M: Match or CSC', 'woocommerce-paypal-payments' ),
-			'N' => __( 'N: No match', 'woocommerce-paypal-payments' ),
-			'P' => __( 'P: Not processed', 'woocommerce-paypal-payments' ),
-			'S' => __( 'S: Service not supported', 'woocommerce-paypal-payments' ),
-			'U' => __( 'U: Unknown - Issuer is not certified', 'woocommerce-paypal-payments' ),
-			'X' => __( 'X: No response / Service not available', 'woocommerce-paypal-payments' ),
+			'E' => 'E: Error - Unrecognized or Unknown response',
+			'I' => 'I: Invalid or Null',
+			'M' => 'M: Match or CSC',
+			'N' => 'N: No match',
+			'P' => 'P: Not processed',
+			'S' => 'S: Service not supported',
+			'U' => 'U: Unknown - Issuer is not certified',
+			'X' => 'X: No response / Service not available',
 			/* Maestro */
-			'0' => __( '0: Matched CVV2', 'woocommerce-paypal-payments' ),
-			'1' => __( '1: No match', 'woocommerce-paypal-payments' ),
-			'2' => __( '2: The merchant has not implemented CVV2 code handling', 'woocommerce-paypal-payments' ),
-			'3' => __( '3: Merchant has indicated that CVV2 is not present on card', 'woocommerce-paypal-payments' ),
-			'4' => __( '4: Service not available', 'woocommerce-paypal-payments' ),
+			'0' => '0: Matched CVV2',
+			'1' => '1: No match',
+			'2' => '2: The merchant has not implemented CVV2 code handling',
+			'3' => '3: Merchant has indicated that CVV2 is not present on card',
+			'4' => '4: Service not available',
 		);
 
 		/**
@@ -154,7 +157,6 @@ class FraudProcessorResponse {
 		 * @psalm-suppress PossiblyNullArrayOffset
 		 * @psalm-suppress PossiblyNullArgument
 		 */
-		/* translators: %s is fraud CVV2 code */
-		return $messages[ $this->cvv_code() ] ?? sprintf( __( '%s: Error', 'woocommerce-paypal-payments' ), $this->cvv_code() );
+		return $messages[ $this->cvv_code() ] ?? sprintf( '%s: Error', $this->cvv_code() );
 	}
 }

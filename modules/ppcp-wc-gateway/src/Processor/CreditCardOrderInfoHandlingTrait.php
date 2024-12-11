@@ -99,13 +99,12 @@ trait CreditCardOrderInfoHandlingTrait {
 		$card_brand       = $payment_source->properties()->brand ?? __( 'N/A', 'woocommerce-paypal-payments' );
 		$card_last_digits = $payment_source->properties()->last_digits ?? __( 'N/A', 'woocommerce-paypal-payments' );
 
-		$response_order_note_title = __( 'Card decline errors', 'woocommerce-paypal-payments' );
+		$response_order_note_title = __( 'PayPal Advanced Card Processing Verification:', 'woocommerce-paypal-payments' );
 		/* translators: %1$s is AVS order note title, %2$s is AVS order note result markup */
 		$response_order_note_format        = __( '%1$s %2$s', 'woocommerce-paypal-payments' );
 		$response_order_note_result_format = '<ul class="ppcp_avs_cvv_result">
             <li>%1$s</li>
             <li>%2$s</li>
-            <li>%3$s</li>
             <li>%3$s</li>
         </ul>';
 		$response_order_note_result        = sprintf(
@@ -113,9 +112,9 @@ trait CreditCardOrderInfoHandlingTrait {
 			/* translators: %1$s is card brand and %2$s card last 4 digits */
 			sprintf( __( 'Card: %1$s (%2$s)', 'woocommerce-paypal-payments' ), $card_brand, $card_last_digits ),
 			/* translators: %s is fraud AVS message */
-			sprintf( __( 'AVS: %s', 'woocommerce-paypal-payments' ), $fraud->get_avs_code_messages() ),
+			sprintf( __( 'AVS: %s', 'woocommerce-paypal-payments' ), $fraud->get_avs_code_message() ),
 			/* translators: %s is fraud CVV message */
-			sprintf( __( 'CVV: %s', 'woocommerce-paypal-payments' ), $fraud->get_cvv2_code_messages() ),
+			sprintf( __( 'CVV: %s', 'woocommerce-paypal-payments' ), $fraud->get_cvv2_code_message() ),
 		);
 		$response_order_note = sprintf(
 			$response_order_note_format,
