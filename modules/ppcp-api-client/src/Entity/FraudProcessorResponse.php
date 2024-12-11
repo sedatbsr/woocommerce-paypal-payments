@@ -110,6 +110,8 @@ class FraudProcessorResponse {
 		);
 
 		/**
+		 * Psalm suppress
+		 *
 		 * @psalm-suppress PossiblyNullArrayOffset
 		 * @psalm-suppress PossiblyNullArgument
 		 */
@@ -147,6 +149,8 @@ class FraudProcessorResponse {
 		);
 
 		/**
+		 * Psalm suppress
+		 *
 		 * @psalm-suppress PossiblyNullArrayOffset
 		 * @psalm-suppress PossiblyNullArgument
 		 */
