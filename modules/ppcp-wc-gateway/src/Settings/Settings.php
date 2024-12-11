@@ -104,7 +104,7 @@ class Settings implements ContainerInterface {
 	 *
 	 * @return mixed
 	 */
-	public function get( string $id ) {
+	public function get( $id ) {
 		if ( ! $this->has( $id ) ) {
 			throw new NotFoundException();
 		}
@@ -119,7 +119,7 @@ class Settings implements ContainerInterface {
 	 *
 	 * @return bool
 	 */
-	public function has( string $id ) : bool {
+	public function has( string $id ) {
 		if ( $this->settings_map_helper->has_mapped_key( $id ) ) {
 			return true;
 		}
@@ -135,7 +135,7 @@ class Settings implements ContainerInterface {
 	 * @param string $id    The value identifier.
 	 * @param mixed  $value The value.
 	 */
-	public function set( string $id, $value ) : void {
+	public function set( $id, $value ) {
 		$this->load();
 		$this->settings[ $id ] = $value;
 	}
@@ -143,18 +143,18 @@ class Settings implements ContainerInterface {
 	/**
 	 * Stores the settings to the database.
 	 */
-	public function persist() : bool {
+	public function persist() {
 		return update_option( self::KEY, $this->settings );
 	}
 
 	/**
 	 * Loads the settings.
 	 *
-	 * @return void
+	 * @return bool
 	 */
-	private function load() : void {
+	private function load() : bool {
 		if ( $this->settings ) {
-			return;
+			return false;
 		}
 		$this->settings = get_option( self::KEY, array() );
 
@@ -186,5 +186,6 @@ class Settings implements ContainerInterface {
 			$this->settings[ $key ] = $value;
 		}
 
+		return true;
 	}
 }
