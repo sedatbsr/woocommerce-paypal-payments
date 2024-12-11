@@ -44,7 +44,7 @@ class FraudProcessorResponse {
 	 *
 	 * @return string
 	 */
-	public function avs_code(): ?string {
+	public function avs_code(): string {
 		return $this->avs_code;
 	}
 
@@ -53,7 +53,7 @@ class FraudProcessorResponse {
 	 *
 	 * @return string
 	 */
-	public function cvv_code(): ?string {
+	public function cvv_code(): string {
 		return $this->cvv2_code;
 	}
 
