@@ -9,6 +9,8 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Compat;
 
+use RuntimeException;
+
 /**
  * A helper class to manage the transition between legacy and new settings.
  *
@@ -42,10 +44,33 @@ class SettingsMapHelper {
 	/**
 	 * Constructor.
 	 *
+	 * @throws RuntimeException When an old key has multiple mappings.
+	 *
 	 * @param SettingsMap[] $settings_map A list of settings maps containing key definitions.
 	 */
 	public function __construct( array $settings_map ) {
+		$this->validate_settings_map( $settings_map );
 		$this->settings_map = $settings_map;
+	}
+
+	/**
+	 * Validates the settings map for duplicate keys.
+	 *
+	 * @throws RuntimeException When an old key has multiple mappings.
+	 *
+	 * @param SettingsMap[] $settings_map The settings map to validate.
+	 */
+	protected function validate_settings_map( array $settings_map ) : void {
+		$seen_keys = array();
+
+		foreach ( $settings_map as $settings_map_instance ) {
+			foreach ( $settings_map_instance->get_map() as $old_key => $new_key ) {
+				if ( isset( $seen_keys[ $old_key ] ) ) {
+					throw new RuntimeException( "Duplicate mapping for legacy key '$old_key'." );
+				}
+				$seen_keys[ $old_key ] = true;
+			}
+		}
 	}
 
 	/**
