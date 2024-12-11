@@ -33,6 +33,13 @@ class SettingsMapHelper {
 	protected ?array $key_to_model = null;
 
 	/**
+	 * Cache for results of `to_array()` calls on models.
+	 *
+	 * @var array Associative array where keys are model IDs.
+	 */
+	protected array $model_cache = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @param SettingsMap[] $settings_map A list of settings maps containing key definitions.
@@ -49,20 +56,16 @@ class SettingsMapHelper {
 	 * @return mixed|null The value of the mapped setting, or null if not found.
 	 */
 	public function mapped_value( string $old_key ) {
-		if ( ! $this->has_mapped_key( $old_key ) ) {
+		$this->ensure_map_initialized();
+
+		if ( ! isset( $this->key_to_model[ $old_key ] ) ) {
 			return null;
 		}
 
-		foreach ( $this->settings_map as $settings_map ) {
-			$mapped_key   = array_search( $old_key, $settings_map->get_map(), true );
-			$new_settings = $settings_map->get_model()->to_array();
+		$mapping  = $this->key_to_model[ $old_key ];
+		$model_id = spl_object_id( $mapping['model'] );
 
-			if ( ! empty( $new_settings[ $mapped_key ] ) ) {
-				return $new_settings[ $mapped_key ];
-			}
-		}
-
-		return null;
+		return $this->get_cached_model_value( $model_id, $mapping['new_key'], $mapping['model'] );
 	}
 
 	/**
@@ -76,6 +79,23 @@ class SettingsMapHelper {
 		$this->ensure_map_initialized();
 
 		return isset( $this->key_to_model[ $old_key ] );
+	}
+
+	/**
+	 * Retrieves a cached model value or caches it if not already cached.
+	 *
+	 * @param int    $model_id The unique identifier for the model object.
+	 * @param string $new_key  The key in the new settings structure.
+	 * @param object $model    The model object.
+	 *
+	 * @return mixed|null The value of the key in the model, or null if not found.
+	 */
+	protected function get_cached_model_value( int $model_id, string $new_key, object $model ) {
+		if ( ! isset( $this->model_cache[ $model_id ] ) ) {
+			$this->model_cache[ $model_id ] = $model->to_array();
+		}
+
+		return $this->model_cache[ $model_id ][ $new_key ] ?? null;
 	}
 
 	/**
