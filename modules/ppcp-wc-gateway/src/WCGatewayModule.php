@@ -653,7 +653,10 @@ class WCGatewayModule implements ServiceModule, ExtendingModule, ExecutableModul
 				$listener = $container->get( 'wcgateway.settings.listener' );
 				assert( $listener instanceof SettingsListener );
 
-				$listener->listen_for_merchant_id();
+				$use_new_ui = $container->get( 'wcgateway.settings.admin-settings-enabled' );
+				if ( ! $use_new_ui ) {
+					$listener->listen_for_merchant_id();
+				}
 
 				try {
 					$listener->listen_for_vaulting_enabled();

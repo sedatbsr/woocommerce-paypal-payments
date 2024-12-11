@@ -1,10 +1,12 @@
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 
 import OnboardingHeader from '../../ReusableComponents/OnboardingHeader';
 import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
 import SelectBox from '../../ReusableComponents/SelectBox';
-import { OnboardingHooks } from '../../../data';
+import { CommonHooks, OnboardingHooks } from '../../../data';
 import OptionalPaymentMethods from '../../ReusableComponents/OptionalPaymentMethods/OptionalPaymentMethods';
+import { pricesBasedDescription } from '../../ReusableComponents/WelcomeDocs/pricesBasedDescription';
+import { countryPriceInfo } from '../../../utils/countryPriceInfo';
 
 const OPM_RADIO_GROUP_NAME = 'optional-payment-methods';
 
@@ -13,14 +15,8 @@ const StepPaymentMethods = ( {} ) => {
 		areOptionalPaymentMethodsEnabled,
 		setAreOptionalPaymentMethodsEnabled,
 	} = OnboardingHooks.useOptionalPaymentMethods();
-	const pricesBasedDescription = sprintf(
-		// translators: %s: Link to PayPal REST application guide
-		__(
-			'<sup>1</sup>Prices based on domestic transactions as of October 25th, 2024. <a target="_blank" href="%s">Click here</a> for full pricing details.',
-			'woocommerce-paypal-payments'
-		),
-		'https://woocommerce.com/document/woocommerce-paypal-payments/#manual-credential-input '
-	);
+
+	const { storeCountry, storeCurrency } = CommonHooks.useWooSettings();
 
 	return (
 		<div className="ppcp-r-page-optional-payment-methods">
@@ -42,8 +38,8 @@ const StepPaymentMethods = ( {} ) => {
 								useAcdc={ true }
 								isFastlane={ true }
 								isPayLater={ true }
-								storeCountry={ 'us' }
-								storeCurrency={ 'usd' }
+								storeCountry={ storeCountry }
+								storeCurrency={ storeCurrency }
 							/>
 						}
 						name={ OPM_RADIO_GROUP_NAME }
@@ -64,12 +60,14 @@ const StepPaymentMethods = ( {} ) => {
 						type="radio"
 					></SelectBox>
 				</SelectBoxWrapper>
-				<p
-					className="ppcp-r-optional-payment-methods__description"
-					dangerouslySetInnerHTML={ {
-						__html: pricesBasedDescription,
-					} }
-				></p>
+				{ storeCountry in countryPriceInfo && (
+					<p
+						className="ppcp-r-optional-payment-methods__description"
+						dangerouslySetInnerHTML={ {
+							__html: pricesBasedDescription,
+						} }
+					></p>
+				) }
 			</div>
 		</div>
 	);

@@ -19,7 +19,9 @@ use WooCommerce\PayPalCommerce\Settings\Endpoint\LoginLinkRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Service\ConnectionUrlGenerator;
+use WooCommerce\PayPalCommerce\Settings\Service\OnboardingUrlManager;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
+use WooCommerce\PayPalCommerce\Settings\Handler\ConnectionListener;
 
 return array(
 	'settings.url'                                => static function ( ContainerInterface $container ) : string {
@@ -37,6 +39,8 @@ return array(
 		$can_use_casual_selling = $container->get( 'settings.casual-selling.eligible' );
 		$can_use_vaulting       = $container->has( 'save-payment-methods.eligible' ) && $container->get( 'save-payment-methods.eligible' );
 		$can_use_card_payments  = $container->has( 'card-fields.eligible' ) && $container->get( 'card-fields.eligible' );
+		$can_use_subscriptions  = $container->has( 'wc-subscriptions.helper' ) && $container->get( 'wc-subscriptions.helper' )
+				->plugin_is_active();
 
 		// Card payments are disabled for this plugin when WooPayments is active.
 		// TODO: Move this condition to the card-fields.eligible service?
@@ -47,14 +51,18 @@ return array(
 		return new OnboardingProfile(
 			$can_use_casual_selling,
 			$can_use_vaulting,
-			$can_use_card_payments
+			$can_use_card_payments,
+			$can_use_subscriptions
 		);
 	},
 	'settings.data.general'                       => static function ( ContainerInterface $container ) : GeneralSettings {
 		return new GeneralSettings();
 	},
 	'settings.data.common'                        => static function ( ContainerInterface $container ) : CommonSettings {
-		return new CommonSettings();
+		return new CommonSettings(
+			$container->get( 'api.shop.country' ),
+			$container->get( 'api.shop.currency.getter' )->get(),
+		);
 	},
 	'settings.rest.onboarding'                    => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {
 		return new OnboardingRestEndpoint( $container->get( 'settings.data.onboarding' ) );
@@ -131,8 +139,24 @@ return array(
 
 		return in_array( $country, $eligible_countries, true );
 	},
+	'settings.handler.connection-listener'        => static function ( ContainerInterface $container ) : ConnectionListener {
+		$page_id = $container->has( 'wcgateway.current-ppcp-settings-page-id' ) ? $container->get( 'wcgateway.current-ppcp-settings-page-id' ) : '';
+
+		return new ConnectionListener(
+			$page_id,
+			$container->get( 'settings.data.common' ),
+			$container->get( 'settings.service.onboarding-url-manager' ),
+			$container->get( 'woocommerce.logger.woocommerce' )
+		);
+	},
 	'settings.service.signup-link-cache'          => static function ( ContainerInterface $container ) : Cache {
 		return new Cache( 'ppcp-paypal-signup-link' );
+	},
+	'settings.service.onboarding-url-manager'     => static function ( ContainerInterface $container ) : OnboardingUrlManager {
+		return new OnboardingUrlManager(
+			$container->get( 'settings.service.signup-link-cache' ),
+			$container->get( 'woocommerce.logger.woocommerce' )
+		);
 	},
 	'settings.service.connection-url-generators'  => static function ( ContainerInterface $container ) : array {
 		// Define available environments.
@@ -152,8 +176,8 @@ return array(
 			$generators[ $environment ] = new ConnectionUrlGenerator(
 				$config['partner_referrals'],
 				$container->get( 'api.repository.partner-referrals-data' ),
-				$container->get( 'settings.service.signup-link-cache' ),
 				$environment,
+				$container->get( 'settings.service.onboarding-url-manager' ),
 				$container->get( 'woocommerce.logger.woocommerce' )
 			);
 		}
