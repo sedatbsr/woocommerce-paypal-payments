@@ -5,7 +5,7 @@
  * @package WooCommerce\PayPalCommerce\Compat
  */
 
-declare(strict_types=1);
+declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Compat;
 
@@ -33,17 +33,19 @@ class SettingsMapHelper {
 	/**
 	 * Retrieves the mapped value from the new settings.
 	 *
-	 * @param string $key The key.
+	 * @param string $old_key The key from the legacy settings.
+	 *
 	 * @return ?mixed the mapped value or Null if it doesn't exist.
 	 */
-	public function mapped_value( string $key ) {
-		if ( ! $this->has_mapped_key( $key ) ) {
+	public function mapped_value( string $old_key ) {
+		if ( ! $this->has_mapped_key( $old_key ) ) {
 			return null;
 		}
 
 		foreach ( $this->settings_map as $settings_map ) {
-			$mapped_key   = array_search( $key, $settings_map->get_map(), true );
+			$mapped_key   = array_search( $old_key, $settings_map->get_map(), true );
 			$new_settings = $settings_map->get_model()->to_array();
+
 			if ( ! empty( $new_settings[ $mapped_key ] ) ) {
 				return $new_settings[ $mapped_key ];
 			}
@@ -55,12 +57,13 @@ class SettingsMapHelper {
 	/**
 	 * Checks if the given key exists in the new settings.
 	 *
-	 * @param string $key The key.
+	 * @param string $old_key The key from the legacy settings.
+	 *
 	 * @return bool true if the given key exists in the new settings, otherwise false.
 	 */
-	public function has_mapped_key( string $key ) : bool {
+	public function has_mapped_key( string $old_key ) : bool {
 		foreach ( $this->settings_map as $settings_map ) {
-			if ( in_array( $key, $settings_map->get_map(), true ) ) {
+			if ( in_array( $old_key, $settings_map->get_map(), true ) ) {
 				return true;
 			}
 		}
