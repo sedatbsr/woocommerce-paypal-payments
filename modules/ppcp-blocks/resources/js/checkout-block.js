@@ -59,6 +59,14 @@ if ( cartHasSubscriptionProducts( config.scriptData ) ) {
 		blockEnabled = false;
 	}
 
+	// Don't show buttons if cart contains free trial product and the stroe is not eligible for saving payment methods.
+	if (
+		! config.scriptData.vault_v3_enabled &&
+		config.scriptData.is_free_trial_cart
+	) {
+		blockEnabled = false;
+	}
+
 	features.push( 'subscriptions' );
 }
 
