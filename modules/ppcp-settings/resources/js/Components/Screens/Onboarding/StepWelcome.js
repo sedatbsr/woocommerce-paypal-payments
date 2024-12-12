@@ -12,7 +12,7 @@ import { CommonHooks } from '../../../data';
 import BusyStateWrapper from '../../ReusableComponents/BusyStateWrapper';
 
 const StepWelcome = ( { setStep, currentStep } ) => {
-	const { storeCountry, storeCurrency } = CommonHooks.useWooSettings();
+	const { storeCountry } = CommonHooks.useWooSettings();
 
 	return (
 		<div className="ppcp-r-page-welcome">
@@ -54,7 +54,6 @@ const StepWelcome = ( { setStep, currentStep } ) => {
 				isFastlane={ true }
 				isPayLater={ true }
 				storeCountry={ storeCountry }
-				storeCurrency={ storeCurrency }
 			/>
 			<Separator text={ __( 'or', 'woocommerce-paypal-payments' ) } />
 			<AccordionSection

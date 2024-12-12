@@ -4,13 +4,7 @@ import PricingDescription from '../PricingDescription';
 import AcdcFlow from './AcdcFlow';
 import BcdcFlow from './BcdcFlow';
 
-const WelcomeDocs = ( {
-	useAcdc,
-	isFastlane,
-	isPayLater,
-	storeCountry,
-	storeCurrency,
-} ) => {
+const WelcomeDocs = ( { useAcdc, isFastlane, isPayLater, storeCountry } ) => {
 	return (
 		<div className="ppcp-r-welcome-docs">
 			<h2 className="ppcp-r-welcome-docs__title">
@@ -24,13 +18,11 @@ const WelcomeDocs = ( {
 					isFastlane={ isFastlane }
 					isPayLater={ isPayLater }
 					storeCountry={ storeCountry }
-					storeCurrency={ storeCurrency }
 				/>
 			) : (
 				<BcdcFlow
 					isPayLater={ isPayLater }
 					storeCountry={ storeCountry }
-					storeCurrency={ storeCurrency }
 				/>
 			) }
 			<PricingDescription />

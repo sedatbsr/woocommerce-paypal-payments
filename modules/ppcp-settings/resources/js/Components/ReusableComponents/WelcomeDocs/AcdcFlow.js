@@ -5,12 +5,7 @@ import Separator from '../Separator';
 import OptionalPaymentMethods from '../OptionalPaymentMethods/OptionalPaymentMethods';
 import PricingTitleBadge from '../PricingTitleBadge';
 
-const AcdcFlow = ( {
-	isFastlane,
-	isPayLater,
-	storeCountry,
-	storeCurrency,
-} ) => {
+const AcdcFlow = ( { isFastlane, isPayLater, storeCountry } ) => {
 	if ( isFastlane && isPayLater && storeCountry === 'US' ) {
 		return (
 			<div className="ppcp-r-welcome-docs__wrapper">
@@ -21,13 +16,7 @@ const AcdcFlow = ( {
 							'woocommerce-paypal-payments'
 						) }
 						titleType={ BADGE_BOX_TITLE_BIG }
-						textBadge={
-							<PricingTitleBadge
-								item="checkout"
-								currency={ storeCurrency }
-								country={ storeCountry }
-							/>
-						}
+						textBadge={ <PricingTitleBadge item="checkout" /> }
 						description={ __(
 							'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
 							'woocommerce-paypal-payments'
@@ -117,7 +106,6 @@ const AcdcFlow = ( {
 						isFastlane={ isFastlane }
 						isPayLater={ isPayLater }
 						storeCountry={ storeCountry }
-						storeCurrency={ storeCurrency }
 					/>
 				</div>
 			</div>
@@ -134,13 +122,7 @@ const AcdcFlow = ( {
 							'woocommerce-paypal-payments'
 						) }
 						titleType={ BADGE_BOX_TITLE_BIG }
-						textBadge={
-							<PricingTitleBadge
-								item="checkout"
-								currency={ storeCurrency }
-								country={ storeCountry }
-							/>
-						}
+						textBadge={ <PricingTitleBadge item="checkout" /> }
 						description={ __(
 							'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
 							'woocommerce-paypal-payments'
@@ -204,7 +186,6 @@ const AcdcFlow = ( {
 						isFastlane={ isFastlane }
 						isPayLater={ isPayLater }
 						storeCountry={ storeCountry }
-						storeCurrency={ storeCurrency }
 					/>
 				</div>
 			</div>
@@ -220,13 +201,7 @@ const AcdcFlow = ( {
 						'woocommerce-paypal-payments'
 					) }
 					titleType={ BADGE_BOX_TITLE_BIG }
-					textBadge={
-						<PricingTitleBadge
-							item="checkout"
-							currency={ storeCurrency }
-							country={ storeCountry }
-						/>
-					}
+					textBadge={ <PricingTitleBadge item="checkout" /> }
 					description={ __(
 						'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
 						'woocommerce-paypal-payments'
@@ -285,7 +260,6 @@ const AcdcFlow = ( {
 					isFastlane={ isFastlane }
 					isPayLater={ isPayLater }
 					storeCountry={ storeCountry }
-					storeCurrency={ storeCurrency }
 				/>
 			</div>
 		</div>

@@ -1,10 +1,12 @@
 import { __, sprintf } from '@wordpress/i18n';
+
 import { countryPriceInfo } from '../../utils/countryPriceInfo';
 import TitleBadge, { TITLE_BADGE_INFO } from './TitleBadge';
 import { CommonHooks } from '../../data';
 
-const PricingTitleBadge = ( { item, country, currency } ) => {
-	const infos = countryPriceInfo[ country ];
+const PricingTitleBadge = ( { item } ) => {
+	const { storeCountry } = CommonHooks.useWooSettings();
+	const infos = countryPriceInfo[ storeCountry ];
 
 	if ( ! infos || ! infos[ item ] ) {
 		return null;
@@ -20,7 +22,7 @@ const PricingTitleBadge = ( { item, country, currency } ) => {
 		),
 		percentage,
 		fixedFee,
-		currency
+		infos.currencySymbol
 	);
 
 	return <TitleBadge type={ TITLE_BADGE_INFO } text={ label } />;

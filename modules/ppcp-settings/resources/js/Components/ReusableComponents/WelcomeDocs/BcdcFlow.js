@@ -5,7 +5,7 @@ import Separator from '../Separator';
 import OptionalPaymentMethods from '../OptionalPaymentMethods/OptionalPaymentMethods';
 import PricingTitleBadge from '../PricingTitleBadge';
 
-const BcdcFlow = ( { isPayLater, storeCountry, storeCurrency } ) => {
+const BcdcFlow = ( { isPayLater, storeCountry } ) => {
 	if ( isPayLater && storeCountry === 'US' ) {
 		return (
 			<div className="ppcp-r-welcome-docs__wrapper">
@@ -16,13 +16,7 @@ const BcdcFlow = ( { isPayLater, storeCountry, storeCurrency } ) => {
 							'woocommerce-paypal-payments'
 						) }
 						titleType={ BADGE_BOX_TITLE_BIG }
-						textBadge={
-							<PricingTitleBadge
-								item="checkout"
-								currency={ storeCurrency }
-								country={ storeCountry }
-							/>
-						}
+						textBadge={ <PricingTitleBadge item="checkout" /> }
 						description={ __(
 							'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
 							'woocommerce-paypal-payments'
@@ -112,7 +106,6 @@ const BcdcFlow = ( { isPayLater, storeCountry, storeCurrency } ) => {
 						isFastlane={ false }
 						isPayLater={ isPayLater }
 						storeCountry={ storeCountry }
-						storeCurrency={ storeCurrency }
 					/>
 				</div>
 			</div>
@@ -124,13 +117,7 @@ const BcdcFlow = ( { isPayLater, storeCountry, storeCurrency } ) => {
 			<BadgeBox
 				title={ __( 'PayPal Checkout', 'woocommerce-paypal-payments' ) }
 				titleType={ BADGE_BOX_TITLE_BIG }
-				textBadge={
-					<PricingTitleBadge
-						item="checkout"
-						currency={ storeCurrency }
-						country={ storeCountry }
-					/>
-				}
+				textBadge={ <PricingTitleBadge item="checkout" /> }
 				description={ __(
 					'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
 					'woocommerce-paypal-payments'
@@ -185,7 +172,6 @@ const BcdcFlow = ( { isPayLater, storeCountry, storeCurrency } ) => {
 				isFastlane={ false }
 				isPayLater={ isPayLater }
 				storeCountry={ storeCountry }
-				storeCurrency={ storeCurrency }
 			/>
 		</div>
 	);

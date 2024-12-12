@@ -3,11 +3,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import BadgeBox from '../BadgeBox';
 import PricingTitleBadge from '../PricingTitleBadge';
 
-const BcdcOptionalPaymentMethods = ( {
-	isPayLater,
-	storeCountry,
-	storeCurrency,
-} ) => {
+const BcdcOptionalPaymentMethods = ( { isPayLater, storeCountry } ) => {
 	if ( isPayLater && storeCountry === 'us' ) {
 		return (
 			<div className="ppcp-r-optional-payment-methods__wrapper">
@@ -23,11 +19,7 @@ const BcdcOptionalPaymentMethods = ( {
 						'icon-button-discover.svg',
 					] }
 					textBadge={
-						<PricingTitleBadge
-							item="standardCardFields"
-							currency={ storeCurrency }
-							country={ storeCountry }
-						/>
+						<PricingTitleBadge item="standardCardFields" />
 					}
 					description={ sprintf(
 						// translators: %s: Link to PayPal REST application guide
@@ -55,13 +47,7 @@ const BcdcOptionalPaymentMethods = ( {
 					'icon-button-amex.svg',
 					'icon-button-discover.svg',
 				] }
-				textBadge={
-					<PricingTitleBadge
-						item="standardCardFields"
-						currency={ storeCurrency }
-						country={ storeCountry }
-					/>
-				}
+				textBadge={ <PricingTitleBadge item="standardCardFields" /> }
 				description={ sprintf(
 					// translators: %s: Link to PayPal REST application guide
 					__(

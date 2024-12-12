@@ -8,7 +8,6 @@ const AcdcOptionalPaymentMethods = ( {
 	isFastlane,
 	isPayLater,
 	storeCountry,
-	storeCurrency,
 } ) => {
 	if ( isFastlane && isPayLater && storeCountry === 'US' ) {
 		return (
@@ -24,13 +23,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'icon-button-amex.svg',
 						'icon-button-discover.svg',
 					] }
-					textBadge={
-						<PricingTitleBadge
-							item="ccf"
-							currency={ storeCurrency }
-							country={ storeCountry }
-						/>
-					}
+					textBadge={ <PricingTitleBadge item="ccf" /> }
 					description={ sprintf(
 						// translators: %s: Link to PayPal business fees guide
 						__(
@@ -50,13 +43,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'icon-button-apple-pay.svg',
 						'icon-button-google-pay.svg',
 					] }
-					textBadge={
-						<PricingTitleBadge
-							item="dw"
-							currency={ storeCurrency }
-							country={ storeCountry }
-						/>
-					}
+					textBadge={ <PricingTitleBadge item="dw" /> }
 					description={ sprintf(
 						// translators: %s: Link to PayPal business fees guide
 						__(
@@ -77,13 +64,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'icon-button-blik.svg',
 						'icon-button-bancontact.svg',
 					] }
-					textBadge={
-						<PricingTitleBadge
-							item="apm"
-							currency={ storeCurrency }
-							country={ storeCountry }
-						/>
-					}
+					textBadge={ <PricingTitleBadge item="apm" /> }
 					description={ sprintf(
 						// translators: %s: Link to PayPal business fees guide
 						__(
@@ -127,13 +108,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'icon-button-amex.svg',
 						'icon-button-discover.svg',
 					] }
-					textBadge={
-						<PricingTitleBadge
-							item="ccf"
-							currency={ storeCurrency }
-							country={ storeCountry }
-						/>
-					}
+					textBadge={ <PricingTitleBadge item="ccf" /> }
 					description={ sprintf(
 						// translators: %s: Link to PayPal business fees guide
 						__(
@@ -153,13 +128,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'icon-button-apple-pay.svg',
 						'icon-button-google-pay.svg',
 					] }
-					textBadge={
-						<PricingTitleBadge
-							item="dw"
-							currency={ storeCurrency }
-							country={ storeCountry }
-						/>
-					}
+					textBadge={ <PricingTitleBadge item="dw" /> }
 					description={ sprintf(
 						// translators: %s: Link to PayPal business fees guide
 						__(
@@ -181,13 +150,7 @@ const AcdcOptionalPaymentMethods = ( {
 						'icon-button-blik.svg',
 						'icon-button-bancontact.svg',
 					] }
-					textBadge={
-						<PricingTitleBadge
-							item="apm"
-							currency={ storeCurrency }
-							country={ storeCountry }
-						/>
-					}
+					textBadge={ <PricingTitleBadge item="apm" /> }
 					description={ sprintf(
 						// translators: %s: Link to PayPal business fees guide
 						__(
@@ -214,13 +177,7 @@ const AcdcOptionalPaymentMethods = ( {
 					'icon-button-amex.svg',
 					'icon-button-discover.svg',
 				] }
-				textBadge={
-					<PricingTitleBadge
-						item="ccf"
-						currency={ storeCurrency }
-						country={ storeCountry }
-					/>
-				}
+				textBadge={ <PricingTitleBadge item="ccf" /> }
 				description={ sprintf(
 					// translators: %s: Link to PayPal business fees guide
 					__(
@@ -237,13 +194,7 @@ const AcdcOptionalPaymentMethods = ( {
 					'icon-button-apple-pay.svg',
 					'icon-button-google-pay.svg',
 				] }
-				textBadge={
-					<PricingTitleBadge
-						item="dw"
-						currency={ storeCurrency }
-						country={ storeCountry }
-					/>
-				}
+				textBadge={ <PricingTitleBadge item="dw" /> }
 				description={ sprintf(
 					// translators: %s: Link to PayPal business fees guide
 					__(
@@ -265,13 +216,7 @@ const AcdcOptionalPaymentMethods = ( {
 					'icon-button-blik.svg',
 					'icon-button-bancontact.svg',
 				] }
-				textBadge={
-					<PricingTitleBadge
-						item="apm"
-						currency={ storeCurrency }
-						country={ storeCountry }
-					/>
-				}
+				textBadge={ <PricingTitleBadge item="apm" /> }
 				description={ sprintf(
 					// translators: %s: Link to PayPal business fees guide
 					__(
