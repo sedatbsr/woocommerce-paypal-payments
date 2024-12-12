@@ -1,8 +1,19 @@
 import { __, sprintf } from '@wordpress/i18n';
 
-import { countryPriceInfo } from '../../utils/countryPriceInfo';
-import TitleBadge, { TITLE_BADGE_INFO } from './TitleBadge';
 import { CommonHooks } from '../../data';
+import { countryPriceInfo } from '../../utils/countryPriceInfo';
+import { formatPrice } from '../../utils/formatPrice';
+import TitleBadge, { TITLE_BADGE_INFO } from './TitleBadge';
+
+const getFixedAmount = ( currency, priceList ) => {
+	if ( priceList[ currency ] ) {
+		return formatPrice( priceList[ currency ], currency );
+	}
+
+	const [ defaultCurrency, defaultPrice ] = Object.entries( priceList )[ 0 ];
+
+	return formatPrice( defaultPrice, defaultCurrency );
+};
 
 const PricingTitleBadge = ( { item } ) => {
 	const { storeCountry } = CommonHooks.useWooSettings();
@@ -13,13 +24,12 @@ const PricingTitleBadge = ( { item } ) => {
 	}
 
 	const percentage = infos[ item ].toFixed( 2 );
-	const fixedFee = `${ infos.currencySymbol }${ infos.fixedFee }`;
+	const fixedAmount = getFixedAmount( storeCountry, infos.fixedFee );
 
 	const label = sprintf(
-		__( 'from %1$s%% + %2$s %3$s', 'woocommerce-paypal-payments' ),
+		__( 'from %1$s%% + %2$s', 'woocommerce-paypal-payments' ),
 		percentage,
-		fixedFee,
-		infos.currencySymbol
+		fixedAmount
 	);
 
 	return (
