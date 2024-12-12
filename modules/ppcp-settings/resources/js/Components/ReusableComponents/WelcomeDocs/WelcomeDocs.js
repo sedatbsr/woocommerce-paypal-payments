@@ -33,7 +33,7 @@ const WelcomeDocs = ( {
 					storeCurrency={ storeCurrency }
 				/>
 			) }
-			<PricingDescription country={ storeCountry } />
+			<PricingDescription />
 		</div>
 	);
 };

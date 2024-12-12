@@ -1,9 +1,12 @@
 import { __, sprintf } from '@wordpress/i18n';
 
 import { countryPriceInfo } from '../../utils/countryPriceInfo';
+import { CommonHooks } from '../../data';
 
-const PricingDescription = ( { country } ) => {
-	if ( ! countryPriceInfo[ country ] ) {
+const PricingDescription = () => {
+	const { storeCountry } = CommonHooks.useWooSettings();
+
+	if ( ! countryPriceInfo[ storeCountry ] ) {
 		return null;
 	}
 

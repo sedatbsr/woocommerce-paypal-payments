@@ -59,7 +59,7 @@ const StepPaymentMethods = ( {} ) => {
 						type="radio"
 					></SelectBox>
 				</SelectBoxWrapper>
-				<PricingDescription country={ storeCountry } />
+				<PricingDescription />
 			</div>
 		</div>
 	);
