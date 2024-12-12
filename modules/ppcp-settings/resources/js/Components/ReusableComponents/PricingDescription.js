@@ -7,20 +7,28 @@ const PricingDescription = ( { country } ) => {
 		return null;
 	}
 
+	const lastDate = 'October 25th, 2024'; // TODO -- needs to be the last plugin update date.
+	const detailsUrl =
+		'https://woocommerce.com/document/woocommerce-paypal-payments/#manual-credential-input';
+
 	const label = sprintf(
-		// translators: %s: Link to PayPal REST application guide
+		// translators: %1$s: Pricing date, %2$s Link to PayPal price-details page.
 		__(
-			'<sup>1</sup>Prices based on domestic transactions as of October 25th, 2024. <a target="_blank" href="%s">Click here</a> for full pricing details.',
+			'Prices based on domestic transactions as of %1$s. <a target="_blank" href="%2$s">Click here</a> for full pricing details.',
 			'woocommerce-paypal-payments'
 		),
-		'https://woocommerce.com/document/woocommerce-paypal-payments/#manual-credential-input'
+		lastDate,
+		detailsUrl
 	);
 
 	return (
 		<p
 			className="ppcp-r-optional-payment-methods__description"
-			dangerouslySetInnerHTML={ { __html: label } }
-		/>
+			data-country={ storeCountry }
+		>
+			<sup>1</sup>
+			<span dangerouslySetInnerHTML={ { __html: label } } />
+		</p>
 	);
 };
 
