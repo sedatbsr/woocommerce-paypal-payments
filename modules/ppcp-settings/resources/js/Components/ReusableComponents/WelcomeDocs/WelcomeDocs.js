@@ -1,7 +1,8 @@
 import { __ } from '@wordpress/i18n';
+
+import { countryPriceInfo } from '../../../utils/countryPriceInfo';
 import AcdcFlow from './AcdcFlow';
 import BcdcFlow from './BcdcFlow';
-import { countryPriceInfo } from '../../../utils/countryPriceInfo';
 import { pricesBasedDescription } from './pricesBasedDescription';
 
 const WelcomeDocs = ( {

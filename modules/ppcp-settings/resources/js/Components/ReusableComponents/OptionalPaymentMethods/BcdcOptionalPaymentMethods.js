@@ -1,7 +1,7 @@
-import BadgeBox from '../BadgeBox';
 import { __, sprintf } from '@wordpress/i18n';
-import generatePriceText from '../../../utils/badgeBoxUtils';
-import { countryPriceInfo } from '../../../utils/countryPriceInfo';
+
+import BadgeBox from '../BadgeBox';
+import PricingTitleBadge from '../PricingTitleBadge';
 
 const BcdcOptionalPaymentMethods = ( {
 	isPayLater,
@@ -22,11 +22,13 @@ const BcdcOptionalPaymentMethods = ( {
 						'icon-button-amex.svg',
 						'icon-button-discover.svg',
 					] }
-					textBadge={ generatePriceText(
-						'standardCardFields',
-						countryPriceInfo[ storeCountry ],
-						storeCurrency
-					) }
+					textBadge={
+						<PricingTitleBadge
+							item="standardCardFields"
+							currency={ storeCurrency }
+							country={ storeCountry }
+						/>
+					}
 					description={ sprintf(
 						// translators: %s: Link to PayPal REST application guide
 						__(
@@ -53,11 +55,13 @@ const BcdcOptionalPaymentMethods = ( {
 					'icon-button-amex.svg',
 					'icon-button-discover.svg',
 				] }
-				textBadge={ generatePriceText(
-					'standardCardFields',
-					countryPriceInfo[ storeCountry ],
-					storeCurrency
-				) }
+				textBadge={
+					<PricingTitleBadge
+						item="standardCardFields"
+						currency={ storeCurrency }
+						country={ storeCountry }
+					/>
+				}
 				description={ sprintf(
 					// translators: %s: Link to PayPal REST application guide
 					__(

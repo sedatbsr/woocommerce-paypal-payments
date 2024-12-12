@@ -1,10 +1,9 @@
-import BadgeBox, { BADGE_BOX_TITLE_BIG } from '../BadgeBox';
 import { __, sprintf } from '@wordpress/i18n';
-import Separator from '../Separator';
-import generatePriceText from '../../../utils/badgeBoxUtils';
-import { countryPriceInfo } from '../../../utils/countryPriceInfo';
 
+import BadgeBox, { BADGE_BOX_TITLE_BIG } from '../BadgeBox';
+import Separator from '../Separator';
 import OptionalPaymentMethods from '../OptionalPaymentMethods/OptionalPaymentMethods';
+import PricingTitleBadge from '../PricingTitleBadge';
 
 const AcdcFlow = ( {
 	isFastlane,
@@ -22,11 +21,13 @@ const AcdcFlow = ( {
 							'woocommerce-paypal-payments'
 						) }
 						titleType={ BADGE_BOX_TITLE_BIG }
-						textBadge={ generatePriceText(
-							'checkout',
-							countryPriceInfo[ storeCountry ],
-							storeCurrency
-						) }
+						textBadge={
+							<PricingTitleBadge
+								item="checkout"
+								currency={ storeCurrency }
+								country={ storeCountry }
+							/>
+						}
 						description={ __(
 							'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
 							'woocommerce-paypal-payments'
@@ -133,11 +134,13 @@ const AcdcFlow = ( {
 							'woocommerce-paypal-payments'
 						) }
 						titleType={ BADGE_BOX_TITLE_BIG }
-						textBadge={ generatePriceText(
-							'checkout',
-							countryPriceInfo[ storeCountry ],
-							storeCurrency
-						) }
+						textBadge={
+							<PricingTitleBadge
+								item="checkout"
+								currency={ storeCurrency }
+								country={ storeCountry }
+							/>
+						}
 						description={ __(
 							'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
 							'woocommerce-paypal-payments'
@@ -217,11 +220,13 @@ const AcdcFlow = ( {
 						'woocommerce-paypal-payments'
 					) }
 					titleType={ BADGE_BOX_TITLE_BIG }
-					textBadge={ generatePriceText(
-						'checkout',
-						countryPriceInfo[ storeCountry ],
-						storeCurrency
-					) }
+					textBadge={
+						<PricingTitleBadge
+							item="checkout"
+							currency={ storeCurrency }
+							country={ storeCountry }
+						/>
+					}
 					description={ __(
 						'Our all-in-one checkout solution lets you offer PayPal, Venmo, Pay Later options, and more to help maximise conversion',
 						'woocommerce-paypal-payments'
