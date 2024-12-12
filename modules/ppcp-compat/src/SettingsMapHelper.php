@@ -44,9 +44,8 @@ class SettingsMapHelper {
 	/**
 	 * Constructor.
 	 *
-	 * @throws RuntimeException When an old key has multiple mappings.
-	 *
 	 * @param SettingsMap[] $settings_map A list of settings maps containing key definitions.
+	 * @throws RuntimeException When an old key has multiple mappings.
 	 */
 	public function __construct( array $settings_map ) {
 		$this->validate_settings_map( $settings_map );
@@ -56,9 +55,8 @@ class SettingsMapHelper {
 	/**
 	 * Validates the settings map for duplicate keys.
 	 *
-	 * @throws RuntimeException When an old key has multiple mappings.
-	 *
 	 * @param SettingsMap[] $settings_map The settings map to validate.
+	 * @throws RuntimeException When an old key has multiple mappings.
 	 */
 	protected function validate_settings_map( array $settings_map ) : void {
 		$seen_keys = array();
