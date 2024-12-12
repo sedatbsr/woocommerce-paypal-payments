@@ -16,16 +16,18 @@ const PricingTitleBadge = ( { item } ) => {
 	const fixedFee = `${ infos.currencySymbol }${ infos.fixedFee }`;
 
 	const label = sprintf(
-		__(
-			'from %1$s%% + %2$s %2$s<sup>1</sup>',
-			'woocommerce-paypal-payments'
-		),
+		__( 'from %1$s%% + %2$s %3$s', 'woocommerce-paypal-payments' ),
 		percentage,
 		fixedFee,
 		infos.currencySymbol
 	);
 
-	return <TitleBadge type={ TITLE_BADGE_INFO } text={ label } />;
+	return (
+		<TitleBadge
+			type={ TITLE_BADGE_INFO }
+			text={ `${ label }<sup>1</sup>` }
+		/>
+	);
 };
 
 export default PricingTitleBadge;
