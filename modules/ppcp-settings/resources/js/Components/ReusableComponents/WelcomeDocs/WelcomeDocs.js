@@ -1,9 +1,8 @@
 import { __ } from '@wordpress/i18n';
 
-import { countryPriceInfo } from '../../../utils/countryPriceInfo';
+import PricingDescription from '../PricingDescription';
 import AcdcFlow from './AcdcFlow';
 import BcdcFlow from './BcdcFlow';
-import { pricesBasedDescription } from './pricesBasedDescription';
 
 const WelcomeDocs = ( {
 	useAcdc,
@@ -34,14 +33,7 @@ const WelcomeDocs = ( {
 					storeCurrency={ storeCurrency }
 				/>
 			) }
-			{ storeCountry in countryPriceInfo && (
-				<p
-					className="ppcp-r-optional-payment-methods__description"
-					dangerouslySetInnerHTML={ {
-						__html: pricesBasedDescription,
-					} }
-				></p>
-			) }
+			<PricingDescription country={ storeCountry } />
 		</div>
 	);
 };

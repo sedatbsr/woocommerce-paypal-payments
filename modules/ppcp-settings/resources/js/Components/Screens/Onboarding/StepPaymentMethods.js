@@ -5,8 +5,7 @@ import SelectBoxWrapper from '../../ReusableComponents/SelectBoxWrapper';
 import SelectBox from '../../ReusableComponents/SelectBox';
 import { CommonHooks, OnboardingHooks } from '../../../data';
 import OptionalPaymentMethods from '../../ReusableComponents/OptionalPaymentMethods/OptionalPaymentMethods';
-import { pricesBasedDescription } from '../../ReusableComponents/WelcomeDocs/pricesBasedDescription';
-import { countryPriceInfo } from '../../../utils/countryPriceInfo';
+import PricingDescription from '../../ReusableComponents/PricingDescription';
 
 const OPM_RADIO_GROUP_NAME = 'optional-payment-methods';
 
@@ -60,14 +59,7 @@ const StepPaymentMethods = ( {} ) => {
 						type="radio"
 					></SelectBox>
 				</SelectBoxWrapper>
-				{ storeCountry in countryPriceInfo && (
-					<p
-						className="ppcp-r-optional-payment-methods__description"
-						dangerouslySetInnerHTML={ {
-							__html: pricesBasedDescription,
-						} }
-					></p>
-				) }
+				<PricingDescription country={ storeCountry } />
 			</div>
 		</div>
 	);
