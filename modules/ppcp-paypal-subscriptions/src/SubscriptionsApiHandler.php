@@ -280,7 +280,7 @@ class SubscriptionsApiHandler {
 			$update          = true;
 		}
 		if ( $update ) {
-			$product->add_meta_data( '_subscription_period_interval', $period_interval, true );
+			$product->add_meta_data( '_subscription_period_interval', (string) $period_interval, true );
 			$product->save();
 		}
 
