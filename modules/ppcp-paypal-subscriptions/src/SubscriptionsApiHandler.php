@@ -263,10 +263,31 @@ class SubscriptionsApiHandler {
 			$sequence++;
 		}
 
+		$interval        = $product->get_meta( '_subscription_period' );
+		$period_interval = (int) $product->get_meta( '_subscription_period_interval' );
+		$update          = false;
+		if ( $interval === 'day' && $period_interval > 365 ) {
+			$period_interval = 365;
+			$update          = true;
+		} elseif ( $interval === 'week' && $period_interval > 52 ) {
+			$period_interval = 52;
+			$update          = true;
+		} elseif ( $interval === 'month' && $period_interval > 12 ) {
+			$period_interval = 12;
+			$update          = true;
+		} elseif ( $interval === 'year' && $period_interval > 1 ) {
+			$period_interval = 1;
+			$update          = true;
+		}
+		if ( $update ) {
+			$product->add_meta_data( '_subscription_period_interval', $period_interval, true );
+			$product->save();
+		}
+
 		$billing_cycles[] = ( new BillingCycle(
 			array(
-				'interval_unit'  => $product->get_meta( '_subscription_period' ),
-				'interval_count' => $product->get_meta( '_subscription_period_interval' ),
+				'interval_unit'  => $interval,
+				'interval_count' => $period_interval,
 			),
 			$sequence,
 			'REGULAR',
