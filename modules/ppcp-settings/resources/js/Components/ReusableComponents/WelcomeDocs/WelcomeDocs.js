@@ -1,16 +1,10 @@
 import { __ } from '@wordpress/i18n';
+
+import PricingDescription from '../PricingDescription';
 import AcdcFlow from './AcdcFlow';
 import BcdcFlow from './BcdcFlow';
-import { countryPriceInfo } from '../../../utils/countryPriceInfo';
-import { pricesBasedDescription } from './pricesBasedDescription';
 
-const WelcomeDocs = ( {
-	useAcdc,
-	isFastlane,
-	isPayLater,
-	storeCountry,
-	storeCurrency,
-} ) => {
+const WelcomeDocs = ( { useAcdc, isFastlane, isPayLater, storeCountry } ) => {
 	return (
 		<div className="ppcp-r-welcome-docs">
 			<h2 className="ppcp-r-welcome-docs__title">
@@ -24,23 +18,14 @@ const WelcomeDocs = ( {
 					isFastlane={ isFastlane }
 					isPayLater={ isPayLater }
 					storeCountry={ storeCountry }
-					storeCurrency={ storeCurrency }
 				/>
 			) : (
 				<BcdcFlow
 					isPayLater={ isPayLater }
 					storeCountry={ storeCountry }
-					storeCurrency={ storeCurrency }
 				/>
 			) }
-			{ storeCountry in countryPriceInfo && (
-				<p
-					className="ppcp-r-optional-payment-methods__description"
-					dangerouslySetInnerHTML={ {
-						__html: pricesBasedDescription,
-					} }
-				></p>
-			) }
+			<PricingDescription />
 		</div>
 	);
 };
