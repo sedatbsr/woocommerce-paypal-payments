@@ -69,7 +69,6 @@ const AcdcOptionalPaymentMethods = ( {
 						'woocommerce-paypal-payments'
 					) }
 					imageBadge={ [
-						'icon-button-sepa.svg',
 						'icon-button-ideal.svg',
 						'icon-button-blik.svg',
 						'icon-button-bancontact.svg',

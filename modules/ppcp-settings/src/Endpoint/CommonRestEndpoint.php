@@ -206,12 +206,6 @@ class CommonRestEndpoint extends RestEndpoint {
 			$this->merchant_info_map
 		);
 
-		// TEMP for demonstration.
-		$extra_data['merchant']['isConnected'] = true;
-		$extra_data['merchant']['isSandbox']   = true;
-		$extra_data['merchant']['id']          = '1234567890';
-		$extra_data['merchant']['email']       = 'example@example.com';
-
 		return $extra_data;
 	}
 
