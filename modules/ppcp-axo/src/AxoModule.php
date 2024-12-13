@@ -247,7 +247,10 @@ class AxoModule implements ServiceModule, ExtendingModule, ExecutableModule {
 				add_filter(
 					'woocommerce_paypal_payments_sdk_components_hook',
 					function( $components ) use ( $c ) {
-						if ( ! $c->has( 'axo.available' ) || ! $c->get( 'axo.available' ) ) {
+						$dcc_configuration = $c->get( 'wcgateway.configuration.dcc' );
+						assert( $dcc_configuration instanceof DCCGatewayConfiguration );
+
+						if ( ! $dcc_configuration->use_fastlane() ) {
 							return $components;
 						}
 						$components[] = 'fastlane';
@@ -258,14 +261,18 @@ class AxoModule implements ServiceModule, ExtendingModule, ExecutableModule {
 				add_action(
 					'wp_head',
 					function () use ( $c ) {
-						// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-						echo '<script async src="https://www.paypalobjects.com/insights/v1/paypal-insights.sandbox.min.js"></script>';
-
 						// Add meta tag to allow feature-detection of the site's AXO payment state.
 						$dcc_configuration = $c->get( 'wcgateway.configuration.dcc' );
 						assert( $dcc_configuration instanceof DCCGatewayConfiguration );
 
-						$this->add_feature_detection_tag( $dcc_configuration->use_fastlane() );
+						if ( $dcc_configuration->use_fastlane() ) {
+							// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+							echo '<script async src="https://www.paypalobjects.com/insights/v1/paypal-insights.sandbox.min.js"></script>';
+
+							$this->add_feature_detection_tag( true );
+						} else {
+							$this->add_feature_detection_tag( false );
+						}
 					}
 				);
 
