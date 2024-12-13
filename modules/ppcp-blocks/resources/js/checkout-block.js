@@ -132,10 +132,11 @@ if ( blockEnabled ) {
 			},
 		} );
 	} else if ( config.smartButtonsEnabled ) {
-		for ( const fundingSource of [
-			'paypal',
-			...config.enabledFundingSources,
-		] ) {
+		const fundingSources = config.scriptData.is_free_trial_cart
+			? [ 'paypal' ]
+			: [ 'paypal', ...config.enabledFundingSources ];
+
+		for ( const fundingSource of fundingSources ) {
 			registerExpressPaymentMethod( {
 				name: `${ config.id }-${ fundingSource }`,
 				title: 'PayPal',
