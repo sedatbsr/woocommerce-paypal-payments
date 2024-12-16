@@ -189,3 +189,14 @@ export const connectViaIdAndSecret = function* () {
 export const refreshMerchantData = function* () {
 	return yield { type: ACTION_TYPES.DO_REFRESH_MERCHANT };
 };
+
+/**
+ * Side effect.
+ * Purges all features status data via a REST request.
+ * Refreshes the merchant data via a REST request.
+ *
+ * @return {Action} The action.
+ */
+export const refreshFeatureStatuses = function* () {
+	return yield { type: ACTION_TYPES.DO_REFRESH_FEATURES };
+};

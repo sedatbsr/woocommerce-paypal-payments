@@ -53,3 +53,14 @@ export const REST_MANUAL_CONNECTION_PATH = '/wc/v3/wc_paypal/connect_manual';
  * @type {string}
  */
 export const REST_CONNECTION_URL_PATH = '/wc/v3/wc_paypal/login_link';
+
+/**
+ * REST path to refresh the feature status.
+ *
+ * Used by: Controls
+ * See: RefreshFeatureStatusEndpoint.php
+ *
+ * @type {string}
+ */
+export const REST_REFRESH_FEATURES_PATH =
+	'/wc/v3/wc_paypal/refresh-feature-status';
