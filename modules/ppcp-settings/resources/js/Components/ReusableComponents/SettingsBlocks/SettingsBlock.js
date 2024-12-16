@@ -1,13 +1,14 @@
-const SettingsBlock = ( { className, components = [] } ) => {
+const SettingsBlock = ( { className, components = [], children } ) => {
 	const blockClassName = [ 'ppcp-r-settings-block', className ].filter(
 		Boolean
 	);
 
 	return (
 		<div className={ blockClassName.join( ' ' ) }>
-			{ components.map( ( Component, index ) => (
-				<Component key={ index } />
-			) ) }
+			{ children ||
+				components.map( ( Component, index ) => (
+					<Component key={ index } />
+				) ) }
 		</div>
 	);
 };
