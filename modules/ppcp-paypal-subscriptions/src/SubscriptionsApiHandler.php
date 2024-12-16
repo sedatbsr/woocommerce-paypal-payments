@@ -282,6 +282,7 @@ class SubscriptionsApiHandler {
 		if ( $update ) {
 			$product->add_meta_data( '_subscription_period_interval', (string) $period_interval, true );
 			$product->save();
+			$this->logger->warning( sprintf( 'Subscription plan on PayPal is to high for %1$s interval change it to maximum of  %2$d', $interval, $period_interval ) );
 		}
 
 		$billing_cycles[] = ( new BillingCycle(
