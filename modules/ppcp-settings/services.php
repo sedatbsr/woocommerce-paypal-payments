@@ -192,7 +192,7 @@ return array(
 
 		return $generators;
 	},
-	'settings.switch-ui.endpoint'                 => static function ( ContainerInterface $container ) : SwitchSettingsUiEndpoint {
+	'settings.ajax.switch_ui'                     => static function ( ContainerInterface $container ) : SwitchSettingsUiEndpoint {
 		return new SwitchSettingsUiEndpoint(
 			$container->get( 'woocommerce.logger.woocommerce' ),
 			$container->get( 'button.request-data' ),

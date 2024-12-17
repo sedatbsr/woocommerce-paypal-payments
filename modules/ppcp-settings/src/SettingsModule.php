@@ -86,7 +86,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 				}
 			);
 
-			$endpoint = $container->get( 'settings.switch-ui.endpoint' ) ? $container->get( 'settings.switch-ui.endpoint' ) : null;
+			$endpoint = $container->get( 'settings.ajax.switch_ui' ) ? $container->get( 'settings.ajax.switch_ui' ) : null;
 			assert( $endpoint instanceof SwitchSettingsUiEndpoint );
 
 			add_action(
