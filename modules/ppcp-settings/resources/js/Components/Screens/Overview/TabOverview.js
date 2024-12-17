@@ -32,6 +32,7 @@ const TabOverview = () => {
 
 		const result = await refreshFeatureStatuses();
 
+		// TODO: Implement the refresh logic, remove this debug code -- PCP-4024
 		if ( result && ! result.success ) {
 			console.error(
 				'Failed to refresh features:',
@@ -128,6 +129,7 @@ const TabOverview = () => {
 	);
 };
 
+// TODO: This list should be refactored into a separate module, maybe utils/thingsToDoNext.js
 const todosDataDefault = [
 	{
 		value: 'paypal_later_messaging',
@@ -163,6 +165,7 @@ const todosDataDefault = [
 	},
 ];
 
+// TODO: Hardcoding this list here is not the best idea. Can we move this to a REST API response?
 const featuresDefault = [
 	{
 		id: 'save_paypal_and_venmo',
