@@ -321,6 +321,7 @@ const SectionButtonPreview = ( { locationSettings } ) => {
 				clientId: 'test',
 				merchantId: 'QTQX5NP6N9WZU',
 				components: 'buttons,googlepay',
+				'disable-funding': 'card',
 				'buyer-country': 'US',
 				currency: 'USD',
 			} }
