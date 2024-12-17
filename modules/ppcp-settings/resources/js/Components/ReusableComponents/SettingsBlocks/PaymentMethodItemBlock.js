@@ -5,7 +5,7 @@ import PaymentMethodIcon from '../PaymentMethodIcon';
 import data from '../../../utils/data';
 
 const PaymentMethodItemBlock = ( props ) => {
-	const [ isChecked, setIsChecked ] = useState( false );
+	const [ toggleIsChecked, setToggleIsChecked ] = useState( false );
 	const [ modalIsVisible, setModalIsVisible ] = useState( false );
 	const Modal = props?.modal;
 
@@ -28,8 +28,8 @@ const PaymentMethodItemBlock = ( props ) => {
 					<div className="ppcp-r-settings-block__payment-methods__item__footer">
 						<ToggleControl
 							__nextHasNoMarginBottom={ true }
-							checked={ isChecked }
-							onChange={ setIsChecked }
+							checked={ toggleIsChecked }
+							onChange={ setToggleIsChecked }
 						/>
 						{ Modal && (
 							<div
