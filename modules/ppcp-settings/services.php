@@ -81,10 +81,7 @@ return array(
 	},
 	'settings.rest.connect_manual'                => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
 		return new ConnectManualRestEndpoint(
-			$container->get( 'api.paypal-host-production' ),
-			$container->get( 'api.paypal-host-sandbox' ),
-			$container->get( 'woocommerce.logger.woocommerce' ),
-			$container->get( 'settings.data.general' )
+			$container->get( 'settings.service.connection_manager' ),
 		);
 	},
 	'settings.rest.login_link'                    => static function ( ContainerInterface $container ) : LoginLinkRestEndpoint {
