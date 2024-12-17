@@ -36,36 +36,30 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 					value: settings.logging,
 				} }
 			/>
-			<SettingsBlock
-				components={ [
-					() => (
-						<>
-							<Header>
-								<Title>
-									{ __(
-										'Subscribed PayPal webhooks',
-										'woocommerce-paypal-payments'
-									) }
-								</Title>
-								<Description>
-									{ __(
-										'The following PayPal webhooks are subscribed. More information about the webhooks is available in the',
-										'woocommerce-paypal-payments'
-									) }{ ' ' }
-									<a href="https://woocommerce.com/document/woocommerce-paypal-payments/#webhook-status">
-										{ __(
-											'Webhook Status documentation',
-											'woocommerce-paypal-payments'
-										) }
-									</a>
-									.
-								</Description>
-							</Header>
-							<HooksTable data={ hooksExampleData() } />
-						</>
-					),
-				] }
-			/>
+			<SettingsBlock>
+				<Header>
+					<Title>
+						{ __(
+							'Subscribed PayPal webhooks',
+							'woocommerce-paypal-payments'
+						) }
+					</Title>
+					<Description>
+						{ __(
+							'The following PayPal webhooks are subscribed. More information about the webhooks is available in the',
+							'woocommerce-paypal-payments'
+						) }{ ' ' }
+						<a href="https://woocommerce.com/document/woocommerce-paypal-payments/#webhook-status">
+							{ __(
+								'Webhook Status documentation',
+								'woocommerce-paypal-payments'
+							) }
+						</a>
+						.
+					</Description>
+				</Header>
+				<HooksTable data={ hooksExampleData() } />
+			</SettingsBlock>
 
 			<ButtonSettingsBlock
 				title={ __(

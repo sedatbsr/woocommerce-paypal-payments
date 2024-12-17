@@ -16,25 +16,18 @@ const PaymentMethodsBlock = ( { paymentMethods, className = '' } ) => {
 	return (
 		<SettingsBlock
 			className={ `ppcp-r-settings-block__payment-methods ${ className }` }
-			components={ [
-				() => (
-					<>
-						{ paymentMethods.map( ( paymentMethod ) => (
-							<PaymentMethodItemBlock
-								key={ paymentMethod.id }
-								{ ...paymentMethod }
-								isSelected={
-									selectedMethod === paymentMethod.id
-								}
-								onSelect={ ( checked ) =>
-									handleSelect( paymentMethod.id, checked )
-								}
-							/>
-						) ) }
-					</>
-				),
-			] }
-		/>
+		>
+			{ paymentMethods.map( ( paymentMethod ) => (
+				<PaymentMethodItemBlock
+					key={ paymentMethod.id }
+					{ ...paymentMethod }
+					isSelected={ selectedMethod === paymentMethod.id }
+					onSelect={ ( checked ) =>
+						handleSelect( paymentMethod.id, checked )
+					}
+				/>
+			) ) }
+		</SettingsBlock>
 	);
 };
 
