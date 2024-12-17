@@ -1,13 +1,14 @@
 import { __ } from '@wordpress/i18n';
 import { useState } from '@wordpress/element';
-import { Button } from '@wordpress/components';
+import { Button, Icon } from '@wordpress/components';
+import { useDispatch } from '@wordpress/data';
+import { reusableBlock } from '@wordpress/icons';
+
 import SettingsCard from '../../ReusableComponents/SettingsCard';
 import TodoSettingsBlock from '../../ReusableComponents/SettingsBlocks/TodoSettingsBlock';
 import FeatureSettingsBlock from '../../ReusableComponents/SettingsBlocks/FeatureSettingsBlock';
 import { TITLE_BADGE_POSITIVE } from '../../ReusableComponents/TitleBadge';
-import data from '../../../utils/data';
 import { useMerchantInfo } from '../../../data/common/hooks';
-import { useDispatch } from '@wordpress/data';
 import { STORE_NAME } from '../../../data/common';
 
 const TabOverview = () => {
@@ -31,6 +32,7 @@ const TabOverview = () => {
 
 		const result = await refreshFeatureStatuses();
 
+		// TODO: Implement the refresh logic, remove this debug code -- PCP-4024
 		if ( result && ! result.success ) {
 			console.error(
 				'Failed to refresh features:',
@@ -88,7 +90,7 @@ const TabOverview = () => {
 							onClick={ refreshHandler }
 							disabled={ isRefreshing }
 						>
-							{ data().getImage( 'icon-refresh.svg' ) }
+							<Icon icon={ reusableBlock } size={ 18 } />
 							{ isRefreshing
 								? __(
 										'Refreshing…',
@@ -127,6 +129,7 @@ const TabOverview = () => {
 	);
 };
 
+// TODO: This list should be refactored into a separate module, maybe utils/thingsToDoNext.js
 const todosDataDefault = [
 	{
 		value: 'paypal_later_messaging',
@@ -162,6 +165,7 @@ const todosDataDefault = [
 	},
 ];
 
+// TODO: Hardcoding this list here is not the best idea. Can we move this to a REST API response?
 const featuresDefault = [
 	{
 		id: 'save_paypal_and_venmo',
