@@ -170,6 +170,20 @@ class CommonSettings extends AbstractDataModel {
 	}
 
 	/**
+	 * Reset all connection details to the initial, disconnected state.
+	 *
+	 * @return void
+	 */
+	public function reset_merchant_data() : void {
+		$defaults = $this->get_defaults();
+
+		$this->data['sandbox_merchant']   = $defaults['sandbox_merchant'];
+		$this->data['merchant_id']        = $defaults['merchant_id'];
+		$this->data['merchant_email']     = $defaults['merchant_email'];
+		$this->data['merchant_connected'] = $defaults['merchant_connected'];
+	}
+
+	/**
 	 * Whether the currently connected merchant is a sandbox account.
 	 *
 	 * @return bool

@@ -23,6 +23,7 @@ use WooCommerce\PayPalCommerce\Settings\Service\ConnectionUrlGenerator;
 use WooCommerce\PayPalCommerce\Settings\Service\OnboardingUrlManager;
 use WooCommerce\PayPalCommerce\Vendor\Psr\Container\ContainerInterface;
 use WooCommerce\PayPalCommerce\Settings\Handler\ConnectionListener;
+use WooCommerce\PayPalCommerce\Settings\Service\ConnectionManager;
 
 return array(
 	'settings.url'                                => static function ( ContainerInterface $container ) : string {
@@ -191,6 +192,14 @@ return array(
 		}
 
 		return $generators;
+	},
+	'settings.service.connection_manager'         => static function ( ContainerInterface $container ) : ConnectionManager {
+		return new ConnectionManager(
+			$container->get( 'settings.data.common' ),
+			$container->get( 'api.paypal-host-production' ),
+			$container->get( 'api.paypal-host-sandbox' ),
+			$container->get( 'woocommerce.logger.woocommerce' ),
+		);
 	},
 	'settings.ajax.switch_ui'                     => static function ( ContainerInterface $container ) : SwitchSettingsUiEndpoint {
 		return new SwitchSettingsUiEndpoint(
