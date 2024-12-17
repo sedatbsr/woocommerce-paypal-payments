@@ -158,8 +158,9 @@ const TabStylingSection = ( props ) => {
 };
 
 const SectionIntro = ( { location } ) => {
-	const { description, link } = defaultLocationSettings[ location ];
-	const buttonStyleDescription = sprintf( description, link );
+	const { description, descriptionLink } =
+		defaultLocationSettings[ location ];
+	const buttonStyleDescription = sprintf( description, descriptionLink );
 
 	return (
 		<TabStylingSection
