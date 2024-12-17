@@ -187,7 +187,13 @@ export const connectViaIdAndSecret = function* () {
  * @return {Action} The action.
  */
 export const refreshMerchantData = function* () {
-	return yield { type: ACTION_TYPES.DO_REFRESH_MERCHANT };
+	const result = yield { type: ACTION_TYPES.DO_REFRESH_MERCHANT };
+
+	if ( result.success && result.merchant ) {
+		yield hydrate( result );
+	}
+
+	return result;
 };
 
 /**
@@ -201,7 +207,9 @@ export const refreshFeatureStatuses = function* () {
 	const result = yield { type: ACTION_TYPES.DO_REFRESH_FEATURES };
 
 	if ( result && result.success ) {
-		return yield dispatch( STORE_NAME ).refreshMerchantData();
+		// TODO: Review if we can get the updated feature details in the result.data instead of
+		//       doing a second refreshMerchantData() request.
+		yield refreshMerchantData();
 	}
 
 	return result;
