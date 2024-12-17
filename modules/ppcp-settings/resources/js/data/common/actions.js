@@ -7,7 +7,7 @@
  * @file
  */
 
-import { select } from '@wordpress/data';
+import { dispatch, select } from '@wordpress/data';
 
 import ACTION_TYPES from './action-types';
 import { STORE_NAME } from './constants';
@@ -192,11 +192,17 @@ export const refreshMerchantData = function* () {
 
 /**
  * Side effect.
- * Purges all features status data via a REST request.
+ * Purges all feature status data via a REST request.
  * Refreshes the merchant data via a REST request.
  *
  * @return {Action} The action.
  */
 export const refreshFeatureStatuses = function* () {
-	return yield { type: ACTION_TYPES.DO_REFRESH_FEATURES };
+	const result = yield { type: ACTION_TYPES.DO_REFRESH_FEATURES };
+
+	if ( result && result.success ) {
+		return yield dispatch( STORE_NAME ).refreshMerchantData();
+	}
+
+	return result;
 };
