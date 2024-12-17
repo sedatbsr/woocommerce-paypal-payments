@@ -16,6 +16,7 @@ import {
 	REST_MANUAL_CONNECTION_PATH,
 	REST_CONNECTION_URL_PATH,
 	REST_HYDRATE_MERCHANT_PATH,
+	REST_REFRESH_FEATURES_PATH,
 } from './constants';
 import ACTION_TYPES from './action-types';
 
@@ -116,6 +117,29 @@ export const controls = {
 			result = {
 				success: false,
 				error: e,
+			};
+		}
+
+		return result;
+	},
+
+	async [ ACTION_TYPES.DO_REFRESH_FEATURES ]() {
+		let result = null;
+
+		try {
+			result = await apiFetch( {
+				path: REST_REFRESH_FEATURES_PATH,
+				method: 'POST',
+			} );
+
+			if ( result.success ) {
+				result = await dispatch( STORE_NAME ).refreshMerchantData();
+			}
+		} catch ( e ) {
+			result = {
+				success: false,
+				error: e,
+				message: e.message,
 			};
 		}
 

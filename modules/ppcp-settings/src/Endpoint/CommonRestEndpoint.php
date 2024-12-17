@@ -206,6 +206,11 @@ class CommonRestEndpoint extends RestEndpoint {
 			$this->merchant_info_map
 		);
 
+		$extra_data['merchant'] = apply_filters(
+			'woocommerce_paypal_payments_rest_common_merchant_data',
+			$extra_data['merchant'],
+		);
+
 		return $extra_data;
 	}
 

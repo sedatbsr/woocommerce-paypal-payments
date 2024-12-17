@@ -17,6 +17,7 @@ use WooCommerce\PayPalCommerce\Settings\Endpoint\CommonRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\ConnectManualRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\LoginLinkRestEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\OnboardingRestEndpoint;
+use WooCommerce\PayPalCommerce\Settings\Endpoint\RefreshFeatureStatusEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Endpoint\SwitchSettingsUiEndpoint;
 use WooCommerce\PayPalCommerce\Settings\Service\ConnectionUrlGenerator;
 use WooCommerce\PayPalCommerce\Settings\Service\OnboardingUrlManager;
@@ -69,6 +70,13 @@ return array(
 	},
 	'settings.rest.common'                        => static function ( ContainerInterface $container ) : CommonRestEndpoint {
 		return new CommonRestEndpoint( $container->get( 'settings.data.common' ) );
+	},
+	'settings.rest.refresh_feature_status'        => static function ( ContainerInterface $container ) : RefreshFeatureStatusEndpoint {
+		return new RefreshFeatureStatusEndpoint(
+			$container->get( 'wcgateway.settings' ),
+			new Cache( 'ppcp-timeout' ),
+			$container->get( 'woocommerce.logger.woocommerce' )
+		);
 	},
 	'settings.rest.connect_manual'                => static function ( ContainerInterface $container ) : ConnectManualRestEndpoint {
 		return new ConnectManualRestEndpoint(
