@@ -12,7 +12,6 @@ namespace WooCommerce\PayPalCommerce\Settings\Service;
 use Exception;
 use Psr\Log\LoggerInterface;
 use WooCommerce\PayPalCommerce\ApiClient\Endpoint\PartnerReferrals;
-use WooCommerce\PayPalCommerce\ApiClient\Helper\Cache;
 use WooCommerce\PayPalCommerce\ApiClient\Repository\PartnerReferralsData;
 use WooCommerce\WooCommerce\Logging\Logger\NullLogger;
 
