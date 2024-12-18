@@ -798,14 +798,15 @@ class PayPalSubscriptionsModule implements ServiceModule, ExtendingModule, Execu
 		$subscription_plan      = $product->get_meta( 'ppcp_subscription_plan' );
 		$subscription_plan_name = $product->get_meta( '_ppcp_subscription_plan_name' );
 		if ( $subscription_product && $subscription_plan ) {
-			$display_unlink_p = ' style="display: none;"';
+			$display_unlink_p = 'display:none;';
 			if ( $enable_subscription_product !== 'yes' ) {
 				$display_unlink_p = '';
 			}
 			echo sprintf(
 			// translators: %1$s and %2$s are button and wrapper html tags.
 				esc_html__( '%1$sUnlink PayPal Subscription Plan%2$s', 'woocommerce-paypal-payments' ),
-				'<p class="form-field ppcp-enable-subscription" id="ppcp-enable-subscription-' . esc_attr( (string) $product->get_id() ) . '"' . $display_unlink_p . '><label></label><button class="button ppcp-unlink-sub-plan" id="ppcp-unlink-sub-plan-' . esc_attr( (string) $product->get_id() ) . '">',
+				//
+				'<p class="form-field ppcp-enable-subscription" id="ppcp-enable-subscription-' . esc_attr( (string) $product->get_id() ) . '" style="' . esc_attr( $display_unlink_p ) . '"><label></label><button class="button ppcp-unlink-sub-plan" id="ppcp-unlink-sub-plan-' . esc_attr( (string) $product->get_id() ) . '">',
 				'</button><span class="spinner is-active" id="spinner-unlink-plan" style="float: none; display:none;"></span></p>'
 			);
 			echo sprintf(
