@@ -181,6 +181,7 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 					$container->get( 'settings.rest.common' ),
 					$container->get( 'settings.rest.connect_manual' ),
 					$container->get( 'settings.rest.login_link' ),
+					$container->get('settings.rest.webhooks')
 				);
 
 				foreach ( $endpoints as $endpoint ) {

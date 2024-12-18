@@ -15,6 +15,7 @@ const ButtonSettingsBlock = ( { title, description, ...props } ) => (
 					</Header>
 					<Action>
 						<Button
+							isBusy={ props.actionProps?.isBusy }
 							variant={ props.actionProps?.buttonType }
 							onClick={
 								props.actionProps?.callback

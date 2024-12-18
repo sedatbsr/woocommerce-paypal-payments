@@ -9,6 +9,8 @@
 
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useCallback } from '@wordpress/element';
+import { REST_WEBHOOKS, REST_WEBHOOKS_SIMULATE } from './constants';
+import apiFetch from '@wordpress/api-fetch';
 
 import { STORE_NAME } from './constants';
 
@@ -31,6 +33,7 @@ const useHooks = () => {
 		setManualConnectionMode,
 		setClientId,
 		setClientSecret,
+		setWebhooks,
 		connectToSandbox,
 		connectToProduction,
 		connectViaIdAndSecret,
@@ -44,7 +47,7 @@ const useHooks = () => {
 	const clientSecret = usePersistent( 'clientSecret' );
 	const isSandboxMode = usePersistent( 'useSandbox' );
 	const isManualConnectionMode = usePersistent( 'useManualConnection' );
-
+	const webhooks = usePersistent( 'webhooks' );
 	const merchant = useSelect(
 		( select ) => select( STORE_NAME ).merchant(),
 		[]
@@ -77,11 +80,32 @@ const useHooks = () => {
 		setClientSecret: ( value ) => {
 			return savePersistent( setClientSecret, value );
 		},
+		setWebhooks: async () => {
+			const response = await apiFetch( {
+				method: 'GET',
+				path: REST_WEBHOOKS,
+			} );
+			setWebhooks( response?.data?.webhooks );
+		},
+		registerWebhooks: async () => {
+			const response = await apiFetch( {
+				method: 'POST',
+				path: REST_WEBHOOKS,
+			} );
+			setWebhooks( response?.data?.webhooks );
+		},
+		simulateWebhooks: async () => {
+			const response = await apiFetch( {
+				path: REST_WEBHOOKS_SIMULATE,
+			} );
+			console.log( response );
+		},
 		connectToSandbox,
 		connectToProduction,
 		connectViaIdAndSecret,
 		merchant,
 		wooSettings,
+		webhooks,
 	};
 };
 
@@ -125,6 +149,10 @@ export const useWooSettings = () => {
 	return wooSettings;
 };
 
+export const useWebhooks = () => {
+	const { webhooks, setWebhooks, registerWebhooks } = useHooks();
+	return { webhooks, setWebhooks, registerWebhooks };
+};
 export const useMerchantInfo = () => {
 	const { merchant } = useHooks();
 	const { refreshMerchantData } = useDispatch( STORE_NAME );

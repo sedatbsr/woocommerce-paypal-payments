@@ -8,8 +8,21 @@ import {
 	ButtonSettingsBlock,
 } from '../../../../ReusableComponents/SettingsBlocks';
 import SettingsBlock from '../../../../ReusableComponents/SettingsBlocks/SettingsBlock';
+import { CommonHooks } from '../../../../../data';
+import { useState } from '@wordpress/element';
 
 const Troubleshooting = ( { updateFormValue, settings } ) => {
+	const { webhooks, registerWebhooks, simulateWebhooks } =
+		CommonHooks.useWebhooks();
+
+	const [ resubscribing, setResubscribing ] = useState( false );
+
+	const resubscribeWebhooks = async () => {
+		setResubscribing( true );
+		await registerWebhooks();
+		setResubscribing( false );
+	};
+
 	return (
 		<AccordionSettingsBlock
 			className="ppcp-r-settings-block--troubleshooting"
@@ -61,7 +74,7 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 									.
 								</Description>
 							</Header>
-							<HooksTable data={ hooksExampleData() } />
+							<HooksTable data={ webhooks } />
 						</>
 					),
 				] }
@@ -78,11 +91,8 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 				) }
 				actionProps={ {
 					buttonType: 'secondary',
-					callback: () =>
-						console.log(
-							'Resubscribe webhooks',
-							'woocommerce-paypal-payments'
-						),
+					isBusy: resubscribing,
+					callback: () => resubscribeWebhooks(),
 					value: __(
 						'Resubscribe webhooks',
 						'woocommerce-paypal-payments'
@@ -97,11 +107,7 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 				) }
 				actionProps={ {
 					buttonType: 'secondary',
-					callback: () =>
-						console.log(
-							'Simulate webhooks',
-							'woocommerce-paypal-payments'
-						),
+					callback: () => simulateWebhooks(),
 					value: __(
 						'Simulate webhooks',
 						'woocommerce-paypal-payments'
@@ -110,32 +116,6 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 			/>
 		</AccordionSettingsBlock>
 	);
-};
-
-const hooksExampleData = () => {
-	return {
-		url: 'https://www.rt3.tech/wordpress/paypal-ux-testin/index.php?rest_route=/paypal/v1/incoming',
-		hooks: [
-			'billing plan pricing-change activated',
-			'billing plan updated',
-			'billing subscription cancelled',
-			'catalog product updated',
-			'checkout order approved',
-			'checkout order completed',
-			'checkout payment-approval reversed',
-			'payment authorization voided',
-			'payment capture completed',
-			'payment capture denied',
-			'payment capture pending',
-			'payment capture refunded',
-			'payment capture reversed',
-			'payment order cancelled',
-			'payment sale completed',
-			'payment sale refunded',
-			'vault payment-token created',
-			'vault payment-token deleted',
-		],
-	};
 };
 
 const HooksTable = ( { data } ) => {
@@ -156,15 +136,11 @@ const HooksTable = ( { data } ) => {
 			</thead>
 			<tbody>
 				<tr>
-					<td className="ppcp-r-table__hooks-url">{ data?.url }</td>
-					<td className="ppcp-r-table__hooks-events">
-						{ data.hooks.map( ( hook, index ) => (
-							<span key={ hook }>
-								{ hook }{ ' ' }
-								{ index !== data.hooks.length - 1 && ',' }
-							</span>
-						) ) }
-					</td>
+					<td className="ppcp-r-table__hooks-url">{ data?.[ 0 ] }</td>
+					<td
+						className="ppcp-r-table__hooks-events"
+						dangerouslySetInnerHTML={ { __html: data?.[ 1 ] } }
+					></td>
 				</tr>
 			</tbody>
 		</table>

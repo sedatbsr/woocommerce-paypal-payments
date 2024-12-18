@@ -134,6 +134,11 @@ export const setClientSecret = ( clientSecret ) => ( {
 	payload: { clientSecret },
 } );
 
+export const setWebhooks = ( webhooks ) => ( {
+	type: ACTION_TYPES.SET_PERSISTENT,
+	payload: { webhooks },
+} );
+
 /**
  * Side effect. Saves the persistent details to the WP database.
  *

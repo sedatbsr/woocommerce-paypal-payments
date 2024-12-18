@@ -9,88 +9,24 @@ declare( strict_types = 1 );
 
 namespace WooCommerce\PayPalCommerce\Settings\Endpoint;
 
-use WP_REST_Server;
+use WooCommerce\PayPalCommerce\Webhooks\Status\WebhookSimulation;
+use WooCommerce\PayPalCommerce\Webhooks\WebhookRegistrar;
 use WP_REST_Response;
-use WP_REST_Request;
-use WooCommerce\PayPalCommerce\Settings\Data\OnboardingProfile;
+use WP_REST_Server;
 
-/**
- * REST controller for the onboarding module.
- *
- * This API acts as the intermediary between the "external world" and our
- * internal data model.
- */
 class WebhookSettingsEndpoint extends RestEndpoint {
-	/**
-	 * The base path for this REST controller.
-	 *
-	 * @var string
-	 */
-	protected $rest_base = 'webhook-settings';
+	protected $rest_base = 'webhook_settings';
+	protected string $rest_simulate_base = 'webhooks_simulate';
 
-	/**
-	 * The settings instance.
-	 *
-	 * @var OnboardingProfile
-	 */
-	protected OnboardingProfile $profile;
+	private array $webhooksData;
+	private WebhookRegistrar $webhookRegistrar;
+	private WebhookSimulation $webhookSimulation;
 
-	/**
-	 * Field mapping for request to profile transformation.
-	 *
-	 * @var array
-	 */
-	private array $field_map = array(
-		'completed'                            => array(
-			'js_name'  => 'completed',
-			'sanitize' => 'to_boolean',
-		),
-		'step'                                 => array(
-			'js_name'  => 'step',
-			'sanitize' => 'to_number',
-		),
-		'is_casual_seller'                     => array(
-			'js_name'  => 'isCasualSeller',
-			'sanitize' => 'to_boolean',
-		),
-		'are_optional_payment_methods_enabled' => array(
-			'js_name'  => 'areOptionalPaymentMethodsEnabled',
-			'sanitize' => 'to_boolean',
-		),
-		'products'                             => array(
-			'js_name' => 'products',
-		),
-	);
-
-	/**
-	 * Map the internal flags to JS names.
-	 *
-	 * @var array
-	 */
-	private array $flag_map = array(
-		'can_use_casual_selling' => array(
-			'js_name' => 'canUseCasualSelling',
-		),
-		'can_use_vaulting'       => array(
-			'js_name' => 'canUseVaulting',
-		),
-		'can_use_card_payments'  => array(
-			'js_name' => 'canUseCardPayments',
-		),
-		'can_use_subscriptions'  => array(
-			'js_name' => 'canUseSubscriptions',
-		),
-	);
-
-	/**
-	 * Constructor.
-	 *
-	 * @param OnboardingProfile $profile The settings instance.
-	 */
-	public function __construct( OnboardingProfile $profile ) {
-		$this->profile = $profile;
-
-		$this->field_map['products']['sanitize'] = fn( $list ) => array_map( 'sanitize_text_field', $list );
+	public function __construct(array $webhooksData, WebhookRegistrar $webhookRegistrar, WebhookSimulation $webhookSimulation)
+	{
+		$this->webhooksData = $webhooksData;
+		$this->webhookRegistrar = $webhookRegistrar;
+		$this->webhookSimulation = $webhookSimulation;
 	}
 
 	/**
@@ -103,65 +39,43 @@ class WebhookSettingsEndpoint extends RestEndpoint {
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'get_details' ),
+					'callback'            => array( $this, 'get_webhooks' ),
 					'permission_callback' => array( $this, 'check_permission' ),
 				),
+				array(
+					'methods' => WP_REST_Server::CREATABLE,
+					'callback' => array($this, 'register_webhooks'),
+					'permission_callback' => array($this, 'check_permission')
+				)
 			)
 		);
 
 		register_rest_route(
 			$this->namespace,
-			'/' . $this->rest_base,
+			'/' . $this->rest_simulate_base,
 			array(
 				array(
-					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'update_details' ),
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'simulate_webhooks' ),
 					'permission_callback' => array( $this, 'check_permission' ),
-				),
+				)
 			)
 		);
 	}
 
-	/**
-	 * Returns all details of the current onboarding wizard progress.
-	 *
-	 * @return WP_REST_Response The current state of the onboarding wizard.
-	 */
-	public function get_details() : WP_REST_Response {
-		$js_data = $this->sanitize_for_javascript(
-			$this->profile->to_array(),
-			$this->field_map
-		);
-
-		$js_flags = $this->sanitize_for_javascript(
-			$this->profile->get_flags(),
-			$this->flag_map
-		);
-
-		return $this->return_success(
-			$js_data,
-			array(
-				'flags' => $js_flags,
-			)
-		);
+	public function get_webhooks(): WP_REST_Response{
+		return $this->return_success( ["webhooks" => $this->webhooksData['data'][0]] );
 	}
 
-	/**
-	 * Updates onboarding details based on the request.
-	 *
-	 * @param WP_REST_Request $request Full data about the request.
-	 *
-	 * @return WP_REST_Response The updated state of the onboarding wizard.
-	 */
-	public function update_details( WP_REST_Request $request ) : WP_REST_Response {
-		$wp_data = $this->sanitize_for_wordpress(
-			$request->get_params(),
-			$this->field_map
-		);
+	public function register_webhooks(): WP_REST_Response{
+		if ( ! $this->webhookRegistrar->register() ) {
+			return $this->return_error('Webhook subscription failed.');
+		}
 
-		$this->profile->from_array( $wp_data );
-		$this->profile->save();
+		return $this->return_success(["webhooks" => $this->webhooksData['data'][0]]);
+	}
 
-		return $this->get_details();
+	public function simulate_webhooks(): WP_REST_Response{
+		$this->return_success(['success' => true]);
 	}
 }
