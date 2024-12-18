@@ -19,7 +19,7 @@ class SavePaymentMethodsApplies {
 	 *
 	 * @var array
 	 */
-	private array $allowed_country_currencies;
+	private array $allowed_countries;
 
 	/**
 	 * 2-letter country code of the shop.
@@ -31,15 +31,15 @@ class SavePaymentMethodsApplies {
 	/**
 	 * SavePaymentMethodsApplies constructor.
 	 *
-	 * @param array  $allowed_country_currencies The matrix which countries and currency combinations can be used for Save Payment Methods.
+	 * @param array  $allowed_countries The matrix which countries and currency combinations can be used for Save Payment Methods.
 	 * @param string $country 2-letter country code of the shop.
 	 */
 	public function __construct(
-		array $allowed_country_currencies,
+		array $allowed_countries,
 		string $country
 	) {
-		$this->allowed_country_currencies = $allowed_country_currencies;
-		$this->country                    = $country;
+		$this->allowed_countries = $allowed_countries;
+		$this->country            = $country;
 	}
 
 	/**
@@ -49,6 +49,6 @@ class SavePaymentMethodsApplies {
 	 */
 	public function for_country(): bool {
 
-		return in_array( $this->country, $this->allowed_country_currencies, true );
+		return in_array( $this->country, $this->allowed_countries, true );
 	}
 }
