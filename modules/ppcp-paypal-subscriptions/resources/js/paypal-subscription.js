@@ -70,45 +70,37 @@ document.addEventListener( 'DOMContentLoaded', () => {
 		soldIndividually.setAttribute( 'disabled', 'disabled' );
 	};
 
+    const checkSubscriptionPeriodsInterval = (period, period_interval, linkBtn) => {
+        if (
+            ( period === 'year' && parseInt( period_interval ) > 1 ) ||
+            ( period === 'month' && parseInt( period_interval ) > 12 ) ||
+            ( period === 'week' && parseInt( period_interval ) > 52 ) ||
+            ( period === 'day' && parseInt( period_interval ) > 356 )
+        ) {
+            linkBtn.disabled = true;
+            linkBtn.checked = false;
+            linkBtn.setAttribute('title', __( 'Not allowed period intervall combination!', 'woocommerce-paypal-subscriptions' ) );
+        } else {
+            linkBtn.disabled = false;
+            linkBtn.removeAttribute('title');
+        }
+    }
+
 	const setupProducts = () => {
         jQuery( '.wc_input_subscription_period' ).on( 'change', (e) => {
-            const linkBtn = e.target.parentElement.parentElement.parentElement.parentElement.querySelector('input[name="_ppcp_enable_subscription_product"]');
+            const linkBtn = e.target.parentElement.parentElement.parentElement.querySelector('input[name="_ppcp_enable_subscription_product"]');
             const period_interval = e.target.parentElement.querySelector('select.wc_input_subscription_period_interval')?.value;
             const period = e.target.value;
 
-            if (
-                ( period === 'year' && parseInt( period_interval ) > 1 ) ||
-                ( period === 'month' && parseInt( period_interval ) > 12 ) ||
-                ( period === 'week' && parseInt( period_interval ) > 52 ) ||
-                ( period === 'day' && parseInt( period_interval ) > 356 )
-            ) {
-                linkBtn.disabled = true;
-                linkBtn.checked = false;
-                linkBtn.setAttribute('title', __( 'Not allowed period intervall combination!', 'woocommerce-paypal-subscriptions' ) );
-            } else {
-                linkBtn.disabled = false;
-                linkBtn.removeAttribute('title');
-            }
+            checkSubscriptionPeriodsInterval(period, period_interval, linkBtn);
         });
 
         jQuery( '.wc_input_subscription_period_interval' ).on( 'change', (e) => {
-            const linkBtn = e.target.parentElement.parentElement.parentElement.parentElement.querySelector('input[name="_ppcp_enable_subscription_product"]');
+            const linkBtn = e.target.parentElement.parentElement.parentElement.querySelector('input[name="_ppcp_enable_subscription_product"]');
             const period_interval = e.target.value;
             const period = e.target.parentElement.querySelector('select.wc_input_subscription_period')?.value;
 
-            if (
-                ( period === 'year' && parseInt( period_interval ) > 1 ) ||
-                ( period === 'month' && parseInt( period_interval ) > 12 ) ||
-                ( period === 'week' && parseInt( period_interval ) > 52 ) ||
-                ( period === 'day' && parseInt( period_interval ) > 356 )
-            ) {
-                linkBtn.disabled = true;
-                linkBtn.checked = false;
-                linkBtn.setAttribute('title', __( 'Not allowed period intervall combination!', 'woocommerce-paypal-subscriptions' ) );
-            } else {
-                linkBtn.disabled = false;
-                linkBtn.removeAttribute('title');
-            }
+            checkSubscriptionPeriodsInterval(period, period_interval, linkBtn);
         });
 
 		PayPalCommerceGatewayPayPalSubscriptionProducts?.forEach(

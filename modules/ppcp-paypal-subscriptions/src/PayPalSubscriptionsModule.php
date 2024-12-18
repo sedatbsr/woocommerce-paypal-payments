@@ -805,7 +805,6 @@ class PayPalSubscriptionsModule implements ServiceModule, ExtendingModule, Execu
 			echo sprintf(
 			// translators: %1$s and %2$s are button and wrapper html tags.
 				esc_html__( '%1$sUnlink PayPal Subscription Plan%2$s', 'woocommerce-paypal-payments' ),
-				//
 				'<p class="form-field ppcp-enable-subscription" id="ppcp-enable-subscription-' . esc_attr( (string) $product->get_id() ) . '" style="' . esc_attr( $display_unlink_p ) . '"><label></label><button class="button ppcp-unlink-sub-plan" id="ppcp-unlink-sub-plan-' . esc_attr( (string) $product->get_id() ) . '">',
 				'</button><span class="spinner is-active" id="spinner-unlink-plan" style="float: none; display:none;"></span></p>'
 			);
