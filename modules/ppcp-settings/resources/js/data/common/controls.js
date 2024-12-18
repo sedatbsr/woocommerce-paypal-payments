@@ -7,22 +7,21 @@
  * @file
  */
 
-import { dispatch } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 
 import {
-	STORE_NAME,
 	REST_PERSIST_PATH,
 	REST_MANUAL_CONNECTION_PATH,
 	REST_CONNECTION_URL_PATH,
 	REST_HYDRATE_MERCHANT_PATH,
+	REST_REFRESH_FEATURES_PATH,
 } from './constants';
 import ACTION_TYPES from './action-types';
 
 export const controls = {
 	async [ ACTION_TYPES.DO_PERSIST_DATA ]( { data } ) {
 		try {
-			return await apiFetch( {
+			await apiFetch( {
 				path: REST_PERSIST_PATH,
 				method: 'POST',
 				data,
@@ -33,10 +32,8 @@ export const controls = {
 	},
 
 	async [ ACTION_TYPES.DO_SANDBOX_LOGIN ]() {
-		let result = null;
-
 		try {
-			result = await apiFetch( {
+			return apiFetch( {
 				path: REST_CONNECTION_URL_PATH,
 				method: 'POST',
 				data: {
@@ -45,20 +42,16 @@ export const controls = {
 				},
 			} );
 		} catch ( e ) {
-			result = {
+			return {
 				success: false,
 				error: e,
 			};
 		}
-
-		return result;
 	},
 
 	async [ ACTION_TYPES.DO_PRODUCTION_LOGIN ]( { products } ) {
-		let result = null;
-
 		try {
-			result = await apiFetch( {
+			return apiFetch( {
 				path: REST_CONNECTION_URL_PATH,
 				method: 'POST',
 				data: {
@@ -67,13 +60,11 @@ export const controls = {
 				},
 			} );
 		} catch ( e ) {
-			result = {
+			return {
 				success: false,
 				error: e,
 			};
 		}
-
-		return result;
 	},
 
 	async [ ACTION_TYPES.DO_MANUAL_CONNECTION ]( {
@@ -81,10 +72,8 @@ export const controls = {
 		clientSecret,
 		useSandbox,
 	} ) {
-		let result = null;
-
 		try {
-			result = await apiFetch( {
+			return await apiFetch( {
 				path: REST_MANUAL_CONNECTION_PATH,
 				method: 'POST',
 				data: {
@@ -94,31 +83,36 @@ export const controls = {
 				},
 			} );
 		} catch ( e ) {
-			result = {
+			return {
 				success: false,
 				error: e,
 			};
 		}
-
-		return result;
 	},
 
 	async [ ACTION_TYPES.DO_REFRESH_MERCHANT ]() {
-		let result = null;
-
 		try {
-			result = await apiFetch( { path: REST_HYDRATE_MERCHANT_PATH } );
-
-			if ( result.success && result.merchant ) {
-				await dispatch( STORE_NAME ).hydrate( result );
-			}
+			return await apiFetch( { path: REST_HYDRATE_MERCHANT_PATH } );
 		} catch ( e ) {
-			result = {
+			return {
 				success: false,
 				error: e,
 			};
 		}
+	},
 
-		return result;
+	async [ ACTION_TYPES.DO_REFRESH_FEATURES ]() {
+		try {
+			return await apiFetch( {
+				path: REST_REFRESH_FEATURES_PATH,
+				method: 'POST',
+			} );
+		} catch ( e ) {
+			return {
+				success: false,
+				error: e,
+				message: e.message,
+			};
+		}
 	},
 };
