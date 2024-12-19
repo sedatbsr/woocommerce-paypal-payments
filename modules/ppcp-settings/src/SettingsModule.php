@@ -106,7 +106,6 @@ class SettingsModule implements ServiceModule, ExecutableModule {
 				&& update_option( SwitchSettingsUiEndpoint::OPTION_NAME_SHOULD_USE_OLD_UI, 'yes' )
 		);
 
-
 		add_action(
 			'admin_enqueue_scripts',
 			/**
