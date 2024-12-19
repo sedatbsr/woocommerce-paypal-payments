@@ -118,11 +118,11 @@ const useConnectionAttempt = ( connectFn, errorMessage ) => {
 };
 
 export const useSandboxConnection = () => {
-	const { connectToSandbox, isSandboxMode, setSandboxMode } =
+	const { sandboxOnboardingUrl, isSandboxMode, setSandboxMode } =
 		CommonHooks.useSandbox();
 	const { withActivity } = CommonHooks.useBusyState();
 	const connectionAttempt = useConnectionAttempt(
-		connectToSandbox,
+		sandboxOnboardingUrl,
 		MESSAGES.SANDBOX_ERROR
 	);
 
@@ -142,11 +142,11 @@ export const useSandboxConnection = () => {
 };
 
 export const useProductionConnection = () => {
-	const { connectToProduction } = CommonHooks.useProduction();
+	const { productionOnboardingUrl } = CommonHooks.useProduction();
 	const { withActivity } = CommonHooks.useBusyState();
 	const products = OnboardingHooks.useDetermineProducts();
 	const connectionAttempt = useConnectionAttempt(
-		() => connectToProduction( products ),
+		() => productionOnboardingUrl( products ),
 		MESSAGES.PRODUCTION_ERROR
 	);
 

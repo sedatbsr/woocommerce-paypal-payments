@@ -150,7 +150,7 @@ export const persist = function* () {
  *
  * @return {Action} The action.
  */
-export const connectToSandbox = function* () {
+export const sandboxOnboardingUrl = function* () {
 	return yield {
 		type: ACTION_TYPES.DO_GENERATE_ONBOARDING_URL,
 		environment: 'sandbox',
@@ -164,7 +164,7 @@ export const connectToSandbox = function* () {
  * @param {string[]} products Which products/features to display in the ISU popup.
  * @return {Action} The action.
  */
-export const connectToProduction = function* ( products = [] ) {
+export const productionOnboardingUrl = function* ( products = [] ) {
 	return yield {
 		type: ACTION_TYPES.DO_GENERATE_ONBOARDING_URL,
 		environment: 'production',
