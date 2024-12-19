@@ -63,6 +63,7 @@ return array(
 		return new CommonSettings(
 			$container->get( 'api.shop.country' ),
 			$container->get( 'api.shop.currency.getter' )->get(),
+			$container->get( 'wcgateway.is-send-only-country' )
 		);
 	},
 	'settings.rest.onboarding'                    => static function ( ContainerInterface $container ) : OnboardingRestEndpoint {

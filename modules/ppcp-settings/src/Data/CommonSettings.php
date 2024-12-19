@@ -41,11 +41,13 @@ class CommonSettings extends AbstractDataModel {
 	 *
 	 * @param string $country  WooCommerce store country.
 	 * @param string $currency WooCommerce store currency.
+	 * @param bool   $is_current_country_send_only Indicates whether the current store's country is classified as a send-only country.
 	 */
-	public function __construct( string $country, string $currency ) {
+	public function __construct( string $country, string $currency, bool $is_current_country_send_only ) {
 		parent::__construct();
-		$this->woo_settings['country']  = $country;
-		$this->woo_settings['currency'] = $currency;
+		$this->woo_settings['country']              = $country;
+		$this->woo_settings['currency']             = $currency;
+		$this->data['is_current_country_send_only'] = $is_current_country_send_only;
 	}
 
 	/**

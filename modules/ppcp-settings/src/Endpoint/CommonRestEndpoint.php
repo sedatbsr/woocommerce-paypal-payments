@@ -66,17 +66,20 @@ class CommonRestEndpoint extends RestEndpoint {
 	 * @var array
 	 */
 	private array $merchant_info_map = array(
-		'merchant_connected' => array(
+		'merchant_connected'           => array(
 			'js_name' => 'isConnected',
 		),
-		'sandbox_merchant'   => array(
+		'sandbox_merchant'             => array(
 			'js_name' => 'isSandbox',
 		),
-		'merchant_id'        => array(
+		'merchant_id'                  => array(
 			'js_name' => 'id',
 		),
-		'merchant_email'     => array(
+		'merchant_email'               => array(
 			'js_name' => 'email',
+		),
+		'is_current_country_send_only' => array(
+			'js_name' => 'isCurrentCountrySendOnly',
 		),
 	);
 

@@ -7,9 +7,12 @@ import SpinnerOverlay from '../ReusableComponents/SpinnerOverlay';
 
 import Onboarding from './Onboarding/Onboarding';
 import SettingsScreen from './SettingsScreen';
+import { useMerchantInfo } from '../../data/common/hooks';
+import SendOnlyMessage from './SendOnlyMessage';
 
 const Settings = () => {
 	const onboardingProgress = OnboardingHooks.useSteps();
+	const { merchant } = useMerchantInfo();
 
 	// Disable the "Changes you made might not be saved" browser warning.
 	useEffect( () => {
@@ -36,6 +39,10 @@ const Settings = () => {
 					message={ __( 'Loading…', 'woocommerce-paypal-payments' ) }
 				/>
 			);
+		}
+
+		if ( merchant.isCurrentCountrySendOnly ) {
+			return <SendOnlyMessage />;
 		}
 
 		if ( ! onboardingProgress.completed ) {
