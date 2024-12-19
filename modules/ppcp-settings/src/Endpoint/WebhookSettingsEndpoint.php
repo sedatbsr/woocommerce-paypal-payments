@@ -16,7 +16,7 @@ use WP_REST_Server;
 
 class WebhookSettingsEndpoint extends RestEndpoint {
 	protected $rest_base = 'webhook_settings';
-	protected string $rest_simulate_base = 'webhooks_simulate';
+	protected string $rest_simulate_base = 'webhook_simulate';
 
 	private array $webhooksData;
 	private WebhookRegistrar $webhookRegistrar;
@@ -44,7 +44,7 @@ class WebhookSettingsEndpoint extends RestEndpoint {
 				),
 				array(
 					'methods' => WP_REST_Server::CREATABLE,
-					'callback' => array($this, 'register_webhooks'),
+					'callback' => array($this, 'resubscribe_webhooks'),
 					'permission_callback' => array($this, 'check_permission')
 				)
 			)
@@ -52,11 +52,16 @@ class WebhookSettingsEndpoint extends RestEndpoint {
 
 		register_rest_route(
 			$this->namespace,
-			'/' . $this->rest_simulate_base,
+			'/' .  $this->rest_simulate_base,
 			array(
 				array(
 					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'simulate_webhooks' ),
+					'callback'            => array( $this, 'check_simulated_webhook_state' ),
+					'permission_callback' => array( $this, 'check_permission' ),
+				),
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'simulate_webhooks_start' ),
 					'permission_callback' => array( $this, 'check_permission' ),
 				)
 			)
@@ -67,15 +72,33 @@ class WebhookSettingsEndpoint extends RestEndpoint {
 		return $this->return_success( ["webhooks" => $this->webhooksData['data'][0]] );
 	}
 
-	public function register_webhooks(): WP_REST_Response{
+	public function resubscribe_webhooks(): WP_REST_Response{
 		if ( ! $this->webhookRegistrar->register() ) {
 			return $this->return_error('Webhook subscription failed.');
 		}
-
 		return $this->return_success(["webhooks" => $this->webhooksData['data'][0]]);
 	}
 
-	public function simulate_webhooks(): WP_REST_Response{
-		$this->return_success(['success' => true]);
+	public function simulate_webhooks_start(): WP_REST_Response{
+		try {
+			$this->webhookSimulation->start();
+			return $this->return_success([]);
+		} catch ( \Exception $error ) {
+			return $this->return_error($error->getMessage());
+		}
+	}
+
+	public function check_simulated_webhook_state(): WP_REST_Response
+	{
+		try {
+			$state = $this->webhookSimulation->get_state();
+
+			return $this->return_success(array(
+				'state' => $state
+			));
+
+		} catch ( \Exception $error ) {
+			return $this->return_error($error->getMessage());
+		}
 	}
 }

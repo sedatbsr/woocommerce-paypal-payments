@@ -7,7 +7,7 @@
  * @file
  */
 
-import { dispatch, select } from '@wordpress/data';
+import { select } from '@wordpress/data';
 
 import ACTION_TYPES from './action-types';
 import { STORE_NAME } from './constants';
@@ -134,11 +134,6 @@ export const setClientSecret = ( clientSecret ) => ( {
 	payload: { clientSecret },
 } );
 
-export const setWebhooks = ( webhooks ) => ( {
-	type: ACTION_TYPES.SET_PERSISTENT,
-	payload: { webhooks },
-} );
-
 /**
  * Side effect. Saves the persistent details to the WP database.
  *
@@ -215,6 +210,33 @@ export const refreshFeatureStatuses = function* () {
 		// TODO: Review if we can get the updated feature details in the result.data instead of
 		//       doing a second refreshMerchantData() request.
 		yield refreshMerchantData();
+	}
+
+	return result;
+};
+
+/**
+ * Persistent. Changes the "webhooks" value.
+ *
+ * @param {string} webhooks
+ * @return {Action} The action.
+ */
+export const setWebhooks = ( webhooks ) => ( {
+	type: ACTION_TYPES.SET_PERSISTENT,
+	payload: { webhooks },
+} );
+
+/**
+ * Side effect
+ * Refreshes subscribed webhooks via a REST request
+ *
+ * @return {Action} The action.
+ */
+export const resubscribeWebhooks = function* () {
+	const result = yield { type: ACTION_TYPES.DO_RESUBSCRIBE_WEBHOOKS };
+
+	if ( result && result.success ) {
+		yield hydrate( result );
 	}
 
 	return result;

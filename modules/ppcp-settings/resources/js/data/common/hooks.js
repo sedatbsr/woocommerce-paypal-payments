@@ -9,10 +9,8 @@
 
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useCallback } from '@wordpress/element';
-import { REST_WEBHOOKS, REST_WEBHOOKS_SIMULATE } from './constants';
+import { REST_WEBHOOKS, STORE_NAME } from './constants';
 import apiFetch from '@wordpress/api-fetch';
-
-import { STORE_NAME } from './constants';
 
 const useTransient = ( key ) =>
 	useSelect(
@@ -87,19 +85,6 @@ const useHooks = () => {
 			} );
 			setWebhooks( response?.data?.webhooks );
 		},
-		registerWebhooks: async () => {
-			const response = await apiFetch( {
-				method: 'POST',
-				path: REST_WEBHOOKS,
-			} );
-			setWebhooks( response?.data?.webhooks );
-		},
-		simulateWebhooks: async () => {
-			const response = await apiFetch( {
-				path: REST_WEBHOOKS_SIMULATE,
-			} );
-			console.log( response );
-		},
 		connectToSandbox,
 		connectToProduction,
 		connectViaIdAndSecret,
@@ -150,8 +135,20 @@ export const useWooSettings = () => {
 };
 
 export const useWebhooks = () => {
-	const { webhooks, setWebhooks, registerWebhooks } = useHooks();
-	return { webhooks, setWebhooks, registerWebhooks };
+	const {
+		webhooks,
+		setWebhooks,
+		registerWebhooks,
+		startWebhookSimulation,
+		checkWebhookSimulationState,
+	} = useHooks();
+	return {
+		webhooks,
+		setWebhooks,
+		registerWebhooks,
+		startWebhookSimulation,
+		checkWebhookSimulationState,
+	};
 };
 export const useMerchantInfo = () => {
 	const { merchant } = useHooks();
