@@ -196,6 +196,8 @@ return array(
 		return new SwitchSettingsUiEndpoint(
 			$container->get( 'woocommerce.logger.woocommerce' ),
 			$container->get( 'button.request-data' ),
+			$container->get( 'settings.data.onboarding' ),
+			$container->get( 'api.merchant_id' ) !== ''
 		);
 	},
 );
