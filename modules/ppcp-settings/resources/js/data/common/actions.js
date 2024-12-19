@@ -7,7 +7,7 @@
  * @file
  */
 
-import { dispatch, select } from '@wordpress/data';
+import { select } from '@wordpress/data';
 
 import ACTION_TYPES from './action-types';
 import { STORE_NAME } from './constants';
@@ -151,7 +151,11 @@ export const persist = function* () {
  * @return {Action} The action.
  */
 export const connectToSandbox = function* () {
-	return yield { type: ACTION_TYPES.DO_SANDBOX_LOGIN };
+	return yield {
+		type: ACTION_TYPES.DO_GENERATE_ONBOARDING_URL,
+		environment: 'sandbox',
+		products: [ 'EXPRESS_CHECKOUT' ],
+	};
 };
 
 /**
@@ -161,7 +165,11 @@ export const connectToSandbox = function* () {
  * @return {Action} The action.
  */
 export const connectToProduction = function* ( products = [] ) {
-	return yield { type: ACTION_TYPES.DO_PRODUCTION_LOGIN, products };
+	return yield {
+		type: ACTION_TYPES.DO_GENERATE_ONBOARDING_URL,
+		environment: 'production',
+		products,
+	};
 };
 
 /**

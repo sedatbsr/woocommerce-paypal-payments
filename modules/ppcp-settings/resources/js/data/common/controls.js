@@ -31,33 +31,15 @@ export const controls = {
 		}
 	},
 
-	async [ ACTION_TYPES.DO_SANDBOX_LOGIN ]() {
+	async [ ACTION_TYPES.DO_GENERATE_ONBOARDING_URL ]( {
+		products,
+		environment,
+	} ) {
 		try {
 			return apiFetch( {
 				path: REST_CONNECTION_URL_PATH,
 				method: 'POST',
-				data: {
-					environment: 'sandbox',
-					products: [ 'EXPRESS_CHECKOUT' ], // Sandbox always uses EXPRESS_CHECKOUT.
-				},
-			} );
-		} catch ( e ) {
-			return {
-				success: false,
-				error: e,
-			};
-		}
-	},
-
-	async [ ACTION_TYPES.DO_PRODUCTION_LOGIN ]( { products } ) {
-		try {
-			return apiFetch( {
-				path: REST_CONNECTION_URL_PATH,
-				method: 'POST',
-				data: {
-					environment: 'production',
-					products,
-				},
+				data: { environment, products },
 			} );
 		} catch ( e ) {
 			return {
