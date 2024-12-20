@@ -1,4 +1,4 @@
-import { useCallback, useState } from '@wordpress/element';
+import { useState } from '@wordpress/element';
 import apiFetch from '@wordpress/api-fetch';
 import { REST_WEBHOOKS_SIMULATE } from '../../../../../../data/common/constants';
 import { __ } from '@wordpress/i18n';
@@ -16,22 +16,22 @@ const SimulationBlock = () => {
 
 	const [ simulating, setSimulating ] = useState( false );
 
-	function sleep( ms ) {
+	const sleep = ( ms ) => {
 		return new Promise( ( resolve ) => setTimeout( resolve, ms ) );
-	}
+	};
 
-	const startWebhookSimulation = useCallback( async () => {
+	const startWebhookSimulation = async () => {
 		return apiFetch( {
 			method: 'POST',
 			path: REST_WEBHOOKS_SIMULATE,
 		} );
-	}, [] );
+	};
 
-	const checkWebhookSimulationState = useCallback( async () => {
+	const checkWebhookSimulationState = async () => {
 		return apiFetch( {
 			path: REST_WEBHOOKS_SIMULATE,
 		} );
-	}, [] );
+	};
 
 	const startSimulation = async ( maxRetries ) => {
 		const simulationStartNoticeId =
