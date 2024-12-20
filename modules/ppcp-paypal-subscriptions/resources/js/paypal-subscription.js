@@ -71,6 +71,9 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	};
 
     const checkSubscriptionPeriodsInterval = (period, period_interval, linkBtn) => {
+        if ( ! linkBtn) {
+            return;
+        }
         if (
             ( period === 'year' && parseInt( period_interval ) > 1 ) ||
             ( period === 'month' && parseInt( period_interval ) > 12 ) ||
@@ -88,7 +91,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
 
 	const setupProducts = () => {
         jQuery( '.wc_input_subscription_period' ).on( 'change', (e) => {
-            const linkBtn = e.target.parentElement.parentElement.parentElement.querySelector('input[name="_ppcp_enable_subscription_product"]');
+            const linkBtn = e.target.parentElement.parentElement.parentElement.parentElement.querySelector('input[name="_ppcp_enable_subscription_product"]');
             const period_interval = e.target.parentElement.querySelector('select.wc_input_subscription_period_interval')?.value;
             const period = e.target.value;
 
@@ -96,7 +99,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
         });
 
         jQuery( '.wc_input_subscription_period_interval' ).on( 'change', (e) => {
-            const linkBtn = e.target.parentElement.parentElement.parentElement.querySelector('input[name="_ppcp_enable_subscription_product"]');
+            const linkBtn = e.target.parentElement.parentElement.parentElement.parentElement.querySelector('input[name="_ppcp_enable_subscription_product"]');
             const period_interval = e.target.value;
             const period = e.target.parentElement.querySelector('select.wc_input_subscription_period')?.value;
 
