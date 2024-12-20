@@ -19,20 +19,22 @@ const ResubscribeBlock = () => {
 		} catch ( error ) {
 			setResubscribing( false );
 			createErrorNotice(
-				__(
-					'Operation failed. Check WooCommerce logs for more details.',
-					'woocommerce-paypal-payments'
-				)
+				'❌ ' +
+					__(
+						'Operation failed. Check WooCommerce logs for more details.',
+						'woocommerce-paypal-payments'
+					)
 			);
 			return;
 		}
 
 		setResubscribing( false );
 		createSuccessNotice(
-			__(
-				'Webhooks were successfully re-subscribed.',
-				'woocommerce-paypal-payments'
-			)
+			'✔️ ' +
+				__(
+					'Webhooks were successfully re-subscribed.',
+					'woocommerce-paypal-payments'
+				)
 		);
 	};
 

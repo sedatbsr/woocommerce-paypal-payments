@@ -7,7 +7,7 @@ import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
 
 const SimulationBlock = () => {
-	const { createSuccessNotice, createErrorNotice } =
+	const { createSuccessNotice, createInfoNotice, createErrorNotice } =
 		useDispatch( noticesStore );
 
 	const [ simulating, setSimulating ] = useState( false );
@@ -29,13 +29,10 @@ const SimulationBlock = () => {
 		} );
 	}, [] );
 
-	const startSimulation = async () => {
-		const retriesBeforeErrorMessage = 15;
-		const maxRetries = 30;
-
+	const startSimulation = async ( retriesBeforeErrorMessage, maxRetries ) => {
 		setSimulating( true );
 
-		createSuccessNotice(
+		createInfoNotice(
 			__(
 				'Waiting for the webhook to arrive…',
 				'woocommerce-paypal-payments'
@@ -48,7 +45,8 @@ const SimulationBlock = () => {
 			setSimulating( false );
 			createErrorNotice(
 				__(
-					'Operation failed. Check WooCommerce logs for more details.',
+					'❌ ' +
+						'Operation failed. Check WooCommerce logs for more details.',
 					'woocommerce-paypal-payments'
 				)
 			);
@@ -87,7 +85,8 @@ const SimulationBlock = () => {
 			if ( i === retriesBeforeErrorMessage ) {
 				createErrorNotice(
 					__(
-						'Looks like the webhook cannot be received. Check that your website is accessible from the internet.',
+						'❌ ' +
+							'Looks like the webhook cannot be received. Check that your website is accessible from the internet.',
 						'woocommerce-paypal-payments'
 					)
 				);
@@ -107,7 +106,7 @@ const SimulationBlock = () => {
 				actionProps={ {
 					buttonType: 'secondary',
 					isBusy: simulating,
-					callback: () => startSimulation(),
+					callback: () => startSimulation( 15, 30 ),
 					value: __(
 						'Simulate webhooks',
 						'woocommerce-paypal-payments'
