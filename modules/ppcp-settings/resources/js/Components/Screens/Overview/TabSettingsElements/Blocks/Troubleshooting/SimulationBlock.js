@@ -19,27 +19,27 @@ const SimulationBlock = () => {
 		return new Promise( ( resolve ) => setTimeout( resolve, ms ) );
 	};
 	const startSimulation = async ( maxRetries ) => {
-		const simulationStartNoticeId =
-			'paypal-webhook-simulation-start-notice';
-		const statusCheckNoticeId = 'paypal-webhook-status-check-notice';
+		const webhookInfoNoticeId = 'paypal-webhook-simulation-info-notice';
+		const triggerWebhookInfoNotice = () => {
+			createInfoNotice(
+				__(
+					'Waiting for the webhook to arrive…',
+					'woocommerce-paypal-payments'
+				),
+				{
+					id: webhookInfoNoticeId,
+				}
+			);
+		};
 
 		const stopSimulation = () => {
-			removeNotice( statusCheckNoticeId );
-			removeNotice( simulationStartNoticeId );
+			removeNotice( webhookInfoNoticeId );
 			setSimulating( false );
 		};
 
 		setSimulating( true );
 
-		createInfoNotice(
-			__(
-				'Waiting for the webhook to arrive…',
-				'woocommerce-paypal-payments'
-			),
-			{
-				id: simulationStartNoticeId,
-			}
-		);
+		triggerWebhookInfoNotice();
 
 		try {
 			await startWebhookSimulation();
@@ -84,24 +84,22 @@ const SimulationBlock = () => {
 					stopSimulation();
 					return;
 				}
-				removeNotice( statusCheckNoticeId );
-				createInfoNotice(
-					__(
-						'Webhook status check: ',
-						'woocommerce-paypal-payments'
-					) +
-						( i + 1 ) +
-						' / ' +
-						maxRetries,
-					{
-						id: statusCheckNoticeId,
-					}
-				);
+				removeNotice( webhookInfoNoticeId );
+				triggerWebhookInfoNotice();
 			} catch ( error ) {
 				console.error( error );
 			}
 		}
 		stopSimulation();
+		createErrorNotice(
+			__(
+				'Looks like the webhook cannot be received. Check that your website is accessible from the internet.',
+				'woocommerce-paypal-payments'
+			),
+			{
+				icon: '❌',
+			}
+		);
 	};
 
 	return (
