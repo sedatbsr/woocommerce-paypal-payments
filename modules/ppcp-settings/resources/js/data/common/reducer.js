@@ -35,7 +35,7 @@ const defaultPersistent = Object.freeze( {
 	useManualConnection: false,
 	clientId: '',
 	clientSecret: '',
-	webhooks: 0,
+	webhooks: [],
 } );
 
 // Reducer logic.

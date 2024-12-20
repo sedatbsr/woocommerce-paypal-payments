@@ -7,15 +7,12 @@ import {
 	ToggleSettingsBlock,
 } from '../../../../../ReusableComponents/SettingsBlocks';
 import SettingsBlock from '../../../../../ReusableComponents/SettingsBlocks/SettingsBlock';
-import { CommonHooks } from '../../../../../../data';
 
 import SimulationBlock from './SimulationBlock';
 import ResubscribeBlock from './ResubscribeBlock';
 import HooksTableBlock from './HooksTableBlock';
 
 const Troubleshooting = ( { updateFormValue, settings } ) => {
-	const { webhooks } = CommonHooks.useWebhooks();
-
 	return (
 		<AccordionSettingsBlock
 			className="ppcp-r-settings-block--troubleshooting"
@@ -64,7 +61,7 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 						.
 					</Description>
 				</Header>
-				<HooksTableBlock webhooks={ webhooks } />
+				<HooksTableBlock />
 				<ResubscribeBlock />
 				<SimulationBlock />
 			</SettingsBlock>

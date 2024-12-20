@@ -1,6 +1,9 @@
 import { __ } from '@wordpress/i18n';
+import { CommonHooks } from '../../../../../../data';
 
-const HooksTableBlock = ( { webhooks } ) => {
+const HooksTableBlock = () => {
+	const { webhooks } = CommonHooks.useWebhooks();
+
 	return (
 		<table className="ppcp-r-table">
 			<thead>
