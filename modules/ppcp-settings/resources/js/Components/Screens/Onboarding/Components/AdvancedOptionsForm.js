@@ -7,18 +7,15 @@ import {
 	useMemo,
 	useCallback,
 } from '@wordpress/element';
-
 import classNames from 'classnames';
 
 import SettingsToggleBlock from '../../../ReusableComponents/SettingsToggleBlock';
 import Separator from '../../../ReusableComponents/Separator';
 import DataStoreControl from '../../../ReusableComponents/DataStoreControl';
-import { CommonHooks } from '../../../../data';
 import {
 	useSandboxConnection,
 	useManualConnection,
 } from '../../../../hooks/useHandleConnections';
-
 import ConnectionButton from './ConnectionButton';
 import BusyStateWrapper from '../../../ReusableComponents/BusyStateWrapper';
 
@@ -41,7 +38,6 @@ const AdvancedOptionsForm = () => {
 	const [ clientValid, setClientValid ] = useState( false );
 	const [ secretValid, setSecretValid ] = useState( false );
 
-	const { isBusy } = CommonHooks.useBusyState();
 	const { isSandboxMode, setSandboxMode } = useSandboxConnection();
 	const {
 		handleConnectViaIdAndSecret,
