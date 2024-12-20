@@ -241,3 +241,21 @@ export const resubscribeWebhooks = function* () {
 
 	return result;
 };
+
+/**
+ * Side effect. Starts webhook simulation.
+ *
+ * @return {Action} The action.
+ */
+export const startWebhookSimulation = function* () {
+	return yield { type: ACTION_TYPES.DO_START_WEBHOOK_SIMULATION };
+};
+
+/**
+ * Side effect. Checks webhook simulation.
+ *
+ * @return {Action} The action.
+ */
+export const checkWebhookSimulationState = function* () {
+	return yield { type: ACTION_TYPES.DO_CHECK_WEBHOOK_SIMULATION_STATE };
+};

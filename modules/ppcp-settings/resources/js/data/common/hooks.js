@@ -9,8 +9,7 @@
 
 import { useDispatch, useSelect } from '@wordpress/data';
 import { useCallback } from '@wordpress/element';
-import { REST_WEBHOOKS, STORE_NAME } from './constants';
-import apiFetch from '@wordpress/api-fetch';
+import { STORE_NAME } from './constants';
 
 const useTransient = ( key ) =>
 	useSelect(
@@ -31,10 +30,11 @@ const useHooks = () => {
 		setManualConnectionMode,
 		setClientId,
 		setClientSecret,
-		setWebhooks,
 		connectToSandbox,
 		connectToProduction,
 		connectViaIdAndSecret,
+		startWebhookSimulation,
+		checkWebhookSimulationState,
 	} = useDispatch( STORE_NAME );
 
 	// Transient accessors.
@@ -78,19 +78,14 @@ const useHooks = () => {
 		setClientSecret: ( value ) => {
 			return savePersistent( setClientSecret, value );
 		},
-		setWebhooks: async () => {
-			const response = await apiFetch( {
-				method: 'GET',
-				path: REST_WEBHOOKS,
-			} );
-			setWebhooks( response?.data?.webhooks );
-		},
 		connectToSandbox,
 		connectToProduction,
 		connectViaIdAndSecret,
 		merchant,
 		wooSettings,
 		webhooks,
+		startWebhookSimulation,
+		checkWebhookSimulationState,
 	};
 };
 

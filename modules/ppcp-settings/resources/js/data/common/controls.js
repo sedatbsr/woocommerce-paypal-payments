@@ -16,6 +16,7 @@ import {
 	REST_PERSIST_PATH,
 	REST_REFRESH_FEATURES_PATH,
 	REST_WEBHOOKS,
+	REST_WEBHOOKS_SIMULATE,
 } from './constants';
 import ACTION_TYPES from './action-types';
 
@@ -121,6 +122,19 @@ export const controls = {
 		return await apiFetch( {
 			method: 'POST',
 			path: REST_WEBHOOKS,
+		} );
+	},
+
+	async [ ACTION_TYPES.DO_START_WEBHOOK_SIMULATION ]() {
+		return await apiFetch( {
+			method: 'POST',
+			path: REST_WEBHOOKS_SIMULATE,
+		} );
+	},
+
+	async [ ACTION_TYPES.DO_CHECK_WEBHOOK_SIMULATION_STATE ]() {
+		return await apiFetch( {
+			path: REST_WEBHOOKS_SIMULATE,
 		} );
 	},
 };

@@ -1,10 +1,9 @@
 import { useState } from '@wordpress/element';
-import apiFetch from '@wordpress/api-fetch';
-import { REST_WEBHOOKS_SIMULATE } from '../../../../../../data/common/constants';
 import { __ } from '@wordpress/i18n';
 import { ButtonSettingsBlock } from '../../../../../ReusableComponents/SettingsBlocks';
 import { useDispatch } from '@wordpress/data';
 import { store as noticesStore } from '@wordpress/notices';
+import { CommonHooks } from '../../../../../../data';
 
 const SimulationBlock = () => {
 	const {
@@ -13,26 +12,12 @@ const SimulationBlock = () => {
 		createErrorNotice,
 		removeNotice,
 	} = useDispatch( noticesStore );
-
+	const { startWebhookSimulation, checkWebhookSimulationState } =
+		CommonHooks.useWebhooks();
 	const [ simulating, setSimulating ] = useState( false );
-
 	const sleep = ( ms ) => {
 		return new Promise( ( resolve ) => setTimeout( resolve, ms ) );
 	};
-
-	const startWebhookSimulation = async () => {
-		return apiFetch( {
-			method: 'POST',
-			path: REST_WEBHOOKS_SIMULATE,
-		} );
-	};
-
-	const checkWebhookSimulationState = async () => {
-		return apiFetch( {
-			path: REST_WEBHOOKS_SIMULATE,
-		} );
-	};
-
 	const startSimulation = async ( maxRetries ) => {
 		const simulationStartNoticeId =
 			'paypal-webhook-simulation-start-notice';
@@ -59,6 +44,7 @@ const SimulationBlock = () => {
 		try {
 			await startWebhookSimulation();
 		} catch ( error ) {
+			console.error( error );
 			setSimulating( false );
 			createErrorNotice(
 				__(
