@@ -58,4 +58,10 @@ class PaymentSource {
 	public function properties(): object {
 		return $this->properties;
 	}
+
+	public function to_array(): array {
+		return array(
+			$this->name => (array) $this->properties
+		);
+	}
 }

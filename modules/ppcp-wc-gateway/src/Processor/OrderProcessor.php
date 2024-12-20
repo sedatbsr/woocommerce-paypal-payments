@@ -17,6 +17,7 @@ use WooCommerce\PayPalCommerce\ApiClient\Entity\ApplicationContext;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\Order;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\OrderStatus;
 use WooCommerce\PayPalCommerce\ApiClient\Entity\PaymentSource;
+use WooCommerce\PayPalCommerce\ApiClient\Exception\PayPalApiException;
 use WooCommerce\PayPalCommerce\ApiClient\Exception\RuntimeException;
 use WooCommerce\PayPalCommerce\ApiClient\Factory\OrderFactory;
 use WooCommerce\PayPalCommerce\ApiClient\Factory\PayerFactory;
@@ -196,11 +197,11 @@ class OrderProcessor {
 	 * Processes a given WooCommerce order and captured/authorizes the connected PayPal orders.
 	 *
 	 * @param WC_Order $wc_order The WooCommerce order.
-	 *
+	 * @return \stdClass PayPal order details of confirmed Order
 	 * @throws PayPalOrderMissingException If no PayPal order.
 	 * @throws Exception If processing fails.
 	 */
-	public function process( WC_Order $wc_order ): void {
+	public function process( WC_Order $wc_order ): \stdClass {
 		$order = $this->session_handler->order();
 		if ( ! $order ) {
 			// phpcs:ignore WordPress.Security.NonceVerification
@@ -226,6 +227,20 @@ class OrderProcessor {
 					)
 				);
 			}
+		}
+
+		$request_body = apply_filters(
+			'woocommerce_paypal_payments_confirm_payment_source_request_body',
+			array(
+				'payment_source' => $order->payment_source() !== null ? $order->payment_source()->to_array() : null,
+				'application_context' => $order->application_context() !== null ? $order->application_context()->to_array() : null,
+			)
+		);
+
+		if ( ! empty( $request_body[ 'payment_source' ] ) ) {
+			$confirm_payment_result = $this->order_endpoint->confirm_payment_source( $order->id(), $request_body );
+		} else {
+			$confirm_payment_result = new \stdClass();
 		}
 
 		$this->add_paypal_meta( $wc_order, $order, $this->environment );
@@ -268,6 +283,8 @@ class OrderProcessor {
 		}
 
 		do_action( 'woocommerce_paypal_payments_after_order_processor', $wc_order, $order );
+
+		return $confirm_payment_result;
 	}
 
 	/**

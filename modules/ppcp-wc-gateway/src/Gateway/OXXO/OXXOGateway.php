@@ -186,7 +186,15 @@ class OXXOGateway extends WC_Payment_Gateway {
 					'country_code' => $wc_order->get_billing_country(),
 				),
 			);
-			$payment_method = $this->order_endpoint->confirm_payment_source( $order->id(), $payment_source );
+			$request_body   = array(
+				'payment_source'         => $payment_source,
+				'processing_instruction' => 'ORDER_COMPLETE_ON_PAYMENT_APPROVAL',
+				'application_context'    => array(
+					'locale' => 'es-MX',
+				),
+			);
+
+			$payment_method = $this->order_endpoint->confirm_payment_source( $order->id(), $request_body );
 			foreach ( $payment_method->links as $link ) {
 				if ( $link->rel === 'payer-action' ) {
 					$payer_action = $link->href;

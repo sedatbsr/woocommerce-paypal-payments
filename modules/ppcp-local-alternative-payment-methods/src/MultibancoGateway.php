@@ -169,11 +169,10 @@ class MultibancoGateway extends WC_Payment_Gateway {
 				),
 			);
 
-			$response = $this->orders_endpoint->confirm_payment_source( $request_body, $body->id );
-			$body     = json_decode( $response['body'] );
+			$response = $this->orders_endpoint->confirm_payment_source( $body->id, $request_body );
 
 			$payer_action = '';
-			foreach ( $body->links as $link ) {
+			foreach ( $response->links as $link ) {
 				if ( $link->rel === 'payer-action' ) {
 					$payer_action = $link->href;
 				}

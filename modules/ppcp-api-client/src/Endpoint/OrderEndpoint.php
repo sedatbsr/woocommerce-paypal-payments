@@ -601,30 +601,23 @@ class OrderEndpoint {
 	 *
 	 * @param string $id The PayPal order ID.
 	 * @param array  $payment_source The payment source.
-	 * @return stdClass
+	 * @return \stdClass
 	 * @throws PayPalApiException If the request fails.
 	 * @throws RuntimeException If something unexpected happens.
 	 */
-	public function confirm_payment_source( string $id, array $payment_source ): stdClass {
+	public function confirm_payment_source( string $id, array $request_body ): stdClass {
 		$bearer = $this->bearer->bearer();
 		$url    = trailingslashit( $this->host ) . 'v2/checkout/orders/' . $id . '/confirm-payment-source';
-
-		$data = array(
-			'payment_source'         => $payment_source,
-			'processing_instruction' => 'ORDER_COMPLETE_ON_PAYMENT_APPROVAL',
-			'application_context'    => array(
-				'locale' => 'es-MX',
-			),
-		);
 
 		$args = array(
 			'method'  => 'POST',
 			'headers' => array(
-				'Authorization' => 'Bearer ' . $bearer->token(),
-				'Content-Type'  => 'application/json',
-				'Prefer'        => 'return=representation',
+				'Authorization'     => 'Bearer ' . $bearer->token(),
+				'Content-Type'      => 'application/json',
+				'Prefer'            => 'return=representation',
+				'PayPal-Request-Id' => uniqid( 'ppcp-', true ),
 			),
-			'body'    => wp_json_encode( $data ),
+			'body'    => wp_json_encode( $request_body ),
 		);
 
 		$response = $this->request( $url, $args );
@@ -634,8 +627,16 @@ class OrderEndpoint {
 
 		$json        = json_decode( $response['body'] );
 		$status_code = (int) wp_remote_retrieve_response_code( $response );
-		if ( 200 !== $status_code ) {
-			throw new PayPalApiException( $json, $status_code );
+		if ( $status_code !== 200 ) {
+			$message = $json->details[0]->description ?? '';
+			if ( $message ) {
+				throw new RuntimeException( $message );
+			}
+
+			throw new PayPalApiException(
+				$json,
+				$status_code
+			);
 		}
 
 		return $json;
