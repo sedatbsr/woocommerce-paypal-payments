@@ -177,6 +177,7 @@ const featuresDefault = [
 		buttons: [
 			{
 				type: 'secondary',
+				class: 'small-button',
 				text: __( 'Configure', 'woocommerce-paypal-payments' ),
 				url: '#',
 			},
@@ -200,6 +201,7 @@ const featuresDefault = [
 		buttons: [
 			{
 				type: 'secondary',
+				class: 'small-button',
 				text: __( 'Configure', 'woocommerce-paypal-payments' ),
 				url: '#',
 			},
@@ -223,6 +225,7 @@ const featuresDefault = [
 		buttons: [
 			{
 				type: 'secondary',
+				class: 'small-button',
 				text: __( 'Apply', 'woocommerce-paypal-payments' ),
 				url: '#',
 			},
@@ -243,6 +246,7 @@ const featuresDefault = [
 		buttons: [
 			{
 				type: 'secondary',
+				class: 'small-button',
 				text: __( 'Configure', 'woocommerce-paypal-payments' ),
 				url: '#',
 			},
@@ -251,9 +255,6 @@ const featuresDefault = [
 				text: __( 'Learn more', 'woocommerce-paypal-payments' ),
 				url: '#',
 			},
-		],
-		notes: [
-			__( '¹PayPal Q2 Earnings-2021.', 'woocommerce-paypal-payments' ),
 		],
 	},
 	{
@@ -266,6 +267,7 @@ const featuresDefault = [
 		buttons: [
 			{
 				type: 'secondary',
+				class: 'small-button',
 				text: __(
 					'Domain registration',
 					'woocommerce-paypal-payments'
@@ -289,6 +291,7 @@ const featuresDefault = [
 		buttons: [
 			{
 				type: 'secondary',
+				class: 'small-button',
 				text: __( 'Configure', 'woocommerce-paypal-payments' ),
 				url: '#',
 			},
@@ -297,6 +300,9 @@ const featuresDefault = [
 				text: __( 'Learn more', 'woocommerce-paypal-payments' ),
 				url: '#',
 			},
+		],
+		notes: [
+			__( '¹PayPal Q2 Earnings-2021.', 'woocommerce-paypal-payments' ),
 		],
 	},
 ];
