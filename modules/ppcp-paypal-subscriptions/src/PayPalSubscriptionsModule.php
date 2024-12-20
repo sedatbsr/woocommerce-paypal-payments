@@ -845,7 +845,7 @@ class PayPalSubscriptionsModule implements ServiceModule, ExtendingModule, Execu
 			echo sprintf(
 			// translators: %1$s and %2$s are wrapper html tags.
 				esc_html__( '%1$sPlan Name%2$s', 'woocommerce-paypal-payments' ),
-				'<p class="form-field ppcp_subscription_plan_name_p" id="ppcp_subscription_plan_name_p-' . esc_attr( (string) $product->get_id() ) . '" style="' . esc_attr( $display_plan_name_p ). '"><label for="_ppcp_subscription_plan_name-' . esc_attr( (string) $product->get_id() ) . '">',
+				'<p class="form-field ppcp_subscription_plan_name_p" id="ppcp_subscription_plan_name_p-' . esc_attr( (string) $product->get_id() ) . '" style="' . esc_attr( $display_plan_name_p ) . '"><label for="_ppcp_subscription_plan_name-' . esc_attr( (string) $product->get_id() ) . '">',
 				'</label><input type="text" class="short ppcp_subscription_plan_name" id="ppcp_subscription_plan_name-' . esc_attr( (string) $product->get_id() ) . '" name="_ppcp_subscription_plan_name" value="' . esc_attr( $subscription_plan_name ) . '"></p>'
 			);
 		}
