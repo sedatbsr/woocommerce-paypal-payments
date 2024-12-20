@@ -24,34 +24,21 @@ const ButtonOrPlaceholder = ( {
 	href,
 	children,
 } ) => {
-	if ( ! href ) {
-		return (
-			<Button
-				className={ className }
-				variant={ variant }
-				icon={ showIcon ? openSignup : null }
-			>
-				{ children }
-			</Button>
-		);
+	const buttonProps = {
+		className,
+		variant,
+		icon: showIcon ? openSignup : null,
+	};
+
+	if ( href ) {
+		buttonProps.href = href;
+		buttonProps.target = 'PPFrame';
+		buttonProps[ 'data-paypal-button' ] = 'true';
+		buttonProps[ 'data-paypal-onboard-complete' ] = 'onOnboardComplete';
+		buttonProps[ 'data-paypal-onboard-button' ] = 'true';
 	}
 
-	return (
-		<Button
-			className={ className }
-			variant={ variant }
-			icon={ showIcon ? openSignup : null }
-			href={ href }
-			target={ 'PPFrame' }
-			{ ...{
-				'data-paypal-button': 'true',
-				'data-paypal-onboard-complete': 'onOnboardComplete',
-				'data-paypal-onboard-button': 'true',
-			} }
-		>
-			{ children }
-		</Button>
-	);
+	return <Button { ...buttonProps }>{ children }</Button>;
 };
 
 const ConnectionButton = ( {
