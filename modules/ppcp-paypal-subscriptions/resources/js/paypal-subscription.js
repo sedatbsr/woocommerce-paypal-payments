@@ -71,9 +71,6 @@ document.addEventListener( 'DOMContentLoaded', () => {
 	};
 
     const checkSubscriptionPeriodsInterval = (period, period_interval, linkBtn) => {
-        if ( ! linkBtn) {
-            return;
-        }
         if (
             ( period === 'year' && parseInt( period_interval ) > 1 ) ||
             ( period === 'month' && parseInt( period_interval ) > 12 ) ||
@@ -82,7 +79,7 @@ document.addEventListener( 'DOMContentLoaded', () => {
         ) {
             linkBtn.disabled = true;
             linkBtn.checked = false;
-            linkBtn.setAttribute('title', __( 'Not allowed period intervall combination!', 'woocommerce-paypal-subscriptions' ) );
+            linkBtn.setAttribute('title', __( 'Not allowed period intervall combination for PayPal Subscriptions!', 'woocommerce-paypal-subscriptions' ) );
         } else {
             linkBtn.disabled = false;
             linkBtn.removeAttribute('title');
