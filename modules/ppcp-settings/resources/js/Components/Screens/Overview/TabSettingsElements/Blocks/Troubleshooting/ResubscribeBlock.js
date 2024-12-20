@@ -1,43 +1,39 @@
 import { useState } from '@wordpress/element';
-import { useDispatch } from '@wordpress/data';
 import { STORE_NAME } from '../../../../../../data/common';
 import { ButtonSettingsBlock } from '../../../../../ReusableComponents/SettingsBlocks';
 import { __ } from '@wordpress/i18n';
+import { useDispatch } from '@wordpress/data';
+import { store as noticesStore } from '@wordpress/notices';
 
-const TroubleshootingResubscribeBlock = () => {
-	const [ resubscribingState, setResubscribingState ] = useState( {
-		resubscribing: false,
-		message: '',
-	} );
+const ResubscribeBlock = () => {
+	const { createSuccessNotice, createErrorNotice } =
+		useDispatch( noticesStore );
+	const [ resubscribing, setResubscribing ] = useState( false );
 
 	const { resubscribeWebhooks } = useDispatch( STORE_NAME );
 
 	const startResubscribingWebhooks = async () => {
-		setResubscribingState( ( prevState ) => ( {
-			...prevState,
-			resubscribing: true,
-		} ) );
+		setResubscribing( true );
 		try {
 			await resubscribeWebhooks();
 		} catch ( error ) {
-			setResubscribingState( ( prevState ) => ( {
-				...prevState,
-				resubscribing: false,
-				message: __(
+			setResubscribing( false );
+			createErrorNotice(
+				__(
 					'Operation failed. Check WooCommerce logs for more details.',
 					'woocommerce-paypal-payments'
-				),
-			} ) );
+				)
+			);
 			return;
 		}
-		setResubscribingState( ( prevState ) => ( {
-			...prevState,
-			resubscribing: false,
-			message: __(
+
+		setResubscribing( false );
+		createSuccessNotice(
+			__(
 				'Webhooks were successfully re-subscribed.',
 				'woocommerce-paypal-payments'
-			),
-		} ) );
+			)
+		);
 	};
 
 	return (
@@ -52,8 +48,7 @@ const TroubleshootingResubscribeBlock = () => {
 			) }
 			actionProps={ {
 				buttonType: 'secondary',
-				isBusy: resubscribingState.resubscribing,
-				message: resubscribingState.message,
+				isBusy: resubscribing,
 				callback: () => startResubscribingWebhooks(),
 				value: __(
 					'Resubscribe webhooks',
@@ -64,4 +59,4 @@ const TroubleshootingResubscribeBlock = () => {
 	);
 };
 
-export default TroubleshootingResubscribeBlock;
+export default ResubscribeBlock;

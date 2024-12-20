@@ -87,9 +87,9 @@ const commonReducer = createReducer( defaultTransient, defaultPersistent, {
 
 	[ ACTION_TYPES.HYDRATE ]: ( state, payload ) => {
 		const newState = setPersistent( state, payload.data );
-
+		console.log( state, payload );
 		// Populate read-only properties.
-		[ 'wooSettings', 'merchant' ].forEach( ( key ) => {
+		[ 'wooSettings', 'merchant', 'webhooks' ].forEach( ( key ) => {
 			if ( ! payload[ key ] ) {
 				return;
 			}

@@ -92,11 +92,11 @@ return array(
 			$container->get( 'settings.service.connection-url-generators' ),
 		);
 	},
-	'settings.rest.webhooks'                        => static function ( ContainerInterface $container ) : WebhookSettingsEndpoint {
+	'settings.rest.webhooks'                      => static function ( ContainerInterface $container ) : WebhookSettingsEndpoint {
 		return new WebhookSettingsEndpoint(
-			$container->get('webhook.status.registered-webhooks-data'),
-			$container->get( 'webhook.registrar'),
-			$container->get('webhook.status.simulation')
+			$container->get( 'api.endpoint.webhook' ),
+			$container->get( 'webhook.registrar' ),
+			$container->get( 'webhook.status.simulation' )
 		);
 	},
 	'settings.casual-selling.supported-countries' => static function ( ContainerInterface $container ) : array {

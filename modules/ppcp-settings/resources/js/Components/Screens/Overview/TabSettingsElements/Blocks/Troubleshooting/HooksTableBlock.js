@@ -1,6 +1,6 @@
 import { __ } from '@wordpress/i18n';
 
-const TroubleshootingTableBlock = ( { webhooks } ) => {
+const HooksTableBlock = ( { webhooks } ) => {
 	return (
 		<table className="ppcp-r-table">
 			<thead>
@@ -19,11 +19,11 @@ const TroubleshootingTableBlock = ( { webhooks } ) => {
 			<tbody>
 				<tr>
 					<td className="ppcp-r-table__hooks-url">
-						{ webhooks?.[ 0 ] }
+						{ webhooks?.url }
 					</td>
 					<td
 						className="ppcp-r-table__hooks-events"
-						dangerouslySetInnerHTML={ { __html: webhooks?.[ 1 ] } }
+						dangerouslySetInnerHTML={ { __html: webhooks?.events } }
 					></td>
 				</tr>
 			</tbody>
@@ -31,4 +31,4 @@ const TroubleshootingTableBlock = ( { webhooks } ) => {
 	);
 };
 
-export default TroubleshootingTableBlock;
+export default HooksTableBlock;

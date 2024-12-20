@@ -9,9 +9,6 @@ const ButtonSettingsBlock = ( { title, description, ...props } ) => (
 			<Description>{ description }</Description>
 		</Header>
 		<Action>
-			{ props.actionProps?.message && (
-				<p>{ props.actionProps.message }</p>
-			) }
 			<Button
 				isBusy={ props.actionProps?.isBusy }
 				variant={ props.actionProps?.buttonType }

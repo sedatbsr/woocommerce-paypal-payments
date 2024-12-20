@@ -9,9 +9,9 @@ import {
 import SettingsBlock from '../../../../../ReusableComponents/SettingsBlocks/SettingsBlock';
 import { CommonHooks } from '../../../../../../data';
 
-import TroubleshootingSimulationBlock from './TroubleshootingSimulationBlock';
-import TroubleshootingResubscribeBlock from './TroubleshootingResubscribeBlock';
-import TroubleshootingTableBlock from './TroubleshootingTableBlock';
+import SimulationBlock from './SimulationBlock';
+import ResubscribeBlock from './ResubscribeBlock';
+import HooksTableBlock from './HooksTableBlock';
 
 const Troubleshooting = ( { updateFormValue, settings } ) => {
 	const { webhooks } = CommonHooks.useWebhooks();
@@ -64,9 +64,9 @@ const Troubleshooting = ( { updateFormValue, settings } ) => {
 						.
 					</Description>
 				</Header>
-				<TroubleshootingTableBlock webhooks={ webhooks } />
-				<TroubleshootingResubscribeBlock />
-				<TroubleshootingSimulationBlock />
+				<HooksTableBlock webhooks={ webhooks } />
+				<ResubscribeBlock />
+				<SimulationBlock />
 			</SettingsBlock>
 		</AccordionSettingsBlock>
 	);

@@ -3,13 +3,14 @@ import apiFetch from '@wordpress/api-fetch';
 import { REST_WEBHOOKS_SIMULATE } from '../../../../../../data/common/constants';
 import { __ } from '@wordpress/i18n';
 import { ButtonSettingsBlock } from '../../../../../ReusableComponents/SettingsBlocks';
+import { useDispatch } from '@wordpress/data';
+import { store as noticesStore } from '@wordpress/notices';
 
-const TroubleshootingSimulationBlock = () => {
-	const [ simulationState, setSimulationState ] = useState( {
-		simulating: false,
-		message: '',
-		status: '',
-	} );
+const SimulationBlock = () => {
+	const { createSuccessNotice, createErrorNotice } =
+		useDispatch( noticesStore );
+
+	const [ simulating, setSimulating ] = useState( false );
 
 	function sleep( ms ) {
 		return new Promise( ( resolve ) => setTimeout( resolve, ms ) );
@@ -29,35 +30,33 @@ const TroubleshootingSimulationBlock = () => {
 	}, [] );
 
 	const startSimulation = async () => {
-		const delay = 2000;
 		const retriesBeforeErrorMessage = 15;
 		const maxRetries = 30;
 
-		setSimulationState( ( prevState ) => ( {
-			...prevState,
-			simulating: true,
-			message: __(
+		setSimulating( true );
+
+		createSuccessNotice(
+			__(
 				'Waiting for the webhook to arrive…',
 				'woocommerce-paypal-payments'
-			),
-		} ) );
+			)
+		);
 
 		try {
 			await startWebhookSimulation();
 		} catch ( error ) {
-			setSimulationState( ( prevState ) => ( {
-				...prevState,
-				simulating: false,
-				message: __(
+			setSimulating( false );
+			createErrorNotice(
+				__(
 					'Operation failed. Check WooCommerce logs for more details.',
 					'woocommerce-paypal-payments'
-				),
-			} ) );
+				)
+			);
 			return;
 		}
 
 		for ( let i = 0; i < maxRetries; i++ ) {
-			await sleep( delay );
+			await sleep( 2000 );
 
 			const simulationStateResponse = await checkWebhookSimulationState();
 			try {
@@ -71,18 +70,14 @@ const TroubleshootingSimulationBlock = () => {
 
 				const state = simulationStateResponse?.data?.state;
 				if ( state === 'received' ) {
-					setSimulationState( ( prevState ) => ( {
-						...prevState,
-						...{
-							message:
-								'✔️ ' +
-								__(
-									'The webhook was received successfully.',
-									'woocommerce-paypal-payments'
-								),
-							simulating: false,
-						},
-					} ) );
+					setSimulating( false );
+					createSuccessNotice(
+						'✔️ ' +
+							__(
+								'The webhook was received successfully.',
+								'woocommerce-paypal-payments'
+							)
+					);
 					return;
 				}
 			} catch ( exc ) {
@@ -90,20 +85,16 @@ const TroubleshootingSimulationBlock = () => {
 			}
 
 			if ( i === retriesBeforeErrorMessage ) {
-				setSimulationState( ( prevState ) => ( {
-					...prevState,
-					...{
-						message: __(
-							'Looks like the webhook cannot be received. Check that your website is accessible from the internet.',
-							'woocommerce-paypal-payments'
-						),
-						status: STATUS_ERROR,
-					},
-				} ) );
+				createErrorNotice(
+					__(
+						'Looks like the webhook cannot be received. Check that your website is accessible from the internet.',
+						'woocommerce-paypal-payments'
+					)
+				);
 			}
 		}
 
-		setSimulationState( { ...simulationState, ...{ simulating: false } } );
+		setSimulating( false );
 	};
 
 	return (
@@ -115,8 +106,7 @@ const TroubleshootingSimulationBlock = () => {
 				) }
 				actionProps={ {
 					buttonType: 'secondary',
-					isBusy: simulationState.simulating,
-					message: simulationState.message,
+					isBusy: simulating,
 					callback: () => startSimulation(),
 					value: __(
 						'Simulate webhooks',
@@ -127,4 +117,4 @@ const TroubleshootingSimulationBlock = () => {
 		</>
 	);
 };
-export default TroubleshootingSimulationBlock;
+export default SimulationBlock;
