@@ -1,9 +1,9 @@
 import { __ } from '@wordpress/i18n';
 import { useDispatch } from '@wordpress/data';
+import { useState, useEffect } from '@wordpress/element';
 import { store as noticesStore } from '@wordpress/notices';
 
 import { CommonHooks, OnboardingHooks } from '../data';
-import { openPopup } from '../utils/window';
 
 const MESSAGES = {
 	CONNECTED: __( 'Connected to PayPal', 'woocommerce-paypal-payments' ),
@@ -35,32 +35,77 @@ const ACTIVITIES = {
 	CONNECT_MANUAL: 'MANUAL_LOGIN',
 };
 
-const handlePopupWithCompletion = ( url, onError ) => {
-	return new Promise( ( resolve ) => {
-		const popup = openPopup( url );
+export const useHandleOnboardingButton = ( isSandbox ) => {
+	const { sandboxOnboardingUrl } = CommonHooks.useSandbox();
+	const { productionOnboardingUrl } = CommonHooks.useProduction();
+	const products = OnboardingHooks.useDetermineProducts();
+	const [ onboardingUrl, setOnboardingUrl ] = useState( '' );
+	const [ scriptLoaded, setScriptLoaded ] = useState( false );
 
-		if ( ! popup ) {
-			onError( MESSAGES.POPUP_BLOCKED );
-			resolve( false );
+	useEffect( () => {
+		const fetchOnboardingUrl = async () => {
+			let res;
+			if ( isSandbox ) {
+				res = await sandboxOnboardingUrl();
+			} else {
+				res = await productionOnboardingUrl( products );
+			}
+
+			if ( res.success && res.data ) {
+				setOnboardingUrl( res.data );
+			} else {
+				console.error( 'Failed to fetch onboarding URL' );
+			}
+		};
+
+		fetchOnboardingUrl();
+	}, [ isSandbox, productionOnboardingUrl, products, sandboxOnboardingUrl ] );
+
+	useEffect( () => {
+		/**
+		 * The partner.js script initializes all onboarding buttons in the onload event.
+		 * When no buttons are present, a JS error is displayed; i.e. we should load this script
+		 * only when the button is ready (with a valid href and data-attributes).
+		 */
+		if ( ! onboardingUrl ) {
 			return;
 		}
 
-		// Check popup state every 500ms
-		const checkPopup = setInterval( () => {
-			if ( popup.closed ) {
-				clearInterval( checkPopup );
-				resolve( true );
-			}
-		}, 500 );
+		const script = document.createElement( 'script' );
+		script.id = 'partner-js';
+		script.src =
+			'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
+		script.onload = () => {
+			setScriptLoaded( true );
+		};
+		document.body.appendChild( script );
 
 		return () => {
-			clearInterval( checkPopup );
+			/**
+			 * When the component is unmounted, remove the partner.js script, as well as the
+			 * dynamic scripts it loaded (signup-js and rampConfig-js)
+			 *
+			 * This is important, as the onboarding button is only initialized during the onload
+			 * event of those scripts; i.e. we need to load the scripts again, when the button is
+			 * rendered again.
+			 */
+			const onboardingScripts = [
+				'partner-js',
+				'signup-js',
+				'rampConfig-js',
+			];
 
-			if ( popup && ! popup.closed ) {
-				popup.close();
-			}
+			onboardingScripts.forEach( ( id ) => {
+				const el = document.querySelector( `script[id="${ id }"]` );
+
+				if ( el?.parentNode ) {
+					el.parentNode.removeChild( el );
+				}
+			} );
 		};
-	} );
+	}, [ onboardingUrl ] );
+
+	return { onboardingUrl, scriptLoaded };
 };
 
 const useConnectionBase = () => {
@@ -92,73 +137,13 @@ const useConnectionBase = () => {
 	};
 };
 
-const useConnectionAttempt = ( connectFn, errorMessage ) => {
-	const { handleFailed, createErrorNotice, handleCompleted } =
-		useConnectionBase();
-
-	return async ( ...args ) => {
-		const res = await connectFn( ...args );
-
-		if ( ! res.success || ! res.data ) {
-			handleFailed( res, errorMessage );
-			return false;
-		}
-
-		const popupClosed = await handlePopupWithCompletion(
-			res.data,
-			createErrorNotice
-		);
-
-		if ( popupClosed ) {
-			await handleCompleted();
-		}
-
-		return popupClosed;
-	};
-};
-
 export const useSandboxConnection = () => {
-	const { sandboxOnboardingUrl, isSandboxMode, setSandboxMode } =
-		CommonHooks.useSandbox();
-	const { withActivity } = CommonHooks.useBusyState();
-	const connectionAttempt = useConnectionAttempt(
-		sandboxOnboardingUrl,
-		MESSAGES.SANDBOX_ERROR
-	);
-
-	const handleSandboxConnect = async () => {
-		return withActivity(
-			ACTIVITIES.CONNECT_SANDBOX,
-			'Connecting to sandbox account',
-			connectionAttempt
-		);
-	};
+	const { isSandboxMode, setSandboxMode } = CommonHooks.useSandbox();
 
 	return {
-		handleSandboxConnect,
 		isSandboxMode,
 		setSandboxMode,
 	};
-};
-
-export const useProductionConnection = () => {
-	const { productionOnboardingUrl } = CommonHooks.useProduction();
-	const { withActivity } = CommonHooks.useBusyState();
-	const products = OnboardingHooks.useDetermineProducts();
-	const connectionAttempt = useConnectionAttempt(
-		() => productionOnboardingUrl( products ),
-		MESSAGES.PRODUCTION_ERROR
-	);
-
-	const handleProductionConnect = async () => {
-		return withActivity(
-			ACTIVITIES.CONNECT_PRODUCTION,
-			'Connecting to production account',
-			connectionAttempt
-		);
-	};
-
-	return { handleProductionConnect };
 };
 
 export const useManualConnection = () => {
