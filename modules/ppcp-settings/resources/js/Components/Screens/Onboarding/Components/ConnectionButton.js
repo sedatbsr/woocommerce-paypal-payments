@@ -34,7 +34,6 @@ const ButtonOrPlaceholder = ( {
 		buttonProps.href = href;
 		buttonProps.target = 'PPFrame';
 		buttonProps[ 'data-paypal-button' ] = 'true';
-		buttonProps[ 'data-paypal-onboard-complete' ] = 'onOnboardComplete';
 		buttonProps[ 'data-paypal-onboard-button' ] = 'true';
 	}
 
@@ -48,18 +47,34 @@ const ConnectionButton = ( {
 	showIcon = true,
 	className = '',
 } ) => {
-	const { onboardingUrl, scriptLoaded } =
-		useHandleOnboardingButton( isSandbox );
+	const {
+		onboardingUrl,
+		scriptLoaded,
+		setCompleteHandler,
+		removeCompleteHandler,
+	} = useHandleOnboardingButton( isSandbox );
 	const buttonClassName = classNames( 'ppcp-r-connection-button', className, {
 		'sandbox-mode': isSandbox,
 		'live-mode': ! isSandbox,
 	} );
+	const environment = isSandbox ? 'sandbox' : 'production';
 
 	useEffect( () => {
 		if ( scriptLoaded && onboardingUrl ) {
 			window.PAYPAL.apps.Signup.render();
+			setCompleteHandler( environment );
 		}
-	}, [ scriptLoaded, onboardingUrl ] );
+
+		return () => {
+			removeCompleteHandler();
+		};
+	}, [
+		scriptLoaded,
+		onboardingUrl,
+		environment,
+		setCompleteHandler,
+		removeCompleteHandler,
+	] );
 
 	return (
 		<BusyStateWrapper isBusy={ ! onboardingUrl }>

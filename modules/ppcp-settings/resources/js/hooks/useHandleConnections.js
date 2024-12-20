@@ -1,9 +1,12 @@
 import { __ } from '@wordpress/i18n';
 import { useDispatch } from '@wordpress/data';
-import { useState, useEffect } from '@wordpress/element';
+import { useState, useEffect, useCallback, useRef } from '@wordpress/element';
 import { store as noticesStore } from '@wordpress/notices';
 
 import { CommonHooks, OnboardingHooks } from '../data';
+
+const PAYPAL_PARTNER_SDK_URL =
+	'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
 
 const MESSAGES = {
 	CONNECTED: __( 'Connected to PayPal', 'woocommerce-paypal-payments' ),
@@ -41,6 +44,7 @@ export const useHandleOnboardingButton = ( isSandbox ) => {
 	const products = OnboardingHooks.useDetermineProducts();
 	const [ onboardingUrl, setOnboardingUrl ] = useState( '' );
 	const [ scriptLoaded, setScriptLoaded ] = useState( false );
+	const timerRef = useRef( null );
 
 	useEffect( () => {
 		const fetchOnboardingUrl = async () => {
@@ -73,8 +77,7 @@ export const useHandleOnboardingButton = ( isSandbox ) => {
 
 		const script = document.createElement( 'script' );
 		script.id = 'partner-js';
-		script.src =
-			'https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js';
+		script.src = PAYPAL_PARTNER_SDK_URL;
 		script.onload = () => {
 			setScriptLoaded( true );
 		};
@@ -105,7 +108,47 @@ export const useHandleOnboardingButton = ( isSandbox ) => {
 		};
 	}, [ onboardingUrl ] );
 
-	return { onboardingUrl, scriptLoaded };
+	const setCompleteHandler = useCallback( ( environment ) => {
+		const onComplete = ( authCode, shareId ) => {
+			// TODO -- finish this!
+			console.log(
+				`${ environment }-boarding complete - AUTH: `,
+				authCode
+			);
+			console.log(
+				`${ environment }-boarding complete - SHARE:`,
+				shareId
+			);
+		};
+
+		const addHandler = () => {
+			const MiniBrowser = window.PAYPAL?.apps?.Signup?.MiniBrowser;
+			if ( ! MiniBrowser || MiniBrowser.onOnboardComplete ) {
+				return;
+			}
+
+			MiniBrowser.onOnboardComplete = onComplete;
+		};
+
+		// Ensure the onComplete handler is not removed by a PayPal init script.
+		timerRef.current = setInterval( addHandler, 250 );
+	}, [] );
+
+	const removeCompleteHandler = useCallback( () => {
+		if ( timerRef.current ) {
+			clearInterval( timerRef.current );
+			timerRef.current = null;
+		}
+
+		delete window.PAYPAL?.apps?.Signup?.MiniBrowser?.onOnboardComplete;
+	}, [] );
+
+	return {
+		onboardingUrl,
+		scriptLoaded,
+		setCompleteHandler,
+		removeCompleteHandler,
+	};
 };
 
 const useConnectionBase = () => {
