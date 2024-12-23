@@ -1,6 +1,6 @@
 # PCP Tests
 
-Monorepo for Playwright tests. Depends on [`@inpsyde/playwright-utils`](https://github.com/inpsyde/playwright-utils) package.
+Folder for Playwright tests. Depends on [`@inpsyde/playwright-utils`](https://github.com/inpsyde/playwright-utils) package.
 
 ## Folder structure
 
@@ -36,7 +36,7 @@ Tests for PCP project are stored under the __tests/qa__ dir.
 
 1. Remove `"workspaces": [ "playwright-utils" ]` from `package.json`.
 
-2. In the root of the monorepo run following command:
+2. In the root of the tests (which is __qa__) run following command:
 
 ```bash
 npm run setup:tests
