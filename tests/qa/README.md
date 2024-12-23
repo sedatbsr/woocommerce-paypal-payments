@@ -1,10 +1,10 @@
-# Plugin Tests Monorepo
+# PCP Tests
 
 Monorepo for Playwright tests. Depends on [`@inpsyde/playwright-utils`](https://github.com/inpsyde/playwright-utils) package.
 
-## Monorepo structure
+## Folder structure
 
-Tests for different projects are stored under the __projects__ dir. `node_modules` are shared among __projects__.
+Tests for PCP project are stored under the __tests/qa__ dir.
 
 ### Project structure
 
@@ -14,21 +14,7 @@ Tests for different projects are stored under the __projects__ dir. `node_module
 	
 	- `01-plugin-foundation` - general tests for plugin installation, uninstallation, activation, deactivation, display of plugin in __WooCommerce -> Settings -> Payments__.
 
-	- `02-merchant-setup` - tests for connection of current plugin instance to the payment system provider API via merchant (seller) credentials.
-
-	- `03-plugin-settings` - tests for various plugin settings, may include assertions of settings effect on frontend.
-
-	- `04-frontend-ui` - tests for plugin UI on frontend: display of payment buttons, display of payment methods depending on customer's country, etc.
-
-	- `05-transaction` - tests of payment process. Typically include: adding products to cart as precondition, payment (transaction) process, assertions on order received page, dashboard order edit page, payment via payment system provider API.
-
-	- `06-refund` - tests for refund transactions. Typically include: finished transaction as precondition, refund via payment system provider API on dashboard order edit page, assertion of refund statuses.
-
-	- `07-vaulting` - tests for transactions with enabled vaulting (saved payment methods for registered customers). Ability to remember payment methods and use them for transactions.
-
-	- `08-subscriptions` - tests for transactions for subscription products. Requires WooCommerce Subscriptions plugin. Usually available to registered customers and also includes vaulting and renewal of subscription (with automatic payment). WooCommerce Subscriptions plugin (can be [downloaded here](https://woocommerce.com/my-account/downloads/), login credentials in 1Password).
-
-	- `09-compatibility` - tests for compatibility with other themes, plugins, etc.
+	__The rest of the tests will be added over time__
 
 	\* - folders are numerated on purpose, to force correct sequence of tests - from basic to advanced. Although each test should be independent and work separately, it is better to start testing from `plugin-foundation` and move to more complex tests.
 
