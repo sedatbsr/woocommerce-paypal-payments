@@ -48,13 +48,13 @@ npm run setup:tests
 
 2. Delete `@inpsyde/playwright-utils` from `/node_modules`.
 
-3. In the root of the monorepo run following command:
+3. In the root of the project (which is __qa__ in this case) run following command:
 
 	```bash
 	git clone https://github.com/inpsyde/playwright-utils.git
 	```
 
-	[`@inpsyde/playwright-utils`](https://github.com/inpsyde/playwright-utils) repository should be cloned as `playwright-utils` right inside the root directory of monorepo.
+	[`@inpsyde/playwright-utils`](https://github.com/inpsyde/playwright-utils) repository should be cloned as `playwright-utils` right inside the root directory of project.
 
 4. Restart VSCode editor. This will create `playwright-utils` instance in the source control tab of VSCode editor.
 
@@ -74,7 +74,7 @@ npm run setup:tests
 
 ## Project configuration
 
-Project from the monorepo requires a working WordPress website with WooCommmerce, `.env` file and configured Playwright.
+Project requires a working WordPress website with WooCommmerce, `.env` file and configured Playwright.
 
 1. [SSE setup](https://inpsyde.atlassian.net/wiki/spaces/AT/pages/3175907370/Self+Service+WordPress+Environment) - will be deprecated in Q1 of 2025.
 
@@ -90,7 +90,7 @@ Project from the monorepo requires a working WordPress website with WooCommmerce
 
 6. To avoid conflicts make sure any other payment plugins like are deleted.
 
-7. Configure `.env` file following [these steps](https://github.com/inpsyde/playwright-utils?tab=readme-ov-file#env-variables). See also `/projects/<project-name>/.env.example`.
+7. Configure `.env` file following [these steps](https://github.com/inpsyde/playwright-utils?tab=readme-ov-file#env-variables). See also `/tests/qa/.env.example`.
 
 8. Configure `playwright.config.ts` of the project following [these steps](https://github.com/inpsyde/playwright-utils?tab=readme-ov-file#playwright-configuration).
 
@@ -98,7 +98,7 @@ Project from the monorepo requires a working WordPress website with WooCommmerce
 
 ## Run tests
 
-To execute tests, in the terminal, navigate to the root directory of tested project (e.g. `cd projects/paypal`) and run following command:
+To execute tests, in the terminal, navigate to the __qa__ directory of the project (e.g. `cd tests/qa`) and run following command:
 
 ```bash
 npx playwright test
