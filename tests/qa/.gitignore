@@ -7,7 +7,6 @@ playwright/.cache
 storage-states
 test-results
 package-lock.json
-playwright-wordpress-credentials.json
 
 .env*
 !.env.example

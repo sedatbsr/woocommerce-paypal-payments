@@ -32,7 +32,7 @@ Tests for PCP project are stored under the __tests/qa__ dir.
 
 - `.env`, `playwright.config.ts`, `package.json` - see below.
 
-### Installation as a node package
+### Setup @inpsyde/playwright-utils as a node package
 
 1. Remove `"workspaces": [ "playwright-utils" ]` from `package.json`.
 
@@ -42,7 +42,7 @@ Tests for PCP project are stored under the __tests/qa__ dir.
 npm run setup:tests
 ```
 
-### Installation for local development
+### Setup @inpsyde/playwright-utils for local development
 
 1. Add `"workspaces": [ "playwright-utils" ]` to `package.json`.
 
@@ -94,7 +94,7 @@ Project requires a working WordPress website with WooCommmerce, `.env` file and 
 
 8. Configure `playwright.config.ts` of the project following [these steps](https://github.com/inpsyde/playwright-utils?tab=readme-ov-file#playwright-configuration).
 
-9. Reporting to __Xray in Jira__ is configured [this way](https://github.com/inpsyde/playwright-utils?tab=readme-ov-file#reporting-to-xray-in-jira).
+9. Reporting to __Xray in Jira__ is configured [this way](https://github.com/inpsyde/playwright-utils/blob/main/docs/test-report-api/report-to-xray.md).
 
 ## Run tests
 
