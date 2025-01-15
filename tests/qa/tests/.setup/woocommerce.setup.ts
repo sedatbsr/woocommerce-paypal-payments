@@ -101,7 +101,9 @@ setup( 'Setup WooCommerce Live site visibility',
 setup( 'Setup WooCommerce API keys', async ( { wooCommerceUtils } ) => {
 	if ( ! ( await wooCommerceUtils.apiKeysExist() ) ) {
 		const apiKeys = await wooCommerceUtils.createApiKeys();
-		await updateDotenv( './.env', apiKeys );
+		if( ! process.env.CI ) {
+			await updateDotenv( './.env', apiKeys );
+		}
 		for ( const [ key, value ] of Object.entries( apiKeys ) ) {
 			process.env[ key ] = value;
 		}
